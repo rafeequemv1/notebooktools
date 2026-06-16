@@ -364,10 +364,12 @@ async function addTextToNotebookLm(notebookId, title, content, options = {}) {
   return true;
 }
 
-window.NotebookToolsNotebookLM = {
-  addTextToNotebookLm,
-  addWebpageToNotebookLm,
-  addYoutubeToNotebookLm,
-  createNotebookLmNotebook,
-  listNotebookLmNotebooks
-};
+if (typeof window !== "undefined") {
+  window.NotebookToolsNotebookLM = {
+    addTextToNotebookLm,
+    addWebpageToNotebookLm,
+    addYoutubeToNotebookLm,
+    createNotebookLmNotebook,
+    listNotebookLmNotebooks
+  };
+}

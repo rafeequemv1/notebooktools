@@ -6,7 +6,11 @@ function normalizeYouTubeVideoUrl(value) {
   let url;
 
   try {
-    url = new URL(String(value || ""), window.location.href);
+    const base =
+      typeof window !== "undefined" && window.location?.href
+        ? window.location.href
+        : "https://www.youtube.com/";
+    url = new URL(String(value || ""), base);
   } catch (_error) {
     return "";
   }
@@ -126,14 +130,16 @@ function setImportButtonState(button, isLoading, idleLabel = "Import") {
   button.textContent = isLoading ? "Adding..." : idleLabel;
 }
 
-window.NotebookToolsStore = {
-  cleanNotebookName,
-  normalizeYouTubeVideoUrl,
-  normalizeWebpageUrl,
-  isYouTubeUrl
-};
+if (typeof window !== "undefined") {
+  window.NotebookToolsStore = {
+    cleanNotebookName,
+    normalizeYouTubeVideoUrl,
+    normalizeWebpageUrl,
+    isYouTubeUrl
+  };
 
-window.NotebookToolsUI = {
-  setImportStatus,
-  setImportButtonState
-};
+  window.NotebookToolsUI = {
+    setImportStatus,
+    setImportButtonState
+  };
+}

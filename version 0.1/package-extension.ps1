@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $extDir = Join-Path $here "extension"
-$zipPath = Join-Path $here "notebooktools-v0.1.1.zip"
+$zipPath = Join-Path $here "notebooktools-v0.1.2.zip"
 
 if (-not (Test-Path $extDir)) {
   throw "Extension folder not found: $extDir"

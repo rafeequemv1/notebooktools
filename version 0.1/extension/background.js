@@ -1,22 +1,37 @@
-importScripts("utils.js", "notebooklm-client.js");
-
 const PENDING_TEXT_KEY = "pendingTextImport";
-const PLATFORM_IMPORT_KEY = "notebooktoolsPlatformImport";
 
 let platformImportCache = null;
 
 function setupContextMenu() {
   chrome.contextMenus.removeAll(() => {
-    chrome.contextMenus.create({
-      id: "notebooktools-add-selection",
-      title: "Add to NotebookLM",
-      contexts: ["selection"]
-    });
+    if (chrome.runtime.lastError) {
+      console.warn("NotebookTools contextMenus.removeAll:", chrome.runtime.lastError.message);
+    }
+
+    chrome.contextMenus.create(
+      {
+        id: "notebooktools-add-selection",
+        title: "Add to NotebookLM",
+        contexts: ["selection"],
+        documentUrlPatterns: ["http://*/*", "https://*/*"]
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          console.error("NotebookTools contextMenus.create:", chrome.runtime.lastError.message);
+        }
+      }
+    );
   });
 }
 
-chrome.runtime.onInstalled.addListener(setupContextMenu);
-chrome.runtime.onStartup.addListener(setupContextMenu);
+chrome.runtime.onInstalled.addListener(() => {
+  setupContextMenu();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  setupContextMenu();
+});
+
 setupContextMenu();
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -43,23 +58,27 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   const pageUrl = tab?.url || "";
   const title = pageTitle.length > 80 ? `${pageTitle.slice(0, 77)}...` : pageTitle;
 
-  await chrome.storage.session.set({
-    [PENDING_TEXT_KEY]: {
-      text: info.selectionText.trim(),
-      title,
-      pageUrl
-    }
-  });
+  try {
+    await chrome.storage.session.set({
+      [PENDING_TEXT_KEY]: {
+        text: info.selectionText.trim(),
+        title,
+        pageUrl
+      }
+    });
 
-  const popupUrl = chrome.runtime.getURL(
-    `popup.html?mode=text&title=${encodeURIComponent(title)}`
-  );
+    const popupUrl = chrome.runtime.getURL(
+      `popup.html?mode=text&title=${encodeURIComponent(title)}`
+    );
 
-  await chrome.windows.create({
-    url: popupUrl,
-    type: "popup",
-    width: 380,
-    height: 520,
-    focused: true
-  });
+    await chrome.windows.create({
+      url: popupUrl,
+      type: "popup",
+      width: 380,
+      height: 520,
+      focused: true
+    });
+  } catch (error) {
+    console.error("NotebookTools context menu import failed:", error);
+  }
 });

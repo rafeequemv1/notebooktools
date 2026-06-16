@@ -11,4 +11,4 @@ Thumbs.db
 .idea/
 
 # Store upload zip (run package-extension.ps1 to generate)
-version 0.1/notebooktools-v0.1.1.zip
+version 0.1/notebooktools-v0.1.2.zip
