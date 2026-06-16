@@ -1085,6 +1085,87 @@ h1, h2, h3, p {
   color: var(--accent);
 }
 
+/* Support page */
+
+.support-main .eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.support-lead {
+  font-size: 17px;
+  line-height: 1.65;
+  margin-bottom: 40px;
+  max-width: 560px;
+}
+
+.support-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 48px;
+}
+
+.support-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 24px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.support-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.support-label {
+  color: var(--subtle);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.support-value {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.support-hint {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.support-faq h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.support-faq ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.support-faq li {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+  .support-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Responsive */
 
 @media (max-width: 960px) {

@@ -26,6 +26,7 @@ NotebookTools helps researchers, students, and knowledge workers capture web con
 - Blog: https://notebooktools.vercel.app/blog
 - Blog post — What is NotebookTools?: https://notebooktools.vercel.app/blog/what-is-notebooktools
 - Privacy policy: https://notebooktools.vercel.app/privacy
+- Support: https://notebooktools.vercel.app/support
 - NotebookLM (Google): https://notebooklm.google.com/
 - Chrome Web Store / source: https://github.com/rafeequemv1/notebooktools
 
@@ -48,4 +49,10 @@ No. The extension talks directly to NotebookLM using your browser session.
 
 ## Contact
 
+Email: rafeequemavoor@gmail.com
+Support page: https://notebooktools.vercel.app/support
+X: https://x.com/rafeequemavoor
+LinkedIn: https://www.linkedin.com/in/rafeequemavoor
+Instagram: https://www.instagram.com/rafeequemavoor
+Website: https://rafeeque.com
 Project repository: https://github.com/rafeequemv1/notebooktools

@@ -85,8 +85,10 @@ https://notebooktools.vercel.app/privacy
 ## Support URL
 
 ```
-https://github.com/rafeequemv1/notebooktools/issues
+https://notebooktools.vercel.app/support
 ```
+
+Contact email: `rafeequemavoor@gmail.com`
 
 ---
 
@@ -140,7 +142,26 @@ Required to list the user's notebooks and add sources (videos, URLs, and text) t
 
 ## Store listing graphics
 
-### Icons (included in zip)
+Pre-made assets in **`store-assets/`** (see `store-assets/README.md`):
+
+| Asset | File |
+|-------|------|
+| Store icon 128×128 | `store-assets/store-icon-128.png` |
+| Screenshots 1280×800 (×5) | `store-assets/screenshot-01-workflow.png` … `screenshot-05-all-sources.png` |
+| Small promo 440×280 | `store-assets/promo-small-440x280.png` |
+| Marquee promo 1400×560 | `store-assets/promo-marquee-1400x560.png` |
+
+Regenerate: `.\store-assets\generate-store-assets.ps1`
+
+### Promotional images (you create)
+
+| Asset | Size | Notes |
+|-------|------|-------|
+| Screenshot | 1280×800 | 5 files in `store-assets/` (workflow, YouTube, popup, AI chats, all sources) |
+| Small promo tile | 440×280 | `store-assets/promo-small-440x280.png` |
+| Marquee promo tile | 1400×560 | `store-assets/promo-marquee-1400x560.png` |
+
+### Extension icons (included in zip)
 
 | Size | File |
 |------|------|
@@ -148,21 +169,7 @@ Required to list the user's notebooks and add sources (videos, URLs, and text) t
 | 48×48 | `extension/icons/icon48.png` |
 | 128×128 | `extension/icons/icon128.png` |
 
-### Promotional images (you create)
-
-| Asset | Size | Notes |
-|-------|------|-------|
-| Screenshot | 1280×800 or 640×400 | At least 1, up to 5 |
-| Small promo tile | 440×280 | Optional |
-| Marquee promo tile | 1400×560 | Optional |
-
-### Suggested screenshots (1280×800)
-
-1. YouTube watch page with the NotebookLM import button visible
-2. ChatGPT or Gemini chat with the in-page NotebookLM button
-3. Extension popup showing notebook selector on a webpage tab
-4. Right-click context menu: “Add to NotebookLM” on selected text
-5. NotebookLM notebook showing imported sources
+### Suggested screenshot captions
 
 ---
 
