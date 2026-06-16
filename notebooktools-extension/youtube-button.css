@@ -2,16 +2,17 @@
   align-items: center;
   display: inline-flex;
   margin-right: 8px;
+  position: relative;
   vertical-align: middle;
 }
 
 .notebooktools-youtube-action button {
   align-items: center;
   background: #ffffff;
-  border: 1px solid rgba(60, 64, 67, 0.18);
-  border-radius: 3px;
-  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.08);
-  color: #0c0c0c;
+  border: 1px solid rgba(15, 15, 15, 0.12);
+  border-radius: 999px;
+  box-shadow: none;
+  color: #0f0f0f;
   cursor: pointer;
   display: inline-flex;
   font-family: "Roboto", "Arial", sans-serif;
@@ -19,21 +20,20 @@
   font-weight: 500;
   gap: 8px;
   height: 36px;
-  padding: 0 14px 0 10px;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  padding: 0 16px 0 12px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
   white-space: nowrap;
 }
 
 .notebooktools-youtube-action button:hover,
 .notebooktools-youtube-action.is-open button {
   background: #ffffff;
-  border-color: rgba(26, 115, 232, 0.45);
-  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.12);
+  border-color: rgba(15, 15, 15, 0.22);
 }
 
 .notebooktools-youtube-mark {
   align-items: center;
-  color: #0c0c0c;
+  color: currentColor;
   display: inline-flex;
   flex-shrink: 0;
   height: 20px;
@@ -48,23 +48,52 @@
 }
 
 .notebooktools-youtube-text {
+  color: currentColor;
   letter-spacing: -0.01em;
 }
 
-.notebooktools-youtube-panel {
-  background: transparent;
-  border: 0;
-  border-radius: 3px;
-  box-shadow: 0 4px 24px rgba(60, 64, 67, 0.18);
-  height: 460px;
+.notebooktools-youtube-dropdown {
+  display: none;
   position: fixed;
-  width: 380px;
   z-index: 2147483647;
+}
+
+.notebooktools-youtube-dropdown.is-open {
+  display: block;
+}
+
+.notebooktools-youtube-panel {
+  background: #ffffff;
+  border: 1px solid rgba(15, 15, 15, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  display: block;
+  height: 300px;
+  width: 272px;
+}
+
+html[dark] .notebooktools-youtube-action button {
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1));
+  border-color: transparent;
+  color: var(--yt-spec-text-primary, #f1f1f1);
+}
+
+html[dark] .notebooktools-youtube-action button:hover,
+html[dark] .notebooktools-youtube-action.is-open button {
+  background: var(--yt-spec-button-chip-background-hover, rgba(255, 255, 255, 0.2));
+  border-color: transparent;
+  color: var(--yt-spec-text-primary, #ffffff);
+}
+
+html[dark] .notebooktools-youtube-panel {
+  background: #212121;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 720px) {
   .notebooktools-youtube-action button {
-    padding: 0 10px 0 8px;
+    padding: 0 12px 0 10px;
   }
 
   .notebooktools-youtube-text {
@@ -72,16 +101,7 @@
   }
 
   .notebooktools-youtube-panel {
-    left: 12px !important;
-    right: 12px;
-    width: calc(100vw - 24px);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .notebooktools-youtube-action button {
-    background: #ffffff;
-    border-color: rgba(60, 64, 67, 0.2);
-    color: #0c0c0c;
+    height: 290px;
+    width: min(272px, calc(100vw - 24px));
   }
 }

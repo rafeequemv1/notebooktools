@@ -1,8 +1,10 @@
 const NOTEBOOKTOOLS_BUTTON_ID = "notebooktools-youtube-action";
+const NOTEBOOKTOOLS_DROPDOWN_ID = "notebooktools-youtube-dropdown";
 const NOTEBOOKTOOLS_PANEL_ID = "notebooktools-youtube-panel";
 
 let lastUrl = "";
 let renderTimer = null;
+let positionListenersBound = false;
 
 function normalizeYouTubeVideoUrl(value) {
   let url;
@@ -48,39 +50,99 @@ function getActionAnchor() {
   );
 }
 
-function closePanel() {
-  document.getElementById(NOTEBOOKTOOLS_PANEL_ID)?.remove();
-  document.getElementById(NOTEBOOKTOOLS_BUTTON_ID)?.classList.remove("is-open");
+function getWrapper() {
+  return document.getElementById(NOTEBOOKTOOLS_BUTTON_ID);
 }
 
-function positionPanel(button, panel) {
+function getDropdown() {
+  let dropdown = document.getElementById(NOTEBOOKTOOLS_DROPDOWN_ID);
+
+  if (!dropdown) {
+    dropdown = document.createElement("div");
+    dropdown.id = NOTEBOOKTOOLS_DROPDOWN_ID;
+    dropdown.className = "notebooktools-youtube-dropdown";
+    document.body.append(dropdown);
+  }
+
+  return dropdown;
+}
+
+function positionDropdown() {
+  const wrapper = getWrapper();
+  const dropdown = document.getElementById(NOTEBOOKTOOLS_DROPDOWN_ID);
+  const button = wrapper?.querySelector("button");
+
+  if (!wrapper || !dropdown || !button || !wrapper.classList.contains("is-open")) {
+    return;
+  }
+
   const rect = button.getBoundingClientRect();
+  const panelWidth = dropdown.offsetWidth || 272;
+  const panelHeight = dropdown.offsetHeight || 300;
   const margin = 8;
-  const panelWidth = panel.offsetWidth || 380;
-  const panelHeight = panel.offsetHeight || 470;
   const left = Math.min(
     Math.max(margin, rect.right - panelWidth),
     window.innerWidth - panelWidth - margin
   );
-  const top = Math.min(rect.bottom + margin, window.innerHeight - panelHeight - margin);
+  const belowTop = rect.bottom + 6;
+  const aboveTop = rect.top - panelHeight - 6;
+  const top = belowTop + panelHeight > window.innerHeight - margin && aboveTop > margin
+    ? aboveTop
+    : belowTop;
 
-  panel.style.left = `${Math.max(margin, left)}px`;
-  panel.style.top = `${Math.max(margin, top)}px`;
+  dropdown.style.left = `${left}px`;
+  dropdown.style.top = `${Math.max(margin, top)}px`;
 }
 
-function togglePanel(button) {
-  const existingPanel = document.getElementById(NOTEBOOKTOOLS_PANEL_ID);
-
-  if (existingPanel) {
-    closePanel();
+function bindPositionListeners() {
+  if (positionListenersBound) {
     return;
   }
 
+  positionListenersBound = true;
+  window.addEventListener("scroll", positionDropdown, true);
+  window.addEventListener("resize", positionDropdown);
+}
+
+function closePanel() {
+  const wrapper = getWrapper();
+  const dropdown = document.getElementById(NOTEBOOKTOOLS_DROPDOWN_ID);
+
+  dropdown?.classList.remove("is-open");
+  dropdown?.replaceChildren();
+  wrapper?.classList.remove("is-open");
+  wrapper?.querySelector("button")?.setAttribute("aria-expanded", "false");
+}
+
+function bindPanelMessageListener() {
+  if (window.__notebooktoolsPanelMessageBound) {
+    return;
+  }
+
+  window.__notebooktoolsPanelMessageBound = true;
+
+  window.addEventListener("message", (event) => {
+    if (event.data?.type !== "notebooktools-import-success") {
+      return;
+    }
+
+    const panel = document.getElementById(NOTEBOOKTOOLS_PANEL_ID);
+
+    if (panel?.contentWindow && event.source === panel.contentWindow) {
+      closePanel();
+    }
+  });
+}
+
+function openPanel(wrapper) {
   const youtubeUrl = normalizeYouTubeVideoUrl(window.location.href);
 
   if (!youtubeUrl) {
     return;
   }
+
+  const dropdown = getDropdown();
+  dropdown.replaceChildren();
 
   const panel = document.createElement("iframe");
   const frameUrl = new URL(chrome.runtime.getURL("youtube-import.html"));
@@ -89,11 +151,28 @@ function togglePanel(button) {
 
   panel.id = NOTEBOOKTOOLS_PANEL_ID;
   panel.className = "notebooktools-youtube-panel";
-  panel.title = "NotebookTools YouTube import";
+  panel.title = "Import to NotebookLM";
   panel.src = frameUrl.toString();
-  document.body.append(panel);
-  button.classList.add("is-open");
-  positionPanel(button, panel);
+  dropdown.append(panel);
+  dropdown.classList.add("is-open");
+  wrapper.classList.add("is-open");
+  wrapper.querySelector("button")?.setAttribute("aria-expanded", "true");
+
+  bindPositionListeners();
+  bindPanelMessageListener();
+  requestAnimationFrame(() => {
+    positionDropdown();
+    requestAnimationFrame(positionDropdown);
+  });
+}
+
+function togglePanel(wrapper) {
+  if (wrapper.classList.contains("is-open")) {
+    closePanel();
+    return;
+  }
+
+  openPanel(wrapper);
 }
 
 function createButton() {
@@ -106,19 +185,20 @@ function createButton() {
   wrapper.className = "notebooktools-youtube-action";
   mark.className = "notebooktools-youtube-mark";
   mark.setAttribute("aria-hidden", "true");
-  mark.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M2 22V12.5C2 12.5 4.8 7.5 12 7.5C19.2 7.5 22 12.5 22 12.5V22" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-    <path d="M5.5 22V14.8C5.5 14.8 7.6 10.8 12 10.8C16.4 10.8 18.5 14.8 18.5 14.8V22" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-    <path d="M9 22V17.2C9 17.2 10.2 14.8 12 14.8C13.8 14.8 15 17.2 15 17.2V22" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+  mark.innerHTML = `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="2" y="2" width="28" height="28" rx="7" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-width="1.8"/>
+    <text x="16" y="22" text-anchor="middle" fill="currentColor" font-family="Roboto, Arial, sans-serif" font-size="15" font-weight="600">N</text>
   </svg>`;
   text.className = "notebooktools-youtube-text";
   text.textContent = "NotebookTools";
 
   button.type = "button";
-  button.title = "Import this YouTube video to NotebookLM";
+  button.title = "Import this video to NotebookLM";
+  button.setAttribute("aria-expanded", "false");
   button.append(mark, text);
   wrapper.append(button);
-  wrapper.addEventListener("click", (event) => {
+
+  button.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
     togglePanel(wrapper);
@@ -129,7 +209,7 @@ function createButton() {
 
 function renderButton() {
   const youtubeUrl = normalizeYouTubeVideoUrl(window.location.href);
-  const existingButton = document.getElementById(NOTEBOOKTOOLS_BUTTON_ID);
+  const existingButton = getWrapper();
 
   if (!youtubeUrl) {
     existingButton?.remove();
@@ -138,6 +218,9 @@ function renderButton() {
   }
 
   if (existingButton?.isConnected) {
+    if (existingButton.classList.contains("is-open")) {
+      positionDropdown();
+    }
     return;
   }
 
@@ -154,8 +237,6 @@ function renderButton() {
   } else {
     anchor.before(button);
   }
-
-  anchor.closest?.("#actions")?.style.setProperty("padding-right", "1px");
 }
 
 function scheduleRender() {
@@ -171,26 +252,28 @@ function watchNavigation() {
   }
 }
 
-document.addEventListener("click", (event) => {
-  const target = event.target;
+document.addEventListener(
+  "mousedown",
+  (event) => {
+    const wrapper = getWrapper();
+    const dropdown = document.getElementById(NOTEBOOKTOOLS_DROPDOWN_ID);
+    const target = event.target;
 
-  if (
-    target instanceof Node &&
-    !document.getElementById(NOTEBOOKTOOLS_BUTTON_ID)?.contains(target) &&
-    !document.getElementById(NOTEBOOKTOOLS_PANEL_ID)?.contains(target)
-  ) {
+    if (!wrapper?.classList.contains("is-open")) {
+      return;
+    }
+
+    if (
+      target instanceof Node &&
+      (wrapper.contains(target) || dropdown?.contains(target))
+    ) {
+      return;
+    }
+
     closePanel();
-  }
-});
-
-window.addEventListener("resize", () => {
-  const button = document.getElementById(NOTEBOOKTOOLS_BUTTON_ID);
-  const panel = document.getElementById(NOTEBOOKTOOLS_PANEL_ID);
-
-  if (button && panel) {
-    positionPanel(button, panel);
-  }
-});
+  },
+  true
+);
 
 new MutationObserver(scheduleRender).observe(document.documentElement, {
   childList: true,

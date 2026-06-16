@@ -9,3 +9,6 @@ extension-inspection-4/
 Thumbs.db
 .vscode/
 .idea/
+
+# Store upload zip (run package-extension.ps1 to generate)
+version 0.1/notebooktools-v0.1.0.zip

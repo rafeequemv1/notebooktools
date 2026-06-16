@@ -1,44 +1,61 @@
-# Chrome Web Store listing — NotebookTools v0.1
+# Chrome Web Store listing — NotebookTools v0.1.0
 
-Use the fields below in the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole).
+Copy these fields into the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole).
 
-## Extension name
+**Homepage:** `https://notebooktools.vercel.app/`  
+**Privacy policy:** `https://notebooktools.vercel.app/privacy`  
+**Support:** `https://github.com/rafeequemv1/notebooktools/issues`
+
+---
+
+## Extension name (75 chars max)
 
 ```
-NotebookTools — YouTube to NotebookLM
+NotebookTools — Import YouTube, ChatGPT & Web to NotebookLM
 ```
 
 ## Short description (132 chars max)
 
 ```
-Import YouTube videos into NotebookLM notebooks with one click from YouTube or the extension popup.
+Free: import YouTube, ChatGPT, Gemini, X posts, webpages & highlighted text into Google NotebookLM — one click, your sign-in.
 ```
 
-## Detailed description
+*(131 characters)*
+
+## Detailed description (SEO-optimized)
 
 ```
-NotebookTools helps you send YouTube videos to NotebookLM without copying links manually.
+NotebookTools is a free Chrome extension that imports content into Google NotebookLM — without copy-paste.
 
-WHAT IT DOES
-• Adds a NotebookLM button on YouTube watch pages
-• Lets you import the current video from the extension popup
-• Lists your NotebookLM notebooks and supports creating a new notebook
-• Uses your existing signed-in NotebookLM browser session
+Import YouTube videos, ChatGPT conversations, Gemini chats, X (Twitter) threads, any webpage URL, and highlighted text from the web. NotebookTools uses your existing Google sign-in. No extra account. No paywall.
+
+WHAT YOU CAN IMPORT
+• YouTube — in-page button on watch pages; pick a notebook and import in one click
+• ChatGPT — import full conversations as text sources
+• Gemini — import full conversations as text sources
+• X / Twitter — import threads and articles as clean text
+• Webpages — import the current tab URL from the extension popup
+• Selected text — right-click highlighted text → Add to NotebookLM
 
 HOW TO USE
-1. Sign in to NotebookLM at notebooklm.google.com
-2. Open any YouTube video
-3. Click the in-page NotebookLM button or open the NotebookTools popup
-4. Choose a notebook (or create a new one) and import
+1. Sign in to NotebookLM at notebooklm.google.com (keep a tab open once)
+2. Install NotebookTools and pin the extension
+3. On YouTube, ChatGPT, Gemini, or X — click the in-page NotebookLM button
+4. Or open the popup on any tab to import a webpage
+5. Or highlight text, right-click, and choose Add to NotebookLM
+6. Select an existing notebook or create a new one — done
 
-VERSION 0.1
-This first release focuses on YouTube import only. More research capture features are planned.
+WHY NOTEBOOKTOOLS
+NotebookLM is powerful for research and synthesis, but collecting sources from across the web can be slow. NotebookTools closes that gap with a minimal, calm UI designed for NotebookLM workflows.
 
 PRIVACY
-NotebookTools does not run its own servers. Video URLs are sent to NotebookLM only when you click import. See the privacy policy URL in this listing.
+No backend servers. No analytics. Imports go directly from your browser to NotebookLM using your signed-in session. Read our privacy policy: https://notebooktools.vercel.app/privacy
+
+FREE
+All features are included at no cost.
 
 NOT AFFILIATED WITH GOOGLE
-NotebookTools is an independent extension and is not affiliated with Google or NotebookLM.
+NotebookTools is an independent extension and is not affiliated with, endorsed by, or sponsored by Google or NotebookLM.
 ```
 
 ## Category
@@ -53,58 +70,116 @@ Productivity
 English
 ```
 
-## Single purpose description (for review)
+## Homepage URL
 
 ```
-This extension imports YouTube video URLs into the user's NotebookLM notebooks using their signed-in NotebookLM session.
-```
-
-## Permission justifications
-
-### activeTab
-```
-Needed to read the active YouTube video URL when the user opens the extension popup and clicks import.
-```
-
-### storage
-```
-Stores lightweight extension preferences locally on the user's device.
-```
-
-### Host permissions — youtube.com / youtu.be
-```
-Required to inject the in-page import button on YouTube watch pages and to identify the current video URL.
-```
-
-### Host permissions — notebooklm.google.com
-```
-Required to list notebooks and send YouTube video sources to the user's NotebookLM account through the signed-in browser session.
+https://notebooktools.vercel.app/
 ```
 
 ## Privacy policy URL
 
-Host `website/privacy.html` on your domain, for example:
-
 ```
-https://YOUR-VERCEL-URL.vercel.app/privacy.html
+https://notebooktools.vercel.app/privacy
 ```
 
-## Icons (included in package)
-
-- 16×16 — `extension/icons/icon16.png`
-- 48×48 — `extension/icons/icon48.png`
-- 128×128 — `extension/icons/icon128.png`
-
-## Suggested screenshots
-
-Capture at 1280×800:
-
-1. YouTube watch page showing the white **NotebookLM** button beside Share
-2. Extension popup with notebook dropdown on a YouTube tab
-3. NotebookLM notebook showing the imported YouTube source
-
-## Support URL (optional)
+## Support URL
 
 ```
 https://github.com/rafeequemv1/notebooktools/issues
 ```
+
+---
+
+## Single purpose description (required for review)
+
+```
+This extension helps users import YouTube videos, AI chat conversations, social posts, webpage URLs, and selected text into their Google NotebookLM notebooks using their signed-in NotebookLM browser session.
+```
+
+## Permission justifications
+
+Paste each justification when the dashboard asks.
+
+### activeTab
+
+```
+Needed to read the current tab URL when the user opens the extension popup to import a webpage, and to support import actions on the active page.
+```
+
+### storage
+
+```
+Stores lightweight extension preferences locally on the user's device (for example, last-selected notebook).
+```
+
+### contextMenus
+
+```
+Adds a right-click menu item so users can send highlighted text on any webpage directly to NotebookLM.
+```
+
+### tabs
+
+```
+Needed to detect when NotebookLM is open and to support import flows that communicate between the extension and the user's NotebookLM session.
+```
+
+### Host permission — https://*/* and http://*/*
+
+```
+Required to inject in-page import buttons on supported sites (YouTube, ChatGPT, Gemini, X), load import panels, and send webpage URLs and extracted text to NotebookLM when the user clicks import.
+```
+
+### Host permission — notebooklm.google.com
+
+```
+Required to list the user's notebooks and add sources (videos, URLs, and text) to NotebookLM through the signed-in browser session.
+```
+
+---
+
+## Store listing graphics
+
+### Icons (included in zip)
+
+| Size | File |
+|------|------|
+| 16×16 | `extension/icons/icon16.png` |
+| 48×48 | `extension/icons/icon48.png` |
+| 128×128 | `extension/icons/icon128.png` |
+
+### Promotional images (you create)
+
+| Asset | Size | Notes |
+|-------|------|-------|
+| Screenshot | 1280×800 or 640×400 | At least 1, up to 5 |
+| Small promo tile | 440×280 | Optional |
+| Marquee promo tile | 1400×560 | Optional |
+
+### Suggested screenshots (1280×800)
+
+1. YouTube watch page with the NotebookLM import button visible
+2. ChatGPT or Gemini chat with the in-page NotebookLM button
+3. Extension popup showing notebook selector on a webpage tab
+4. Right-click context menu: “Add to NotebookLM” on selected text
+5. NotebookLM notebook showing imported sources
+
+---
+
+## Keywords for discoverability (use naturally in description)
+
+NotebookLM, Google NotebookLM, import to NotebookLM, YouTube to NotebookLM, ChatGPT to NotebookLM, Gemini NotebookLM, Chrome extension, research tool, AI notes, knowledge base, web clipper, save to NotebookLM
+
+---
+
+## Submission checklist
+
+- [ ] One-time [Chrome Web Store developer registration](https://chrome.google.com/webstore/devconsole) fee ($5)
+- [ ] Run `.\package-extension.ps1` → upload `notebooktools-v0.1.0.zip`
+- [ ] Paste listing text from this file
+- [ ] Set privacy policy URL to `https://notebooktools.vercel.app/privacy`
+- [ ] Set homepage to `https://notebooktools.vercel.app/`
+- [ ] Upload 1–5 screenshots
+- [ ] Complete **Privacy practices** tab (no data sold, no remote code, etc.)
+- [ ] Submit for review (typically 1–3 business days)
+- [ ] After approval: copy the store URL and update `website/script.js` → `CHROME_STORE_URL`

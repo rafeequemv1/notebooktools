@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect x="3" y="3" width="42" height="42" rx="10" fill="#ffffff" stroke="url(#rainbow)" stroke-width="2.5"/>
+  <text x="24" y="33" text-anchor="middle" fill="#0c0c0c" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="26" font-weight="600">N</text>
+  <defs>
+    <linearGradient id="rainbow" x1="3" y1="3" x2="45" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4285F4"/>
+      <stop offset="0.33" stop-color="#34A853"/>
+      <stop offset="0.66" stop-color="#FBBC04"/>
+      <stop offset="1" stop-color="#EA4335"/>
+    </linearGradient>
+  </defs>
+</svg>

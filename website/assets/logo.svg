@@ -1,22 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 32" fill="none" role="img" aria-label="NotebookTools">
-  <title>NotebookTools</title>
-  <g stroke="currentColor" stroke-linecap="square" stroke-width="2.15" fill="none">
-    <path d="M3 28V15.5C3 15.5 6.5 8.5 16 8.5C25.5 8.5 29 15.5 29 15.5V28"/>
-    <path d="M7.5 28V18.5C7.5 18.5 10.2 12.8 16 12.8C21.8 12.8 24.5 18.5 24.5 18.5V28"/>
-    <path d="M12 28V21.2C12 21.2 13.8 17.5 16 17.5C18.2 17.5 20 21.2 20 21.2V28"/>
-  </g>
-  <path d="M3 29.5H29" stroke="url(#mark-accent)" stroke-width="1.5" stroke-linecap="square"/>
-  <text
-    x="42"
-    y="24"
-    fill="currentColor"
-    font-family="'Google Sans', 'Product Sans', Roboto, Arial, sans-serif"
-    font-size="22"
-    font-weight="500"
-    letter-spacing="-0.4"
-  >NotebookTools</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 32" fill="none" role="img" aria-label="NotebookTools">
+  <rect x="1.5" y="1.5" width="29" height="29" rx="7" stroke="url(#nt-rainbow)" stroke-width="2.2" fill="#fff"/>
+  <text x="16" y="22.5" text-anchor="middle" fill="#0c0c0c" font-family="Roboto, Arial, sans-serif" font-size="18" font-weight="600">N</text>
+  <text x="42" y="23.5" fill="currentColor" font-family="Roboto, Arial, sans-serif" font-size="21" font-weight="500" letter-spacing="-0.3">NotebookTools</text>
   <defs>
-    <linearGradient id="mark-accent" x1="3" y1="0" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+    <linearGradient id="nt-rainbow" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
       <stop stop-color="#4285F4"/>
       <stop offset="0.33" stop-color="#34A853"/>
       <stop offset="0.66" stop-color="#FBBC04"/>

@@ -10,35 +10,34 @@
     <main class="app">
       <section class="card">
         <div class="brand">
-          <img class="brand-logo" src="logo.svg" alt="NotebookTools" width="168" height="20">
-          <p class="brand-tagline">Import YouTube videos into NotebookLM.</p>
+          <img class="brand-logo" src="logo.svg" alt="NotebookTools" width="148" height="18">
+          <p class="brand-tagline" id="pageContext">Import to NotebookLM</p>
         </div>
 
-        <label for="notebookLmSelect">NotebookLM notebook</label>
+        <div class="import-modes" role="tablist" aria-label="Import type">
+          <button class="import-mode is-active" id="modeWebpage" type="button" data-mode="webpage">Webpage</button>
+          <button class="import-mode" id="modeYouTube" type="button" data-mode="youtube">YouTube</button>
+          <button class="import-mode" id="modeText" type="button" data-mode="text" hidden>Selected text</button>
+        </div>
+
+        <p class="source-preview" id="sourcePreview">Current tab</p>
+
+        <label for="notebookLmSelect">Notebook</label>
         <select id="notebookLmSelect">
-          <option value="">Loading NotebookLM notebooks...</option>
+          <option value="">Loading notebooks...</option>
         </select>
 
-        <label for="newNotebookLmName">New notebook name</label>
-        <input id="newNotebookLmName" type="text" placeholder="Example: Video research">
+        <p class="field-divider">or create new</p>
 
-        <button class="button" id="importYouTubeButton" type="button">
-          Import current YouTube video
-        </button>
+        <input id="newNotebookLmName" type="text" placeholder="Notebook name" aria-label="New notebook name">
 
-        <button class="button secondary compact" id="refreshNotebookLmButton" type="button">
-          Refresh notebooks
-        </button>
+        <button class="button" id="importButton" type="button">Import webpage</button>
 
-        <a class="button secondary compact" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">
-          Open NotebookLM
-        </a>
+        <div class="footer-row">
+          <button class="text-button" id="refreshNotebookLmButton" type="button">Refresh list</button>
+        </div>
 
         <div class="status" id="status" role="status"></div>
-        <p class="hint">
-          Open a YouTube video, then import it here or use the in-page NotebookTools button.
-          Uses your signed-in NotebookLM browser session.
-        </p>
       </section>
     </main>
 

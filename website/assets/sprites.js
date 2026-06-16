@@ -11,14 +11,10 @@
     sprite.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
     sprite.innerHTML = `
       <symbol id="logo-mark" viewBox="0 0 32 32">
-        <g stroke="currentColor" stroke-linecap="square" stroke-width="2.15" fill="none">
-          <path d="M3 28V15.5C3 15.5 6.5 8.5 16 8.5C25.5 8.5 29 15.5 29 15.5V28"/>
-          <path d="M7.5 28V18.5C7.5 18.5 10.2 12.8 16 12.8C21.8 12.8 24.5 18.5 24.5 18.5V28"/>
-          <path d="M12 28V21.2C12 21.2 13.8 17.5 16 17.5C18.2 17.5 20 21.2 20 21.2V28"/>
-        </g>
-        <path d="M3 29.5H29" stroke="url(#mark-accent)" stroke-width="1.5" stroke-linecap="square"/>
+        <rect x="2" y="2" width="28" height="28" rx="7" fill="#fff" stroke="url(#mark-rainbow)" stroke-width="2.2"/>
+        <text x="16" y="22.5" text-anchor="middle" fill="currentColor" font-family="'Google Sans', Roboto, Arial, sans-serif" font-size="17" font-weight="600">N</text>
         <defs>
-          <linearGradient id="mark-accent" x1="3" y1="0" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+          <linearGradient id="mark-rainbow" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
             <stop stop-color="#4285F4"/>
             <stop offset="0.33" stop-color="#34A853"/>
             <stop offset="0.66" stop-color="#FBBC04"/>
@@ -27,23 +23,11 @@
         </defs>
       </symbol>
       <symbol id="logo-notebooktools" viewBox="0 0 380 32">
-        <g stroke="currentColor" stroke-linecap="square" stroke-width="2.15" fill="none">
-          <path d="M3 28V15.5C3 15.5 6.5 8.5 16 8.5C25.5 8.5 29 15.5 29 15.5V28"/>
-          <path d="M7.5 28V18.5C7.5 18.5 10.2 12.8 16 12.8C21.8 12.8 24.5 18.5 24.5 18.5V28"/>
-          <path d="M12 28V21.2C12 21.2 13.8 17.5 16 17.5C18.2 17.5 20 21.2 20 21.2V28"/>
-        </g>
-        <path d="M3 29.5H29" stroke="url(#mark-accent-wordmark)" stroke-width="1.5" stroke-linecap="square"/>
-        <text
-          x="42"
-          y="24"
-          fill="currentColor"
-          font-family="'Google Sans', 'Product Sans', Roboto, Arial, sans-serif"
-          font-size="22"
-          font-weight="500"
-          letter-spacing="-0.4"
-        >NotebookTools</text>
+        <rect x="1.5" y="1.5" width="29" height="29" rx="7" fill="#fff" stroke="url(#wordmark-rainbow)" stroke-width="2.2"/>
+        <text x="16" y="22.5" text-anchor="middle" fill="currentColor" font-family="'Google Sans', Roboto, Arial, sans-serif" font-size="17" font-weight="600">N</text>
+        <text x="42" y="24" fill="currentColor" font-family="'Google Sans', Roboto, Arial, sans-serif" font-size="22" font-weight="500" letter-spacing="-0.4">NotebookTools</text>
         <defs>
-          <linearGradient id="mark-accent-wordmark" x1="3" y1="0" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+          <linearGradient id="wordmark-rainbow" x1="1.5" y1="1.5" x2="30.5" y2="30.5" gradientUnits="userSpaceOnUse">
             <stop stop-color="#4285F4"/>
             <stop offset="0.33" stop-color="#34A853"/>
             <stop offset="0.66" stop-color="#FBBC04"/>

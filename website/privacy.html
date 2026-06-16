@@ -3,7 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Privacy Policy — NotebookTools</title>
+    <title>Privacy Policy — NotebookTools | NotebookLM Chrome Extension</title>
+    <meta
+      name="description"
+      content="NotebookTools privacy policy: no backend server, no analytics. Imports use your NotebookLM session in Chrome. Independent tool, not affiliated with Google."
+    >
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://notebooktools.vercel.app/privacy">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -12,48 +19,58 @@
   <body>
     <script src="assets/sprites.js"></script>
     <header class="site-header">
-      <a class="logo" href="index.html">
+      <a class="logo" href="/">
         <svg class="svg-logo svg-logo-header" viewBox="0 0 380 32" role="img" aria-label="NotebookTools">
           <use href="#logo-notebooktools"></use>
         </svg>
       </a>
+      <nav class="site-nav">
+        <a href="/#features">Features</a>
+        <a href="blog">Blog</a>
+        <a href="/#install">Install</a>
+      </nav>
     </header>
 
     <main class="page-main">
       <h1>Privacy Policy</h1>
-      <p class="lead">Last updated: June 2026 · NotebookTools version 0.1</p>
+      <p class="lead">Last updated: June 2026 · NotebookTools version 0.1.0</p>
 
       <p>
-        NotebookTools is an independent Chrome extension that helps you send YouTube video
-        URLs to your NotebookLM account. This policy explains what the extension does with data.
+        NotebookTools is an independent Chrome extension that helps you import content into
+        your Google NotebookLM account — including YouTube videos, ChatGPT and Gemini
+        conversations, X (Twitter) posts, webpage URLs, and text you highlight on the web.
       </p>
 
       <h2>What we collect</h2>
-      <p>NotebookTools version 0.1 does not operate a backend server and does not collect analytics.</p>
+      <p>NotebookTools does not operate a backend server and does not collect analytics.</p>
       <ul>
-        <li>The extension reads the active YouTube video URL when you choose to import.</li>
+        <li>The extension reads page content only when you choose to import.</li>
         <li>The extension may store lightweight preferences locally in Chrome storage on your device.</li>
         <li>Notebook list data is fetched from NotebookLM using your existing signed-in Google session.</li>
       </ul>
 
       <h2>What we send</h2>
       <p>
-        When you import a video, the extension sends the YouTube URL to NotebookLM through
+        When you click import, the extension sends the relevant source data to NotebookLM through
         Google's NotebookLM web APIs, using the same browser session you already use at
         <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">notebooklm.google.com</a>.
+        This may include YouTube URLs, webpage URLs, extracted conversation or post text, and
+        text you selected on a page.
       </p>
 
       <h2>What we do not do</h2>
       <ul>
         <li>We do not sell personal data.</li>
         <li>We do not receive your Google password.</li>
-        <li>We do not upload page content beyond the YouTube URL you choose to import.</li>
+        <li>We do not upload content unless you explicitly trigger an import.</li>
+        <li>We do not run analytics or tracking on our own servers.</li>
       </ul>
 
       <h2>Third-party services</h2>
       <p>
-        YouTube and NotebookLM are operated by Google. Your use of those services is subject
-        to Google's terms and privacy policies. NotebookTools is not affiliated with Google.
+        YouTube, ChatGPT, Gemini, X, and NotebookLM are operated by their respective providers.
+        Your use of those services is subject to their terms and privacy policies. NotebookTools
+        is not affiliated with Google or any of these platforms.
       </p>
 
       <h2>Contact</h2>
@@ -64,12 +81,15 @@
     </main>
 
     <footer class="site-footer">
-      <div>
-        <strong>NotebookTools</strong>
-        <p>Independent Chrome extension for NotebookLM workflows.</p>
+      <div class="footer-brand">
+        <svg class="svg-logo svg-logo-footer" viewBox="0 0 380 32" role="img" aria-label="NotebookTools">
+          <use href="#logo-notebooktools"></use>
+        </svg>
+        <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
-        <a href="index.html">Home</a>
+        <a href="blog">Blog</a>
+        <a href="/">Home</a>
         <a href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </footer>

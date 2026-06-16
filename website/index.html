@@ -3,21 +3,127 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NotebookTools — YouTube to NotebookLM</title>
+    <title>NotebookTools — Free Chrome Extension to Import YouTube, ChatGPT & Web to NotebookLM</title>
     <meta
       name="description"
-      content="Send YouTube videos to NotebookLM in one click. A simple Chrome extension for students, researchers, and curious minds."
+      content="NotebookTools is a free Chrome extension that imports YouTube videos, ChatGPT and Gemini chats, X posts, webpages, and highlighted text into Google NotebookLM — one click, your existing sign-in."
     >
+    <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, ChatGPT NotebookLM, Gemini NotebookLM, NotebookTools">
+    <meta name="author" content="NotebookTools">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="googlebot" content="index, follow">
+    <link rel="canonical" href="https://notebooktools.vercel.app/">
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site summary">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NotebookTools">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="NotebookTools — Import Anything to NotebookLM">
+    <meta property="og:description" content="Free Chrome extension: YouTube, ChatGPT, Gemini, X, webpages, and highlights → NotebookLM in one click.">
+    <meta property="og:url" content="https://notebooktools.vercel.app/">
+    <meta property="og:image" content="https://notebooktools.vercel.app/assets/logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NotebookTools — Import to NotebookLM">
+    <meta name="twitter:description" content="Import YouTube, AI chats, X posts, webpages, and text into NotebookLM. Free Chrome extension.">
+    <meta name="twitter:image" content="https://notebooktools.vercel.app/assets/logo.svg">
+    <meta name="theme-color" content="#fdfbf7">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "NotebookTools",
+          "url": "https://notebooktools.vercel.app/",
+          "description": "Free Chrome extension for importing YouTube, ChatGPT, Gemini, X, webpages, and text into Google NotebookLM.",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "Organization",
+          "name": "NotebookTools",
+          "url": "https://notebooktools.vercel.app/",
+          "logo": "https://notebooktools.vercel.app/assets/logo.svg",
+          "sameAs": ["https://github.com/rafeequemv1/notebooktools"]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "NotebookTools",
+          "applicationCategory": "BrowserApplication",
+          "operatingSystem": "Chrome",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": "Import YouTube videos, ChatGPT and Gemini conversations, X posts, webpages, and selected text into Google NotebookLM.",
+          "url": "https://notebooktools.vercel.app/",
+          "featureList": [
+            "YouTube video import on watch pages",
+            "ChatGPT conversation extraction",
+            "Gemini conversation extraction",
+            "X and Twitter thread import",
+            "Webpage URL import",
+            "Selected text via context menu"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is NotebookTools?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "NotebookTools is a free Chrome extension that sends YouTube videos, ChatGPT and Gemini chats, X posts, webpages, and highlighted text directly into Google NotebookLM using your existing Google sign-in."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is NotebookTools free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Every feature is free with no paywall, subscription, or premium tier."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I import a YouTube video to NotebookLM?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Install NotebookTools in Chrome, open NotebookLM once to sign in, visit any YouTube watch page, click the NotebookLM import button, and choose a notebook."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does NotebookTools work with ChatGPT and Gemini?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. NotebookTools adds an in-page button at the top of ChatGPT and Gemini conversations and imports the full chat as text into NotebookLM."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does NotebookTools collect my data?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No backend server and no analytics. Imports go directly from your browser to NotebookLM using your session."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <script src="assets/sprites.js"></script>
 
     <header class="site-header">
-      <a class="logo" href="#">
+      <a class="logo" href="/">
         <svg class="svg-logo svg-logo-header" viewBox="0 0 380 32" role="img" aria-label="NotebookTools">
           <use href="#logo-notebooktools"></use>
         </svg>
@@ -25,7 +131,8 @@
       <nav class="site-nav">
         <a href="#features">Features</a>
         <a href="#how-it-works">How it works</a>
-        <a href="#upcoming">Upcoming</a>
+        <a href="#pricing">Pricing</a>
+        <a href="blog">Blog</a>
         <a href="#install">Install</a>
       </nav>
       <a class="button button-sm header-cta" href="#install">Add to Chrome</a>
@@ -36,17 +143,18 @@
         <div class="hero-glow" aria-hidden="true"></div>
         <div class="hero-inner">
           <div class="hero-copy">
-            <p class="eyebrow">For NotebookLM users</p>
-            <h1>Turn YouTube videos into NotebookLM sources — instantly.</h1>
+            <p class="eyebrow">Built for NotebookLM</p>
+            <h1>Capture videos, chats, posts, and pages — straight into NotebookLM.</h1>
             <p class="lead">
-              NotebookTools sits right on YouTube. Pick a notebook, click import, and keep
-              learning without copying links or switching tabs.
+              NotebookTools lives in your browser. Import YouTube videos, ChatGPT and Gemini chats,
+              X posts and articles, webpages, or any highlighted text — straight into NotebookLM.
             </p>
 
-            <div class="brand-flow" aria-label="YouTube to NotebookTools">
-              <svg class="svg-logo svg-logo-youtube svg-logo-flow" viewBox="0 0 24 24" role="img" aria-label="YouTube">
-                <use href="#logo-youtube"></use>
-              </svg>
+            <div class="brand-flow" aria-label="Sources to NotebookLM">
+              <span class="flow-pill">YouTube</span>
+              <span class="flow-pill">ChatGPT</span>
+              <span class="flow-pill">Gemini</span>
+              <span class="flow-pill">X</span>
               <span class="brand-flow-arrow" aria-hidden="true">→</span>
               <svg class="svg-logo svg-logo-flow" viewBox="0 0 380 32" role="img" aria-label="NotebookTools">
                 <use href="#logo-notebooktools"></use>
@@ -54,48 +162,35 @@
             </div>
 
             <div class="hero-actions">
-              <a class="button button-primary" href="#install">Add to Chrome</a>
+              <a class="button button-primary" href="#install">Add to Chrome — Free</a>
               <a class="button button-ghost" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">
                 Open NotebookLM
               </a>
             </div>
 
             <ul class="hero-trust">
-              <li>Works with your Google account</li>
-              <li>No extra sign-up</li>
-              <li>Built for research & learning</li>
+              <li>Uses your Google / NotebookLM session</li>
+              <li>No extra account</li>
+              <li>Privacy-first design</li>
             </ul>
           </div>
 
           <div class="hero-visual" aria-hidden="true">
-            <div class="visual-card visual-card-yt">
-              <div class="visual-top">
-                <svg class="svg-logo svg-logo-youtube svg-logo-mini" viewBox="0 0 24 24">
-                  <use href="#logo-youtube"></use>
-                </svg>
-                <div class="visual-line"></div>
-              </div>
-              <div class="visual-actions">
-                <span class="chip">Share</span>
-                <span class="chip chip-brand">
-                  <svg class="svg-mark svg-mark-btn" viewBox="0 0 32 32">
-                    <use href="#logo-mark"></use>
-                  </svg>
-                  <span>NotebookTools</span>
-                </span>
-              </div>
-            </div>
             <div class="visual-card visual-card-popup">
               <div class="visual-popup-head">
                 <svg class="svg-logo svg-logo-mockup" viewBox="0 0 380 32">
                   <use href="#logo-notebooktools"></use>
                 </svg>
               </div>
+              <div class="visual-tabs">
+                <span class="visual-tab is-active">Webpage</span>
+                <span class="visual-tab">YouTube</span>
+              </div>
+              <label>Source</label>
+              <div class="field muted">Article you are reading</div>
               <label>Notebook</label>
               <div class="field">Research notes</div>
-              <label>New notebook</label>
-              <div class="field muted">Video sources</div>
-              <div class="visual-cta">Import video</div>
+              <div class="visual-cta">Import webpage</div>
             </div>
           </div>
         </div>
@@ -103,34 +198,32 @@
 
       <section class="features" id="features">
         <div class="section-head center">
-          <p class="eyebrow">Why NotebookTools</p>
-          <h2>Research flow, uninterrupted</h2>
-          <p class="section-lead">Everything you need to move from video to notebook without friction.</p>
+          <p class="eyebrow">Features</p>
+          <h2>Everything you need to feed NotebookLM</h2>
+          <p class="section-lead">Minimal UI, premium feel — designed to match NotebookLM’s calm research workflow.</p>
         </div>
         <div class="feature-grid">
           <article class="feature-card">
             <div class="feature-icon">
               <svg class="svg-mark" viewBox="0 0 32 32"><use href="#logo-mark"></use></svg>
             </div>
-            <h3>One-click import</h3>
-            <p>Send the video you are watching straight into any NotebookLM notebook.</p>
+            <h3>YouTube import</h3>
+            <p>A native button on YouTube watch pages. Pick a notebook and import in one click.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon">
-              <svg class="svg-logo svg-logo-youtube svg-logo-icon" viewBox="0 0 24 24"><use href="#logo-youtube"></use></svg>
-            </div>
-            <h3>Lives on YouTube</h3>
-            <p>A native-feeling button appears beside Share — no hunting for the extension menu.</p>
+            <div class="feature-icon feature-icon-text">AI</div>
+            <h3>ChatGPT & Gemini</h3>
+            <p>A NotebookLM button at the top of chats. Import the full conversation as a text source.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon feature-icon-text">+</div>
-            <h3>Create notebooks</h3>
-            <p>Start a fresh notebook from the popup or add to one you already use.</p>
+            <div class="feature-icon feature-icon-text">X</div>
+            <h3>X / Twitter posts</h3>
+            <p>Import threads and articles from X with one click — extracted as clean text for NotebookLM.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon feature-icon-text">✓</div>
-            <h3>Your session, your data</h3>
-            <p>Uses the NotebookLM account you are already signed into. Nothing leaves your browser unless you import.</p>
+            <div class="feature-icon feature-icon-text">↗</div>
+            <h3>Webpages & highlights</h3>
+            <p>Import any page from the popup, or right-click selected text on the web.</p>
           </article>
         </div>
       </section>
@@ -138,84 +231,127 @@
       <section class="steps" id="how-it-works">
         <div class="section-head center">
           <p class="eyebrow">How it works</p>
-          <h2>Up and running in minutes</h2>
+          <h2>Three ways in, one calm flow</h2>
         </div>
         <ol class="step-grid">
           <li class="step-card">
             <span class="step-num">1</span>
-            <h3>Add to Chrome</h3>
-            <p>Install NotebookTools and pin it to your toolbar for quick access.</p>
+            <h3>Install & sign in</h3>
+            <p>Add NotebookTools to Chrome and make sure NotebookLM is open in another tab.</p>
           </li>
           <li class="step-card">
             <span class="step-num">2</span>
-            <h3>Open a YouTube video</h3>
-            <p>Watch anything — lectures, podcasts, tutorials, or deep-dive explainers.</p>
+            <h3>Choose your source</h3>
+            <p>YouTube button, ChatGPT/Gemini/X in-page button, popup for webpages, or right-click for text.</p>
           </li>
           <li class="step-card">
             <span class="step-num">3</span>
-            <h3>Import to NotebookLM</h3>
-            <p>Click the in-page button or open the popup, choose a notebook, and you are done.</p>
+            <h3>Pick a notebook</h3>
+            <p>Select a destination notebook — done. Your source appears in NotebookLM.</p>
           </li>
         </ol>
       </section>
 
-      <section class="upcoming" id="upcoming">
+      <section class="pricing" id="pricing">
         <div class="section-head center">
-          <p class="eyebrow">On the roadmap</p>
-          <h2>Upcoming features</h2>
-          <p class="section-lead">We are building more ways to capture research for NotebookLM.</p>
+          <p class="eyebrow">Pricing</p>
+          <h2>Free — full access</h2>
+          <p class="section-lead">NotebookTools is free to use. No paywall, no account beyond your Google sign-in.</p>
         </div>
-        <div class="upcoming-grid">
-          <article class="upcoming-card">
-            <span class="upcoming-tag">Soon</span>
-            <h3>Playlist import</h3>
-            <p>Add an entire YouTube playlist to a notebook in one go.</p>
-          </article>
-          <article class="upcoming-card">
-            <span class="upcoming-tag">Soon</span>
-            <h3>Channel import</h3>
-            <p>Pull videos from a YouTube channel into your research notebook.</p>
-          </article>
-          <article class="upcoming-card">
-            <span class="upcoming-tag">Planned</span>
-            <h3>Search batch import</h3>
-            <p>Import multiple videos from YouTube search results at once.</p>
-          </article>
-          <article class="upcoming-card">
-            <span class="upcoming-tag">Planned</span>
-            <h3>Webpage capture</h3>
-            <p>Save articles and documentation pages alongside your video sources.</p>
-          </article>
-          <article class="upcoming-card">
-            <span class="upcoming-tag">Planned</span>
-            <h3>Selected text</h3>
-            <p>Highlight text on any page and send it to a local research notebook.</p>
-          </article>
-          <article class="upcoming-card">
-            <span class="upcoming-tag">Planned</span>
-            <h3>Smarter sync</h3>
-            <p>Faster notebook refresh and a smoother import experience.</p>
-          </article>
+        <div class="pricing-card">
+          <div class="pricing-badge">Free</div>
+          <h3>NotebookTools</h3>
+          <p class="pricing-price">$0 <span>forever</span></p>
+          <ul class="pricing-features">
+            <li>YouTube video import from watch pages</li>
+            <li>ChatGPT conversation extraction</li>
+            <li>Gemini conversation extraction</li>
+            <li>X / Twitter threads and articles</li>
+            <li>Webpage URL import from any site</li>
+            <li>Selected text via right-click context menu</li>
+            <li>Create or choose NotebookLM notebooks</li>
+            <li>Works with your existing NotebookLM session</li>
+          </ul>
+          <a class="button button-primary button-lg" href="#install">Get started free</a>
         </div>
+      </section>
+
+      <section class="faq" id="faq">
+        <div class="section-head center">
+          <p class="eyebrow">FAQ</p>
+          <h2>Common questions</h2>
+        </div>
+        <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">What is NotebookTools?</summary>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                NotebookTools is a free Chrome extension that sends YouTube videos, ChatGPT and Gemini
+                chats, X posts, webpages, and highlighted text directly into Google NotebookLM —
+                using your existing Google sign-in.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Is NotebookTools free?</summary>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                Yes. Every feature is free with no paywall, subscription, or premium tier.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">How do I import a YouTube video to NotebookLM?</summary>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                Install NotebookTools in Chrome, open NotebookLM once to sign in, visit any YouTube
+                watch page, click the NotebookLM import button, and choose a notebook. The video is
+                added as a source in one click.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Does NotebookTools work with ChatGPT and Gemini?</summary>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                Yes. NotebookTools adds an in-page button at the top of ChatGPT and Gemini
+                conversations. It extracts the full chat and imports it as text into NotebookLM.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Does NotebookTools collect my data?</summary>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                No backend server and no analytics. Imports go directly from your browser to
+                NotebookLM using your session. See our <a href="privacy.html">privacy policy</a>.
+              </p>
+            </div>
+          </details>
+        </div>
+        <p class="faq-more">Read more on the <a href="blog/what-is-notebooktools">NotebookTools blog</a>.</p>
       </section>
 
       <section class="install" id="install">
         <div class="install-panel">
           <div class="install-copy">
             <p class="eyebrow">Get started</p>
-            <h2>Start importing videos today</h2>
+            <h2>Start building your NotebookLM library</h2>
             <p>
-              NotebookTools is a free Chrome extension. Install it, open YouTube, and send
-              your first video to NotebookLM in seconds.
+              Install NotebookTools, open NotebookLM once to sign in, then import your first
+              video, page, or text selection in seconds.
             </p>
-            <a class="button button-primary button-lg" href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noreferrer">
-              Add to Chrome
+            <a class="button button-primary button-lg" id="chrome-store-link" href="https://chromewebstore.google.com/" target="_blank" rel="noopener noreferrer">
+              Add to Chrome — Free
             </a>
-            <p class="install-note">Requires Chrome and a signed-in NotebookLM account.</p>
+            <a class="button button-ghost button-lg install-secondary" href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noopener noreferrer">
+              View on GitHub
+            </a>
+            <p class="install-note">Requires Chrome and a signed-in NotebookLM account. Free on the Chrome Web Store.</p>
           </div>
           <ul class="install-benefits">
-            <li>Free to use</li>
-            <li>Works on YouTube watch pages</li>
+            <li>Free — all features included</li>
+            <li>YouTube, ChatGPT, Gemini, X & web</li>
             <li>Privacy-first — <a href="privacy.html">read our policy</a></li>
           </ul>
         </div>
@@ -230,6 +366,7 @@
         <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
+        <a href="blog">Blog</a>
         <a href="privacy.html">Privacy</a>
         <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM</a>
       </div>

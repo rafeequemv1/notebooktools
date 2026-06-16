@@ -1,3 +1,5 @@
+const SUCCESS_CLOSE_DELAY_MS = 1400;
+
 const params = new URLSearchParams(window.location.search);
 const youtubeUrl = params.get("url") || "";
 const pageTitle = params.get("title") || "YouTube video";
@@ -10,13 +12,17 @@ const statusBox = document.querySelector("#status");
 
 let notebookLmNotebooks = [];
 
-function setStatus(message, type = "success") {
-  statusBox.textContent = message;
-  statusBox.className = `status show ${type}`;
+function setStatus(message, options = {}) {
+  NotebookToolsUI.setImportStatus(statusBox, {
+    message,
+    type: options.type || "success",
+    loading: options.loading === true,
+    done: options.done === true
+  });
 }
 
 function setBusy(isBusy) {
-  importButton.disabled = isBusy;
+  NotebookToolsUI.setImportButtonState(importButton, isBusy, "Import");
   refreshButton.disabled = isBusy;
   notebookLmSelect.disabled = isBusy;
   newNotebookLmName.disabled = isBusy;
@@ -29,11 +35,15 @@ function selectedNotebookName() {
 async function refreshNotebookList({ silent = false } = {}) {
   refreshButton.disabled = true;
   notebookLmSelect.disabled = true;
-  notebookLmSelect.innerHTML = '<option value="">Loading NotebookLM notebooks...</option>';
+  notebookLmSelect.innerHTML = '<option value="">Loading notebooks...</option>';
+
+  if (!silent) {
+    setStatus("Loading notebooks...", { loading: true });
+  }
 
   try {
     notebookLmNotebooks = await NotebookToolsNotebookLM.listNotebookLmNotebooks();
-    notebookLmSelect.innerHTML = '<option value="">New NotebookLM notebook...</option>';
+    notebookLmSelect.innerHTML = '<option value="">Choose a notebook...</option>';
 
     for (const notebook of notebookLmNotebooks) {
       const option = document.createElement("option");
@@ -43,15 +53,14 @@ async function refreshNotebookList({ silent = false } = {}) {
     }
 
     if (!silent) {
-      const suffix = notebookLmNotebooks.length === 1 ? "" : "s";
-      setStatus(`Loaded ${notebookLmNotebooks.length} NotebookLM notebook${suffix}.`);
+      setStatus(`${notebookLmNotebooks.length} notebook${notebookLmNotebooks.length === 1 ? "" : "s"} ready.`);
     }
   } catch (error) {
     notebookLmNotebooks = [];
-    notebookLmSelect.innerHTML = '<option value="">Open NotebookLM and sign in first</option>';
+    notebookLmSelect.innerHTML = '<option value="">Sign in to NotebookLM first</option>';
 
     if (!silent) {
-      setStatus(error.message || "Could not load NotebookLM notebooks.", "error");
+      setStatus(error.message || "Could not load notebooks.", { type: "error" });
     }
   } finally {
     refreshButton.disabled = false;
@@ -61,7 +70,7 @@ async function refreshNotebookList({ silent = false } = {}) {
 
 async function importVideo() {
   setBusy(true);
-  setStatus("Preparing import...", "success");
+  setStatus("Adding video...", { loading: true });
 
   try {
     if (!youtubeUrl) {
@@ -72,25 +81,28 @@ async function importVideo() {
     let targetNotebook = null;
 
     if (newName) {
-      setStatus("Creating NotebookLM notebook...", "success");
+      setStatus("Creating notebook...", { loading: true });
       targetNotebook = await NotebookToolsNotebookLM.createNotebookLmNotebook(newName);
     } else {
       targetNotebook = notebookLmNotebooks.find((notebook) => notebook.id === notebookLmSelect.value) || null;
 
       if (!targetNotebook) {
-        throw new Error("Choose a notebook or enter a new notebook name.");
+        throw new Error("Choose a notebook or enter a new name.");
       }
     }
 
-    setStatus("Sending video to NotebookLM...", "success");
+    setStatus("Sending to NotebookLM...", { loading: true });
     await NotebookToolsNotebookLM.addYoutubeToNotebookLm(targetNotebook.id, youtubeUrl);
 
     newNotebookLmName.value = "";
     await refreshNotebookList({ silent: true });
     notebookLmSelect.value = targetNotebook.id;
-    setStatus(`Imported into "${targetNotebook.title}".`);
+    setStatus(`Added to "${targetNotebook.title}"`, { done: true });
+    window.setTimeout(() => {
+      window.parent.postMessage({ type: "notebooktools-import-success" }, "*");
+    }, SUCCESS_CLOSE_DELAY_MS);
   } catch (error) {
-    setStatus(error.message || "Could not import this video.", "error");
+    setStatus(error.message || "Import failed.", { type: "error" });
   } finally {
     setBusy(false);
   }

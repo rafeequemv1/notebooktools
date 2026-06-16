@@ -11,30 +11,25 @@
       <section class="card">
         <div class="brand">
           <img class="brand-logo" src="logo.svg" alt="NotebookTools" width="148" height="18">
-          <p id="videoTitle" class="brand-tagline">Send this YouTube video to NotebookLM.</p>
+          <p id="videoTitle" class="video-title">YouTube video</p>
         </div>
 
-        <label for="notebookLmSelect">NotebookLM notebook</label>
+        <label for="notebookLmSelect">Notebook</label>
         <select id="notebookLmSelect">
-          <option value="">Loading NotebookLM notebooks...</option>
+          <option value="">Loading notebooks...</option>
         </select>
 
-        <label for="newNotebookLmName">New notebook name</label>
-        <input id="newNotebookLmName" type="text" placeholder="Example: Video research">
+        <p class="field-divider">or create new</p>
 
-        <button class="button" id="importButton" type="button">
-          Import to NotebookLM
-        </button>
+        <input id="newNotebookLmName" type="text" placeholder="Notebook name" aria-label="New notebook name">
 
-        <button class="button secondary compact" id="refreshButton" type="button">
-          Refresh notebooks
-        </button>
+        <button class="button" id="importButton" type="button">Import</button>
+
+        <div class="footer-row">
+          <button class="text-button" id="refreshButton" type="button">Refresh list</button>
+        </div>
 
         <div class="status" id="status" role="status"></div>
-        <p class="hint">
-          Uses your signed-in NotebookLM browser session. Open NotebookLM once if
-          notebooks do not load.
-        </p>
       </section>
     </main>
 

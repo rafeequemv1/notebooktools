@@ -1,0 +1,51 @@
+# NotebookTools
+
+> NotebookTools is a free Chrome extension that imports YouTube videos, ChatGPT and Gemini conversations, X (Twitter) posts, webpages, and selected text directly into Google NotebookLM.
+
+NotebookTools helps researchers, students, and knowledge workers capture web content into NotebookLM without copy-paste. It uses your existing Google sign-in — no separate account, no backend server, and no analytics.
+
+## What it does
+
+- **YouTube**: Adds an import button on watch pages. Choose a notebook and add the video as a source in one click.
+- **ChatGPT & Gemini**: Adds a NotebookLM button at the top of chats. Imports the full conversation as clean text.
+- **X / Twitter**: Imports threads and articles as text sources.
+- **Webpages**: Import any page URL from the extension popup.
+- **Selected text**: Right-click highlighted text on any site → Add to NotebookLM.
+
+## Key facts
+
+- **Price**: Free — all features included.
+- **Platform**: Google Chrome (Manifest V3 extension).
+- **Auth**: Uses your signed-in NotebookLM / Google session in the browser.
+- **Privacy**: No backend server; no analytics; data stays between your browser and NotebookLM.
+- **Affiliation**: Independent tool — not affiliated with Google.
+
+## Pages
+
+- Home: https://notebooktools.vercel.app/
+- Blog: https://notebooktools.vercel.app/blog
+- Blog post — What is NotebookTools?: https://notebooktools.vercel.app/blog/what-is-notebooktools
+- Privacy policy: https://notebooktools.vercel.app/privacy
+- NotebookLM (Google): https://notebooklm.google.com/
+- Chrome Web Store / source: https://github.com/rafeequemv1/notebooktools
+
+## Common questions
+
+**What is NotebookTools?**
+A free Chrome extension that sends videos, chats, posts, pages, and highlights into NotebookLM.
+
+**Is NotebookTools free?**
+Yes. Every feature is free with no paywall.
+
+**Does NotebookTools work with ChatGPT and Gemini?**
+Yes. In-page buttons extract and import full conversations.
+
+**How do I import a YouTube video to NotebookLM?**
+Install NotebookTools, open NotebookLM once to sign in, visit a YouTube watch page, click the NotebookLM button, and pick a notebook.
+
+**Is my data sent to NotebookTools servers?**
+No. The extension talks directly to NotebookLM using your browser session.
+
+## Contact
+
+Project repository: https://github.com/rafeequemv1/notebooktools

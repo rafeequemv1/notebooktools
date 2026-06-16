@@ -266,7 +266,7 @@ async function listNotebookLmNotebooks(options = {}) {
 
 async function createNotebookLmNotebook(title, options = {}) {
   const tokens = await getNotebookLmTokens(options);
-  const safeTitle = String(title || "").trim() || "NotebookTools YouTube";
+  const safeTitle = String(title || "").trim() || "NotebookTools";
   const response = await callNotebookLmRpc(
     NOTEBOOKLM_RPC_IDS.createNotebook,
     [safeTitle],
@@ -311,7 +311,62 @@ async function addYoutubeToNotebookLm(notebookId, youtubeUrl, options = {}) {
   return true;
 }
 
+async function addWebpageToNotebookLm(notebookId, pageUrl, options = {}) {
+  const tokens = await getNotebookLmTokens(options);
+  const targetNotebookId = String(notebookId || "").trim();
+  const url = String(pageUrl || "").trim();
+
+  if (!targetNotebookId) {
+    throw new Error("Choose a NotebookLM notebook first.");
+  }
+
+  if (!url) {
+    throw new Error("Open a webpage first.");
+  }
+
+  const payload = [
+    [[null, null, [url]]],
+    targetNotebookId,
+    [2]
+  ];
+
+  await callNotebookLmRpc(NOTEBOOKLM_RPC_IDS.addSources, payload, tokens, {
+    sourcePath: `/notebook/${targetNotebookId}`
+  });
+
+  return true;
+}
+
+async function addTextToNotebookLm(notebookId, title, content, options = {}) {
+  const tokens = await getNotebookLmTokens(options);
+  const targetNotebookId = String(notebookId || "").trim();
+  const sourceTitle = cleanText(title) || "Selected text";
+  const bodyContent = String(content || "").trim();
+
+  if (!targetNotebookId) {
+    throw new Error("Choose a NotebookLM notebook first.");
+  }
+
+  if (!bodyContent) {
+    throw new Error("No text was selected.");
+  }
+
+  const payload = [
+    [[null, [sourceTitle, bodyContent], null, 2, null, null, null, null, null, null, 1]],
+    targetNotebookId,
+    [2]
+  ];
+
+  await callNotebookLmRpc(NOTEBOOKLM_RPC_IDS.addSources, payload, tokens, {
+    sourcePath: `/notebook/${targetNotebookId}`
+  });
+
+  return true;
+}
+
 window.NotebookToolsNotebookLM = {
+  addTextToNotebookLm,
+  addWebpageToNotebookLm,
   addYoutubeToNotebookLm,
   createNotebookLmNotebook,
   listNotebookLmNotebooks

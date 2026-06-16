@@ -1,24 +1,24 @@
 {
   "manifest_version": 3,
-  "name": "NotebookTools — YouTube to NotebookLM",
-  "version": "0.1.0",
-  "description": "Import YouTube videos into NotebookLM notebooks with one click from the popup or an in-page button.",
-  "permissions": ["activeTab", "storage"],
+  "name": "NotebookTools — Import to NotebookLM",
+  "version": "1.1.1",
+  "description": "Import YouTube videos, webpages, ChatGPT, Gemini, X posts, and selected text into NotebookLM.",
+  "permissions": ["activeTab", "storage", "contextMenus", "tabs"],
   "host_permissions": [
-    "https://www.youtube.com/*",
-    "https://youtube.com/*",
-    "https://m.youtube.com/*",
-    "https://youtu.be/*",
-    "https://www.youtube-nocookie.com/*",
+    "https://*/*",
+    "http://*/*",
     "https://notebooklm.google.com/*"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "NotebookTools — YouTube to NotebookLM",
+    "default_title": "NotebookTools — Import to NotebookLM",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
@@ -36,7 +36,31 @@
         "https://www.youtube-nocookie.com/*"
       ],
       "css": ["youtube-button.css"],
-      "js": ["youtube-button.js"],
+      "js": ["utils.js", "notebooklm-client.js", "youtube-button.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ],
+      "css": ["platform-button.css"],
+      "js": ["platform-extractors.js", "platform-button.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "css": ["platform-button.css"],
+      "js": ["platform-extractors.js", "platform-button.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "css": ["platform-button.css"],
+      "js": ["platform-extractors.js", "platform-button.js"],
       "run_at": "document_idle"
     }
   ],
@@ -45,17 +69,17 @@
       "resources": [
         "youtube-import.html",
         "youtube-import.js",
+        "platform-import.html",
+        "platform-import.js",
         "notebooklm-client.js",
         "utils.js",
         "shared.css",
-        "logo.svg"
+        "logo.svg",
+        "icons/icon48.svg"
       ],
       "matches": [
-        "https://www.youtube.com/*",
-        "https://youtube.com/*",
-        "https://m.youtube.com/*",
-        "https://youtu.be/*",
-        "https://www.youtube-nocookie.com/*"
+        "https://*/*",
+        "http://*/*"
       ]
     }
   ]
