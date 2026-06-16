@@ -1,31 +1,41 @@
 # NotebookTools
 
-NotebookTools is a simple Chrome extension and website starter for collecting webpage research for NotebookLM workflows.
+NotebookTools is a Chrome extension and website for sending YouTube videos to NotebookLM.
 
 ## Folders
 
-- `notebooktools-extension` contains the Chrome Manifest V3 addon.
-- `website` contains the static NotebookTools.com landing page.
+- `notebooktools-extension` — development copy of the Chrome MV3 extension
+- `version 0.1/` — **Chrome Web Store submission package** (zip the `extension` folder)
+- `website` — landing page and privacy policy for Vercel hosting
 
-## Extension Features
+## Version 0.1 features
 
-- Import the current YouTube video into a signed-in NotebookLM notebook.
-- Use the in-page **NotebookLM** button that appears beside YouTube's video action buttons.
-- Create a new NotebookLM notebook from the popup before importing a YouTube video.
-- Right-click selected text on any webpage and choose **Add selection to NotebookTools**.
-- Click the extension icon to add the entire current webpage.
-- Save captures into an existing local notebook or type a new notebook name.
-- Open NotebookLM from the extension after saving research.
+- Import the current YouTube video into a signed-in NotebookLM notebook
+- In-page **NotebookLM** button beside YouTube action buttons
+- Create a new NotebookLM notebook from the popup before importing
 
-## Install the Extension Locally
+## Install locally
 
-1. Open `chrome://extensions`.
-2. Turn on **Developer mode**.
-3. Click **Load unpacked**.
-4. Select the `notebooktools-extension` folder.
+1. Open `chrome://extensions`
+2. Turn on **Developer mode**
+3. Click **Load unpacked**
+4. Select `version 0.1/extension` (or `notebooktools-extension`)
 
-## NotebookLM Direct Import
+## Chrome Web Store upload
 
-NotebookLM does not provide a public browser extension API. The YouTube import feature uses the signed-in NotebookLM browser session and NotebookLM web RPCs. If import fails, open `https://notebooklm.google.com/`, confirm you are signed in, refresh the extension popup, and try again.
+See [`version 0.1/README.md`](version%200.1/README.md) for packaging and listing instructions.
 
-Local capture remains available as a fallback for selected text and full webpage notes.
+```powershell
+cd "version 0.1"
+.\package-extension.ps1
+```
+
+Upload `notebooktools-v0.1.0.zip` in the Chrome Developer Dashboard.
+
+## NotebookLM direct import
+
+NotebookLM does not provide a public browser extension API. YouTube import uses your signed-in NotebookLM browser session. If import fails, open [NotebookLM](https://notebooklm.google.com/), confirm you are signed in, refresh the extension popup, and try again.
+
+## Disclaimer
+
+NotebookTools is an independent project and is not affiliated with Google or NotebookLM.
