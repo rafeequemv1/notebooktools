@@ -12,12 +12,12 @@
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NotebookTools — Free Chrome Extension to Import YouTube, ChatGPT & Web to NotebookLM</title>
+    <title>NotebookTools — Import YouTube, Web & Highlights to NotebookLM</title>
     <meta
       name="description"
-      content="NotebookTools is a free Chrome extension that imports YouTube videos, ChatGPT and Gemini chats, X posts, webpages, and highlighted text into Google NotebookLM — one click, your existing sign-in."
+      content="NotebookTools is a free Chrome extension that sends YouTube videos, webpages, X posts, and highlighted text into Google NotebookLM — one click or right-click. Your sources, ready to query."
     >
-    <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, ChatGPT NotebookLM, Gemini NotebookLM, NotebookTools">
+    <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, save to NotebookLM, NotebookTools, web clipper">
     <meta name="author" content="NotebookTools">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <meta name="googlebot" content="index, follow">
@@ -27,12 +27,12 @@
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:locale" content="en_US">
     <meta property="og:title" content="NotebookTools — Import Anything to NotebookLM">
-    <meta property="og:description" content="Free Chrome extension: YouTube, ChatGPT, Gemini, X, webpages, and highlights → NotebookLM in one click.">
+    <meta property="og:description" content="Free Chrome extension: YouTube, webpages, X posts, and highlights → NotebookLM in one click. Right-click any selection to add.">
     <meta property="og:url" content="https://notebooktools.vercel.app/">
     <meta property="og:image" content="https://notebooktools.vercel.app/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NotebookTools — Import to NotebookLM">
-    <meta name="twitter:description" content="Import YouTube, AI chats, X posts, webpages, and text into NotebookLM. Free Chrome extension.">
+    <meta name="twitter:description" content="Import YouTube, webpages, X posts, and highlighted text into NotebookLM. Free Chrome extension.">
     <meta name="twitter:image" content="https://notebooktools.vercel.app/assets/og-image.png">
     <meta name="theme-color" content="#fdfbf7">
     <link rel="icon" href="assets/favicon.png" type="image/png">
@@ -48,7 +48,7 @@
           "@type": "WebSite",
           "name": "NotebookTools",
           "url": "https://notebooktools.vercel.app/",
-          "description": "Free Chrome extension for importing YouTube, ChatGPT, Gemini, X, webpages, and text into Google NotebookLM.",
+          "description": "Free Chrome extension for importing YouTube, X, webpages, and highlighted text into Google NotebookLM.",
           "inLanguage": "en"
         },
         {
@@ -68,15 +68,13 @@
             "price": "0",
             "priceCurrency": "USD"
           },
-          "description": "Import YouTube videos, ChatGPT and Gemini conversations, X posts, webpages, and selected text into Google NotebookLM.",
+          "description": "Import YouTube videos, X posts, webpages, and selected text into Google NotebookLM.",
           "url": "https://notebooktools.vercel.app/",
           "featureList": [
             "YouTube video import on watch pages",
-            "ChatGPT conversation extraction",
-            "Gemini conversation extraction",
             "X and Twitter thread import",
             "Webpage URL import",
-            "Selected text via context menu"
+            "Selected text via right-click context menu"
           ]
         },
         {
@@ -87,7 +85,7 @@
               "name": "What is NotebookTools?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "NotebookTools is a free Chrome extension that sends YouTube videos, ChatGPT and Gemini chats, X posts, webpages, and highlighted text directly into Google NotebookLM using your existing Google sign-in."
+                "text": "NotebookTools is a free Chrome extension that sends YouTube videos, X posts, webpages, and highlighted text directly into Google NotebookLM using your existing Google sign-in."
               }
             },
             {
@@ -108,10 +106,10 @@
             },
             {
               "@type": "Question",
-              "name": "Does NotebookTools work with ChatGPT and Gemini?",
+              "name": "How do I add highlighted text to NotebookLM?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. NotebookTools adds an in-page button at the top of ChatGPT and Gemini conversations and imports the full chat as text into NotebookLM."
+                "text": "Highlight text on any webpage, right-click, and choose Add to NotebookLM. Pick a notebook and the selection is imported as a text source."
               }
             },
             {
@@ -131,7 +129,8 @@
   <body>
     <header class="site-header">
       <a class="logo" href="/">
-        <img class="logo-img logo-header" src="assets/logo-wordmark.png" alt="NotebookTools" height="24">
+        <img class="logo-img logo-mark-header" src="assets/logo-mark-32.png" alt="" width="32" height="32">
+        <span class="logo-text">NotebookTools</span>
       </a>
       <nav class="site-nav">
         <a href="#features">Features</a>
@@ -150,17 +149,18 @@
         <div class="hero-inner">
           <div class="hero-copy">
             <p class="eyebrow">Built for NotebookLM</p>
-            <h1>Capture videos, chats, posts, and pages — straight into NotebookLM.</h1>
+            <h1>Turn videos, pages, and highlights into NotebookLM sources — instantly.</h1>
             <p class="lead">
-              NotebookTools lives in your browser. Import YouTube videos, ChatGPT and Gemini chats,
-              X posts and articles, webpages, or any highlighted text — straight into NotebookLM.
+              Stop copy-pasting links. NotebookTools adds YouTube videos, webpages, X posts,
+              and any text you select straight into your notebooks — so you can ask NotebookLM
+              about everything in one place.
             </p>
 
             <div class="brand-flow" aria-label="Sources to NotebookLM">
               <span class="flow-pill">YouTube</span>
-              <span class="flow-pill">ChatGPT</span>
-              <span class="flow-pill">Gemini</span>
+              <span class="flow-pill">Web</span>
               <span class="flow-pill">X</span>
+              <span class="flow-pill">Highlight</span>
               <span class="brand-flow-arrow" aria-hidden="true">→</span>
               <img class="logo-img logo-flow" src="assets/logo-mark-32.png" alt="NotebookTools" width="32" height="32">
             </div>
@@ -213,19 +213,19 @@
             <p>A native button on YouTube watch pages. Pick a notebook and import in one click.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon feature-icon-text">AI</div>
-            <h3>ChatGPT & Gemini</h3>
-            <p>A NotebookLM button at the top of chats. Import the full conversation as a text source.</p>
+            <div class="feature-icon feature-icon-text">✦</div>
+            <h3>Right-click highlights</h3>
+            <p>Select text on any page → right-click → <strong>Add to NotebookLM</strong>. Quotes and notes, imported in seconds.</p>
           </article>
           <article class="feature-card">
             <div class="feature-icon feature-icon-text">X</div>
             <h3>X / Twitter posts</h3>
-            <p>Import threads and articles from X with one click — extracted as clean text for NotebookLM.</p>
+            <p>Import threads and articles from X with one click — clean text sources in NotebookLM.</p>
           </article>
           <article class="feature-card">
             <div class="feature-icon feature-icon-text">↗</div>
-            <h3>Webpages & highlights</h3>
-            <p>Import any page from the popup, or right-click selected text on the web.</p>
+            <h3>Webpage import</h3>
+            <p>Open the extension popup on any tab to add the current page URL to a notebook.</p>
           </article>
         </div>
       </section>
@@ -244,7 +244,7 @@
           <li class="step-card">
             <span class="step-num">2</span>
             <h3>Choose your source</h3>
-            <p>YouTube button, ChatGPT/Gemini/X in-page button, popup for webpages, or right-click for text.</p>
+            <p>YouTube button, popup for webpages, X import, or right-click any highlighted text.</p>
           </li>
           <li class="step-card">
             <span class="step-num">3</span>
@@ -266,11 +266,9 @@
           <p class="pricing-price">$0 <span>forever</span></p>
           <ul class="pricing-features">
             <li>YouTube video import from watch pages</li>
-            <li>ChatGPT conversation extraction</li>
-            <li>Gemini conversation extraction</li>
             <li>X / Twitter threads and articles</li>
             <li>Webpage URL import from any site</li>
-            <li>Selected text via right-click context menu</li>
+            <li>Right-click: Add to NotebookLM on selected text</li>
             <li>Create or choose NotebookLM notebooks</li>
             <li>Works with your existing NotebookLM session</li>
           </ul>
@@ -288,8 +286,8 @@
             <summary itemprop="name">What is NotebookTools?</summary>
             <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
               <p itemprop="text">
-                NotebookTools is a free Chrome extension that sends YouTube videos, ChatGPT and Gemini
-                chats, X posts, webpages, and highlighted text directly into Google NotebookLM —
+                NotebookTools is a free Chrome extension that sends YouTube videos, X posts,
+                webpages, and highlighted text directly into Google NotebookLM —
                 using your existing Google sign-in.
               </p>
             </div>
@@ -313,11 +311,11 @@
             </div>
           </details>
           <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary itemprop="name">Does NotebookTools work with ChatGPT and Gemini?</summary>
+            <summary itemprop="name">How do I add highlighted text to NotebookLM?</summary>
             <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
               <p itemprop="text">
-                Yes. NotebookTools adds an in-page button at the top of ChatGPT and Gemini
-                conversations. It extracts the full chat and imports it as text into NotebookLM.
+                Highlight text on any page, right-click, and choose <strong>Add to NotebookLM</strong>.
+                Select a notebook and your selection is imported as a text source.
               </p>
             </div>
           </details>
@@ -353,7 +351,7 @@
           </div>
           <ul class="install-benefits">
             <li>Free — all features included</li>
-            <li>YouTube, ChatGPT, Gemini, X & web</li>
+            <li>YouTube, X, web &amp; right-click highlights</li>
             <li>Privacy-first — <a href="privacy.html">read our policy</a></li>
           </ul>
         </div>

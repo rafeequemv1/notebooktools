@@ -5,7 +5,7 @@ const PLATFORM_IMPORT_KEY = "notebooktoolsPlatformImport";
 
 let platformImportCache = null;
 
-chrome.runtime.onInstalled.addListener(() => {
+function setupContextMenu() {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
       id: "notebooktools-add-selection",
@@ -13,7 +13,11 @@ chrome.runtime.onInstalled.addListener(() => {
       contexts: ["selection"]
     });
   });
-});
+}
+
+chrome.runtime.onInstalled.addListener(setupContextMenu);
+chrome.runtime.onStartup.addListener(setupContextMenu);
+setupContextMenu();
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "notebooktools-store-platform-import") {

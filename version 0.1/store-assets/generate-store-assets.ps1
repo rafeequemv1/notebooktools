@@ -203,177 +203,146 @@ if ($script:LogoImage) {
 }
 Write-Host "Created store-icon-128.png"
 
-# --- Screenshot 1: Workflow overview ---
+# --- Screenshot 1: Outcome ---
 $c = New-Bitmap 1280 800
 $g = $c.Graphics
 Draw-RainbowBar $g 0 0 1280 5
-Draw-BrandHeader $g 72 52 48
-$ey = Get-Font "Segoe UI" 13 "Bold"
-$eb = New-Object System.Drawing.SolidBrush $script:Accent
-Draw-Text $g "WORKFLOW" $ey $eb 72 130
-$title = Get-Font "Segoe UI" 40 "Bold"
+Draw-BrandHeader $g 72 48 44
+$outcome = Get-Font "Segoe UI" 44 "Bold"
 $tb = New-Object System.Drawing.SolidBrush $script:Ink
-Draw-Text $g "From the web to NotebookLM in 3 steps" $title $tb 72 158
-$lead = Get-Font "Segoe UI" 18
+Draw-Text $g "Your sources. One notebook." $outcome $tb 72 118
+Draw-Text $g "Ready to ask NotebookLM anything." (Get-Font "Segoe UI" 44 "Bold") $tb 72 172
 $lb = New-Object System.Drawing.SolidBrush $script:Muted
-Draw-Text $g "Pick a source, choose a notebook, import. Your session, your data." $lead $lb 72 220
+Draw-Text $g "Videos, articles, posts, and highlights - imported in seconds." (Get-Font "Segoe UI" 20) $lb 72 240
 
-Draw-Step $g 1 72 290 "Install extension" "Add NotebookTools to Chrome"
-Draw-Arrow $g 300 345 340 345
-Draw-Step $g 2 350 290 "Open a source" "YouTube, ChatGPT, Gemini, X, or any page"
-Draw-Arrow $g 578 345 618 345
-Draw-Step $g 3 628 290 "Click import" "Source appears in NotebookLM"
-
-Draw-PaperCard $g 72 440 1136 300 18
-Draw-Text $g "Supported sources" (Get-Font "Segoe UI" 14 "Bold") $lb 100 468
-$px = 100; $py = 510
-foreach ($p in @("YouTube", "ChatGPT", "Gemini", "X", "Webpage", "Highlight")) {
-    $pw = Draw-Pill $g $p $px $py ([System.Drawing.Color]::FromArgb(246, 242, 234)) $script:Ink
-    $px += $pw + 12
+Draw-PaperCard $g 72 310 520 400 18
+Draw-Text $g "Before: scattered tabs" (Get-Font "Segoe UI" 14 "Bold") $lb 100 340
+$by = 372
+foreach ($t in @("youtube.com/watch?v=...", "article-open-in-tab", "x.com/thread/...", "highlighted quote")) {
+    Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 100 $by 460 44 8
+    Draw-Text $g $t (Get-Font "Segoe UI" 13) $tb 116 ($by + 12)
+    $by += 52
 }
-Draw-Arrow $g 700 525 780 525
-Draw-Logo $g 790 498 56
-Draw-Arrow $g 860 525 940 525
-Draw-PaperCard $g 950 478 220 96 12
-Draw-Text $g "NotebookLM" (Get-Font "Segoe UI" 16 "Bold") $tb 1000 500
-Draw-Text $g "Your notebook" (Get-Font "Segoe UI" 12) $lb 1000 530
-Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-01-workflow.png")
+Draw-Arrow $g 620 500 680 500
+Draw-PaperCard $g 700 310 508 400 18
+Draw-Logo $g 730 340 48
+Draw-Text $g "After: NotebookLM notebook" (Get-Font "Segoe UI" 14 "Bold") $lb 790 348
+$iy = 400
+foreach ($s in @("YouTube: Research lecture", "Web: Industry report", "X: Expert thread", "Text: Key quote")) {
+    Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(232, 240, 254))) 730 $iy 448 48 8
+    Draw-Text $g $s (Get-Font "Segoe UI" 13 "Bold") $tb 746 ($iy + 14)
+    $iy += 58
+}
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush $script:Green) 730 640 280 40 8
+Draw-Text $g "Ask across all sources" (Get-Font "Segoe UI" 14 "Bold") (New-Object System.Drawing.SolidBrush $script:Paper) 790 650
+Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-01-outcome.png")
 Dispose-Canvas $c
-Write-Host "Created screenshot-01-workflow.png"
+Write-Host "Created screenshot-01-outcome.png"
 
 # --- Screenshot 2: YouTube ---
 $c = New-Bitmap 1280 800
 $g = $c.Graphics
 Draw-RainbowBar $g 0 0 1280 5
 Draw-BrandHeader $g 72 40 40
-Draw-Text $g "YouTube import" (Get-Font "Segoe UI" 34 "Bold") $tb 72 110
-Draw-Text $g "Step 1: Open a video  |  Step 2: Click NotebookLM  |  Step 3: Pick notebook" (Get-Font "Segoe UI" 16) $lb 72 165
-
-Draw-PaperCard $g 72 210 1136 520 18
+Draw-Text $g "YouTube to NotebookLM" (Get-Font "Segoe UI" 36 "Bold") $tb 72 108
+Draw-Text $g "Outcome: video becomes a source you can query" (Get-Font "Segoe UI" 18) $lb 72 158
+Draw-PaperCard $g 72 200 1136 500 18
 $yt = New-Object System.Drawing.SolidBrush $script:YouTube
-$g.FillRectangle($yt, 100, 240, 1140, 48)
-Draw-Text $g "youtube.com" (Get-Font "Segoe UI" 18 "Bold") (New-Object System.Drawing.SolidBrush $script:Paper) 120 252
-$dark = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(18, 18, 18))
-Fill-RoundRect $g $dark 120 310 1080 380 10
-$play = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(50, 50, 50))
-Fill-RoundRect $g $play 580 430 120 80 8
-Draw-Text $g ">" (Get-Font "Segoe UI" 36 "Bold") (New-Object System.Drawing.SolidBrush $script:Paper) 625 445
-
-# highlight button
-Draw-PaperCard $g 900 248 280 52 26
-Draw-Logo $g 912 254 40
-Draw-Text $g "NotebookLM" (Get-Font "Segoe UI" 15 "Bold") $tb 960 264
+$g.FillRectangle($yt, 100, 230, 1100, 44)
+Draw-Text $g "youtube.com" (Get-Font "Segoe UI" 17 "Bold") (New-Object System.Drawing.SolidBrush $script:Paper) 118 240
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(18, 18, 18))) 100 290 1100 300 10
+Draw-PaperCard $g 880 248 300 52 26
+Draw-Logo $g 892 254 40
+Draw-Text $g "NotebookLM" (Get-Font "Segoe UI" 15 "Bold") $tb 940 264
 $hl = New-Object System.Drawing.Pen $script:Accent, 3
-Draw-RoundRect $g $hl 896 244 288 60 26
+Draw-RoundRect $g $hl 876 244 308 60 26
 $hl.Dispose()
-
-Draw-PaperCard $g 420 620 440 80 12
-Draw-Text $g "One click on every watch page" (Get-Font "Segoe UI" 20 "Bold") $tb 450 648
+Draw-Arrow $g 640 620 760 620
+Draw-PaperCard $g 780 580 380 90 12
+Draw-Text $g "Added to your notebook" (Get-Font "Segoe UI" 18 "Bold") $tb 820 612
 Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-02-youtube.png")
 Dispose-Canvas $c
 Write-Host "Created screenshot-02-youtube.png"
 
-# --- Screenshot 3: Popup ---
+# --- Screenshot 3: Right-click highlight ---
 $c = New-Bitmap 1280 800
 $g = $c.Graphics
 Draw-RainbowBar $g 0 0 1280 5
 Draw-BrandHeader $g 72 40 40
-Draw-Text $g "Webpage import from popup" (Get-Font "Segoe UI" 34 "Bold") $tb 72 110
-Draw-Text $g "Open extension on any tab, select notebook, import URL" (Get-Font "Segoe UI" 16) $lb 72 165
-
-Draw-PaperCard $g 380 200 520 480 18
-Draw-Logo $g 410 230 40
-Draw-Text $g "NotebookTools" (Get-Font "Segoe UI" 18 "Bold") $tb 460 240
-Draw-PrimaryBtn $g "Webpage" 410 290 100
-Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(246, 242, 234))) 520 290 90 44 8
-Draw-Text $g "YouTube" (Get-Font "Segoe UI" 13) $lb 538 302
-Draw-Text $g "1. Current page URL" (Get-Font "Segoe UI" 12 "Bold") $lb 410 360
-Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 410 382 460 40 8
-Draw-Text $g "https://article-you-are-reading.com" (Get-Font "Segoe UI" 13) $tb 424 392
-Draw-Text $g "2. Choose notebook" (Get-Font "Segoe UI" 12 "Bold") $lb 410 440
-Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 410 462 460 40 8
-Draw-Text $g "Research notes" (Get-Font "Segoe UI" 13) $tb 424 472
-Draw-Text $g "3. Import" (Get-Font "Segoe UI" 12 "Bold") $lb 410 520
-Draw-PrimaryBtn $g "Import webpage" 410 548 460
-
-Draw-Step $g 1 72 300 "Pin extension" "Click toolbar icon on any tab"
-Draw-Step $g 2 72 430 "Select notebook" "Create new or use existing"
-Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-03-popup.png")
-Dispose-Canvas $c
-Write-Host "Created screenshot-03-popup.png"
-
-# --- Screenshot 4: AI chats ---
-$c = New-Bitmap 1280 800
-$g = $c.Graphics
-Draw-RainbowBar $g 0 0 1280 5
-Draw-BrandHeader $g 72 40 40
-Draw-Text $g "ChatGPT and Gemini" (Get-Font "Segoe UI" 34 "Bold") $tb 72 110
-Draw-Text $g "Full conversation extracted and sent as a text source" (Get-Font "Segoe UI" 16) $lb 72 165
-
-Draw-PaperCard $g 72 210 700 520 18
-Draw-PrimaryBtn $g "NotebookLM" 100 240 200
-Draw-Logo $g 108 248 28
-Draw-Text $g "Chat thread" (Get-Font "Segoe UI" 13 "Bold") $lb 100 310
-Fill-RoundRect $g (New-Object System.Drawing.SolidBrush $script:Accent) 100 340 480 48 10
-Draw-Text $g "Summarize my research sources" (Get-Font "Segoe UI" 14) (New-Object System.Drawing.SolidBrush $script:Paper) 118 356
-Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 100 410 580 140 10
-Draw-Text $g "Here is a synthesis across your videos, articles," (Get-Font "Segoe UI" 14) $tb 118 430
-Draw-Text $g "and chat notes in NotebookLM..." (Get-Font "Segoe UI" 14) $tb 118 458
-
-Draw-PaperCard $g 820 280 388 380 18
-Draw-Logo $g 850 310 64
-Draw-Text $g "Import flow" (Get-Font "Segoe UI" 18 "Bold") $tb 930 320
-Draw-Text $g "1. Button at top of chat" (Get-Font "Segoe UI" 13) $lb 850 380
-Draw-Text $g "2. Extract full conversation" (Get-Font "Segoe UI" 13) $lb 850 410
-Draw-Text $g "3. Add to notebook as text" (Get-Font "Segoe UI" 13) $lb 850 440
-Draw-Arrow $g 900 500 900 560
-Draw-PaperCard $g 850 570 320 56 10
-Draw-Text $g "NotebookLM source added" (Get-Font "Segoe UI" 14 "Bold") $tb 900 588
-Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-04-ai-chats.png")
-Dispose-Canvas $c
-Write-Host "Created screenshot-04-ai-chats.png"
-
-# --- Screenshot 5: Highlight + all sources ---
-$c = New-Bitmap 1280 800
-$g = $c.Graphics
-Draw-RainbowBar $g 0 0 1280 5
-Draw-BrandHeader $g 72 40 40
-Draw-Text $g "Right-click highlights and more" (Get-Font "Segoe UI" 34 "Bold") $tb 72 110
-Draw-Text $g "X threads, selected text, and every import path in one extension" (Get-Font "Segoe UI" 16) $lb 72 165
-
-Draw-PaperCard $g 72 220 540 420 18
-Draw-Text $g "Any webpage" (Get-Font "Segoe UI" 14 "Bold") $lb 100 250
-Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 100 280 500 120 8
-Draw-Text $g "Highlight important text on any site..." (Get-Font "Segoe UI" 15) $tb 120 310
+Draw-Text $g "Right-click any highlight" (Get-Font "Segoe UI" 36 "Bold") $tb 72 108
+Draw-Text $g "Outcome: selection saved as a NotebookLM text source" (Get-Font "Segoe UI" 18) $lb 72 158
+Draw-PaperCard $g 72 200 560 480 18
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 100 240 500 160 10
+Draw-Text $g "The most important finding from the report" (Get-Font "Segoe UI" 16) $tb 120 280
 $hlBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 249, 196))
-$g.FillRectangle($hlBrush, 120, 340, 340, 28)
-Draw-Text $g "key insight you want in NotebookLM" (Get-Font "Segoe UI" 14 "Bold") $tb 128 346
+$g.FillRectangle($hlBrush, 120, 320, 420, 32)
+Draw-Text $g "was the shift in user behavior in Q3." (Get-Font "Segoe UI" 15 "Bold") $tb 128 326
 $hlBrush.Dispose()
-
-Draw-PaperCard $g 100 430 280 180 10
-Draw-Text $g "Add to NotebookLM" (Get-Font "Segoe UI" 14 "Bold") $tb 130 460
-Draw-Text $g "Copy" (Get-Font "Segoe UI" 12) $lb 130 500
-Draw-Text $g "Search Google for..." (Get-Font "Segoe UI" 12) $lb 130 530
-
-Draw-PaperCard $g 660 220 548 520 18
-Draw-Text $g "All import paths" (Get-Font "Segoe UI" 18 "Bold") $tb 690 250
-$iy = 300
-foreach ($row in @(
-    @{ I = "YouTube"; D = "Watch page button" },
-    @{ I = "ChatGPT / Gemini"; D = "In-page chat button" },
-    @{ I = "X / Twitter"; D = "Threads and articles" },
-    @{ I = "Webpage"; D = "Popup URL import" },
-    @{ I = "Selected text"; D = "Right-click menu" }
-)) {
-    Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 690 $iy 488 56 8
-    Draw-Logo $g 704 ($iy + 8) 40
-    Draw-Text $g $row.I (Get-Font "Segoe UI" 14 "Bold") $tb 756 ($iy + 10)
-    Draw-Text $g $row.D (Get-Font "Segoe UI" 12) $lb 756 ($iy + 32)
-    $iy += 68
-}
-Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-05-all-sources.png")
+Draw-PaperCard $g 120 420 300 200 12
+Draw-Text $g "Add to NotebookLM" (Get-Font "Segoe UI" 16 "Bold") $tb 150 450
+$accentBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(232, 240, 254))
+Fill-RoundRect $g $accentBrush 130 490 260 36 6
+Draw-Text $g "Add to NotebookLM" (Get-Font "Segoe UI" 13 "Bold") $tb 150 498
+$accentBrush.Dispose()
+Draw-Text $g "Copy" (Get-Font "Segoe UI" 12) $lb 150 540
+Draw-PaperCard $g 680 280 528 360 18
+Draw-Step $g 1 710 320 "Highlight text" "Select the passage you need"
+Draw-Step $g 2 710 450 "Right-click" "Choose Add to NotebookLM"
+Draw-Step $g 3 710 580 "Pick notebook" "Source ready to query"
+Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-03-rightclick.png")
 Dispose-Canvas $c
-Write-Host "Created screenshot-05-all-sources.png"
+Write-Host "Created screenshot-03-rightclick.png"
+
+# --- Screenshot 4: Popup webpage ---
+$c = New-Bitmap 1280 800
+$g = $c.Graphics
+Draw-RainbowBar $g 0 0 1280 5
+Draw-BrandHeader $g 72 40 40
+Draw-Text $g "Import any webpage" (Get-Font "Segoe UI" 36 "Bold") $tb 72 108
+Draw-Text $g "Outcome: current tab URL added to your notebook" (Get-Font "Segoe UI" 18) $lb 72 158
+Draw-PaperCard $g 360 190 560 500 18
+Draw-Logo $g 390 220 40
+Draw-Text $g "NotebookTools" (Get-Font "Segoe UI" 18 "Bold") $tb 440 230
+Draw-PrimaryBtn $g "Webpage" 390 280 110
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(246, 242, 234))) 510 280 100 44 8
+Draw-Text $g "YouTube" (Get-Font "Segoe UI" 13) $lb 528 292
+Draw-Text $g "Current page" (Get-Font "Segoe UI" 12 "Bold") $lb 390 350
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 390 372 500 40 8
+Draw-Text $g "https://research-article.com/report" (Get-Font "Segoe UI" 13) $tb 404 382
+Draw-Text $g "Notebook" (Get-Font "Segoe UI" 12 "Bold") $lb 390 430
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 390 452 500 40 8
+Draw-Text $g "Research notes" (Get-Font "Segoe UI" 13) $tb 404 462
+Draw-PrimaryBtn $g "Import webpage" 390 520 500
+Draw-Arrow $g 200 400 340 400
+Draw-PaperCard $g 72 340 200 120 12
+Draw-Text $g "1 click" (Get-Font "Segoe UI" 22 "Bold") $tb 110 390
+Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-04-popup.png")
+Dispose-Canvas $c
+Write-Host "Created screenshot-04-popup.png"
+
+# --- Screenshot 5: Query outcome ---
+$c = New-Bitmap 1280 800
+$g = $c.Graphics
+Draw-RainbowBar $g 0 0 1280 5
+Draw-BrandHeader $g 72 40 40
+Draw-Text $g "Then ask NotebookLM" (Get-Font "Segoe UI" 36 "Bold") $tb 72 108
+Draw-Text $g "Synthesize across every source you imported" (Get-Font "Segoe UI" 18) $lb 72 158
+Draw-PaperCard $g 72 200 1136 520 18
+Draw-Text $g "NotebookLM" (Get-Font "Segoe UI" 22 "Bold") $tb 100 240
+Draw-Text $g "Sources in your notebook" (Get-Font "Segoe UI" 13 "Bold") $lb 100 290
+$iy = 320
+foreach ($s in @("YouTube video", "Web article", "X thread", "Highlighted quote")) {
+    Fill-RoundRect $g (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(253, 251, 247))) 100 $iy 420 48 8
+    Draw-Logo $g 112 ($iy + 6) 36
+    Draw-Text $g $s (Get-Font "Segoe UI" 14) $tb 158 ($iy + 14)
+    $iy += 58
+}
+Fill-RoundRect $g (New-Object System.Drawing.SolidBrush $script:Accent) 580 380 560 120 12
+Draw-Text $g "What are the main themes across my sources?" (Get-Font "Segoe UI" 18 "Bold") (New-Object System.Drawing.SolidBrush $script:Paper) 610 420
+Draw-Text $g "NotebookLM answers using everything you imported." (Get-Font "Segoe UI" 14) (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(220, 235, 255))) 610 460
+Save-RgbPng $c.Bitmap (Join-Path $outDir "screenshot-05-query.png")
+Dispose-Canvas $c
+Write-Host "Created screenshot-05-query.png"
 
 # --- Small promo 440x280 ---
 $c = New-Bitmap 440 280
@@ -381,9 +350,9 @@ $g = $c.Graphics
 Draw-RainbowBar $g 0 0 440 5
 Draw-Logo $g 32 36 72
 Draw-Text $g "NotebookTools" (Get-Font "Segoe UI" 24 "Bold") $tb 118 58
-Draw-Text $g "Import to NotebookLM" (Get-Font "Segoe UI" 15) $lb 32 130
+Draw-Text $g "Sources to NotebookLM in one click" (Get-Font "Segoe UI" 14) $lb 32 128
 $px = 32; $py = 168
-foreach ($p in @("YouTube", "ChatGPT", "Web")) {
+foreach ($p in @("YouTube", "Web", "Highlight")) {
     $pw = Draw-Pill $g $p $px $py ([System.Drawing.Color]::FromArgb(232, 240, 254)) $script:Accent 11
     $px += $pw + 8
 }
@@ -398,30 +367,31 @@ $g = $c.Graphics
 Draw-RainbowBar $g 0 0 1400 6
 Draw-Logo $g 100 90 96
 Draw-Text $g "NotebookTools" (Get-Font "Segoe UI" 42 "Bold") $tb 220 115
-Draw-Text $g "Import YouTube, AI chats, X, webpages, and highlights into NotebookLM" (Get-Font "Segoe UI" 24) $tb 100 230
-Draw-Text $g "Free Chrome extension  |  One click  |  Your Google sign-in" (Get-Font "Segoe UI" 17) $lb 100 285
+Draw-Text $g "Import YouTube, webpages, X posts, and highlights into NotebookLM" (Get-Font "Segoe UI" 24) $tb 100 230
+Draw-Text $g "Right-click any selection  |  Free  |  Your Google sign-in" (Get-Font "Segoe UI" 17) $lb 100 285
 $px = 100; $py = 350
-foreach ($p in @("YouTube", "ChatGPT", "Gemini", "X", "Web", "Text")) {
+foreach ($p in @("YouTube", "X", "Web", "Highlight")) {
     $pw = Draw-Pill $g $p $px $py ([System.Drawing.Color]::FromArgb(246, 242, 234)) $script:Ink 14
     $px += $pw + 10
 }
 Draw-PrimaryBtn $g "Add to Chrome - Free" 100 430 300
-
 Draw-PaperCard $g 860 80 460 400 18
-Draw-Logo $g 890 110 56
-Draw-Text $g "How it works" (Get-Font "Segoe UI" 20 "Bold") $tb 960 125
-Draw-Text $g "1. Install and sign in to NotebookLM" (Get-Font "Segoe UI" 14) $lb 890 190
-Draw-Text $g "2. Click import on any supported site" (Get-Font "Segoe UI" 14) $lb 890 230
-Draw-Text $g "3. Source appears in your notebook" (Get-Font "Segoe UI" 14) $lb 890 270
-Draw-PrimaryBtn $g "Import now" 890 340 360
+Draw-Text $g "The outcome" (Get-Font "Segoe UI" 20 "Bold") $tb 890 125
+Draw-Text $g "All your sources in one notebook" (Get-Font "Segoe UI" 14) $lb 890 170
+Draw-Text $g "Ask questions across videos, pages," (Get-Font "Segoe UI" 14) $lb 890 200
+Draw-Text $g "posts, and saved highlights." (Get-Font "Segoe UI" 14) $lb 890 228
+Draw-PrimaryBtn $g "Start importing" 890 300 360
 Save-RgbPng $c.Bitmap (Join-Path $outDir "promo-marquee-1400x560.png")
 Dispose-Canvas $c
 Write-Host "Created promo-marquee-1400x560.png"
 
 if ($script:LogoImage) { $script:LogoImage.Dispose() }
 
-# Remove old filenames if present
 @(
+    "screenshot-01-workflow.png",
+    "screenshot-03-popup.png",
+    "screenshot-04-ai-chats.png",
+    "screenshot-05-all-sources.png",
     "screenshot-01-hero.png",
     "screenshot-05-sources.png"
 ) | ForEach-Object {
