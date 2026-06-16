@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotebookTools</title>
+    <link rel="stylesheet" href="shared.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="card">
+        <div class="brand">
+          <span class="brand-mark">NT</span>
+          <div>
+            <h1>NotebookTools</h1>
+            <p>Import YouTube into NotebookLM or save webpages locally.</p>
+          </div>
+        </div>
+
+        <div class="section-title">NotebookLM YouTube Import</div>
+
+        <label for="notebookLmSelect">NotebookLM notebook</label>
+        <select id="notebookLmSelect">
+          <option value="">Loading NotebookLM notebooks...</option>
+        </select>
+
+        <label for="newNotebookLmName">New NotebookLM notebook name</label>
+        <input id="newNotebookLmName" type="text" placeholder="Example: YouTube research">
+
+        <button class="button" id="importYouTubeButton" type="button">
+          Import Current YouTube Video
+        </button>
+
+        <button class="button secondary compact" id="refreshNotebookLmButton" type="button">
+          Refresh NotebookLM notebooks
+        </button>
+
+        <div class="divider"></div>
+        <div class="section-title">Local Capture Fallback</div>
+
+        <label for="notebookSelect">Existing notebook</label>
+        <select id="notebookSelect">
+          <option value="">New notebook...</option>
+        </select>
+
+        <label for="newNotebookName">New notebook name</label>
+        <input id="newNotebookName" type="text" placeholder="Example: Research notes">
+
+        <button class="button" id="savePageButton" type="button">
+          Add Entire Webpage
+        </button>
+
+        <a class="button secondary" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">
+          Open NotebookLM
+        </a>
+
+        <div class="status" id="status" role="status"></div>
+        <p class="hint">
+          Right-click selected text on any webpage to save just that selection.
+          Direct NotebookLM import is experimental and uses your signed-in
+          NotebookLM browser session.
+        </p>
+      </section>
+    </main>
+
+    <script src="storage.js"></script>
+    <script src="notebooklm-client.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

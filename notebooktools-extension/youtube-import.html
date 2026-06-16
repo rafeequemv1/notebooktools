@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Import to NotebookLM</title>
+    <link rel="stylesheet" href="shared.css">
+  </head>
+  <body>
+    <main class="app embedded">
+      <section class="card">
+        <div class="brand">
+          <span class="brand-mark">NT</span>
+          <div>
+            <h1>Import Video</h1>
+            <p id="videoTitle">Send this YouTube video to NotebookLM.</p>
+          </div>
+        </div>
+
+        <label for="notebookLmSelect">NotebookLM notebook</label>
+        <select id="notebookLmSelect">
+          <option value="">Loading NotebookLM notebooks...</option>
+        </select>
+
+        <label for="newNotebookLmName">New NotebookLM notebook name</label>
+        <input id="newNotebookLmName" type="text" placeholder="Example: YouTube research">
+
+        <button class="button" id="importButton" type="button">
+          Import to NotebookLM
+        </button>
+
+        <button class="button secondary compact" id="refreshButton" type="button">
+          Refresh notebooks
+        </button>
+
+        <div class="status" id="status" role="status"></div>
+        <p class="hint">
+          Uses your signed-in NotebookLM browser session. If loading fails, open
+          NotebookLM once and refresh this panel.
+        </p>
+      </section>
+    </main>
+
+    <script src="storage.js"></script>
+    <script src="notebooklm-client.js"></script>
+    <script src="youtube-import.js"></script>
+  </body>
+</html>

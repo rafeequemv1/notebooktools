@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotebookTools.com</title>
+    <meta
+      name="description"
+      content="NotebookTools is a simple Chrome addon for collecting webpage text for NotebookLM research."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="/">
+        <span>NT</span>
+        NotebookTools
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">NotebookTools.com</p>
+          <h1>Save webpage research for NotebookLM without breaking your flow.</h1>
+          <p>
+            Select text on any webpage, right-click, and save it to a notebook.
+            Click the addon to add the entire webpage to an existing or new notebook.
+          </p>
+          <div class="actions">
+            <a class="button" href="#install">Install the Chrome addon</a>
+            <a class="button secondary" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">
+              Open NotebookLM
+            </a>
+          </div>
+        </div>
+        <div class="hero-card" aria-label="NotebookTools preview">
+          <div class="mini-window">
+            <div class="dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <h2>Add Entire Webpage</h2>
+            <label>Existing notebook</label>
+            <div class="select">AI Research Notes</div>
+            <label>New notebook name</label>
+            <div class="input">NotebookLM Sources</div>
+            <button>Add to Notebook</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="features" id="features">
+        <article>
+          <span>01</span>
+          <h2>Right-click selected text</h2>
+          <p>Capture only the useful part of an article, paper, blog post, or documentation page.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Add full pages</h2>
+          <p>Open the extension popup to save the active webpage into a notebook in one step.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>Simple notebook choices</h2>
+          <p>Pick an existing notebook or type a new notebook name when you save a source.</p>
+        </article>
+      </section>
+
+      <section class="install" id="install">
+        <div>
+          <p class="eyebrow">First version</p>
+          <h2>Install locally in Chrome</h2>
+          <p>
+            This project starts as a local Chrome extension. Load the
+            <code>notebooktools-extension</code> folder in Chrome using developer mode.
+          </p>
+        </div>
+        <ol>
+          <li>Open <code>chrome://extensions</code>.</li>
+          <li>Turn on <strong>Developer mode</strong>.</li>
+          <li>Click <strong>Load unpacked</strong>.</li>
+          <li>Select the <code>notebooktools-extension</code> folder.</li>
+        </ol>
+      </section>
+    </main>
+
+    <footer>
+      <p>NotebookTools.com</p>
+      <p>Built for simple NotebookLM research collection.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

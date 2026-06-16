@@ -1,0 +1,11 @@
+# Third-party reference addon unpacks (not part of NotebookTools)
+extension-inspection/
+extension-inspection-2/
+extension-inspection-3/
+extension-inspection-4/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

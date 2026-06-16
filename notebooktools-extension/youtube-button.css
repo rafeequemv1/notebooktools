@@ -1,0 +1,70 @@
+.notebooktools-youtube-action {
+  align-items: center;
+  display: inline-flex;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.notebooktools-youtube-action button {
+  align-items: center;
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.05));
+  border: 0;
+  border-radius: 999px;
+  color: var(--yt-spec-text-primary, #0f0f0f);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.notebooktools-youtube-action button:hover,
+.notebooktools-youtube-action.is-open button {
+  background: var(--yt-spec-button-chip-background-hover, rgba(0, 0, 0, 0.1));
+}
+
+.notebooktools-youtube-mark {
+  align-items: center;
+  background: #3b5bdb;
+  border-radius: 7px;
+  color: #fff;
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 800;
+  height: 20px;
+  justify-content: center;
+  letter-spacing: -0.03em;
+  width: 20px;
+}
+
+.notebooktools-youtube-panel {
+  background: transparent;
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+  height: 470px;
+  position: fixed;
+  width: 380px;
+  z-index: 2147483647;
+}
+
+@media (max-width: 720px) {
+  .notebooktools-youtube-action button {
+    padding: 0 11px;
+  }
+
+  .notebooktools-youtube-text {
+    display: none;
+  }
+
+  .notebooktools-youtube-panel {
+    left: 12px !important;
+    right: 12px;
+    width: calc(100vw - 24px);
+  }
+}
