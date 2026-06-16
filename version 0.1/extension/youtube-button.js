@@ -107,12 +107,12 @@ function createButton() {
   mark.className = "notebooktools-youtube-mark";
   mark.setAttribute("aria-hidden", "true");
   mark.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M4 20V10C4 10 7 6 12 6C17 6 20 10 20 10V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-    <path d="M7 20V12C7 12 9 9 12 9C15 9 17 12 17 12V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-    <path d="M10 20V14C10 14 11 12 12 12C13 12 14 14 14 14V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+    <path d="M2 22V12.5C2 12.5 4.8 7.5 12 7.5C19.2 7.5 22 12.5 22 12.5V22" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+    <path d="M5.5 22V14.8C5.5 14.8 7.6 10.8 12 10.8C16.4 10.8 18.5 14.8 18.5 14.8V22" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+    <path d="M9 22V17.2C9 17.2 10.2 14.8 12 14.8C13.8 14.8 15 17.2 15 17.2V22" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
   </svg>`;
   text.className = "notebooktools-youtube-text";
-  text.textContent = "NotebookLM";
+  text.textContent = "NotebookTools";
 
   button.type = "button";
   button.title = "Import this YouTube video to NotebookLM";

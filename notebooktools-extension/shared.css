@@ -49,12 +49,22 @@ body {
 }
 
 .brand {
-  align-items: center;
-  display: flex;
-  gap: 12px;
+  border-bottom: 1px solid var(--nt-line);
   margin-bottom: 18px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--nt-line);
+}
+
+.brand-logo {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.brand-tagline {
+  color: var(--nt-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 8px 0 0;
 }
 
 .brand-mark {

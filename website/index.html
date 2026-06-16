@@ -10,27 +10,18 @@
     >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <header class="site-header">
       <a class="logo" href="#">
-        <span class="logo-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 20V10C4 10 7 6 12 6C17 6 20 10 20 10V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-            <path d="M7 20V12C7 12 9 9 12 9C15 9 17 12 17 12V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-            <path d="M10 20V14C10 14 11 12 12 12C13 12 14 14 14 14V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
-          </svg>
-        </span>
-        <span class="logo-text">NotebookTools</span>
+        <img class="logo-wordmark" src="assets/logo.svg" alt="NotebookTools" width="188" height="22">
       </a>
       <nav class="site-nav">
         <a href="#features">Features</a>
         <a href="#how-it-works">How it works</a>
+        <a href="#roadmap">Roadmap</a>
         <a href="#install">Install</a>
       </nav>
       <a class="button button-sm header-cta" href="#install">Get extension</a>
@@ -45,6 +36,13 @@
             NotebookTools adds a clean import button on YouTube and a popup for your
             NotebookLM notebooks. No extra login — it uses your existing Google session.
           </p>
+
+          <div class="brand-flow" aria-label="YouTube to NotebookTools to NotebookLM">
+            <img class="brand-flow-yt" src="assets/youtube-logo.svg" alt="YouTube" width="108" height="24">
+            <span class="brand-flow-arrow" aria-hidden="true">→</span>
+            <img class="brand-flow-nt" src="assets/logo.svg" alt="NotebookTools" width="188" height="22">
+          </div>
+
           <div class="hero-actions">
             <a class="button" href="#install">Install extension</a>
             <a class="button button-ghost" href="privacy.html">Privacy policy</a>
@@ -57,34 +55,28 @@
         </div>
 
         <div class="hero-visual" aria-hidden="true">
+          <div class="mockup mockup-youtube">
+            <div class="yt-top">
+              <img src="assets/youtube-logo.svg" alt="" width="72" height="16">
+              <div class="yt-bar"></div>
+            </div>
+            <div class="yt-actions">
+              <span class="yt-pill">Share</span>
+              <span class="yt-pill yt-pill-brand">
+                <img class="yt-btn-logo" src="assets/logo.svg" alt="" width="92" height="12">
+              </span>
+            </div>
+          </div>
           <div class="mockup mockup-extension">
             <div class="mockup-body">
               <div class="mockup-brand">
-                <span class="mockup-icon">
-                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10C4 10 7 6 12 6C17 6 20 10 20 10V20" stroke="currentColor" stroke-width="2.2"/><path d="M7 20V12C7 12 9 9 12 9C15 9 17 12 17 12V20" stroke="currentColor" stroke-width="2.2"/><path d="M10 20V14C10 14 11 12 12 12C13 12 14 14 14 14V20" stroke="currentColor" stroke-width="2.2"/></svg>
-                </span>
-                <div>
-                  <strong>NotebookTools</strong>
-                  <small>YouTube to NotebookLM</small>
-                </div>
+                <img src="assets/logo.svg" alt="" width="148" height="18">
               </div>
               <label>NotebookLM notebook</label>
               <div class="mockup-field">Research notes</div>
               <label>New notebook name</label>
               <div class="mockup-field muted">Video sources</div>
               <div class="mockup-btn">Import current YouTube video</div>
-            </div>
-          </div>
-          <div class="mockup mockup-youtube">
-            <div class="yt-bar"></div>
-            <div class="yt-actions">
-              <span class="yt-pill">Share</span>
-              <span class="yt-pill yt-pill-brand">
-                <span class="yt-mark" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10C4 10 7 6 12 6C17 6 20 10 20 10V20" stroke="currentColor" stroke-width="2.4"/><path d="M7 20V12C7 12 9 9 12 9C15 9 17 12 17 12V20" stroke="currentColor" stroke-width="2.4"/><path d="M10 20V14C10 14 11 12 12 12C13 12 14 14 14 14V20" stroke="currentColor" stroke-width="2.4"/></svg>
-                </span>
-                NotebookLM
-              </span>
             </div>
           </div>
         </div>
@@ -97,6 +89,9 @@
         </div>
         <div class="feature-grid">
           <article class="feature-card">
+            <div class="feature-mark">
+              <img src="assets/youtube-logo.svg" alt="" width="72" height="16">
+            </div>
             <h3>Extension popup</h3>
             <p>
               Open NotebookTools on any YouTube video tab, choose a NotebookLM notebook,
@@ -104,14 +99,16 @@
             </p>
           </article>
           <article class="feature-card">
+            <div class="feature-mark">
+              <img src="assets/logo.svg" alt="" width="120" height="14">
+            </div>
             <h3>In-page button</h3>
             <p>
-              A white NotebookLM button appears beside YouTube's action bar so you can
+              A white NotebookTools button appears beside YouTube's action bar so you can
               import without leaving the watch page.
             </p>
           </article>
         </div>
-        <p class="features-note">More capture features are planned for a later release.</p>
       </section>
 
       <section class="steps" id="how-it-works">
@@ -138,10 +135,26 @@
             <span class="step-num">03</span>
             <div>
               <h3>Import to a notebook</h3>
-              <p>Click the in-page NotebookLM button or use the extension popup to send the video.</p>
+              <p>Click the in-page NotebookTools button or use the extension popup to send the video.</p>
             </div>
           </li>
         </ol>
+      </section>
+
+      <section class="roadmap" id="roadmap">
+        <div class="section-head">
+          <p class="eyebrow">Inspired by YouTube to NotebookLM addons</p>
+          <h2>Planned for later versions</h2>
+        </div>
+        <ul class="roadmap-list">
+          <li>Playlist batch import</li>
+          <li>Channel video import</li>
+          <li>Search results batch import</li>
+          <li>Welcome onboarding after install</li>
+        </ul>
+        <p class="roadmap-note">
+          Version 0.1 intentionally ships with single-video import only for a focused Chrome Web Store release.
+        </p>
       </section>
 
       <section class="install" id="install">
@@ -169,7 +182,7 @@
 
     <footer class="site-footer">
       <div>
-        <strong>NotebookTools</strong>
+        <img class="footer-logo" src="assets/logo.svg" alt="NotebookTools" width="148" height="18">
         <p>Independent Chrome extension for NotebookLM workflows. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">

@@ -47,7 +47,8 @@
         "youtube-import.js",
         "notebooklm-client.js",
         "utils.js",
-        "shared.css"
+        "shared.css",
+        "logo.svg"
       ],
       "matches": [
         "https://www.youtube.com/*",

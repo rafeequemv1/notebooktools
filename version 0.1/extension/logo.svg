@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 248 28" fill="none" role="img" aria-label="NotebookTools">
+  <title>NotebookTools</title>
+  <g stroke="currentColor" stroke-linecap="square" stroke-width="2.35" fill="none">
+    <path d="M2 24V13.2C2 13.2 5.35 7.5 13.2 7.5C21.05 7.5 24.4 13.2 24.4 13.2V24"/>
+    <path d="M6.1 24V16C6.1 16 8.45 11.4 13.2 11.4C17.95 11.4 20.3 16 20.3 16V24"/>
+    <path d="M10.2 24V18.4C10.2 18.4 11.55 15.6 13.2 15.6C14.85 15.6 16.2 18.4 16.2 18.4V24"/>
+  </g>
+  <text
+    x="34"
+    y="21.2"
+    fill="currentColor"
+    font-family="'Google Sans', 'Product Sans', Roboto, Arial, sans-serif"
+    font-size="19.5"
+    font-weight="500"
+    letter-spacing="-0.35"
+  >NotebookTools</text>
+</svg>
