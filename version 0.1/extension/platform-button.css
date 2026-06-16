@@ -53,20 +53,18 @@
 
 .notebooktools-platform-mark {
   align-items: center;
-  background: linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(135deg, #4285f4, #34a853, #fbbc04, #ea4335) border-box;
-  border: 1.5px solid transparent;
-  border-radius: 6px;
-  box-sizing: border-box;
-  color: #0f0f0f;
   display: inline-flex;
   flex-shrink: 0;
-  font-family: "Roboto", "Arial", sans-serif;
-  font-size: 11px;
-  font-weight: 700;
   height: 20px;
   justify-content: center;
   width: 20px;
+}
+
+.notebooktools-platform-mark img {
+  border-radius: 4px;
+  display: block;
+  height: 18px;
+  width: 18px;
 }
 
 .notebooktools-platform-text {
@@ -113,14 +111,6 @@ html[data-theme="dark"] .notebooktools-platform-action.is-open button,
   background: rgba(255, 255, 255, 0.2);
   border-color: transparent;
   color: #ffffff;
-}
-
-html.dark .notebooktools-platform-mark,
-html[data-theme="dark"] .notebooktools-platform-mark,
-.notebooktools-platform-theme-dark .notebooktools-platform-mark {
-  background: linear-gradient(rgba(33, 33, 33, 1), rgba(33, 33, 33, 1)) padding-box,
-    linear-gradient(135deg, #4285f4, #34a853, #fbbc04, #ea4335) border-box;
-  color: #f1f1f1;
 }
 
 html.dark .notebooktools-platform-panel,

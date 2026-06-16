@@ -41,7 +41,8 @@
   width: 20px;
 }
 
-.notebooktools-youtube-mark svg {
+.notebooktools-youtube-mark img {
+  border-radius: 4px;
   display: block;
   height: 18px;
   width: 18px;

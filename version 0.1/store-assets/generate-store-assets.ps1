@@ -3,7 +3,10 @@ Add-Type -AssemblyName System.Drawing
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $outDir = $here
-$iconSrc = Join-Path (Split-Path -Parent $here) "extension\icons\icon128.png"
+$iconSrc = Join-Path $here "logo-source.png"
+if (-not (Test-Path $iconSrc)) {
+    $iconSrc = Join-Path (Split-Path -Parent $here) "extension\icons\icon128.png"
+}
 
 # Brand
 $script:BgTop    = [System.Drawing.Color]::FromArgb(253, 251, 247)

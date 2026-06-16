@@ -218,7 +218,12 @@ function createButton() {
 
   mark.className = "notebooktools-platform-mark";
   mark.setAttribute("aria-hidden", "true");
-  mark.textContent = "N";
+  const markImg = document.createElement("img");
+  markImg.src = chrome.runtime.getURL("icons/icon16.png");
+  markImg.alt = "";
+  markImg.width = 16;
+  markImg.height = 16;
+  mark.append(markImg);
   text.className = "notebooktools-platform-text";
   text.textContent = "NotebookLM";
 

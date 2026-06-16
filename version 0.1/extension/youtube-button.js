@@ -185,10 +185,12 @@ function createButton() {
   wrapper.className = "notebooktools-youtube-action";
   mark.className = "notebooktools-youtube-mark";
   mark.setAttribute("aria-hidden", "true");
-  mark.innerHTML = `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="2" y="2" width="28" height="28" rx="7" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-width="1.8"/>
-    <text x="16" y="22" text-anchor="middle" fill="currentColor" font-family="Roboto, Arial, sans-serif" font-size="15" font-weight="600">N</text>
-  </svg>`;
+  const markImg = document.createElement("img");
+  markImg.src = chrome.runtime.getURL("icons/icon16.png");
+  markImg.alt = "";
+  markImg.width = 16;
+  markImg.height = 16;
+  mark.append(markImg);
   text.className = "notebooktools-youtube-text";
   text.textContent = "NotebookTools";
 

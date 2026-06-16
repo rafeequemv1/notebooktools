@@ -74,8 +74,9 @@
         "notebooklm-client.js",
         "utils.js",
         "shared.css",
-        "logo.svg",
-        "icons/icon48.svg"
+        "logo.png",
+        "icons/icon16.png",
+        "icons/icon48.png"
       ],
       "matches": [
         "https://*/*",
