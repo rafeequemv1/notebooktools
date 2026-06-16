@@ -7,83 +7,90 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-K2BJP0Q9LL');
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blog — NotebookTools | NotebookLM Chrome Extension</title>
+    <title>Blog — NotebookTools | NotebookLM Guides &amp; YouTube Tips</title>
     <meta
       name="description"
-      content="Stories and guides about NotebookTools — the free Chrome extension for importing YouTube, ChatGPT, Gemini, X, webpages, and text into Google NotebookLM."
+      content="Guides for NotebookLM: summarize YouTube videos, import webpages and highlights, and build a research notebook faster with NotebookTools."
     >
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://notebooktools.vercel.app/blog">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://notebooktools.com/blog">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:title" content="NotebookTools Blog">
-    <meta property="og:description" content="Guides and updates about importing content into NotebookLM with NotebookTools.">
-    <meta property="og:url" content="https://notebooktools.vercel.app/blog">
-    <meta property="og:image" content="https://notebooktools.vercel.app/assets/og-image.png">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="NotebookTools Blog">
-    <meta name="twitter:description" content="Guides and updates about importing content into NotebookLM with NotebookTools.">
+    <meta property="og:url" content="https://notebooktools.com/blog">
+    <meta property="og:image" content="https://notebooktools.com/assets/og-image.png">
     <link rel="icon" href="../assets/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      "name": "NotebookTools Blog",
-      "description": "Articles about NotebookTools and importing content into Google NotebookLM.",
-      "url": "https://notebooktools.vercel.app/blog",
-      "publisher": {
-        "@type": "Organization",
-        "name": "NotebookTools",
-        "url": "https://notebooktools.vercel.app/"
-      }
-    }
-    </script>
   </head>
   <body class="blog-page">
     <header class="site-header">
-      <a class="logo" href="../">
+      <a class="logo" href="/">
         <img class="logo-img logo-mark-header" src="../assets/logo-mark-32.png" alt="" width="32" height="32">
         <span class="logo-text">NotebookTools</span>
       </a>
       <nav class="site-nav">
-        <a href="../#features">Features</a>
-        <a href="../#how-it-works">How it works</a>
-        <a href="../#pricing">Pricing</a>
-        <a href="../blog" aria-current="page">Blog</a>
-        <a href="../support">Support</a>
-        <a href="../#install">Install</a>
+        <a href="/#features">Features</a>
+        <a href="/#how-it-works">How it works</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/blog" aria-current="page">Blog</a>
+        <a href="/support">Support</a>
+        <a href="/#install">Install</a>
       </nav>
-      <a class="button button-sm header-cta" href="../#install">Add to Chrome</a>
+      <a class="button button-sm header-cta" href="/#install">Add to Chrome</a>
     </header>
 
-    <main class="blog-index">
-      <header class="blog-index-head">
+    <main class="blog-hub">
+      <header class="blog-hub-head">
         <p class="eyebrow">Blog</p>
-        <h1>Notes on building a calmer path into NotebookLM</h1>
-        <p class="blog-index-lead">Product updates, how-tos, and thinking behind NotebookTools.</p>
+        <h1>NotebookLM guides &amp; import tips</h1>
+        <p class="blog-hub-lead">Practical how-tos for YouTube summaries, research notebooks, and faster imports.</p>
       </header>
 
-      <div class="blog-list">
-        <article class="blog-card">
-          <time class="blog-card-date" datetime="2026-06-16">June 16, 2026</time>
-          <h2><a href="what-is-notebooktools">What NotebookTools does — and why it exists</a></h2>
-          <p class="blog-card-excerpt">
-            NotebookLM is brilliant at synthesis, but getting sources in can feel like friction.
-            NotebookTools is a small Chrome extension that closes that gap — YouTube, AI chats,
-            social posts, pages, and highlights, in one calm flow.
-          </p>
-          <p class="blog-card-meta">6 min read</p>
-          <a class="blog-card-link" href="what-is-notebooktools">Read article →</a>
-        </article>
+      <div class="blog-layout">
+        <aside class="blog-sidebar" aria-label="Categories">
+          <p class="blog-sidebar-label">Categories</p>
+          <nav class="blog-categories">
+            <a class="blog-category-link is-active" href="/blog" data-category="all">All posts</a>
+            <a class="blog-category-link" href="/blog?category=youtube" data-category="youtube">YouTube guides</a>
+            <a class="blog-category-link" href="/blog?category=notebooklm" data-category="notebooklm">NotebookLM tips</a>
+            <a class="blog-category-link" href="/blog?category=product" data-category="product">Product</a>
+          </nav>
+        </aside>
+
+        <div class="blog-cards">
+          <article class="blog-card-item" data-blog-category="youtube">
+            <a class="blog-card-item-link" href="/blog/summarize-youtube-videos-notebooklm">
+              <span class="blog-card-tag">YouTube guides</span>
+              <h2>How to summarize YouTube videos in NotebookLM</h2>
+              <p>Add any video as a source, then ask NotebookLM for summaries, key points, and study notes — plus the fastest import path with NotebookTools.</p>
+              <div class="blog-card-item-meta">
+                <time datetime="2026-06-17">June 17, 2026</time>
+                <span>·</span>
+                <span>7 min read</span>
+              </div>
+            </a>
+          </article>
+
+          <article class="blog-card-item" data-blog-category="product">
+            <a class="blog-card-item-link" href="/blog/what-is-notebooktools">
+              <span class="blog-card-tag">Product</span>
+              <h2>What NotebookTools does — and why it exists</h2>
+              <p>A free Chrome extension that sends YouTube videos, webpages, X posts, and highlighted text into NotebookLM — without copy-paste.</p>
+              <div class="blog-card-item-meta">
+                <time datetime="2026-06-16">June 16, 2026</time>
+                <span>·</span>
+                <span>6 min read</span>
+              </div>
+            </a>
+          </article>
+        </div>
       </div>
     </main>
 
@@ -93,13 +100,14 @@
         <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
-        <a href="../blog">Blog</a>
-        <a href="../support">Support</a>
-        <a href="../privacy">Privacy</a>
+        <a href="/blog">Blog</a>
+        <a href="/support">Support</a>
+        <a href="/privacy">Privacy</a>
         <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM</a>
       </div>
     </footer>
 
     <script src="../script.js"></script>
+    <script src="blog.js"></script>
   </body>
 </html>

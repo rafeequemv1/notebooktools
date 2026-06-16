@@ -1,4 +1,4 @@
-# NotebookTools — https://notebooktools.vercel.app
+# NotebookTools — https://notebooktools.com
 User-agent: *
 Allow: /
 
@@ -24,4 +24,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://notebooktools.vercel.app/sitemap.xml
+Sitemap: https://notebooktools.com/sitemap.xml

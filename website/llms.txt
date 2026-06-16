@@ -20,11 +20,17 @@ NotebookTools helps researchers capture web content into NotebookLM without copy
 
 ## Pages
 
-- Home: https://notebooktools.vercel.app/
-- Support: https://notebooktools.vercel.app/support
-- Privacy: https://notebooktools.vercel.app/privacy
+- Home: https://notebooktools.com/
+- Blog: https://notebooktools.com/blog
+- YouTube summary guide: https://notebooktools.com/blog/summarize-youtube-videos-notebooklm
+- What is NotebookTools: https://notebooktools.com/blog/what-is-notebooktools
+- Support: https://notebooktools.com/support
+- Privacy: https://notebooktools.com/privacy
 
 ## Common questions
+
+**How do I summarize a YouTube video in NotebookLM?**
+Add the video as a source, then ask for a summary in the notebook chat. Use NotebookTools to import from the watch page in one click.
 
 **How do I add highlighted text to NotebookLM?**
 Select text on any page, right-click, choose Add to NotebookLM, pick a notebook.
@@ -35,4 +41,4 @@ Visit a watch page, click the NotebookLM button, choose a notebook.
 ## Contact
 
 Email: rafeequemavoor@gmail.com
-Support: https://notebooktools.vercel.app/support
+Support: https://notebooktools.com/support
