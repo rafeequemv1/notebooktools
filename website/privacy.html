@@ -15,7 +15,7 @@
     <title>Privacy Policy — NotebookTools | NotebookLM Chrome Extension</title>
     <meta
       name="description"
-      content="NotebookTools privacy policy: no backend server, no analytics. Imports use your NotebookLM session in Chrome. Independent tool, not affiliated with Google."
+      content="NotebookTools privacy policy: no backend server, no data sales. Imports use your NotebookLM session in Chrome. YouTube, X, webpages, and highlights only when you click import."
     >
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://notebooktools.com/privacy">
@@ -33,28 +33,38 @@
       </a>
       <nav class="site-nav">
         <a href="/#features">Features</a>
-        <a href="blog">Blog</a>
+        <a href="/blog">Blog</a>
         <a href="support">Support</a>
+        <a href="/privacy" aria-current="page">Privacy</a>
         <a href="/#install">Install</a>
       </nav>
     </header>
 
     <main class="page-main">
       <h1>Privacy Policy</h1>
-      <p class="lead">Last updated: June 2026 · NotebookTools version 0.1.0</p>
+      <p class="lead">Last updated: June 2026 · NotebookTools extension version 0.2.8</p>
 
       <p>
         NotebookTools is an independent Chrome extension that helps you import content into
-        your Google NotebookLM account — including YouTube videos, ChatGPT and Gemini
-        conversations, X (Twitter) posts, webpage URLs, and text you highlight on the web.
+        your Google NotebookLM account — including YouTube videos, X (Twitter) posts and articles,
+        webpage URLs, and text you highlight on the web. This policy explains what data the
+        extension handles and what we do not collect.
       </p>
 
-      <h2>What we collect</h2>
-      <p>NotebookTools does not operate a backend server and does not collect analytics.</p>
+      <h2>Summary</h2>
       <ul>
-        <li>The extension reads page content only when you choose to import.</li>
-        <li>The extension may store lightweight preferences locally in Chrome storage on your device.</li>
-        <li>Notebook list data is fetched from NotebookLM using your existing signed-in Google session.</li>
+        <li>No NotebookTools backend server.</li>
+        <li>No sale of your personal data.</li>
+        <li>Imports happen only when <strong>you</strong> click import or use the right-click menu.</li>
+        <li>Data is sent from your browser to NotebookLM using your existing Google sign-in.</li>
+      </ul>
+
+      <h2>What we collect</h2>
+      <p>NotebookTools does not operate a backend server and does not collect analytics on our own infrastructure.</p>
+      <ul>
+        <li>The extension reads page content <strong>only when you choose to import</strong> (for example, a YouTube URL, X post text, webpage URL, or text you highlighted).</li>
+        <li>The extension stores lightweight preferences locally in Chrome on your device (for example, whether the welcome page was shown and your last-selected notebook).</li>
+        <li>Your notebook list is fetched from NotebookLM using your existing signed-in Google session in the browser.</li>
       </ul>
 
       <h2>What we send</h2>
@@ -62,28 +72,57 @@
         When you click import, the extension sends the relevant source data to NotebookLM through
         Google's NotebookLM web APIs, using the same browser session you already use at
         <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">notebooklm.google.com</a>.
-        This may include YouTube URLs, webpage URLs, extracted conversation or post text, and
-        text you selected on a page.
+        Depending on what you import, this may include:
       </p>
+      <ul>
+        <li>YouTube video URLs (from watch pages you are viewing)</li>
+        <li>Webpage URLs (from the tab you chose to import)</li>
+        <li>Text extracted from X posts or articles (only when you click import on that post)</li>
+        <li>Text you selected on a webpage (via right-click → Add to NotebookLM)</li>
+      </ul>
 
       <h2>What we do not do</h2>
       <ul>
-        <li>We do not sell personal data.</li>
+        <li>We do not sell or transfer your data to third parties.</li>
+        <li>We do not use your data for advertising or unrelated purposes.</li>
         <li>We do not receive your Google password.</li>
         <li>We do not upload content unless you explicitly trigger an import.</li>
-        <li>We do not run analytics or tracking on our own servers.</li>
+        <li>We do not log your browsing history.</li>
+        <li>We do not track clicks, scroll position, or keystrokes.</li>
+        <li>We do not use remote code — all extension code is included in the package you install from the Chrome Web Store.</li>
       </ul>
+
+      <h2>Chrome Web Store disclosures</h2>
+      <p>
+        For transparency on the Chrome Web Store, NotebookTools may process <strong>website content</strong>
+        only when you initiate an import (URLs, selected text, or visible post/article text on X).
+        We do not collect personally identifiable information, health, financial, authentication,
+        communication, location, web history, or general user-activity data on NotebookTools servers.
+      </p>
 
       <h2>Third-party services</h2>
       <p>
-        YouTube, ChatGPT, Gemini, X, and NotebookLM are operated by their respective providers.
-        Your use of those services is subject to their terms and privacy policies. NotebookTools
-        is not affiliated with Google or any of these platforms.
+        YouTube, X (Twitter), and NotebookLM are operated by their respective providers.
+        Your use of those services is subject to their terms and privacy policies.
+        NotebookTools is not affiliated with, endorsed by, or sponsored by Google, YouTube, X, or NotebookLM.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        NotebookTools is not directed at children under 13. We do not knowingly collect personal
+        information from children.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update this policy from time to time. The "Last updated" date at the top of this
+        page will reflect the latest version.
       </p>
 
       <h2>Contact</h2>
       <p>
-        Questions about this policy can be sent via the
+        Questions about this policy can be sent via
+        <a href="https://notebooktools.com/support">our support page</a> or the
         <a href="https://github.com/rafeequemv1/notebooktools/issues" target="_blank" rel="noreferrer">GitHub issues page</a>.
       </p>
     </main>
@@ -94,9 +133,9 @@
         <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
-        <a href="blog">Blog</a>
+        <a href="/blog">Blog</a>
         <a href="support">Support</a>
-        <a href="/">Home</a>
+        <a href="/privacy">Privacy</a>
         <a href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </footer>
