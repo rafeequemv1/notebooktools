@@ -9,24 +9,27 @@
   <body>
     <main class="app embedded">
       <section class="card">
-        <div class="brand">
-          <img class="brand-logo" src="logo.png" alt="NotebookTools" width="148" height="18">
-          <p id="videoTitle" class="video-title">YouTube video</p>
-        </div>
+        <header class="import-header-compact">
+          <img class="import-header-icon" src="icons/icon16.png" alt="" width="16" height="16">
+          <div class="import-header-copy">
+            <p class="import-header-title">Import to NotebookLM</p>
+            <p id="videoTitle" class="import-header-meta">YouTube video</p>
+          </div>
+        </header>
 
-        <label for="notebookLmSelect">Notebook</label>
-        <select id="notebookLmSelect">
+        <input id="notebookSearch" type="search" placeholder="Search notebooks..." autocomplete="off" aria-label="Search notebooks">
+
+        <select id="notebookLmSelect" aria-label="Notebook">
           <option value="">Loading notebooks...</option>
         </select>
 
-        <p class="field-divider">or create new</p>
-
-        <input id="newNotebookLmName" type="text" placeholder="Notebook name" aria-label="New notebook name">
+        <input id="newNotebookLmName" type="text" placeholder="Or create new notebook" aria-label="New notebook name">
 
         <button class="button" id="importButton" type="button">Import</button>
 
         <div class="footer-row">
-          <button class="text-button" id="refreshButton" type="button">Refresh list</button>
+          <button class="text-button" id="refreshButton" type="button">Refresh</button>
+          <a class="text-button" id="openNotebookLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open notebook</a>
         </div>
 
         <div class="status" id="status" role="status"></div>
@@ -35,6 +38,7 @@
 
     <script src="utils.js"></script>
     <script src="notebooklm-client.js"></script>
+    <script src="notebook-picker.js"></script>
     <script src="youtube-import.js"></script>
   </body>
 </html>

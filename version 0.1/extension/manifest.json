@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.1.2",
-  "description": "Import YouTube videos, X posts, webpages, and selected text into NotebookLM. Right-click highlights to add sources.",
+  "version": "0.2.3",
+  "description": "Import YouTube videos, X posts, webpages, and selected text into NotebookLM — one click from watch pages, popup, or right-click.",
   "permissions": ["activeTab", "storage", "contextMenus", "tabs"],
   "host_permissions": [
     "https://*/*",
@@ -35,8 +35,11 @@
         "https://www.youtube-nocookie.com/*"
       ],
       "css": ["youtube-button.css"],
-      "js": ["utils.js", "notebooklm-client.js", "youtube-button.js"],
-      "run_at": "document_idle"
+      "js": [
+        "youtube-inject.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
     },
     {
       "matches": [
@@ -56,11 +59,13 @@
         "platform-import.html",
         "platform-import.js",
         "notebooklm-client.js",
+        "notebook-picker.js",
         "utils.js",
         "shared.css",
         "logo.png",
         "icons/icon16.png",
-        "icons/icon48.png"
+        "icons/icon48.png",
+        "welcome.html"
       ],
       "matches": [
         "https://*/*",

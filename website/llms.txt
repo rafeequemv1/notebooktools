@@ -6,7 +6,7 @@ NotebookTools helps researchers capture web content into NotebookLM without copy
 
 ## What it does
 
-- **YouTube**: Import button on watch pages. One click to add a video source.
+- **YouTube**: Import button on watch pages only. One click to add the current video.
 - **X / Twitter**: Import threads and articles as text sources.
 - **Webpages**: Import any page URL from the extension popup.
 - **Selected text**: Highlight text, right-click, choose **Add to NotebookLM**.

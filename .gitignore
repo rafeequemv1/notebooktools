@@ -4,11 +4,13 @@ extension-inspection-2/
 extension-inspection-3/
 extension-inspection-4/
 
+extension-inspection-reference/
+
 # OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# Store upload zip (run package-extension.ps1 to generate)
-version 0.1/notebooktools-v0.1.2.zip
+# Store upload zips (run package-extension.ps1 to generate)
+version 0.1/notebooktools-v*.zip

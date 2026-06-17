@@ -39,7 +39,44 @@ body {
 .app.embedded .card {
   border: 0;
   box-shadow: none;
-  padding: 10px;
+  padding: 8px;
+}
+
+.import-header-compact {
+  align-items: center;
+  border-bottom: 1px solid var(--nt-line);
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.import-header-icon {
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.import-header-copy {
+  min-width: 0;
+}
+
+.import-header-title {
+  color: var(--nt-ink);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.import-header-meta {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--nt-muted);
+  display: -webkit-box;
+  font-size: 10px;
+  line-height: 1.35;
+  margin: 2px 0 0;
+  overflow: hidden;
 }
 
 .app.embedded .brand {
@@ -71,7 +108,13 @@ body {
 .app.embedded input,
 .app.embedded select {
   font-size: 12px;
-  padding: 7px 8px;
+  margin-top: 6px;
+  padding: 6px 8px;
+}
+
+.app.embedded input:first-of-type,
+.app.embedded select:first-of-type {
+  margin-top: 0;
 }
 
 .app.embedded .field-divider {

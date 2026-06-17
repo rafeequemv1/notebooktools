@@ -1,3 +1,5 @@
+importScripts("notebooklm-client.js");
+
 const PENDING_TEXT_KEY = "pendingTextImport";
 
 let platformImportCache = null;
@@ -24,8 +26,23 @@ function setupContextMenu() {
   });
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+async function openWelcomeOnce() {
+  const stored = await chrome.storage.local.get("welcomeShown");
+
+  if (stored.welcomeShown) {
+    return;
+  }
+
+  await chrome.storage.local.set({ welcomeShown: true });
+  chrome.tabs.create({ url: chrome.runtime.getURL("welcome.html") });
+}
+
+chrome.runtime.onInstalled.addListener((details) => {
   setupContextMenu();
+
+  if (details.reason === "install") {
+    openWelcomeOnce();
+  }
 });
 
 chrome.runtime.onStartup.addListener(() => {

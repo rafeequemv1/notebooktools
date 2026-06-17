@@ -22,6 +22,9 @@
 
         <p class="source-preview" id="sourcePreview">Current tab</p>
 
+        <label for="notebookSearch">Search notebooks</label>
+        <input id="notebookSearch" type="search" placeholder="Search notebooks..." autocomplete="off">
+
         <label for="notebookLmSelect">Notebook</label>
         <select id="notebookLmSelect">
           <option value="">Loading notebooks...</option>
@@ -31,10 +34,11 @@
 
         <input id="newNotebookLmName" type="text" placeholder="Notebook name" aria-label="New notebook name">
 
-        <button class="button" id="importButton" type="button">Import webpage</button>
+        <button class="button" id="importButton" type="button">Add current tab to NotebookLM</button>
 
         <div class="footer-row">
           <button class="text-button" id="refreshNotebookLmButton" type="button">Refresh list</button>
+          <a class="text-button" id="openNotebookLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open notebook</a>
         </div>
 
         <div class="status" id="status" role="status"></div>
@@ -43,6 +47,7 @@
 
     <script src="utils.js"></script>
     <script src="notebooklm-client.js"></script>
+    <script src="notebook-picker.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

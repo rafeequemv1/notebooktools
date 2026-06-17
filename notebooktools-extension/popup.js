@@ -3,24 +3,36 @@ const initialMode = params.get("mode") || "webpage";
 
 const pageContext = document.querySelector("#pageContext");
 const sourcePreview = document.querySelector("#sourcePreview");
-const notebookLmSelect = document.querySelector("#notebookLmSelect");
-const newNotebookLmName = document.querySelector("#newNotebookLmName");
 const importButton = document.querySelector("#importButton");
-const refreshNotebookLmButton = document.querySelector("#refreshNotebookLmButton");
 const statusBox = document.querySelector("#status");
 const modeButtons = [...document.querySelectorAll(".import-mode")];
 const modeTextButton = document.querySelector("#modeText");
+const openNotebookLink = document.querySelector("#openNotebookLink");
 
-let notebookLmNotebooks = [];
 let activeMode = initialMode;
 let activeTab = null;
 let pendingText = null;
 
 const MODE_LABELS = {
-  webpage: "Import webpage",
+  webpage: "Add current tab to NotebookLM",
   youtube: "Import video",
   text: "Import selection"
 };
+
+const picker = NotebookToolsPicker.create({
+  searchInput: document.querySelector("#notebookSearch"),
+  selectEl: document.querySelector("#notebookLmSelect"),
+  newNameInput: document.querySelector("#newNotebookLmName"),
+  refreshButton: document.querySelector("#refreshNotebookLmButton"),
+  onStatus: (message, options = {}) => {
+    NotebookToolsUI.setImportStatus(statusBox, {
+      message,
+      type: options.type || "success",
+      loading: options.loading === true,
+      done: options.done === true
+    });
+  }
+});
 
 function setStatus(message, options = {}) {
   NotebookToolsUI.setImportStatus(statusBox, {
@@ -31,12 +43,13 @@ function setStatus(message, options = {}) {
   });
 }
 
-function selectedNotebookLmName() {
-  return NotebookToolsStore.cleanNotebookName(newNotebookLmName.value);
-}
+function showOpenNotebook(notebookId) {
+  if (!openNotebookLink || !notebookId) {
+    return;
+  }
 
-function selectedNotebookLmId() {
-  return notebookLmSelect.value || "";
+  openNotebookLink.hidden = false;
+  openNotebookLink.href = `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}`;
 }
 
 function getActiveTab() {
@@ -61,7 +74,9 @@ async function loadPendingText() {
     return;
   }
 
-  modeTextButton.hidden = false;
+  if (modeTextButton) {
+    modeTextButton.hidden = false;
+  }
   activeMode = "text";
   pageContext.textContent = "Selected text";
   sourcePreview.textContent = pendingText.text.slice(0, 140) + (pendingText.text.length > 140 ? "..." : "");
@@ -115,66 +130,12 @@ function setActiveMode(mode) {
   setStatus("");
 }
 
-async function refreshNotebookLmSelect({ silent = false } = {}) {
-  refreshNotebookLmButton.disabled = true;
-  notebookLmSelect.disabled = true;
-  notebookLmSelect.innerHTML = '<option value="">Loading notebooks...</option>';
-
-  if (!silent) {
-    setStatus("Loading notebooks...", { loading: true });
-  }
-
-  try {
-    notebookLmNotebooks = await NotebookToolsNotebookLM.listNotebookLmNotebooks();
-    notebookLmSelect.innerHTML = '<option value="">Choose a notebook...</option>';
-
-    for (const notebook of notebookLmNotebooks) {
-      const option = document.createElement("option");
-      option.value = notebook.id;
-      option.textContent = notebook.title;
-      notebookLmSelect.append(option);
-    }
-
-    if (!silent) {
-      setStatus(`${notebookLmNotebooks.length} notebook${notebookLmNotebooks.length === 1 ? "" : "s"} ready.`);
-    }
-  } catch (error) {
-    notebookLmNotebooks = [];
-    notebookLmSelect.innerHTML = '<option value="">Sign in to NotebookLM first</option>';
-
-    if (!silent) {
-      setStatus(error.message || "Could not load notebooks.", { type: "error" });
-    }
-  } finally {
-    refreshNotebookLmButton.disabled = false;
-    notebookLmSelect.disabled = false;
-  }
-}
-
-async function resolveTargetNotebook() {
-  const newNotebookName = selectedNotebookLmName();
-
-  if (newNotebookName) {
-    setStatus("Creating notebook...", { loading: true });
-    return NotebookToolsNotebookLM.createNotebookLmNotebook(newNotebookName);
-  }
-
-  const notebookId = selectedNotebookLmId();
-  const targetNotebook = notebookLmNotebooks.find((notebook) => notebook.id === notebookId) || null;
-
-  if (!targetNotebook) {
-    throw new Error("Choose a notebook or enter a new name.");
-  }
-
-  return targetNotebook;
-}
-
 async function runImport() {
   NotebookToolsUI.setImportButtonState(importButton, true, MODE_LABELS[activeMode] || "Import");
   setStatus("Preparing import...", { loading: true });
 
   try {
-    const targetNotebook = await resolveTargetNotebook();
+    const targetNotebook = await picker.resolveTarget();
 
     setStatus("Sending to NotebookLM...", { loading: true });
 
@@ -207,9 +168,10 @@ async function runImport() {
       await NotebookToolsNotebookLM.addWebpageToNotebookLm(targetNotebook.id, webpageUrl);
     }
 
-    newNotebookLmName.value = "";
-    await refreshNotebookLmSelect({ silent: true });
-    notebookLmSelect.value = targetNotebook.id;
+    document.querySelector("#newNotebookLmName").value = "";
+    await picker.refresh({ silent: true });
+    document.querySelector("#notebookLmSelect").value = targetNotebook.id;
+    showOpenNotebook(targetNotebook.id);
     setStatus(`Added to "${targetNotebook.title}"`, { done: true });
   } catch (error) {
     setStatus(error.message || "Import failed.", { type: "error" });
@@ -245,23 +207,10 @@ async function initPopup() {
     button.addEventListener("click", () => setActiveMode(button.dataset.mode));
   });
 
-  notebookLmSelect.addEventListener("change", () => {
-    if (notebookLmSelect.value) {
-      newNotebookLmName.value = "";
-    }
-  });
-
-  newNotebookLmName.addEventListener("input", () => {
-    if (newNotebookLmName.value.trim()) {
-      notebookLmSelect.value = "";
-    }
-  });
-
-  refreshNotebookLmButton.addEventListener("click", () => refreshNotebookLmSelect());
   importButton.addEventListener("click", runImport);
-
+  picker.bind();
   updateModeUi();
-  refreshNotebookLmSelect({ silent: true });
+  picker.refresh({ silent: true });
 }
 
 initPopup();
