@@ -116,6 +116,7 @@ h1, h2, h3, p {
 .hero-inner,
 .features,
 .steps,
+.guides,
 .pricing,
 .install,
 .faq,
@@ -513,6 +514,7 @@ h1, h2, h3, p {
 
 .features,
 .steps,
+.guides,
 .pricing,
 .install {
   border-bottom: 1px solid var(--line-soft);
@@ -606,6 +608,73 @@ h1, h2, h3, p {
 
 .pricing-features li:last-child {
   border-bottom: 0;
+}
+
+/* Popular guides (homepage) */
+
+.guides-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.guide-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.guide-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.guide-card a {
+  color: inherit;
+  display: block;
+  padding: 24px;
+  text-decoration: none;
+}
+
+.guide-tag {
+  color: var(--subtle);
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.guide-card h3 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.guide-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.guides-more {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.guides-more a {
+  color: var(--google-blue);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.guides-more a:hover {
+  text-decoration: underline;
 }
 
 /* Feature grid */
@@ -1594,6 +1663,7 @@ h1, h2, h3, p {
 
   .hero-inner,
   .feature-grid,
+  .guides-grid,
   .step-grid,
   .upcoming-grid,
   .install-panel {
@@ -1648,6 +1718,7 @@ h1, h2, h3, p {
 
   .header-cta { display: none; }
   .feature-grid,
+  .guides-grid,
   .upcoming-grid { grid-template-columns: 1fr; }
   .install-panel { padding: 28px 22px; }
   .site-footer { flex-direction: column; }

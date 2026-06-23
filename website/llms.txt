@@ -25,7 +25,12 @@ NotebookTools helps researchers capture web content into NotebookLM without copy
 - Blog: https://www.notebooktools.com/blog
 - YouTube guides: https://www.notebooktools.com/blog/category/youtube
 - NotebookLM tips: https://www.notebooktools.com/blog/category/notebooklm
+- Comparisons: https://www.notebooktools.com/blog/category/comparisons
+- Student guides: https://www.notebooktools.com/blog/category/students
 - Product guides: https://www.notebooktools.com/blog/category/product
+- What is NotebookLM: https://www.notebooktools.com/blog/what-is-notebooklm
+- Is NotebookLM free: https://www.notebooktools.com/blog/is-notebooklm-free
+- NotebookLM tutorial for beginners: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
 - YouTube summary guide: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
 - What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools
 - NotebookLM vs Gemini: https://www.notebooktools.com/blog/notebooklm-vs-gemini
@@ -52,10 +57,19 @@ Select text on any page, right-click, choose Add to NotebookLM, pick a notebook.
 **How do I import a YouTube video?**
 Visit a watch page, click the NotebookLM button, choose a notebook. Or paste the URL in NotebookLM manually.
 
-**NotebookLM vs Gemini — which is better?**
+**What is NotebookLM?**
+Google's AI research notebook. Grounded answers from your uploaded sources. Guide: https://www.notebooktools.com/blog/what-is-notebooklm
+
+**Is NotebookLM free?**
+Yes for personal use with a Google account. Details: https://www.notebooktools.com/blog/is-notebooklm-free
+
+**How do I use NotebookLM as a beginner?**
+Step-by-step tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
+
+**NotebookLM vs Gemini: which is better?**
 NotebookLM is source-grounded research; Gemini is general-purpose AI. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-gemini
 
-**NotebookLM vs ChatGPT — what's the difference?**
+**NotebookLM vs ChatGPT: what's the difference?**
 NotebookLM cites your uploaded sources; ChatGPT is broader but less grounded. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
 
 **What are the best NotebookLM alternatives?**
