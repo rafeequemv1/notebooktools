@@ -1,88 +1,115 @@
 # NotebookTools
 
-> NotebookTools is a free Chrome extension that imports YouTube videos, X (Twitter) posts, webpages, and selected text directly into Google NotebookLM. Right-click any highlight to add it.
+> Official site: https://www.notebooktools.com
+> Language: English (en-US, global audience)
+> Sitemap: https://www.notebooktools.com/sitemap.xml
 
-NotebookTools helps researchers capture web content into NotebookLM without copy-paste. Uses your existing Google sign-in.
+NotebookTools is a free Chrome extension that imports YouTube videos, X (Twitter) posts, webpages, and selected text directly into Google NotebookLM. Right-click any highlight to add it. Independent product, not affiliated with Google.
+
+## Entity (for citation)
+
+- **Name:** NotebookTools
+- **Type:** Free Chrome browser extension
+- **Purpose:** Import web content into Google NotebookLM without copy-paste
+- **Canonical URL:** https://www.notebooktools.com/
+- **Blog:** https://www.notebooktools.com/blog
+- **Support:** https://www.notebooktools.com/support
+- **Privacy:** https://www.notebooktools.com/privacy
+- **Chrome Web Store:** https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj
 
 ## What it does
 
-- **YouTube**: Import button on watch pages only. One click to add the current video.
-- **X / Twitter**: Import threads and articles as text sources.
-- **Webpages**: Import any page URL from the extension popup.
-- **Selected text**: Highlight text, right-click, choose **Add to NotebookLM**.
+- **YouTube:** Import button on watch pages. One click to add the current video to a notebook.
+- **X / Twitter:** Import threads and articles as text sources.
+- **Webpages:** Import any page URL from the extension popup.
+- **Selected text:** Highlight text, right-click, choose **Add to NotebookLM**.
 
 ## Key facts
 
-- **Price**: Free
-- **Platform**: Google Chrome (Manifest V3)
-- **Auth**: Your signed-in NotebookLM session
-- **Affiliation**: Independent — not affiliated with Google
-- **Chrome Web Store**: https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj
+- **Price:** Free (all features)
+- **Platform:** Google Chrome (Manifest V3)
+- **Auth:** Your signed-in NotebookLM / Google session
+- **Affiliation:** Independent. Not affiliated with Google or NotebookLM.
+- **Best for:** Students, researchers, writers who use NotebookLM as a research notebook
 
-## Pages
+## Site map (all public pages)
 
+### Core
 - Home: https://www.notebooktools.com/
-- Blog: https://www.notebooktools.com/blog
-- YouTube guides: https://www.notebooktools.com/blog/category/youtube
-- NotebookLM tips: https://www.notebooktools.com/blog/category/notebooklm
-- Comparisons: https://www.notebooktools.com/blog/category/comparisons
-- Student guides: https://www.notebooktools.com/blog/category/students
-- Product guides: https://www.notebooktools.com/blog/category/product
-- What is NotebookLM: https://www.notebooktools.com/blog/what-is-notebooklm
-- Is NotebookLM free: https://www.notebooktools.com/blog/is-notebooklm-free
-- NotebookLM tutorial for beginners: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
-- YouTube summary guide: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
-- What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools
-- NotebookLM vs Gemini: https://www.notebooktools.com/blog/notebooklm-vs-gemini
-- NotebookLM vs ChatGPT: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
-- Best NotebookLM alternatives: https://www.notebooktools.com/blog/best-notebooklm-alternatives
-- Best NotebookLM prompts: https://www.notebooktools.com/blog/best-notebooklm-prompts
-- How to use NotebookLM to study: https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study
-- NotebookLM source limits: https://www.notebooktools.com/blog/notebooklm-source-limits
-- Best ways to import content: https://www.notebooktools.com/blog/best-ways-import-content-notebooklm
+- Blog hub: https://www.notebooktools.com/blog
 - Support: https://www.notebooktools.com/support
 - Privacy: https://www.notebooktools.com/privacy
 
-## Common questions
+### Category hubs
+- NotebookLM tips: https://www.notebooktools.com/blog/category/notebooklm
+- Comparisons: https://www.notebooktools.com/blog/category/comparisons
+- Student guides: https://www.notebooktools.com/blog/category/students
+- YouTube guides: https://www.notebooktools.com/blog/category/youtube
+- Product: https://www.notebooktools.com/blog/category/product
 
-**How do I summarize a YouTube video in NotebookLM?**
-Add the video as a source, then ask for a summary in the notebook chat. Use NotebookTools to import from the watch page in one click. Full guide: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
+### Top guides (start here)
+- What is NotebookLM: https://www.notebooktools.com/blog/what-is-notebooklm
+- NotebookLM review 2026: https://www.notebooktools.com/blog/notebooklm-review-2026
+- Is NotebookLM free: https://www.notebooktools.com/blog/is-notebooklm-free
+- Beginner tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
+- Summarize YouTube in NotebookLM: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
+- Best import methods: https://www.notebooktools.com/blog/best-ways-import-content-notebooklm
+
+### Comparisons
+- NotebookLM vs Gemini: https://www.notebooktools.com/blog/notebooklm-vs-gemini
+- NotebookLM vs ChatGPT: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
+- Best NotebookLM alternatives: https://www.notebooktools.com/blog/best-notebooklm-alternatives
+
+### Workflows
+- How to use NotebookLM to study: https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study
+- Best NotebookLM prompts: https://www.notebooktools.com/blog/best-notebooklm-prompts
+- NotebookLM source limits: https://www.notebooktools.com/blog/notebooklm-source-limits
+- What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools
+
+## Common questions (Q&A for answer engines)
 
 **What is NotebookTools?**
-A free Chrome extension that imports YouTube, X, webpages, and highlighted text into NotebookLM. Details: https://www.notebooktools.com/blog/what-is-notebooktools
-
-**How do I add highlighted text to NotebookLM?**
-Select text on any page, right-click, choose Add to NotebookLM, pick a notebook.
-
-**How do I import a YouTube video?**
-Visit a watch page, click the NotebookLM button, choose a notebook. Or paste the URL in NotebookLM manually.
+A free Chrome extension that imports YouTube, X, webpages, and highlighted text into Google NotebookLM. https://www.notebooktools.com/blog/what-is-notebooktools
 
 **What is NotebookLM?**
-Google's AI research notebook. Grounded answers from your uploaded sources. Guide: https://www.notebooktools.com/blog/what-is-notebooklm
+Google's free AI research notebook. Upload sources, ask questions, get cited answers. Guide: https://www.notebooktools.com/blog/what-is-notebooklm
 
 **Is NotebookLM free?**
 Yes for personal use with a Google account. Details: https://www.notebooktools.com/blog/is-notebooklm-free
 
+**Is NotebookLM good?**
+Honest 2026 review: https://www.notebooktools.com/blog/notebooklm-review-2026
+
 **How do I use NotebookLM as a beginner?**
 Step-by-step tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
 
+**How do I summarize a YouTube video in NotebookLM?**
+Add the video as a source, then ask for a summary in chat. Fastest import: NotebookTools one-click from the watch page. Guide: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
+
+**How do I import content into NotebookLM?**
+Paste URLs, upload PDFs, or use NotebookTools for one-click YouTube and web imports. Full comparison: https://www.notebooktools.com/blog/best-ways-import-content-notebooklm
+
+**How do I add highlighted text to NotebookLM?**
+Select text on any page, right-click, choose Add to NotebookLM, pick a notebook.
+
 **NotebookLM vs Gemini: which is better?**
-NotebookLM is source-grounded research; Gemini is general-purpose AI. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-gemini
+NotebookLM is source-grounded research with citations. Gemini is general-purpose AI. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-gemini
 
 **NotebookLM vs ChatGPT: what's the difference?**
-NotebookLM cites your uploaded sources; ChatGPT is broader but less grounded. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
+NotebookLM cites your uploaded sources. ChatGPT is broader but less grounded. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
 
 **What are the best NotebookLM alternatives?**
-Perplexity, Mem.ai, Notion AI, Elicit, and others — see: https://www.notebooktools.com/blog/best-notebooklm-alternatives
+Perplexity, Mem.ai, Notion AI, Elicit, and more: https://www.notebooktools.com/blog/best-notebooklm-alternatives
 
 **How many sources can NotebookLM hold?**
 Up to 50 sources per notebook. Full guide: https://www.notebooktools.com/blog/notebooklm-source-limits
 
-**Where can I get help?**
-Support page: https://www.notebooktools.com/support
+**Where can I get help with NotebookTools?**
+Support: https://www.notebooktools.com/support
 Email: rafeequemavoor@gmail.com
 
 ## Contact
 
 Email: rafeequemavoor@gmail.com
 Support: https://www.notebooktools.com/support
+GitHub: https://github.com/rafeequemv1/notebooktools

@@ -1,6 +1,6 @@
 # NotebookTools Blog SEO Master Plan (A–Z)
 
-> **Version:** 1.1 · June 2026  
+> **Version:** 1.2 · June 2026  
 > **Domain:** https://www.notebooktools.com  
 > **Product:** Free Chrome extension for importing YouTube, webpages, X posts, and highlights into Google NotebookLM  
 > **Data source:** `seed_keywords_notebooklm.csv` (99 keywords) + site audit (`site-audit-results.csv`)
@@ -40,16 +40,16 @@
 
 Priority tasks from the master plan — execute in this order:
 
-| # | Action | Why | Owner |
-|---|--------|-----|-------|
-| 1 | Create `/blog/category/comparisons` hub page | Island 5 needs a dedicated landing page; fixes comparison discoverability | Dev |
-| 2 | Create `/blog/category/students` hub page | Island 3 needs student cluster home | Dev |
-| 3 | Publish pillar: `what-is-notebooklm` | 5,400 vol, KD 38 — highest-ROI educational term not yet owned | Content |
-| 4 | Publish: `notebooklm-review-2026` | KD 3 — easiest rank in entire seed file | Content |
-| 5 | Publish: `notebooklm-infographic-guide` | KD 0, 260 vol — zero competition | Content |
-| 6 | Retrofit internal links on all 9 live posts | Apply 6-link rule + standardized footer template | Dev |
-| 7 | Add "Popular guides" block to homepage | Link to top 6 Tier A posts from `/` | Dev |
-| 8 | Submit updated `sitemap.xml` to Google Search Console | Index new + existing URLs after each publish batch | SEO |
+| # | Action | Why | Status |
+|---|--------|-----|--------|
+| 1 | Create `/blog/category/comparisons` hub page | Island 5 needs a dedicated landing page | ✅ Done |
+| 2 | Create `/blog/category/students` hub page | Island 3 needs student cluster home | ✅ Done |
+| 3 | Publish pillar: `what-is-notebooklm` | 5,400 vol, KD 38 | ✅ Done |
+| 4 | Publish: `notebooklm-review-2026` | KD 3 — easiest rank in seed file | ✅ Done |
+| 5 | Publish: `notebooklm-infographic-guide` | KD 0, 260 vol | 🔴 Deferred (quality over quantity) |
+| 6 | Retrofit internal links on all live posts | 6-link rule + footer template | ✅ Done (Jun 2026 pass) |
+| 7 | Add "Popular guides" block to homepage | Link to top Tier A posts from `/` | ✅ Done (3 guides; expand to 6 later) |
+| 8 | Submit updated `sitemap.xml` to Google Search Console | Index new URLs after publish | 🔴 Manual — do in GSC |
 
 ---
 
@@ -57,27 +57,28 @@ Priority tasks from the master plan — execute in this order:
 
 ### What we already own
 
-- **Island 5 (Comparisons)** — fully live: vs Gemini, vs ChatGPT, alternatives
+- **Island 5 (Comparisons)** — fully live: vs Gemini, vs ChatGPT, alternatives, comparisons hub
 - **Island 1 (Import)** — partially live: import methods + YouTube summarize
-- **Island 3 (Study)** — partially live: study workflows post
-- **Island 7 (Education)** — partially live: source limits + prompts
-- **Technical foundation** — www canonicals, hreflang, security headers, category clean URLs, sidebar CTA, llms.txt, sitemap
+- **Island 3 (Study)** — partially live: study workflows, beginner tutorial, students hub
+- **Island 4 (Pricing)** — partially live: `is-notebooklm-free` (pricing pillar still needed)
+- **Island 6/7 (Education)** — partially live: `what-is-notebooklm`, review, source limits, prompts, tutorial
+- **Technical foundation** — www canonicals, hreflang, security headers, 5 category hubs, sidebar CTA, llms.txt, sitemap, internal link pass
 
 ### Coverage gap
 
-Roughly **70% of Tier A keywords remain uncovered**. Of 24 Tier A keywords (KD ≤ 15), only **~10 are live or covered** by existing posts.
+Roughly **55% of Tier A keywords remain uncovered** (down from ~70%). Of 24 Tier A keywords (KD ≤ 15), **~14 are live or covered**.
 
 ### Biggest gaps (ranked by opportunity)
 
-| Rank | Gap | Top keyword | Volume | KD | Island |
-|------|-----|-------------|--------|-----|--------|
-| 1 | Education pillar missing | what is notebooklm | 5,400 | 38 | 6 / 7 |
-| 2 | Pricing cluster missing | is notebooklm free | 2,400 | 45 | 4 |
-| 3 | Student pillar missing | notebooklm for students | 480 | 38 | 3 |
-| 4 | Features/outputs missing | notebooklm infographic | 260 | 0 | 6 |
-| 5 | YouTube outputs missing | notebooklm video overview | 480 | 19 | 2 |
-| 6 | Category hubs missing | comparisons, students | — | — | 5, 3 |
-| 7 | Cross-island linking incomplete | (structural) | — | — | All |
+| Rank | Gap | Top keyword | Volume | KD | Island | Status |
+|------|-----|-------------|--------|-----|--------|--------|
+| 1 | Education pillar | what is notebooklm | 5,400 | 38 | 6/7 | ✅ Live (expand to 3k+ words later) |
+| 2 | Pricing cluster | is notebooklm free | 2,400 | 45 | 4 | ✅ Partial — need `notebooklm-pricing-plans` |
+| 3 | Student pillar | notebooklm for students | 480 | 38 | 3 | 🔴 Need dedicated pillar post |
+| 4 | Features/outputs | notebooklm infographic | 260 | 0 | 6 | 🔴 Open |
+| 5 | YouTube outputs | notebooklm video overview | 480 | 19 | 2 | 🔴 Open |
+| 6 | Category hubs | comparisons, students | — | — | 5, 3 | ✅ Done |
+| 7 | Cross-island linking | (structural) | — | — | All | ✅ Footer pass done |
 
 ### Authority flow (one line)
 
@@ -122,9 +123,9 @@ Every blog post must:
 
 | Metric | Baseline (Jun 2026) | 3-month | 6-month |
 |--------|---------------------|---------|---------|
-| Indexed blog URLs | 9 articles | 20 | 35+ |
+| Indexed blog URLs | 9 articles | 13 | 35+ |
 | Category hub pages | 3 | 5 | 6 |
-| Pillar pages (3,000+ words) | 0 | 3 | 5 |
+| Pillar pages (3,000+ words) | 0 | 1 | 5 |
 | Tier A keywords in top 20 | ~7 | 15 | 25+ |
 | Organic blog sessions/month | — | 2,000 | 5,000+ |
 | Chrome Web Store clicks from blog | — | track | +30% MoM |
@@ -187,8 +188,8 @@ Every island should reinforce this without being spammy.
 
 | Keyword | Volume | KD | Status |
 |---------|--------|-----|--------|
-| what is notebooklm | 5,400 | 38 | 🔴 Not live — **#1 priority pillar** |
-| is notebooklm free | 2,400 | 45 | 🔴 Not live |
+| what is notebooklm | 5,400 | 38 | ✅ Live |
+| is notebooklm free | 2,400 | 45 | ✅ Live |
 | what is notebooklm used for | 1,000 | 23 | 🔴 Not live |
 | notebooklm pricing | 1,300 | 30 | 🔴 Not live |
 | notebooklm alternative | 590 | 0 | ✅ Live |
@@ -196,7 +197,7 @@ Every island should reinforce this without being spammy.
 | youtube to notebooklm | 480 | 20 | ✅ Live |
 | notebooklm for students | 480 | 38 | 🔴 Not live |
 | notebooklm vs chatgpt | 390 | 0 | ✅ Live |
-| notebooklm review | 320 | 3 | 🔴 Not live — **easiest rank** |
+| notebooklm review | 320 | 3 | ✅ Live |
 
 ---
 
@@ -312,7 +313,7 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 ### Island 3 — Study & Students
 
 **Pillar to create:** `NotebookLM for Students: The Complete Guide`  
-**Category:** `/blog/category/students` ← CREATE
+**Category:** `/blog/category/students` ✅ Live
 
 | Priority | Slug | Target keyword | Vol | KD | Status |
 |----------|------|----------------|-----|-----|--------|
@@ -331,7 +332,7 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 
 | Priority | Slug | Target keyword | Vol | KD | Status |
 |----------|------|----------------|-----|-----|--------|
-| P1 | `is-notebooklm-free` | is notebooklm free | 2,400 | 45 | 🔴 Plan |
+| P1 | `is-notebooklm-free` | is notebooklm free | 2,400 | 45 | ✅ Live |
 | P1 | `notebooklm-pricing-plans` | notebooklm pricing / plans | 1,300 | 30 | 🔴 Plan |
 | P2 | `notebooklm-plus-vs-pro` | notebooklm plus / pro | 880–1,300 | 43–56 | 🔴 Plan |
 | P2 | `how-much-does-notebooklm-cost` | how much does notebooklm cost | 210 | 16 | 🔴 Plan |
@@ -343,7 +344,7 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 
 ### Island 5 — Comparisons
 
-**Pillar:** Category page `/blog/category/comparisons` ← CREATE  
+**Pillar:** Category page `/blog/category/comparisons` ✅ Live  
 **Cross-links:** All comparison posts link to each other
 
 | Priority | Slug | Target keyword | Vol | KD | Status |
@@ -365,7 +366,7 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 | Priority | Slug | Target keyword | Vol | KD | Status |
 |----------|------|----------------|-----|-----|--------|
 | P1 | `what-is-notebooklm-used-for` | what is notebooklm used for | 1,000 | 23 | 🔴 Plan |
-| P1 | `what-is-notebooklm` | what is notebooklm | 5,400 | 38 | 🔴 Plan — **top priority** |
+| P1 | `what-is-notebooklm` | what is notebooklm | 5,400 | 38 | ✅ Live |
 | P2 | `notebooklm-mind-map-guide` | notebooklm mind map | 390 | 26 | 🔴 Plan |
 | P2 | `notebooklm-infographic-guide` | notebooklm infographic | 260 | 0 | 🔴 Plan |
 | P2 | `notebooklm-slide-deck-guide` | notebooklm slide deck | 170 | 27 | 🔴 Plan |
@@ -382,9 +383,9 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 |----------|------|----------------|-----|-----|--------|
 | P0 | `notebooklm-source-limits` | notebooklm source limit / limits | 210–320 | 8–17 | ✅ Live |
 | P0 | `best-notebooklm-prompts` | notebooklm prompts | 210 | 12 | ✅ Live |
-| P1 | `notebooklm-tutorial-beginners` | notebooklm tutorial | 320 | 14 | 🔴 Plan |
+| P1 | `notebooklm-tutorial-beginners` | notebooklm tutorial | 320 | 14 | ✅ Live |
 | P1 | `how-does-notebooklm-work` | how does notebooklm work | 590 | 41 | 🔴 Plan |
-| P1 | `notebooklm-review-2026` | notebooklm review | 320 | 3 | 🔴 Plan — **easiest rank** |
+| P1 | `notebooklm-review-2026` | notebooklm review | 320 | 3 | ✅ Live |
 | P2 | `is-notebooklm-good` | is notebooklm good | 210 | 27 | 🔴 Plan |
 | P2 | `is-notebooklm-private` | is notebooklm private | 170 | 25 | 🔴 Plan |
 
@@ -405,21 +406,25 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 
 ## 8. Content inventory — live vs planned
 
-### Live articles (9)
+### Live articles (13)
 
 | # | Slug | Type | Primary keyword | Vol | KD |
 |---|------|------|-----------------|-----|-----|
-| 1 | `notebooklm-vs-gemini` | Comparison | notebooklm vs gemini | 590 | 0 |
-| 2 | `notebooklm-vs-chatgpt` | Comparison | notebooklm vs chatgpt | 390 | 0 |
-| 3 | `best-notebooklm-alternatives` | Listicle | notebooklm alternatives | 590 | 0 |
-| 4 | `best-notebooklm-prompts` | Listicle | notebooklm prompts | 210 | 12 |
-| 5 | `how-to-use-notebooklm-to-study` | Listicle | how to use notebooklm to study | 210 | 9 |
-| 6 | `notebooklm-source-limits` | Listicle | notebooklm source limit | 210 | 8 |
-| 7 | `best-ways-import-content-notebooklm` | Listicle | youtube to notebooklm chrome extension | 210 | 8 |
-| 8 | `summarize-youtube-videos-notebooklm` | Guide | youtube to notebooklm | 480 | 20 |
-| 9 | `what-is-notebooktools` | Product | (brand) | — | — |
+| 1 | `what-is-notebooklm` | Pillar | what is notebooklm | 5,400 | 38 |
+| 2 | `is-notebooklm-free` | Guide | is notebooklm free | 2,400 | 45 |
+| 3 | `notebooklm-tutorial-beginners` | Guide | notebooklm tutorial | 320 | 14 |
+| 4 | `notebooklm-review-2026` | Review | notebooklm review | 320 | 3 |
+| 5 | `notebooklm-vs-gemini` | Comparison | notebooklm vs gemini | 590 | 0 |
+| 6 | `notebooklm-vs-chatgpt` | Comparison | notebooklm vs chatgpt | 390 | 0 |
+| 7 | `best-notebooklm-alternatives` | Listicle | notebooklm alternatives | 590 | 0 |
+| 8 | `best-notebooklm-prompts` | Listicle | notebooklm prompts | 210 | 12 |
+| 9 | `how-to-use-notebooklm-to-study` | Listicle | how to use notebooklm to study | 210 | 9 |
+| 10 | `notebooklm-source-limits` | Listicle | notebooklm source limit | 210 | 8 |
+| 11 | `best-ways-import-content-notebooklm` | Listicle | youtube to notebooklm chrome extension | 210 | 8 |
+| 12 | `summarize-youtube-videos-notebooklm` | Guide | youtube to notebooklm | 480 | 20 |
+| 13 | `what-is-notebooktools` | Product | (brand) | — | — |
 
-### Live hub pages (4)
+### Live hub pages (6)
 
 | URL | Purpose |
 |-----|---------|
@@ -427,19 +432,18 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 | `/blog/category/youtube` | YouTube island hub |
 | `/blog/category/notebooklm` | NotebookLM tips hub |
 | `/blog/category/product` | Product island hub |
+| `/blog/category/comparisons` | Comparisons island hub |
+| `/blog/category/students` | Students island hub |
 
-### Next 10 articles (Phase 1 priority)
+### Next articles (Phase 1 remaining)
 
-1. `what-is-notebooklm` — 5,400 vol, KD 38
-2. `notebooklm-review-2026` — 320 vol, KD 3
-3. `is-notebooklm-free` — 2,400 vol, KD 45
-4. `notebooklm-pricing-plans` — 1,300 vol, KD 30
-5. `what-is-notebooklm-used-for` — 1,000 vol, KD 23
-6. `notebooklm-infographic-guide` — 260 vol, KD 0
-7. `notebooklm-for-students` — 480 vol, KD 38
-8. `notebooklm-tutorial-beginners` — 320 vol, KD 14
-9. `notebooklm-chrome-extension-guide` — 170 vol, KD 40
-10. `notebooklm-web-importer-how-to` — 210 vol, KD 4
+1. `notebooklm-pricing-plans` — 1,300 vol, KD 30
+2. `what-is-notebooklm-used-for` — 1,000 vol, KD 23
+3. `notebooklm-for-students` — 480 vol, KD 38
+4. `notebooklm-infographic-guide` — 260 vol, KD 0
+5. `notebooklm-chrome-extension-guide` — 170 vol, KD 40
+6. `notebooklm-web-importer-how-to` — 210 vol, KD 4
+7. `notebooklm-video-overview-guide` — 480 vol, KD 19
 
 ---
 
@@ -944,14 +948,14 @@ All keywords with KD ≤ 15 from seed file:
 | notebooklm web importer | 210 | $0 | 4 | nav | notebooklm-web-importer-how-to | 🔴 |
 | gemini vs notebooklm | 210 | $0 | 6 | commercial | gemini-vs-notebooklm | 🔴 |
 | notebooklm cli | 210 | $0 | 6 | nav | notebooklm-cli-tools | 🔴 |
-| notebooklm review | 320 | $5.31 | 3 | info | notebooklm-review-2026 | 🔴 |
+| notebooklm review | 320 | $5.31 | 3 | info | notebooklm-review-2026 | ✅ |
 | notebooklm reddit | 720 | $0 | 2 | nav | SKIP | — |
 | notebooklm prompts | 210 | $21.10 | 12 | nav | best-notebooklm-prompts | ✅ |
 | notebooklm prompt | 210 | $21.10 | 14 | nav | best-notebooklm-prompts | ✅ |
 | how many sources can you add to notebooklm | 210 | $0 | 12 | info | notebooklm-source-limits | ✅ |
 | does notebooklm have a limit | 210 | $0 | 15 | info | notebooklm-source-limits | ✅ |
 | notebooklm student discount | 210 | $7.09 | 13 | commercial | notebooklm-student-discount | 🔴 |
-| notebooklm tutorial | 320 | $5.79 | 14 | nav | notebooklm-tutorial-beginners | 🔴 |
+| notebooklm tutorial | 320 | $5.79 | 14 | nav | notebooklm-tutorial-beginners | ✅ |
 | notebooklm limits | 320 | $0 | 17 | info | notebooklm-source-limits | ✅ |
 
 ---
@@ -967,6 +971,12 @@ All keywords with KD ≤ 15 from seed file:
 | https://www.notebooktools.com/blog/category/youtube | Category |
 | https://www.notebooktools.com/blog/category/notebooklm | Category |
 | https://www.notebooktools.com/blog/category/product | Category |
+| https://www.notebooktools.com/blog/category/comparisons | Category |
+| https://www.notebooktools.com/blog/category/students | Category |
+| https://www.notebooktools.com/blog/what-is-notebooklm | Pillar |
+| https://www.notebooktools.com/blog/is-notebooklm-free | Guide |
+| https://www.notebooktools.com/blog/notebooklm-tutorial-beginners | Guide |
+| https://www.notebooktools.com/blog/notebooklm-review-2026 | Review |
 | https://www.notebooktools.com/blog/notebooklm-vs-gemini | Comparison |
 | https://www.notebooktools.com/blog/notebooklm-vs-chatgpt | Comparison |
 | https://www.notebooktools.com/blog/best-notebooklm-alternatives | Listicle |
@@ -982,22 +992,17 @@ All keywords with KD ≤ 15 from seed file:
 | https://www.notebooktools.com/llms.txt | AEO |
 | https://www.notebooktools.com/robots.txt | Robots |
 
-### Planned (Phase 1)
+### Planned (Phase 1 remaining)
 
 | URL | Type |
 |-----|------|
-| /blog/category/comparisons | Category |
-| /blog/category/students | Category |
-| /blog/what-is-notebooklm | Pillar |
-| /blog/notebooklm-review-2026 | Cluster |
-| /blog/is-notebooklm-free | Cluster |
 | /blog/notebooklm-pricing-plans | Pillar |
 | /blog/what-is-notebooklm-used-for | Pillar |
 | /blog/notebooklm-infographic-guide | Cluster |
 | /blog/notebooklm-for-students | Pillar |
-| /blog/notebooklm-tutorial-beginners | Cluster |
 | /blog/notebooklm-chrome-extension-guide | Cluster |
 | /blog/notebooklm-web-importer-how-to | Cluster |
+| /blog/notebooklm-video-overview-guide | Cluster |
 
 ---
 
@@ -1007,6 +1012,7 @@ All keywords with KD ≤ 15 from seed file:
 |---------|------|---------|
 | 1.0 | June 2026 | Initial master plan from seed keyword analysis + site audit |
 | 1.1 | June 2026 | Added immediate actions, strategic summary, full 99-keyword appendix, coverage index |
+| 1.2 | June 2026 | Shipped 4 new posts, 2 category hubs, internal link pass, review post, updated inventory |
 
 ---
 
