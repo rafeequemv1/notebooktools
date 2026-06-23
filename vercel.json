@@ -41,6 +41,18 @@
       "destination": "/blog/category/students",
       "permanent": true
     },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "category", "value": "tutorials" }],
+      "destination": "/blog/category/tutorials",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "category", "value": "prompts" }],
+      "destination": "/blog/category/prompts",
+      "permanent": true
+    },
     { "source": "/website", "destination": "/", "permanent": true },
     { "source": "/website/", "destination": "/", "permanent": true },
     { "source": "/website/:path*", "destination": "/:path*", "permanent": true },

@@ -41,6 +41,8 @@ NotebookTools is a free Chrome extension that imports YouTube videos, X (Twitter
 - Privacy: https://www.notebooktools.com/privacy
 
 ### Category hubs
+- Prompt library: https://www.notebooktools.com/blog/category/prompts
+- Tutorials & extension guides: https://www.notebooktools.com/blog/category/tutorials
 - NotebookLM tips: https://www.notebooktools.com/blog/category/notebooklm
 - Comparisons: https://www.notebooktools.com/blog/category/comparisons
 - Student guides: https://www.notebooktools.com/blog/category/students
@@ -63,6 +65,7 @@ NotebookTools is a free Chrome extension that imports YouTube videos, X (Twitter
 
 ### Workflows
 - How to use NotebookLM to study: https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study
+- NotebookLM slide prompts: https://www.notebooktools.com/blog/notebooklm-slide-prompts
 - Best NotebookLM prompts: https://www.notebooktools.com/blog/best-notebooklm-prompts
 - NotebookLM source limits: https://www.notebooktools.com/blog/notebooklm-source-limits
 - What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools

@@ -59,7 +59,7 @@
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.notebooktools.com/" },
             { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.notebooktools.com/blog" },
-            { "@type": "ListItem", "position": 3, "name": "NotebookLM tips", "item": "https://www.notebooktools.com/blog/category/notebooklm" },
+            { "@type": "ListItem", "position": 3, "name": "Prompt library", "item": "https://www.notebooktools.com/blog/category/prompts" },
             { "@type": "ListItem", "position": 4, "name": "Best NotebookLM Prompts", "item": "https://www.notebooktools.com/blog/best-notebooklm-prompts" }
           ]
         },
@@ -119,14 +119,14 @@
       <nav class="blog-breadcrumb" aria-label="Breadcrumb">
         <a href="/blog">Blog</a>
         <span aria-hidden="true">/</span>
-        <a href="/blog/category/notebooklm">NotebookLM tips</a>
+        <a href="/blog/category/prompts">Prompt library</a>
         <span aria-hidden="true">/</span>
-        <span>NotebookLM prompts</span>
+        <span>12 best prompts</span>
       </nav>
 
       <article>
         <header class="blog-article-header">
-          <span class="blog-card-tag">NotebookLM tips</span>
+          <span class="blog-card-tag">Prompt library</span>
           <h1>12 Best NotebookLM Prompts for Research &amp; Study</h1>
           <div class="blog-article-byline">
             <time datetime="2026-06-22">June 22, 2026</time>
@@ -134,6 +134,12 @@
             <span>9 min read</span>
           </div>
         </header>
+
+        <nav class="blog-prompt-library-bar" aria-label="Prompt guides">
+          <a href="/blog/category/prompts">All prompts</a>
+          <a class="is-current" href="/blog/best-notebooklm-prompts">Study &amp; research</a>
+          <a href="/blog/notebooklm-slide-prompts">Slide decks</a>
+        </nav>
 
         <div class="blog-article-body">
           <p class="blog-lead">
@@ -161,8 +167,11 @@
           <ol class="blog-listicle">
             <li>
               <h2>1. Executive summary</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Summarize all sources in this notebook in 8–10 bullet points. Lead with the main thesis or conclusion, then supporting evidence. Flag any contradictions between sources."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Summarize all sources in this notebook in 8-10 bullet points. Lead with the main thesis or conclusion, then supporting evidence. Flag any contradictions between sources.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> First pass on a new notebook — orient yourself before deep reading.
                 Works well after importing a lecture series or reading packet.
@@ -170,8 +179,11 @@
             </li>
             <li>
               <h2>2. Key terms glossary</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Create a glossary of the 20 most important terms across my sources. For each term: a one-sentence definition, which source introduced it, and one example."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Create a glossary of the 20 most important terms across my sources. For each term: a one-sentence definition, which source introduced it, and one example.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Technical courses, law, medicine, or any field with dense vocabulary.
                 Export the result to your own notes for quick review.
@@ -179,8 +191,11 @@
             </li>
             <li>
               <h2>3. Compare and contrast</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Compare how each source treats [TOPIC]. Present as a table with columns: Source, Main claim, Evidence used, Limitations."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Compare how each source treats [TOPIC]. Present as a table with columns: Source, Main claim, Evidence used, Limitations.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Literature reviews, debate prep, or seminar papers where authors disagree.
                 Replace [TOPIC] with your specific question.
@@ -188,8 +203,11 @@
             </li>
             <li>
               <h2>4. Study outline</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Build a hierarchical study outline from my sources. Use H2 for major topics, H3 for subtopics, and bullet points for facts I must memorize. Order by logical dependency, not source order."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Build a hierarchical study outline from my sources. Use H2 for major topics, H3 for subtopics, and bullet points for facts I must memorize. Order by logical dependency, not source order.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Exam season — turns scattered readings into a single study map.
                 Pair with our <a href="/blog/how-to-use-notebooklm-to-study">NotebookLM study guide</a> for workflow tips.
@@ -197,8 +215,11 @@
             </li>
             <li>
               <h2>5. Practice exam questions</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Generate 15 practice exam questions based only on my sources. Mix multiple choice (with explanations), short answer, and one essay question. Include answer keys at the end."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Generate 15 practice exam questions based only on my sources. Mix multiple choice (with explanations), short answer, and one essay question. Include answer keys at the end.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Active recall beats passive re-reading. Run this a week before the exam,
                 then ask follow-ups on questions you miss.
@@ -206,40 +227,55 @@
             </li>
             <li>
               <h2>6. Flashcard generator</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Create 30 flashcard pairs (Question :: Answer) from my sources. Focus on definitions, cause-effect relationships, and formulas. Format each pair on its own line."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Create 30 flashcard pairs (Question :: Answer) from my sources. Focus on definitions, cause-effect relationships, and formulas. Format each pair on its own line.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Memorization-heavy subjects. Copy into Anki or your preferred flashcard app.
               </p>
             </li>
             <li>
               <h2>7. Methodology extractor</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"For each research paper in this notebook, extract: research question, methodology, sample size (if stated), key findings, and stated limitations. Present as a structured table."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">For each research paper in this notebook, extract: research question, methodology, sample size (if stated), key findings, and stated limitations. Present as a structured table.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Graduate seminars, thesis lit reviews, or any notebook heavy on academic PDFs.
               </p>
             </li>
             <li>
               <h2>8. Argument map</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Map the logical structure of the main argument across my sources. Show: central claim → supporting premises → counterarguments addressed → conclusion. Note gaps where sources do not provide evidence."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Map the logical structure of the main argument across my sources. Show: central claim → supporting premises → counterarguments addressed → conclusion. Note gaps where sources do not provide evidence.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Philosophy, policy analysis, or persuasive writing courses where structure matters.
               </p>
             </li>
             <li>
               <h2>9. Timeline builder</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Extract every date, event, and sequence mentioned across my sources. Build a chronological timeline from earliest to latest. Flag uncertain dates."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Extract every date, event, and sequence mentioned across my sources. Build a chronological timeline from earliest to latest. Flag uncertain dates.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> History, political science, or case studies with evolving facts over time.
               </p>
             </li>
             <li>
               <h2>10. ELI5 explainer</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Explain the core concepts in this notebook as if teaching a smart high school student. Use analogies, avoid jargon unless you define it, and end with three 'check your understanding' questions."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Explain the core concepts in this notebook as if teaching a smart high school student. Use analogies, avoid jargon unless you define it, and end with three 'check your understanding' questions.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> When a textbook chapter or lecture video left you confused. Especially useful
                 after <a href="/blog/summarize-youtube-videos-notebooklm">adding YouTube lectures</a> to your notebook.
@@ -247,16 +283,22 @@
             </li>
             <li>
               <h2>11. Source gap analysis</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Based on my current sources, what important questions about [TOPIC] remain unanswered? List 5 gaps and suggest what type of source (paper, expert interview, dataset) would fill each gap."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Based on my current sources, what important questions about [TOPIC] remain unanswered? List 5 gaps and suggest what type of source (paper, expert interview, dataset) would fill each gap.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Early research planning — before you waste time reading the wrong materials.
               </p>
             </li>
             <li>
               <h2>12. Briefing memo</h2>
-              <p><strong>Prompt:</strong></p>
-              <p><em>"Write a one-page briefing memo on [TOPIC] for a busy decision-maker. Sections: Situation, Key findings (with source references), Risks, Recommended next steps. Max 400 words."</em></p>
+              <div class="blog-prompt-block">
+                <p class="blog-prompt-label">Prompt</p>
+                <p class="blog-prompt-text">Write a one-page briefing memo on [TOPIC] for a busy decision-maker. Sections: Situation, Key findings (with source references), Risks, Recommended next steps. Max 400 words.</p>
+                <button type="button" class="blog-prompt-copy">Copy prompt</button>
+              </div>
               <p>
                 <strong>When to use:</strong> Workplace research, consulting, or capstone projects where you need a
                 polished deliverable — not just study notes.
@@ -281,7 +323,7 @@
           </p>
 
           <h2>FAQ</h2>
-          <p><strong>Can I save prompts in NotebookLM?</strong><br>NotebookLM does not have a built-in prompt library yet. Bookmark this page or keep a personal snippet doc for your favorites.</p>
+          <p><strong>Can I save prompts in NotebookLM?</strong><br>NotebookLM does not have a built-in prompt library yet. Bookmark our <a href="/blog/category/prompts">prompt library</a> or keep a personal snippet doc for your favorites.</p>
           <p><strong>Do prompts work in Audio Overviews?</strong><br>Audio Overviews use notebook content automatically. Prompts apply to the text chat interface.</p>
           <p><strong>Need help with imports?</strong><br>Visit our <a href="/support">support page</a> or read <a href="/blog/what-is-notebooktools">what NotebookTools does</a>.</p>
         </div>
@@ -291,10 +333,8 @@
             <img class="chrome-store-badge" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
           </a>
           <p class="blog-article-footer-note">
-            More: <a href="/blog/what-is-notebooklm">What is NotebookLM?</a> ·
-            <a href="/blog/how-to-use-notebooklm-to-study">Study guide</a> ·
-            <a href="/blog/what-is-notebooktools">What is NotebookTools?</a> ·
-            <a href="/blog/category/notebooklm">NotebookLM tips</a> ·
+            More: <a href="/blog/notebooklm-slide-prompts">Slide prompts</a> ·
+            <a href="/blog/category/prompts">Prompt library</a> ·
             <a href="/support">Support</a> ·
             <a href="/blog">All blog posts</a>
           </p>

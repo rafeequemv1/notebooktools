@@ -62,6 +62,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/category/students"/>
   </url>
   <url>
+    <loc>https://www.notebooktools.com/blog/category/prompts</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/prompts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/category/prompts"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/category/tutorials</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/tutorials"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/category/tutorials"/>
+  </url>
+  <url>
     <loc>https://www.notebooktools.com/blog/category/youtube</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
@@ -184,6 +200,14 @@
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/best-notebooklm-prompts"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/best-notebooklm-prompts"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-slide-prompts</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-slide-prompts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-slide-prompts"/>
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-source-limits</loc>
