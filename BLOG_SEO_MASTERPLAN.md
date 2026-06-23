@@ -48,7 +48,7 @@ Priority tasks from the master plan — execute in this order:
 | 4 | Publish: `notebooklm-review-2026` | KD 3 — easiest rank in seed file | ✅ Done |
 | 5 | Publish: `notebooklm-infographic-guide` | KD 0, 260 vol | 🔴 Deferred (quality over quantity) |
 | 6 | Retrofit internal links on all live posts | 6-link rule + footer template | ✅ Done (Jun 2026 pass) |
-| 7 | Add "Popular guides" block to homepage | Link to top Tier A posts from `/` | ✅ Done (3 guides; expand to 6 later) |
+| 7 | Add "Popular guides" block to homepage | Link to top Tier A posts from `/` | ✅ Done (6 guides) |
 | 8 | Submit updated `sitemap.xml` to Google Search Console | Index new URLs after publish | 🔴 Manual — do in GSC |
 
 ---
@@ -73,7 +73,7 @@ Roughly **55% of Tier A keywords remain uncovered** (down from ~70%). Of 24 Tier
 | Rank | Gap | Top keyword | Volume | KD | Island | Status |
 |------|-----|-------------|--------|-----|--------|--------|
 | 1 | Education pillar | what is notebooklm | 5,400 | 38 | 6/7 | ✅ Live (expand to 3k+ words later) |
-| 2 | Pricing cluster | is notebooklm free | 2,400 | 45 | 4 | ✅ Partial — need `notebooklm-pricing-plans` |
+| 2 | Pricing cluster | is notebooklm free | 2,400 | 45 | 4 | ✅ Live (`is-notebooklm-free` + `notebooklm-pricing-plans`) |
 | 3 | Student pillar | notebooklm for students | 480 | 38 | 3 | 🔴 Need dedicated pillar post |
 | 4 | Features/outputs | notebooklm infographic | 260 | 0 | 6 | 🔴 Open |
 | 5 | YouTube outputs | notebooklm video overview | 480 | 19 | 2 | 🔴 Open |
@@ -191,7 +191,7 @@ Every island should reinforce this without being spammy.
 | what is notebooklm | 5,400 | 38 | ✅ Live |
 | is notebooklm free | 2,400 | 45 | ✅ Live |
 | what is notebooklm used for | 1,000 | 23 | 🔴 Not live |
-| notebooklm pricing | 1,300 | 30 | 🔴 Not live |
+| notebooklm pricing | 1,300 | 30 | ✅ Live |
 | notebooklm alternative | 590 | 0 | ✅ Live |
 | notebooklm vs gemini | 590 | 0 | ✅ Live |
 | youtube to notebooklm | 480 | 20 | ✅ Live |
@@ -333,7 +333,7 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 | Priority | Slug | Target keyword | Vol | KD | Status |
 |----------|------|----------------|-----|-----|--------|
 | P1 | `is-notebooklm-free` | is notebooklm free | 2,400 | 45 | ✅ Live |
-| P1 | `notebooklm-pricing-plans` | notebooklm pricing / plans | 1,300 | 30 | 🔴 Plan |
+| P1 | `notebooklm-pricing-plans` | notebooklm pricing / plans | 1,300 | 30 | ✅ Live |
 | P2 | `notebooklm-plus-vs-pro` | notebooklm plus / pro | 880–1,300 | 43–56 | 🔴 Plan |
 | P2 | `how-much-does-notebooklm-cost` | how much does notebooklm cost | 210 | 16 | 🔴 Plan |
 | P3 | `notebooklm-enterprise-pricing` | notebooklm enterprise | 390 | 32 | 🔴 Plan |
@@ -406,23 +406,24 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 
 ## 8. Content inventory — live vs planned
 
-### Live articles (13)
+### Live articles (14)
 
 | # | Slug | Type | Primary keyword | Vol | KD |
 |---|------|------|-----------------|-----|-----|
 | 1 | `what-is-notebooklm` | Pillar | what is notebooklm | 5,400 | 38 |
 | 2 | `is-notebooklm-free` | Guide | is notebooklm free | 2,400 | 45 |
-| 3 | `notebooklm-tutorial-beginners` | Guide | notebooklm tutorial | 320 | 14 |
-| 4 | `notebooklm-review-2026` | Review | notebooklm review | 320 | 3 |
-| 5 | `notebooklm-vs-gemini` | Comparison | notebooklm vs gemini | 590 | 0 |
-| 6 | `notebooklm-vs-chatgpt` | Comparison | notebooklm vs chatgpt | 390 | 0 |
-| 7 | `best-notebooklm-alternatives` | Listicle | notebooklm alternatives | 590 | 0 |
-| 8 | `best-notebooklm-prompts` | Listicle | notebooklm prompts | 210 | 12 |
-| 9 | `how-to-use-notebooklm-to-study` | Listicle | how to use notebooklm to study | 210 | 9 |
-| 10 | `notebooklm-source-limits` | Listicle | notebooklm source limit | 210 | 8 |
-| 11 | `best-ways-import-content-notebooklm` | Listicle | youtube to notebooklm chrome extension | 210 | 8 |
-| 12 | `summarize-youtube-videos-notebooklm` | Guide | youtube to notebooklm | 480 | 20 |
-| 13 | `what-is-notebooktools` | Product | (brand) | — | — |
+| 3 | `notebooklm-pricing-plans` | Pillar | notebooklm pricing | 1,300 | 30 |
+| 4 | `notebooklm-tutorial-beginners` | Guide | notebooklm tutorial | 320 | 14 |
+| 5 | `notebooklm-review-2026` | Review | notebooklm review | 320 | 3 |
+| 6 | `notebooklm-vs-gemini` | Comparison | notebooklm vs gemini | 590 | 0 |
+| 7 | `notebooklm-vs-chatgpt` | Comparison | notebooklm vs chatgpt | 390 | 0 |
+| 8 | `best-notebooklm-alternatives` | Listicle | notebooklm alternatives | 590 | 0 |
+| 9 | `best-notebooklm-prompts` | Listicle | notebooklm prompts | 210 | 12 |
+| 10 | `how-to-use-notebooklm-to-study` | Listicle | how to use notebooklm to study | 210 | 9 |
+| 11 | `notebooklm-source-limits` | Listicle | notebooklm source limit | 210 | 8 |
+| 12 | `best-ways-import-content-notebooklm` | Listicle | youtube to notebooklm chrome extension | 210 | 8 |
+| 13 | `summarize-youtube-videos-notebooklm` | Guide | youtube to notebooklm | 480 | 20 |
+| 14 | `what-is-notebooktools` | Product | (brand) | — | — |
 
 ### Live hub pages (6)
 
@@ -437,13 +438,12 @@ Eight islands. Each island = **1 pillar + 4–8 cluster posts + 1 category hub s
 
 ### Next articles (Phase 1 remaining)
 
-1. `notebooklm-pricing-plans` — 1,300 vol, KD 30
-2. `what-is-notebooklm-used-for` — 1,000 vol, KD 23
-3. `notebooklm-for-students` — 480 vol, KD 38
-4. `notebooklm-infographic-guide` — 260 vol, KD 0
+1. `what-is-notebooklm-used-for` — 1,000 vol, KD 23
+2. `notebooklm-for-students` — 480 vol, KD 38
+3. `notebooklm-web-importer-how-to` — 210 vol, KD 4
+4. `notebooklm-infographic-guide` — 260 vol, KD 0 (deferred)
 5. `notebooklm-chrome-extension-guide` — 170 vol, KD 40
-6. `notebooklm-web-importer-how-to` — 210 vol, KD 4
-7. `notebooklm-video-overview-guide` — 480 vol, KD 19
+6. `notebooklm-video-overview-guide` — 480 vol, KD 19
 
 ---
 
@@ -996,6 +996,7 @@ All keywords with KD ≤ 15 from seed file:
 
 | URL | Type |
 |-----|------|
+| /blog/notebooklm-pricing-plans | Pillar |
 | /blog/notebooklm-pricing-plans | Pillar |
 | /blog/what-is-notebooklm-used-for | Pillar |
 | /blog/notebooklm-infographic-guide | Cluster |
