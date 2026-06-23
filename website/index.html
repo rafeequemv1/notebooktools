@@ -12,28 +12,30 @@
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NotebookTools — Import YouTube, Web & Highlights to NotebookLM</title>
+    <title>NotebookTools — Import to NotebookLM</title>
     <meta
       name="description"
-      content="NotebookTools is a free Chrome extension that sends YouTube videos, webpages, X posts, and highlighted text into Google NotebookLM — one click or right-click. Your sources, ready to query."
+      content="Free Chrome extension: import YouTube, webpages, X posts, and highlights into NotebookLM in one click. Uses your Google sign-in."
     >
     <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, save to NotebookLM, NotebookTools, web clipper">
     <meta name="author" content="NotebookTools">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <meta name="googlebot" content="index, follow">
-    <link rel="canonical" href="https://notebooktools.com/">
+    <link rel="canonical" href="https://www.notebooktools.com/">
+    <link rel="alternate" hreflang="en" href="https://www.notebooktools.com/">
+    <link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/">
     <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site summary">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:locale" content="en_US">
     <meta property="og:title" content="NotebookTools — Import Anything to NotebookLM">
     <meta property="og:description" content="Free Chrome extension: YouTube, webpages, X posts, and highlights → NotebookLM in one click. Right-click any selection to add.">
-    <meta property="og:url" content="https://notebooktools.com/">
-    <meta property="og:image" content="https://notebooktools.com/assets/og-image.png">
+    <meta property="og:url" content="https://www.notebooktools.com/">
+    <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NotebookTools — Import to NotebookLM">
     <meta name="twitter:description" content="Import YouTube, webpages, X posts, and highlighted text into NotebookLM. Free Chrome extension.">
-    <meta name="twitter:image" content="https://notebooktools.com/assets/og-image.png">
+    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="theme-color" content="#fdfbf7">
     <link rel="icon" href="assets/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,15 +49,15 @@
         {
           "@type": "WebSite",
           "name": "NotebookTools",
-          "url": "https://notebooktools.com/",
+          "url": "https://www.notebooktools.com/",
           "description": "Free Chrome extension for importing YouTube, X, webpages, and highlighted text into Google NotebookLM.",
           "inLanguage": "en"
         },
         {
           "@type": "Organization",
           "name": "NotebookTools",
-          "url": "https://notebooktools.com/",
-          "logo": "https://notebooktools.com/assets/og-image.png",
+          "url": "https://www.notebooktools.com/",
+          "logo": "https://www.notebooktools.com/assets/og-image.png",
           "sameAs": ["https://github.com/rafeequemv1/notebooktools"]
         },
         {
@@ -69,7 +71,8 @@
             "priceCurrency": "USD"
           },
           "description": "Import YouTube videos, X posts, webpages, and selected text into Google NotebookLM.",
-          "url": "https://notebooktools.com/",
+          "url": "https://www.notebooktools.com/",
+          "downloadUrl": "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj",
           "featureList": [
             "YouTube video import on watch pages (one video at a time)",
             "X and Twitter thread import",
@@ -129,7 +132,7 @@
   <body>
     <header class="site-header">
       <a class="logo" href="/">
-        <img class="logo-img logo-mark-header" src="assets/logo-mark-32.png" alt="" width="32" height="32">
+        <img class="logo-img logo-mark-header" src="assets/logo-mark-32.png" alt="NotebookTools logo" width="32" height="32">
         <span class="logo-text">NotebookTools</span>
       </a>
       <nav class="site-nav">
@@ -137,11 +140,13 @@
         <a href="#how-it-works">How it works</a>
         <a href="#pricing">Pricing</a>
         <a href="/blog">Blog</a>
-        <a href="support">Support</a>
+        <a href="/support">Support</a>
         <a href="/privacy">Privacy</a>
         <a href="#install">Install</a>
       </nav>
-      <a class="button button-sm header-cta" href="#install">Add to Chrome</a>
+      <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+        <img class="chrome-store-badge chrome-store-badge-sm" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+      </a>
     </header>
 
     <main>
@@ -150,7 +155,7 @@
         <div class="hero-inner">
           <div class="hero-copy">
             <p class="eyebrow">Built for NotebookLM</p>
-            <h1>Turn videos, pages, and highlights into NotebookLM sources — instantly.</h1>
+            <h1>Import videos, pages &amp; highlights to NotebookLM</h1>
             <p class="lead">
               Stop copy-pasting links. NotebookTools adds YouTube videos, webpages, X posts,
               and any text you select straight into your notebooks — so you can ask NotebookLM
@@ -167,7 +172,9 @@
             </div>
 
             <div class="hero-actions">
-              <a class="button button-primary" href="#install">Add to Chrome — Free</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
+              </a>
               <a class="button button-ghost" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">
                 Open NotebookLM
               </a>
@@ -208,7 +215,7 @@
         <div class="feature-grid">
           <article class="feature-card">
             <div class="feature-icon">
-              <img class="logo-mark" src="assets/logo-mark-32.png" alt="" width="28" height="28">
+              <img class="logo-mark" src="assets/logo-mark-32.png" alt="NotebookTools" width="28" height="28">
             </div>
             <h3>YouTube watch pages</h3>
             <p>A native button on every YouTube watch page. Import one video at a time — pick a notebook and you’re done.</p>
@@ -273,7 +280,9 @@
             <li>Create or choose NotebookLM notebooks</li>
             <li>Works with your existing NotebookLM session</li>
           </ul>
-          <a class="button button-primary button-lg" href="#install">Get started free</a>
+          <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+            <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
+          </a>
         </div>
       </section>
 
@@ -330,7 +339,7 @@
             </div>
           </details>
         </div>
-        <p class="faq-more">Read our <a href="/blog/summarize-youtube-videos-notebooklm">YouTube summary guide</a> or <a href="/blog/what-is-notebooktools">what NotebookTools does</a>.</p>
+        <p class="faq-more">Read our <a href="/blog/notebooklm-vs-gemini">NotebookLM vs Gemini</a> comparison, <a href="/blog/best-notebooklm-prompts">best prompts guide</a>, <a href="/blog/summarize-youtube-videos-notebooklm">YouTube summary guide</a>, or visit <a href="/blog">all blog posts</a>.</p>
       </section>
 
       <section class="install" id="install">
@@ -342,8 +351,8 @@
               Install NotebookTools, open NotebookLM once to sign in, then import your first
               video, page, or text selection in seconds.
             </p>
-            <a class="button button-primary button-lg" id="chrome-store-link" href="https://chromewebstore.google.com/" target="_blank" rel="noopener noreferrer">
-              Add to Chrome — Free
+            <a class="chrome-store-link" id="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+              <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
             </a>
             <a class="button button-ghost button-lg install-secondary" href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noopener noreferrer">
               View on GitHub
@@ -361,12 +370,12 @@
 
     <footer class="site-footer">
       <div class="footer-brand">
-        <img class="logo-img logo-footer" src="assets/logo-wordmark-sm.png" alt="NotebookTools" height="20">
+        <img class="logo-img logo-footer" src="assets/logo-wordmark-sm.png" alt="NotebookTools" width="120" height="20">
         <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
         <a href="/blog">Blog</a>
-        <a href="support">Support</a>
+        <a href="/support">Support</a>
         <a href="/privacy">Privacy</a>
         <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM</a>
       </div>

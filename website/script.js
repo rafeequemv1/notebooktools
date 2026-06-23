@@ -1,10 +1,9 @@
-// Update this URL after Chrome Web Store approval (see version 0.1/CHROME_STORE_LISTING.md)
-const CHROME_STORE_URL = "https://chromewebstore.google.com/";
+const CHROME_STORE_URL =
+  "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj";
 
-const storeLink = document.getElementById("chrome-store-link");
-if (storeLink && CHROME_STORE_URL) {
-  storeLink.href = CHROME_STORE_URL;
-}
+document.querySelectorAll(".chrome-store-link").forEach((link) => {
+  link.href = CHROME_STORE_URL;
+});
 
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (event) => {

@@ -326,6 +326,38 @@ h1, h2, h3, p {
   margin-top: 32px;
 }
 
+.chrome-store-link {
+  display: inline-block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.chrome-store-badge {
+  display: block;
+  height: 60px;
+  width: auto;
+}
+
+.chrome-store-badge-sm {
+  height: 48px;
+}
+
+.chrome-store-link:hover .chrome-store-badge {
+  opacity: 0.88;
+}
+
+.header-cta.chrome-store-link {
+  flex-shrink: 0;
+}
+
+.pricing-card .chrome-store-link {
+  margin-top: 8px;
+}
+
+.install-copy .chrome-store-link + .install-secondary {
+  margin-top: 16px;
+}
+
 .hero-trust {
   color: var(--subtle);
   display: flex;
@@ -986,6 +1018,17 @@ h1, h2, h3, p {
   color: var(--ink);
 }
 
+.blog-sidebar-note {
+  color: var(--subtle);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 24px;
+}
+
+.blog-sidebar-note a {
+  color: var(--accent);
+}
+
 .blog-cards {
   display: grid;
   gap: 20px;
@@ -1086,6 +1129,114 @@ h1, h2, h3, p {
   max-width: 680px;
   padding: 48px 32px 80px;
   width: 100%;
+}
+
+.blog-article-wrap {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 48px 32px 80px;
+  width: 100%;
+}
+
+.blog-article-layout {
+  align-items: start;
+  display: grid;
+  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+
+.blog-article-layout > .blog-article {
+  margin: 0;
+  max-width: none;
+  padding: 0;
+}
+
+.blog-cta-sidebar {
+  position: sticky;
+  top: 88px;
+}
+
+.blog-cta-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius-lg) + 2px);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  padding: 24px 22px;
+  position: relative;
+}
+
+.blog-cta-card::before {
+  background: linear-gradient(
+    90deg,
+    var(--google-blue),
+    var(--google-green),
+    var(--google-yellow),
+    var(--google-red)
+  );
+  content: "";
+  height: 3px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.blog-cta-logo {
+  display: block;
+  height: 28px;
+  margin-bottom: 16px;
+  width: auto;
+}
+
+.blog-cta-card h2 {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.blog-cta-card > p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.blog-cta-features {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.blog-cta-features li {
+  padding: 4px 0;
+}
+
+.blog-cta-features li::before {
+  color: var(--google-green);
+  content: "✓ ";
+  font-weight: 700;
+}
+
+.blog-cta-card .chrome-store-link {
+  display: block;
+}
+
+.blog-cta-card .chrome-store-badge {
+  height: 54px;
+  margin: 0 auto;
+}
+
+.blog-cta-note {
+  color: var(--subtle);
+  font-size: 11px;
+  margin-top: 12px;
+  text-align: center;
 }
 
 .blog-index-head {
@@ -1251,6 +1402,69 @@ h1, h2, h3, p {
   color: var(--accent);
 }
 
+.blog-listicle {
+  counter-reset: listicle;
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+}
+
+.blog-listicle > li {
+  border-top: 1px solid var(--line-soft);
+  margin-top: 32px;
+  padding-top: 32px;
+}
+
+.blog-listicle > li:first-child {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.blog-listicle h2 {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.blog-comparison-table {
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 24px 0;
+  width: 100%;
+}
+
+.blog-comparison-table th,
+.blog-comparison-table td {
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.blog-comparison-table th {
+  background: var(--surface);
+  font-weight: 500;
+}
+
+.blog-comparison-table tr:nth-child(even) td {
+  background: var(--surface);
+}
+
+.blog-verdict {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  margin-top: 32px;
+  padding: 24px;
+}
+
+.blog-verdict h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
 /* Privacy page */
 
 .page-main {
@@ -1399,6 +1613,14 @@ h1, h2, h3, p {
     right: auto;
   }
 
+  .blog-article-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-cta-sidebar {
+    position: static;
+  }
+
   .feature-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -1418,6 +1640,7 @@ h1, h2, h3, p {
   .faq,
   .blog-index,
   .blog-article,
+  .blog-article-wrap,
   .site-footer {
     padding-left: 20px;
     padding-right: 20px;

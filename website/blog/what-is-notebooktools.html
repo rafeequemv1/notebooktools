@@ -12,24 +12,29 @@
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>What NotebookTools Does — Import YouTube &amp; Web Content to NotebookLM</title>
+    <title>What Is NotebookTools? | NotebookLM Chrome Extension</title>
     <meta
       name="description"
-      content="NotebookTools is a free Chrome extension that imports YouTube videos, X posts, webpages, and highlighted text into Google NotebookLM — in one click, using your existing sign-in."
+      content="NotebookTools is a free Chrome extension that imports YouTube, X posts, webpages, and highlights into Google NotebookLM in one click."
     >
+    <meta name="keywords" content="NotebookTools, NotebookLM extension, Chrome extension, YouTube import, web clipper">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="NotebookTools">
-    <link rel="canonical" href="https://notebooktools.com/blog/what-is-notebooktools">
+    <link rel="canonical" href="https://www.notebooktools.com/blog/what-is-notebooktools">
+    <link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/what-is-notebooktools">
+    <link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/what-is-notebooktools">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="NotebookTools">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="What NotebookTools Does — and Why It Exists">
     <meta property="og:description" content="A free Chrome extension that sends YouTube, X posts, webpages, and highlights straight into NotebookLM.">
-    <meta property="og:url" content="https://notebooktools.com/blog/what-is-notebooktools">
-    <meta property="og:image" content="https://notebooktools.com/assets/og-image.png">
+    <meta property="og:url" content="https://www.notebooktools.com/blog/what-is-notebooktools">
+    <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta property="article:published_time" content="2026-06-16">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="What NotebookTools Does — and Why It Exists">
     <meta name="twitter:description" content="Import YouTube, X, webpages, and text into NotebookLM from your browser.">
+    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <link rel="icon" href="../assets/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,38 +43,50 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      "headline": "What NotebookTools Does — and Why It Exists",
-      "description": "NotebookTools is a free Chrome extension that imports YouTube videos, X posts, webpages, and highlighted text into Google NotebookLM.",
-      "datePublished": "2026-06-16",
-      "dateModified": "2026-06-17",
-      "author": {
-        "@type": "Organization",
-        "name": "NotebookTools",
-        "url": "https://notebooktools.com/"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "NotebookTools",
-        "url": "https://notebooktools.com/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://notebooktools.com/assets/og-image.png"
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "headline": "What NotebookTools Does — and Why It Exists",
+          "description": "NotebookTools is a free Chrome extension that imports YouTube videos, X posts, webpages, and highlighted text into Google NotebookLM.",
+          "datePublished": "2026-06-16",
+          "dateModified": "2026-06-17",
+          "author": {
+            "@type": "Organization",
+            "name": "NotebookTools",
+            "url": "https://www.notebooktools.com/"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "NotebookTools",
+            "url": "https://www.notebooktools.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.notebooktools.com/assets/og-image.png"
+            }
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.notebooktools.com/blog/what-is-notebooktools"
+          },
+          "image": "https://www.notebooktools.com/assets/og-image.png",
+          "keywords": ["NotebookLM", "Chrome extension", "YouTube import", "NotebookTools"]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.notebooktools.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.notebooktools.com/blog" },
+            { "@type": "ListItem", "position": 3, "name": "What NotebookTools does", "item": "https://www.notebooktools.com/blog/what-is-notebooktools" }
+          ]
         }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://notebooktools.com/blog/what-is-notebooktools"
-      },
-      "image": "https://notebooktools.com/assets/og-image.png",
-      "keywords": ["NotebookLM", "Chrome extension", "YouTube import", "NotebookTools"]
+      ]
     }
     </script>
   </head>
   <body class="blog-page blog-article-page">
     <header class="site-header">
       <a class="logo" href="/">
-        <img class="logo-img logo-mark-header" src="../assets/logo-mark-32.png" alt="" width="32" height="32">
+        <img class="logo-img logo-mark-header" src="../assets/logo-mark-32.png" alt="NotebookTools logo" width="32" height="32">
         <span class="logo-text">NotebookTools</span>
       </a>
       <nav class="site-nav">
@@ -78,12 +95,18 @@
         <a href="/support">Support</a>
         <a href="/#install">Install</a>
       </nav>
-      <a class="button button-sm header-cta" href="/#install">Add to Chrome</a>
+      <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+        <img class="chrome-store-badge chrome-store-badge-sm" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+      </a>
     </header>
 
-    <main class="blog-article">
+    <main class="blog-article-wrap">
+      <div class="blog-article-layout">
+        <div class="blog-article">
       <nav class="blog-breadcrumb" aria-label="Breadcrumb">
         <a href="/blog">Blog</a>
+        <span aria-hidden="true">/</span>
+        <a href="/blog/category/product">Product</a>
         <span aria-hidden="true">/</span>
         <span>What NotebookTools does</span>
       </nav>
@@ -206,18 +229,40 @@
         </div>
 
         <footer class="blog-article-footer">
-          <a class="button button-primary" href="/#install">Add NotebookTools to Chrome — Free</a>
+          <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+            <img class="chrome-store-badge" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
+          </a>
           <p class="blog-article-footer-note">
             Related: <a href="/blog/summarize-youtube-videos-notebooklm">Summarize YouTube in NotebookLM</a> ·
+            <a href="/blog/category/youtube">YouTube guides</a> ·
+            <a href="/support">Support</a> ·
             <a href="/blog">All blog posts</a>
           </p>
         </footer>
       </article>
+        </div>
+        <aside class="blog-cta-sidebar" aria-label="Install NotebookTools">
+          <div class="blog-cta-card">
+            <img class="blog-cta-logo" src="/assets/logo-wordmark-sm.png" alt="NotebookTools" width="140" height="20">
+            <h2>Import to NotebookLM in one click</h2>
+            <p>Free Chrome extension — YouTube, webpages, X posts, and highlights straight into your notebooks.</p>
+            <ul class="blog-cta-features">
+              <li>YouTube watch-page button</li>
+              <li>Right-click any highlight</li>
+              <li>Works with your Google sign-in</li>
+            </ul>
+            <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+              <img class="chrome-store-badge" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="54">
+            </a>
+            <p class="blog-cta-note">Free · No extra account</p>
+          </div>
+        </aside>
+      </div>
     </main>
 
     <footer class="site-footer">
       <div class="footer-brand">
-        <img class="logo-img logo-footer" src="../assets/logo-wordmark-sm.png" alt="NotebookTools" height="20">
+        <img class="logo-img logo-footer" src="../assets/logo-wordmark-sm.png" alt="NotebookTools" width="120" height="20">
         <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
@@ -228,6 +273,6 @@
       </div>
     </footer>
 
-    <script src="../script.js"></script>
+    <script src="/script.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-# NotebookTools — https://notebooktools.com
+# NotebookTools — https://www.notebooktools.com
 User-agent: *
 Allow: /
 
@@ -24,4 +24,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://notebooktools.com/sitemap.xml
+Sitemap: https://www.notebooktools.com/sitemap.xml

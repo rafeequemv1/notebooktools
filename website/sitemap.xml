@@ -1,32 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://notebooktools.com/</loc>
+    <loc>https://www.notebooktools.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://notebooktools.com/blog</loc>
+    <loc>https://www.notebooktools.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://notebooktools.com/blog/summarize-youtube-videos-notebooklm</loc>
+    <loc>https://www.notebooktools.com/blog/category/youtube</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/category/notebooklm</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/category/product</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-vs-gemini</loc>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://notebooktools.com/blog/what-is-notebooktools</loc>
+    <loc>https://www.notebooktools.com/blog/notebooklm-vs-chatgpt</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/best-notebooklm-alternatives</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://notebooktools.com/support</loc>
+    <loc>https://www.notebooktools.com/blog/best-notebooklm-prompts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-source-limits</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/best-ways-import-content-notebooklm</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/what-is-notebooktools</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/support</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://notebooktools.com/privacy</loc>
+    <loc>https://www.notebooktools.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>

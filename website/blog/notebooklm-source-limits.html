@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2BJP0Q9LL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-K2BJP0Q9LL');
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotebookLM Source Limits Explained (2026) | Guide</title>
+    <meta
+      name="description"
+      content="How many sources can you add to NotebookLM? Learn the ~50 source limit per notebook, file size caps, what counts as a source, and tips to stay within limits."
+    >
+    <meta name="keywords" content="notebooklm source limit, how many sources can you add to notebooklm, does notebooklm have a limit">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://www.notebooktools.com/blog/notebooklm-source-limits">
+    <link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-source-limits">
+    <link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-source-limits">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="NotebookTools">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="NotebookLM Source Limits Explained (2026)">
+    <meta property="og:description" content="Everything you need to know about NotebookLM source limits — per-notebook caps, file sizes, and practical workarounds.">
+    <meta property="og:url" content="https://www.notebooktools.com/blog/notebooklm-source-limits">
+    <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
+    <meta property="article:published_time" content="2026-06-20">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NotebookLM Source Limits Explained (2026)">
+    <meta name="twitter:description" content="Does NotebookLM have a limit? Yes — here's what counts and how to work within it.">
+    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "headline": "NotebookLM Source Limits Explained (2026)",
+          "description": "A complete guide to NotebookLM source limits: how many sources per notebook, file size caps, what counts as a source, and tips to work within limits.",
+          "datePublished": "2026-06-20",
+          "author": { "@type": "Organization", "name": "NotebookTools" },
+          "publisher": {
+            "@type": "Organization",
+            "name": "NotebookTools",
+            "logo": { "@type": "ImageObject", "url": "https://www.notebooktools.com/assets/og-image.png" }
+          },
+          "mainEntityOfPage": "https://www.notebooktools.com/blog/notebooklm-source-limits"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.notebooktools.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.notebooktools.com/blog" },
+            { "@type": "ListItem", "position": 3, "name": "NotebookLM tips", "item": "https://www.notebooktools.com/blog/category/notebooklm" },
+            { "@type": "ListItem", "position": 4, "name": "NotebookLM source limits", "item": "https://www.notebooktools.com/blog/notebooklm-source-limits" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How many sources can you add to NotebookLM?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each NotebookLM notebook supports roughly 50 sources. This includes PDFs, web pages, YouTube videos, Google Docs, pasted text, and other supported file types combined."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does NotebookLM have a file size limit?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Individual uploaded files are capped at around 200 MB, and very large documents may take longer to process or fail to import. Google recommends keeping individual sources reasonably sized for best results."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What counts as a source in NotebookLM?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each distinct item you add counts as one source: a PDF upload, a pasted URL, a YouTube link, a Google Drive file, or a block of pasted text. Multiple chapters from the same PDF still count as one source if uploaded as a single file."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="blog-page blog-article-page">
+    <header class="site-header">
+      <a class="logo" href="/">
+        <img class="logo-img logo-mark-header" src="../assets/logo-mark-32.png" alt="NotebookTools logo" width="32" height="32">
+        <span class="logo-text">NotebookTools</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/#features">Features</a>
+        <a href="/blog" aria-current="page">Blog</a>
+        <a href="/support">Support</a>
+        <a href="/#install">Install</a>
+      </nav>
+      <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+        <img class="chrome-store-badge chrome-store-badge-sm" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+      </a>
+    </header>
+
+    <main class="blog-article-wrap">
+      <div class="blog-article-layout">
+        <div class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+        <a href="/blog">Blog</a>
+        <span aria-hidden="true">/</span>
+        <a href="/blog/category/notebooklm">NotebookLM tips</a>
+        <span aria-hidden="true">/</span>
+        <span>Source limits guide</span>
+      </nav>
+
+      <article>
+        <header class="blog-article-header">
+          <span class="blog-card-tag">NotebookLM tips</span>
+          <h1>NotebookLM source limits explained (2026)</h1>
+          <div class="blog-article-byline">
+            <time datetime="2026-06-20">June 20, 2026</time>
+            <span class="blog-article-dot">·</span>
+            <span>7 min read</span>
+          </div>
+        </header>
+
+        <div class="blog-article-body">
+          <p class="blog-lead">
+            <strong>Yes — NotebookLM has limits.</strong> Each notebook holds roughly 50 sources,
+            and individual files have size caps. Understanding what counts as a source — and how
+            to organize your research across notebooks — keeps your workflow smooth instead of
+            hitting a wall mid-project.
+          </p>
+
+          <p>
+            If you have ever wondered whether that tenth YouTube lecture, third PDF, and stack of
+            saved articles will fit in one notebook, you are not alone. The NotebookLM source limit
+            is one of the most common questions researchers, students, and content creators ask
+            before building a large knowledge base. This guide breaks down the current limits,
+            what Google counts as a single source, and practical strategies to stay productive
+            within them.
+          </p>
+
+          <ol class="blog-listicle">
+            <li>
+              <h2>The ~50 source limit per notebook</h2>
+              <p>
+                As of 2026, Google NotebookLM allows approximately <strong>50 sources per notebook</strong>.
+                That number applies to the total count of everything you add — PDFs, web URLs,
+                YouTube videos, Google Docs, pasted text blocks, and audio files all share the same
+                pool. There is no separate quota for videos versus documents; one item equals one
+                source regardless of type.
+              </p>
+              <p>
+                When you approach the cap, NotebookLM will stop accepting new sources and display
+                a message indicating the notebook is full. You cannot increase this limit with a
+                paid tier because NotebookLM remains free for personal use. The fix is organizational:
+                split work across multiple notebooks or remove sources you no longer need.
+              </p>
+              <p>
+                For most single-topic research projects — a course, a client brief, or a book draft —
+                50 sources is generous. Problems tend to appear when people treat one notebook as an
+                everything bucket for months of browsing. If you are importing content frequently,
+                see our guide on <a href="/blog/best-ways-import-content-notebooklm">the best ways to import content into NotebookLM</a>
+                for efficient workflows.
+              </p>
+            </li>
+
+            <li>
+              <h2>File size limits and processing constraints</h2>
+              <p>
+                Beyond the per-notebook count, NotebookLM enforces <strong>file size limits</strong>
+                on uploads. Individual files are generally capped at around <strong>200 MB</strong>.
+                Very large PDFs, high-resolution scanned books, or lengthy audio files may fail to
+                upload or take significantly longer to process.
+              </p>
+              <p>
+                Google also imposes word-count and length constraints on certain source types. Extremely
+                long web pages may be truncated during ingestion, and pasted text blocks have practical
+                size ceilings even when they technically import. If a source fails, try splitting a
+                large PDF into chapters, compressing scanned images, or pasting only the relevant
+                sections as separate text sources.
+              </p>
+              <p>
+                Processing time scales with source complexity. A 90-minute YouTube lecture takes
+                longer than a two-page article. Plan a short wait after adding sources before
+                asking detailed questions in chat — especially when batch-importing several items
+                at once with a tool like <a href="/blog/what-is-notebooktools">NotebookTools</a>.
+              </p>
+            </li>
+
+            <li>
+              <h2>What counts as a source (and what does not)</h2>
+              <p>
+                Understanding the NotebookLM source limit starts with knowing what Google counts.
+                Each of the following is <strong>one source</strong>:
+              </p>
+              <ul>
+                <li>A single PDF or Word document upload</li>
+                <li>One pasted URL (web page, article, or blog post)</li>
+                <li>One YouTube video link</li>
+                <li>One Google Drive file (Docs, Slides, etc.)</li>
+                <li>One pasted text block (notes, transcripts, excerpts)</li>
+                <li>One audio file upload</li>
+              </ul>
+              <p>
+                Importantly, a PDF uploaded as one file counts as <em>one</em> source even if it
+                contains 300 pages. Conversely, ten separate article URLs count as ten sources
+                even if each is short. This distinction matters when you are deciding whether to
+                merge related documents or keep them separate for citation granularity.
+              </p>
+              <p>
+                NotebookLM does not count your chat messages, generated Audio Overviews, or
+                briefing documents as sources. Only the reference material in the Sources panel
+                consumes your quota. Deleting a source frees a slot immediately.
+              </p>
+            </li>
+
+            <li>
+              <h2>Tips to work within NotebookLM limits</h2>
+              <p>
+                Hitting the source cap is frustrating but avoidable with a few habits:
+              </p>
+              <ul>
+                <li><strong>Use themed notebooks.</strong> Create separate notebooks per project, course, or client instead of one mega-notebook. Cross-notebook search is not built in, but organization beats running out of slots.</li>
+                <li><strong>Merge related short documents.</strong> Combine small PDFs or notes into a single file before uploading to save source slots.</li>
+                <li><strong>Prioritize primary sources.</strong> Add the papers, transcripts, and canonical references first; skip redundant summaries of material you already have.</li>
+                <li><strong>Remove stale sources.</strong> Audit your Sources panel monthly and delete items you no longer query.</li>
+                <li><strong>Split large files.</strong> Break 500-page scans into chapter-sized PDFs only if you need granular citations — otherwise one file is more efficient.</li>
+                <li><strong>Import efficiently.</strong> Use <a href="/">NotebookTools</a> to add YouTube videos and web pages in one click rather than losing URLs you meant to paste later.</li>
+              </ul>
+              <p>
+                For video-heavy research, our <a href="/blog/summarize-youtube-videos-notebooklm">YouTube summarization guide</a>
+                shows how to get value from each video source without needing duplicates.
+              </p>
+            </li>
+
+            <li>
+              <h2>When to use multiple notebooks</h2>
+              <p>
+                A good rule of thumb: if your project has a clear boundary — a semester, a product
+                launch, a litigation matter — it deserves its own notebook. Students might keep one
+                notebook per class; consultants might keep one per engagement. Writers researching
+                a book can split by part or chapter if sources pile up.
+              </p>
+              <p>
+                The trade-off is that NotebookLM synthesizes across sources <em>within</em> a single
+                notebook. You cannot ask one chat to compare sources from Notebook A and Notebook B.
+                Plan your splits around topics that genuinely do not need cross-referencing, and keep
+                a small "master" notebook for high-level sources you reference everywhere.
+              </p>
+            </li>
+          </ol>
+
+          <h2>FAQ</h2>
+          <p><strong>How many sources can you add to NotebookLM?</strong><br>About 50 per notebook, combining all file types and URLs.</p>
+          <p><strong>Does NotebookLM have a limit on notebooks?</strong><br>Google does not publish a hard cap on the number of notebooks you can create. The practical limit is the 50-source quota inside each one.</p>
+          <p><strong>Can I increase the source limit?</strong><br>Not currently. Organize across multiple notebooks or curate your sources instead.</p>
+          <p><strong>Why did my upload fail?</strong><br>Check file size (under 200 MB), format support, and whether the notebook is already full. Visit our <a href="/support">support page</a> if problems persist.</p>
+        </div>
+
+        <footer class="blog-article-footer">
+          <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+            <img class="chrome-store-badge" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
+          </a>
+          <p class="blog-article-footer-note">
+            More: <a href="/blog/best-ways-import-content-notebooklm">Import content guide</a> ·
+            <a href="/blog/notebooklm-vs-gemini">NotebookLM vs Gemini</a> ·
+            <a href="/blog/category/notebooklm">NotebookLM tips</a> ·
+            <a href="/support">Support</a> ·
+            <a href="/blog">All blog posts</a>
+          </p>
+        </footer>
+      </article>
+        </div>
+        <aside class="blog-cta-sidebar" aria-label="Install NotebookTools">
+          <div class="blog-cta-card">
+            <img class="blog-cta-logo" src="/assets/logo-wordmark-sm.png" alt="NotebookTools" width="140" height="20">
+            <h2>Import to NotebookLM in one click</h2>
+            <p>Free Chrome extension — YouTube, webpages, X posts, and highlights straight into your notebooks.</p>
+            <ul class="blog-cta-features">
+              <li>YouTube watch-page button</li>
+              <li>Right-click any highlight</li>
+              <li>Works with your Google sign-in</li>
+            </ul>
+            <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+              <img class="chrome-store-badge" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="54">
+            </a>
+            <p class="blog-cta-note">Free · No extra account</p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <img class="logo-img logo-footer" src="../assets/logo-wordmark-sm.png" alt="NotebookTools" width="120" height="20">
+        <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
+      </div>
+      <div class="footer-links">
+        <a href="/blog">Blog</a>
+        <a href="/support">Support</a>
+        <a href="/privacy">Privacy</a>
+        <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM</a>
+      </div>
+    </footer>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
