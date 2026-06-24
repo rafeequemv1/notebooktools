@@ -7,17 +7,16 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-K2BJP0Q9LL');
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NotebookTools — Import to NotebookLM</title>
+    <title>NotebookTools — Import, Organize &amp; Power NotebookLM</title>
     <meta
       name="description"
-      content="Free Chrome extension: import YouTube, webpages, X posts, and highlights into NotebookLM in one click. Uses your Google sign-in."
+      content="Free Chrome extension for NotebookLM: bulk import YouTube, web &amp; X, notebooks hub with folders, duplicate cleanup, Drive source refresh, podcast player, Studio tools, and prompt library."
     >
-    <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, save to NotebookLM, NotebookTools, web clipper">
+    <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, NotebookTools, bulk import, podcast player, NotebookLM prompts">
     <meta name="author" content="NotebookTools">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <meta name="googlebot" content="index, follow">
@@ -30,13 +29,13 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:locale" content="en_US">
-    <meta property="og:title" content="NotebookTools — Import Anything to NotebookLM">
-    <meta property="og:description" content="Free Chrome extension: YouTube, webpages, X posts, and highlights → NotebookLM in one click. Right-click any selection to add.">
+    <meta property="og:title" content="NotebookTools — Import, Organize &amp; Power NotebookLM">
+    <meta property="og:description" content="Bulk import, notebooks hub, duplicate cleanup, podcast player, Studio tools, prompts &amp; more — free Chrome extension for NotebookLM.">
     <meta property="og:url" content="https://www.notebooktools.com/">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NotebookTools — Import to NotebookLM">
-    <meta name="twitter:description" content="Import YouTube, webpages, X posts, and highlighted text into NotebookLM. Free Chrome extension.">
+    <meta name="twitter:description" content="Everything you need to feed and manage NotebookLM — import, organize, Studio, podcasts, prompts. Free.">
     <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="theme-color" content="#fdfbf7">
     <link rel="icon" href="assets/favicon.png" type="image/png">
@@ -52,7 +51,7 @@
           "@type": "WebSite",
           "name": "NotebookTools",
           "url": "https://www.notebooktools.com/",
-          "description": "Free Chrome extension for importing YouTube, X, webpages, and highlighted text into Google NotebookLM.",
+          "description": "Free Chrome extension for importing and managing Google NotebookLM notebooks.",
           "inLanguage": "en-US"
         },
         {
@@ -67,64 +66,21 @@
           "name": "NotebookTools",
           "applicationCategory": "BrowserApplication",
           "operatingSystem": "Chrome",
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-          },
-          "description": "Import YouTube videos, X posts, webpages, and selected text into Google NotebookLM.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "description": "Import, organize, and extend NotebookLM with bulk import, notebooks hub, duplicate cleanup, podcast player, Studio tools, and prompt library.",
           "url": "https://www.notebooktools.com/",
           "downloadUrl": "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj",
           "featureList": [
-            "YouTube video import on watch pages (one video at a time)",
-            "X and Twitter thread import",
-            "Webpage URL import",
-            "Selected text via right-click context menu"
-          ]
-        },
-        {
-          "@type": "FAQPage",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "What is NotebookTools?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "NotebookTools is a free Chrome extension that sends YouTube videos, X posts, webpages, and highlighted text directly into Google NotebookLM using your existing Google sign-in."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Is NotebookTools free?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes. Every feature is free with no paywall, subscription, or premium tier."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How do I import a YouTube video to NotebookLM?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Install NotebookTools in Chrome, open NotebookLM once to sign in, visit any YouTube watch page, click the NotebookLM import button, and choose a notebook."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How do I add highlighted text to NotebookLM?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Highlight text on any webpage, right-click, and choose Add to NotebookLM. Pick a notebook and the selection is imported as a text source."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Does NotebookTools collect my data?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "No backend server and no analytics. Imports go directly from your browser to NotebookLM using your session."
-              }
-            }
+            "YouTube, webpage, X, and text import",
+            "Bulk import queue with playlist support",
+            "Extract links from article content",
+            "Notebooks hub with folders, pin, and favorites",
+            "Source folders, bulk actions, duplicate scan",
+            "Google Drive source refresh",
+            "Cross-notebook podcast player",
+            "Studio generation and export",
+            "Prompt library with slash commands",
+            "Chat export from NotebookLM"
           ]
         }
       ]
@@ -139,11 +95,11 @@
       </a>
       <nav class="site-nav">
         <a href="#features">Features</a>
+        <a href="#notebooks-app">Notebooks app</a>
         <a href="#how-it-works">How it works</a>
         <a href="#pricing">Pricing</a>
         <a href="/blog">Blog</a>
         <a href="/support">Support</a>
-        <a href="/privacy">Privacy</a>
         <a href="#install">Install</a>
       </nav>
       <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
@@ -157,55 +113,275 @@
         <div class="hero-inner">
           <div class="hero-copy">
             <p class="eyebrow">Built for NotebookLM</p>
-            <h1>Import videos, pages &amp; highlights to NotebookLM</h1>
+            <h1>Import faster. Organize smarter. Use NotebookLM fully.</h1>
             <p class="lead">
-              Stop copy-pasting links. NotebookTools adds YouTube videos, webpages, X posts,
-              and any text you select straight into your notebooks — so you can ask NotebookLM
-              about everything in one place.
+              NotebookTools is the free Chrome extension that goes beyond one-click import —
+              bulk queues, a full notebooks hub, duplicate cleanup, Drive refresh, podcast playback,
+              Studio tools, and a prompt library. All using your existing Google sign-in.
             </p>
 
-            <div class="brand-flow" aria-label="Sources to NotebookLM">
-              <span class="flow-pill">YouTube</span>
-              <span class="flow-pill">Web</span>
-              <span class="flow-pill">X</span>
-              <span class="flow-pill">Highlight</span>
+            <div class="brand-flow brand-flow-lg" aria-label="Sources to NotebookLM">
+              <span class="flow-pill flow-pill-blue">YouTube</span>
+              <span class="flow-pill flow-pill-green">Web</span>
+              <span class="flow-pill flow-pill-red">X</span>
+              <span class="flow-pill flow-pill-yellow">Links</span>
+              <span class="flow-pill">Text</span>
               <span class="brand-flow-arrow" aria-hidden="true">→</span>
               <img class="logo-img logo-flow" src="assets/logo-mark-32.png" alt="NotebookTools" width="32" height="32">
+              <span class="brand-flow-arrow" aria-hidden="true">→</span>
+              <span class="flow-pill flow-pill-accent">NotebookLM</span>
             </div>
 
             <div class="hero-actions">
               <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
                 <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
               </a>
-              <a class="button button-ghost" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">
-                Open NotebookLM
-              </a>
+              <a class="button button-ghost" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">Open NotebookLM</a>
             </div>
 
             <ul class="hero-trust">
-              <li>Uses your Google / NotebookLM session</li>
-              <li>No extra account</li>
-              <li>Privacy-first design</li>
+              <li>Free — every feature included</li>
+              <li>Uses your NotebookLM session</li>
+              <li>No extra account or backend</li>
             </ul>
           </div>
 
           <div class="hero-visual" aria-hidden="true">
-            <div class="visual-card visual-card-popup">
-              <div class="visual-popup-head">
-                <img class="logo-img logo-mockup" src="assets/logo-wordmark-sm.png" alt="NotebookTools" height="18">
+            <div class="visual-stack">
+              <div class="visual-card visual-card-app">
+                <div class="visual-app-head">
+                  <span class="visual-dot"></span>
+                  <span class="visual-dot"></span>
+                  <span class="visual-dot"></span>
+                  <span class="visual-app-title">Notebooks</span>
+                </div>
+                <div class="visual-app-row is-pinned"><span class="visual-pin">📌</span> Research Q2</div>
+                <div class="visual-app-row is-fav"><span class="visual-star">★</span> Lecture notes</div>
+                <div class="visual-app-row">Reading list</div>
+                <div class="visual-app-tabs">
+                  <span>Sources</span>
+                  <span class="is-active">Studio</span>
+                  <span>Podcast</span>
+                </div>
               </div>
-              <div class="visual-tabs">
-                <span class="visual-tab is-active">Webpage</span>
-                <span class="visual-tab">YouTube</span>
+              <div class="visual-card visual-card-popup">
+                <div class="visual-popup-head">
+                  <img class="logo-img logo-mockup" src="assets/logo-wordmark-sm.png" alt="" height="18">
+                </div>
+                <div class="visual-tabs">
+                  <span class="visual-tab">Import</span>
+                  <span class="visual-tab is-active">Bulk</span>
+                  <span class="visual-tab">Prompts</span>
+                </div>
+                <div class="visual-queue">
+                  <span class="visual-queue-item">youtube.com/watch…</span>
+                  <span class="visual-queue-item">example.com/article…</span>
+                  <span class="visual-queue-item muted">+ 12 in queue</span>
+                </div>
+                <div class="visual-cta">Import queue</div>
               </div>
-              <label>Source</label>
-              <div class="field muted">Article you are reading</div>
-              <label>Notebook</label>
-              <div class="field">Research notes</div>
-              <div class="visual-cta">Import webpage</div>
             </div>
           </div>
         </div>
+      </section>
+
+      <section class="product-flow" aria-label="NotebookTools workflow">
+        <div class="section-head center">
+          <p class="eyebrow">The workflow</p>
+          <h2>From the web to answers — in four steps</h2>
+        </div>
+        <div class="flow-diagram">
+          <div class="flow-node flow-node-blue">
+            <span class="flow-node-icon">↓</span>
+            <strong>Import</strong>
+            <p>YouTube, web, X, highlights, bulk links</p>
+          </div>
+          <div class="flow-connector" aria-hidden="true"></div>
+          <div class="flow-node flow-node-green">
+            <span class="flow-node-icon">▦</span>
+            <strong>Organize</strong>
+            <p>Folders, tags, source labels, dedupe</p>
+          </div>
+          <div class="flow-connector" aria-hidden="true"></div>
+          <div class="flow-node flow-node-yellow">
+            <span class="flow-node-icon">✦</span>
+            <strong>Studio</strong>
+            <p>Generate audio, reports &amp; open in NLM</p>
+          </div>
+          <div class="flow-connector" aria-hidden="true"></div>
+          <div class="flow-node flow-node-red">
+            <span class="flow-node-icon">▶</span>
+            <strong>Listen</strong>
+            <p>Cross-notebook podcast player</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="hubs" id="notebooks-app">
+        <div class="section-head center">
+          <p class="eyebrow">Two surfaces</p>
+          <h2>Side panel for speed. Notebooks app for depth.</h2>
+          <p class="section-lead">Import from anywhere in Chrome, then manage everything in one calm hub.</p>
+        </div>
+        <div class="hub-grid">
+          <article class="hub-card hub-card-panel">
+            <div class="hub-badge hub-badge-blue">Side panel</div>
+            <h3>Import &amp; prompts</h3>
+            <p>Your always-on companion while browsing.</p>
+            <ul class="hub-list">
+              <li>One-click webpage &amp; YouTube import</li>
+              <li>Bulk queue — tabs, paste, extract links</li>
+              <li>Playlist → new notebook in one click</li>
+              <li>Right-click highlights &amp; link extraction</li>
+              <li>Built-in prompt library</li>
+            </ul>
+          </article>
+          <article class="hub-card hub-card-app">
+            <div class="hub-badge hub-badge-green">Notebooks app</div>
+            <h3>Manage &amp; create</h3>
+            <p>A dedicated dashboard for power users.</p>
+            <ul class="hub-list">
+              <li>Pin, favorite &amp; folder notebooks</li>
+              <li>Sources: bulk add, export, dedupe, refresh</li>
+              <li>Studio: generate &amp; open artifacts</li>
+              <li>Podcast tab — all audio in one player</li>
+              <li>Notes panel &amp; multi-delete notebooks</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="features" id="features">
+        <div class="section-head center">
+          <p class="eyebrow">Features</p>
+          <h2>Everything in one extension</h2>
+          <p class="section-lead">Premium, minimal UI — designed to match NotebookLM’s research workflow.</p>
+        </div>
+
+        <div class="feature-category">
+          <h3 class="feature-category-title"><span class="cat-dot cat-dot-blue"></span> Import</h3>
+          <div class="feature-showcase-grid">
+            <article class="feature-card feature-card-color feature-blue">
+              <div class="feature-icon feature-icon-text">▶</div>
+              <h4>YouTube</h4>
+              <p>Button on watch pages. Import one video or load an entire playlist into a bulk queue.</p>
+            </article>
+            <article class="feature-card feature-card-color feature-green">
+              <div class="feature-icon feature-icon-text">↗</div>
+              <h4>Webpages</h4>
+              <p>Add the current tab URL from the side panel — any article or docs page.</p>
+            </article>
+            <article class="feature-card feature-card-color feature-red">
+              <div class="feature-icon feature-icon-text">X</div>
+              <h4>X / Twitter</h4>
+              <p>Import threads and posts as clean text sources.</p>
+            </article>
+            <article class="feature-card feature-card-color feature-yellow">
+              <div class="feature-icon feature-icon-text">✂</div>
+              <h4>Highlights</h4>
+              <p>Select text → right-click → <strong>Add to NotebookLM</strong>.</p>
+            </article>
+            <article class="feature-card feature-card-color feature-purple">
+              <div class="feature-icon feature-icon-text">🔗</div>
+              <h4>Extract links</h4>
+              <p>Right-click any page to pull links from the article body — not header/footer noise.</p>
+            </article>
+            <article class="feature-card feature-card-color feature-teal">
+              <div class="feature-icon feature-icon-text">⊞</div>
+              <h4>Bulk queue</h4>
+              <p>Open tabs, paste URLs, or extract links — import dozens of sources with progress tracking.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="feature-category">
+          <h3 class="feature-category-title"><span class="cat-dot cat-dot-green"></span> Notebooks &amp; sources</h3>
+          <div class="feature-showcase-grid">
+            <article class="feature-card">
+              <h4>Notebook folders &amp; tags</h4>
+              <p>Organize notebooks with custom folders. Pin and star favorites for quick access.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Source folders</h4>
+              <p>Label sources inside a notebook — filter by folder, search, select &amp; bulk export.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Duplicate scan</h4>
+              <p>Fast URL/title match or deep content scan. Clean up redundant sources in a guided wizard.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Drive source refresh</h4>
+              <p>See <strong>Update available</strong> on Google Docs, Slides, Sheets &amp; Drive PDFs — refresh in one click.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Bulk source actions</h4>
+              <p>Select multiple sources to delete or export. Add many links at once from paste or open tabs.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Multi-delete notebooks</h4>
+              <p>Select notebooks on the main screen and delete in batch when cleaning up.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="feature-category">
+          <h3 class="feature-category-title"><span class="cat-dot cat-dot-yellow"></span> Studio, audio &amp; prompts</h3>
+          <div class="feature-showcase-grid">
+            <article class="feature-card">
+              <h4>Studio generation</h4>
+              <p>Create audio overviews, reports, quizzes &amp; more — then open directly in NotebookLM.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Export sources</h4>
+              <p>Download all notebook sources as a single text file from the Studio tab.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Podcast player</h4>
+              <p>Scan every notebook for audio artifacts. Play, queue &amp; resume across notebooks in one player.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Prompt library</h4>
+              <p>Curated prompts in the side panel. Type <code>/</code> in NotebookLM chat to insert instantly.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Chat export</h4>
+              <p>Export NotebookLM conversations from the page — keep your research trail.</p>
+            </article>
+            <article class="feature-card">
+              <h4>Notes panel</h4>
+              <p>View notebook notes alongside sources and Studio without leaving the app.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="steps" id="how-it-works">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>Up and running in minutes</h2>
+        </div>
+        <ol class="step-grid">
+          <li class="step-card step-card-blue">
+            <span class="step-num">1</span>
+            <h3>Install &amp; sign in</h3>
+            <p>Add NotebookTools from the Chrome Web Store. Open NotebookLM once so your session is active.</p>
+          </li>
+          <li class="step-card step-card-green">
+            <span class="step-num">2</span>
+            <h3>Import while you browse</h3>
+            <p>Use the side panel, YouTube button, right-click menus, or bulk queue. Pick a notebook or create new.</p>
+          </li>
+          <li class="step-card step-card-yellow">
+            <span class="step-num">3</span>
+            <h3>Manage in the app</h3>
+            <p>Open <strong>Notebooks</strong> from the panel — organize, dedupe, refresh Drive sources, generate Studio outputs.</p>
+          </li>
+          <li class="step-card step-card-red">
+            <span class="step-num">4</span>
+            <h3>Ask NotebookLM</h3>
+            <p>Your sources are ready. Use prompts, export chat, or listen to podcasts — all from one toolkit.</p>
+          </li>
+        </ol>
       </section>
 
       <section class="guides" id="guides">
@@ -237,103 +413,51 @@
             </a>
           </article>
           <article class="guide-card">
-            <a href="/blog/notebooklm-pricing-plans">
-              <span class="guide-tag">Pricing</span>
-              <h3>NotebookLM pricing plans</h3>
-              <p>Free tier, Plus, and Workspace explained in plain English.</p>
-            </a>
-          </article>
-          <article class="guide-card">
-            <a href="/blog/notebooklm-review-2026">
-              <span class="guide-tag">Review</span>
-              <h3>NotebookLM review (2026)</h3>
-              <p>Honest pros, cons, and who should use it.</p>
-            </a>
-          </article>
-          <article class="guide-card">
             <a href="/blog/best-ways-import-content-notebooklm">
               <span class="guide-tag">Import</span>
               <h3>Best import methods</h3>
               <p>Every way to get content into NotebookLM, ranked.</p>
             </a>
           </article>
+          <article class="guide-card">
+            <a href="/blog/best-notebooklm-prompts">
+              <span class="guide-tag">Prompts</span>
+              <h3>Best NotebookLM prompts</h3>
+              <p>Prompts that actually work — study, research, and writing.</p>
+            </a>
+          </article>
+          <article class="guide-card">
+            <a href="/blog/what-is-notebooktools">
+              <span class="guide-tag">NotebookTools</span>
+              <h3>What is NotebookTools?</h3>
+              <p>How the extension fits into your NotebookLM workflow.</p>
+            </a>
+          </article>
         </div>
         <p class="guides-more"><a href="/blog">Browse all guides</a></p>
-      </section>
-
-      <section class="features" id="features">
-        <div class="section-head center">
-          <p class="eyebrow">Features</p>
-          <h2>Everything you need to feed NotebookLM</h2>
-          <p class="section-lead">Minimal UI, premium feel — designed to match NotebookLM’s calm research workflow.</p>
-        </div>
-        <div class="feature-grid">
-          <article class="feature-card">
-            <div class="feature-icon">
-              <img class="logo-mark" src="assets/logo-mark-32.png" alt="NotebookTools" width="28" height="28">
-            </div>
-            <h3>YouTube watch pages</h3>
-            <p>A native button on every YouTube watch page. Import one video at a time — pick a notebook and you’re done.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon feature-icon-text">✦</div>
-            <h3>Right-click highlights</h3>
-            <p>Select text on any page → right-click → <strong>Add to NotebookLM</strong>. Quotes and notes, imported in seconds.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon feature-icon-text">X</div>
-            <h3>X / Twitter posts</h3>
-            <p>Import threads and articles from X with one click — clean text sources in NotebookLM.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon feature-icon-text">↗</div>
-            <h3>Webpage import</h3>
-            <p>Open the extension popup on any tab to add the current page URL to a notebook.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="steps" id="how-it-works">
-        <div class="section-head center">
-          <p class="eyebrow">How it works</p>
-          <h2>Three ways in, one calm flow</h2>
-        </div>
-        <ol class="step-grid">
-          <li class="step-card">
-            <span class="step-num">1</span>
-            <h3>Install & sign in</h3>
-            <p>Add NotebookTools to Chrome and make sure NotebookLM is open in another tab.</p>
-          </li>
-          <li class="step-card">
-            <span class="step-num">2</span>
-            <h3>Choose your source</h3>
-            <p>YouTube button on watch pages, popup for webpages, X import, or right-click any highlighted text.</p>
-          </li>
-          <li class="step-card">
-            <span class="step-num">3</span>
-            <h3>Pick a notebook</h3>
-            <p>Select a destination notebook — done. Your source appears in NotebookLM.</p>
-          </li>
-        </ol>
       </section>
 
       <section class="pricing" id="pricing">
         <div class="section-head center">
           <p class="eyebrow">Pricing</p>
           <h2>Free — full access</h2>
-          <p class="section-lead">NotebookTools is free to use. No paywall, no account beyond your Google sign-in.</p>
+          <p class="section-lead">Every feature. No paywall. No subscription. Just your Google sign-in.</p>
         </div>
         <div class="pricing-card">
           <div class="pricing-badge">Free</div>
           <h3>NotebookTools</h3>
           <p class="pricing-price">$0 <span>forever</span></p>
           <ul class="pricing-features">
-            <li>YouTube video import from watch pages (one video at a time)</li>
-            <li>X / Twitter threads and articles</li>
-            <li>Webpage URL import from any site</li>
-            <li>Right-click: Add to NotebookLM on selected text</li>
-            <li>Create or choose NotebookLM notebooks</li>
-            <li>Works with your existing NotebookLM session</li>
+            <li>Side panel import — web, YouTube, X, text, bulk queue</li>
+            <li>Extract links from article content (context menu)</li>
+            <li>YouTube playlist one-click &amp; bulk import</li>
+            <li>Notebooks hub — folders, pin, favorite, sort</li>
+            <li>Sources — labels, bulk add/delete/export, duplicate scan</li>
+            <li>Google Drive source refresh &amp; update badges</li>
+            <li>Studio generation, export &amp; deep links</li>
+            <li>Cross-notebook podcast player</li>
+            <li>Prompt library &amp; <code>/</code> slash on NotebookLM</li>
+            <li>Chat export &amp; notes panel</li>
           </ul>
           <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
             <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
@@ -346,77 +470,65 @@
           <p class="eyebrow">FAQ</p>
           <h2>Common questions</h2>
         </div>
-        <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary itemprop="name">What is NotebookTools?</summary>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                NotebookTools is a free Chrome extension that sends YouTube videos, X posts,
-                webpages, and highlighted text directly into Google NotebookLM —
-                using your existing Google sign-in.
-              </p>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>What is NotebookTools?</summary>
+            <div class="faq-answer">
+              <p>NotebookTools is a free Chrome extension that helps you import content into Google NotebookLM and manage notebooks from a dedicated app — bulk import, organization, duplicate cleanup, Drive refresh, Studio tools, podcast playback, and prompts.</p>
             </div>
           </details>
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary itemprop="name">Is NotebookTools free?</summary>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                Yes. Every feature is free with no paywall, subscription, or premium tier.
-              </p>
+          <details class="faq-item">
+            <summary>Is NotebookTools free?</summary>
+            <div class="faq-answer">
+              <p>Yes. Every feature is free with no paywall, subscription, or premium tier.</p>
             </div>
           </details>
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary itemprop="name">How do I import a YouTube video to NotebookLM?</summary>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                Install NotebookTools in Chrome, open NotebookLM once to sign in, visit any YouTube
-                watch page, click the NotebookLM import button, and choose a notebook. The video is
-                added as a source in one click.
-              </p>
+          <details class="faq-item">
+            <summary>How is this different from importing in NotebookLM directly?</summary>
+            <div class="faq-answer">
+              <p>NotebookLM’s built-in import is limited and slow for bulk work. NotebookTools adds a bulk queue, YouTube playlist import, link extraction, notebook folders, duplicate scanning, a podcast player, prompt library, and more — all from Chrome while you browse.</p>
             </div>
           </details>
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary itemprop="name">How do I add highlighted text to NotebookLM?</summary>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                Highlight text on any page, right-click, and choose <strong>Add to NotebookLM</strong>.
-                Select a notebook and your selection is imported as a text source.
-              </p>
+          <details class="faq-item">
+            <summary>What does “refresh source” do?</summary>
+            <div class="faq-answer">
+              <p>For Google Drive sources (Docs, Slides, Sheets, PDFs), NotebookLM can detect when the original file changed. NotebookTools shows an <strong>Update available</strong> badge and lets you re-sync with one click.</p>
             </div>
           </details>
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary itemprop="name">Does NotebookTools collect my data?</summary>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                No backend server and no analytics. Imports go directly from your browser to
-                NotebookLM using your session. See our <a href="/privacy">privacy policy</a>.
-              </p>
+          <details class="faq-item">
+            <summary>How do I extract links from a page?</summary>
+            <div class="faq-answer">
+              <p>Right-click anywhere on a page and choose <strong>Extract links to Notebook</strong>. Links are pulled from the main article content, then opened in the Bulk tab for review before import.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Does NotebookTools collect my data?</summary>
+            <div class="faq-answer">
+              <p>No backend server stores your notebooks or sources. Imports go directly from your browser to NotebookLM using your session. See our <a href="/privacy">privacy policy</a>.</p>
             </div>
           </details>
         </div>
-        <p class="faq-more">Read our <a href="/blog/notebooklm-vs-gemini">NotebookLM vs Gemini</a> comparison, <a href="/blog/best-notebooklm-prompts">best prompts guide</a>, <a href="/blog/summarize-youtube-videos-notebooklm">YouTube summary guide</a>, or visit <a href="/blog">all blog posts</a>.</p>
+        <p class="faq-more">Read our <a href="/blog/notebooklm-vs-gemini">NotebookLM vs Gemini</a> comparison or visit <a href="/blog">all blog posts</a>.</p>
       </section>
 
       <section class="install" id="install">
         <div class="install-panel">
           <div class="install-copy">
             <p class="eyebrow">Get started</p>
-            <h2>Start building your NotebookLM library</h2>
+            <h2>Build your NotebookLM library today</h2>
             <p>
               Install NotebookTools, open NotebookLM once to sign in, then import your first
-              video, page, or text selection in seconds.
+              video, page, or batch of links in seconds.
             </p>
-            <a class="chrome-store-link" id="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+            <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
               <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
             </a>
-            <a class="button button-ghost button-lg install-secondary" href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noopener noreferrer">
-              View on GitHub
-            </a>
-            <p class="install-note">Requires Chrome and a signed-in NotebookLM account. Free on the Chrome Web Store.</p>
+            <a class="button button-ghost button-lg install-secondary" href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            <p class="install-note">Requires Chrome and a signed-in NotebookLM account.</p>
           </div>
           <ul class="install-benefits">
-            <li>Free — all features included</li>
-            <li>YouTube, X, web &amp; right-click highlights</li>
+            <li>Import · Organize · Studio · Podcast · Prompts</li>
+            <li>Side panel + full notebooks app</li>
             <li>Privacy-first — <a href="/privacy">read our policy</a></li>
           </ul>
         </div>

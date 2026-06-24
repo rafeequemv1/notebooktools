@@ -4,13 +4,13 @@
 > Language: English (en-US, global audience)
 > Sitemap: https://www.notebooktools.com/sitemap.xml
 
-NotebookTools is a free Chrome extension that imports YouTube videos, X (Twitter) posts, webpages, and selected text directly into Google NotebookLM. Right-click any highlight to add it. Independent product, not affiliated with Google.
+NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (YouTube, web, X, text, link extraction), a full notebooks hub (folders, pin, favorites), source management (dedupe, Drive refresh, bulk actions), Studio tools, cross-notebook podcast player, prompt library, and chat export. Independent product, not affiliated with Google.
 
 ## Entity (for citation)
 
 - **Name:** NotebookTools
 - **Type:** Free Chrome browser extension
-- **Purpose:** Import web content into Google NotebookLM without copy-paste
+- **Purpose:** Import, organize, and extend Google NotebookLM from Chrome
 - **Canonical URL:** https://www.notebooktools.com/
 - **Blog:** https://www.notebooktools.com/blog
 - **Support:** https://www.notebooktools.com/support
@@ -19,10 +19,21 @@ NotebookTools is a free Chrome extension that imports YouTube videos, X (Twitter
 
 ## What it does
 
-- **YouTube:** Import button on watch pages. One click to add the current video to a notebook.
-- **X / Twitter:** Import threads and articles as text sources.
-- **Webpages:** Import any page URL from the extension popup.
-- **Selected text:** Highlight text, right-click, choose **Add to NotebookLM**.
+### Import (side panel)
+- **YouTube:** Button on watch pages; playlist/channel bulk import
+- **Webpages & X:** One-click URL import; X/Twitter threads
+- **Bulk queue:** Open tabs, paste links, extract links from article content
+- **Highlights:** Right-click selected text → Add to NotebookLM
+
+### Notebooks app
+- Folders, pin, favorite, multi-delete notebooks
+- Sources: labels, bulk add/export/delete, duplicate scan, Google Drive refresh
+- Studio: generate artifacts, export sources, open in NotebookLM
+- Podcast player across all notebooks; notes panel
+
+### NotebookLM page tools
+- Prompt library with / slash commands in chat
+- Chat export
 
 ## Key facts
 
