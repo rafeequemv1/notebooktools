@@ -1675,6 +1675,80 @@ h1, h2, h3, p {
   font-weight: 500;
 }
 
+.blog-cluster {
+  background: var(--bg-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  margin-bottom: 32px;
+  padding: 18px 20px 16px;
+}
+
+.blog-cluster-kicker {
+  color: var(--subtle);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.blog-cluster-main {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius-lg) - 2px);
+  color: inherit;
+  display: block;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.blog-cluster-main:hover {
+  border-color: var(--google-blue);
+}
+
+.blog-cluster-main.is-current {
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+}
+
+.blog-cluster-main strong {
+  color: var(--ink);
+  display: block;
+  font-family: var(--blog-serif);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 6px 0 6px;
+}
+
+.blog-cluster-main span:last-child {
+  color: var(--muted);
+  display: block;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.blog-cluster-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.blog-cluster-list a {
+  color: var(--ink);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.blog-cluster-list a:hover {
+  color: var(--google-blue);
+}
+
+.blog-cluster-list a.is-current {
+  font-weight: 500;
+}
+
 .blog-prompt-toolbar {
   margin: 28px 0 20px;
   position: sticky;
@@ -1834,7 +1908,7 @@ h1, h2, h3, p {
 .blog-prompt-hub-grid {
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   margin-bottom: 32px;
 }
 

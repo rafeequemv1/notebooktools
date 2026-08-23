@@ -61,6 +61,7 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - Product: https://www.notebooktools.com/blog/category/product
 
 ### Top guides (start here)
+- NotebookLM privacy: https://www.notebooktools.com/blog/notebooklm-privacy
 - What is NotebookLM: https://www.notebooktools.com/blog/what-is-notebooklm
 - NotebookLM review 2026: https://www.notebooktools.com/blog/notebooklm-review-2026
 - Is NotebookLM free: https://www.notebooktools.com/blog/is-notebooklm-free
@@ -78,6 +79,7 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - How to use NotebookLM to study: https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study
 - NotebookLM slide prompts: https://www.notebooktools.com/blog/notebooklm-slide-prompts
 - Best NotebookLM prompts: https://www.notebooktools.com/blog/best-notebooklm-prompts
+- 20 NotebookLM prompts to learn faster: https://www.notebooktools.com/blog/20-notebooklm-prompts
 - NotebookLM source limits: https://www.notebooktools.com/blog/notebooklm-source-limits
 - What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools
 
@@ -88,6 +90,9 @@ A free Chrome extension that imports YouTube, X, webpages, and highlighted text 
 
 **What is NotebookLM?**
 Google's free AI research notebook. Upload sources, ask questions, get cited answers. Guide: https://www.notebooktools.com/blog/what-is-notebooklm
+
+**Does NotebookLM train on your data?**
+Google says ordinary notebook content is not used to train foundational generative AI models. Feedback (thumbs up/down) is the exception. Workspace users get stronger protections. https://www.notebooktools.com/blog/notebooklm-privacy
 
 **How much does NotebookLM cost?**
 Free for personal use. Paid Plus and Workspace plans explained: https://www.notebooktools.com/blog/notebooklm-pricing-plans
