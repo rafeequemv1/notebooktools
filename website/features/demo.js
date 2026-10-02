@@ -1459,69 +1459,135 @@
 
   /* ---- Slides to blog demo ---- */
   function initSlidesToBlogDemo(root) {
-    var btn = $("#sb-btn", root);
-    var panel = $("#sb-panel", root);
-    var build = $("#sb-build", root);
+    var convertBtn = $("#sb-convert", root);
+    var deckView = $("#sb-view-deck", root);
+    var blogView = $("#sb-view-blog", root);
     var progress = $("#sb-progress", root);
     var fill = $("#sb-fill", root);
     var status = $("#sb-status", root);
-    var dl = $("#sb-dl", root);
+    var article = $("#sb-article", root);
     var running = false;
-    function reset() {
-      if (panel) panel.setAttribute("hidden", "");
-      if (progress) progress.setAttribute("hidden", "");
-      if (status) status.setAttribute("hidden", "");
-      if (dl) dl.setAttribute("hidden", "");
-      if (fill) fill.style.width = "0%";
-      if (build) build.disabled = false;
-    }
-    function runBuild() {
-      if (progress) progress.removeAttribute("hidden");
-      if (status) {
-        status.textContent = "Extracting slide images…";
-        status.removeAttribute("hidden");
+
+    function showView(which) {
+      if (deckView) {
+        if (which === "deck") {
+          deckView.removeAttribute("hidden");
+          deckView.classList.add("is-active");
+        } else {
+          deckView.setAttribute("hidden", "");
+          deckView.classList.remove("is-active");
+        }
       }
-      if (fill) fill.style.width = "35%";
-      return wait(prefersReducedMotion() ? 80 : 700).then(function () {
-        if (status) status.textContent = "Assembling blog with deck images…";
-        if (fill) fill.style.width = "75%";
-        return wait(prefersReducedMotion() ? 80 : 700);
-      }).then(function () {
-        if (fill) fill.style.width = "100%";
-        if (status) status.textContent = "Blog ready — download below";
-        if (dl) dl.removeAttribute("hidden");
-      });
+      if (blogView) {
+        if (which === "blog") {
+          blogView.removeAttribute("hidden");
+          blogView.classList.add("is-active");
+        } else {
+          blogView.setAttribute("hidden", "");
+          blogView.classList.remove("is-active");
+        }
+      }
     }
+
+    function reset() {
+      showView("deck");
+      if (progress) progress.setAttribute("hidden", "");
+      if (fill) fill.style.width = "0%";
+      if (status) status.textContent = "Extracting slide images…";
+      if (article) article.scrollTop = 0;
+      if (convertBtn) convertBtn.disabled = false;
+    }
+
+    function revealBlog() {
+      if (progress) progress.setAttribute("hidden", "");
+      showView("blog");
+      if (article) {
+        article.scrollTop = 0;
+        return wait(prefersReducedMotion() ? 40 : 500).then(function () {
+          if (!article) return;
+          var target = Math.min(140, Math.max(0, article.scrollHeight - article.clientHeight));
+          if (prefersReducedMotion() || target <= 0) {
+            article.scrollTop = target;
+            return;
+          }
+          var start = article.scrollTop;
+          var t0 = performance.now();
+          var dur = 650;
+          return new Promise(function (resolve) {
+            function frame(now) {
+              var p = Math.min(1, (now - t0) / dur);
+              var ease = 1 - Math.pow(1 - p, 3);
+              article.scrollTop = start + (target - start) * ease;
+              if (p < 1) requestAnimationFrame(frame);
+              else resolve();
+            }
+            requestAnimationFrame(frame);
+          });
+        });
+      }
+      return Promise.resolve();
+    }
+
+    function runBuild() {
+      if (convertBtn) convertBtn.disabled = true;
+      if (progress) progress.removeAttribute("hidden");
+      if (status) status.textContent = "Extracting slide images…";
+      if (fill) fill.style.width = "28%";
+      return wait(prefersReducedMotion() ? 80 : 650)
+        .then(function () {
+          if (status) status.textContent = "Writing sections from each slide…";
+          if (fill) fill.style.width = "62%";
+          return wait(prefersReducedMotion() ? 80 : 650);
+        })
+        .then(function () {
+          if (status) status.textContent = "Placing deck images in the post…";
+          if (fill) fill.style.width = "88%";
+          return wait(prefersReducedMotion() ? 80 : 550);
+        })
+        .then(function () {
+          if (fill) fill.style.width = "100%";
+          if (status) status.textContent = "Blog ready";
+          return wait(prefersReducedMotion() ? 40 : 320);
+        })
+        .then(function () {
+          return revealBlog();
+        });
+    }
+
     function runAutoplay() {
-      if (running) return;
+      if (running) return Promise.resolve();
       running = true;
       reset();
       hideDemoCursor(root);
       return sequence([
-        350,
-        function () { return moveCursorTo(btn, { shell: root }); },
-        function () { if (panel) panel.removeAttribute("hidden"); },
         400,
-        function () { return moveCursorTo(build, { shell: root }); },
         function () {
-          if (build) build.disabled = true;
+          return moveCursorTo(convertBtn, { shell: root });
+        },
+        function () {
           return runBuild();
         },
-        800,
+        900,
         function () {
           hideDemoCursor(root);
           running = false;
         }
-      ]);
+      ]).catch(function () {
+        running = false;
+      });
     }
+
     root.addEventListener("click", function (e) {
       var t = e.target.closest("[data-action]");
       if (!t) return;
       var a = t.getAttribute("data-action");
-      if (a === "sb-open") {
-        if (panel) panel.removeAttribute("hidden");
-      } else if (a === "sb-build") {
-        runBuild();
+      if (a === "sb-convert") {
+        if (running) return;
+        running = true;
+        reset();
+        runBuild().then(function () {
+          running = false;
+        });
       }
     });
     registerDemo("slidestoblog", { play: runAutoplay });

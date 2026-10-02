@@ -945,7 +945,7 @@
         </ol>
       </section>
         </article>
-        <article class="md-panel" data-panel="slides-to-blog" id="panel-slides-to-blog" hidden>
+                <article class="md-panel" data-panel="slides-to-blog" id="panel-slides-to-blog" hidden>
           <h1 class="sr-only">Slides to blog</h1>
           <section class="feature-demo-section md-demo">
 <div class="md-demo-toolbar">
@@ -953,31 +953,112 @@
           </div>
         <div class="demo-shell" data-demo="slidestoblog">
           <div class="mock-demo mock-slides-blog">
-            <div class="nlm-app">
-              <header class="nlm-topbar"><div class="nlm-top-left"><span class="nlm-logo-dot"></span><span class="nlm-notebook-title">Launch deck notebook</span></div>
-                <button type="button" class="mock-blog-btn" id="sb-btn" data-action="sb-open">Blog workflow</button>
-              </header>
-              <div class="mock-sb-body">
-                <div class="mock-deck-card">
-                  <div class="mock-deck-thumb">Slides · 12</div>
-                  <strong>Product launch deck</strong>
-                  <span class="mock-dim">Studio artifact · Ready</span>
-                </div>
-                <div class="mock-blog-panel" id="sb-panel" hidden>
-                  <label class="mock-label">Slide deck</label>
-                  <div class="mock-select is-on">Product launch deck (12 slides)</div>
-                  <button type="button" class="mock-primary" id="sb-build" data-action="sb-build">Build blog</button>
-                  <div class="mock-progress" id="sb-progress" hidden>
-                    <div class="mock-progress-fill" id="sb-fill"></div>
+            <!-- Start: Studio / PPT-like slide deck -->
+            <div class="sb-view is-active" id="sb-view-deck" data-sb-view="deck">
+              <div class="nlm-app">
+                <header class="nlm-topbar">
+                  <div class="nlm-top-left">
+                    <span class="nlm-logo-dot"></span>
+                    <span class="nlm-notebook-title">Launch deck notebook</span>
                   </div>
-                  <p class="mock-status" id="sb-status" hidden>Extracting slide images…</p>
-                  <div class="mock-downloads" id="sb-dl" hidden>
-                    <button type="button" class="mock-format is-done">MD</button>
-                    <button type="button" class="mock-format is-done">HTML</button>
-                    <button type="button" class="mock-format is-done">DOCX</button>
+                  <button type="button" class="mock-blog-btn" id="sb-convert" data-action="sb-convert">Convert to blog</button>
+                </header>
+                <div class="sb-deck-stage">
+                  <div class="sb-filmstrip" aria-hidden="true">
+                    <div class="sb-thumb is-active" data-slide="1"><span class="sb-thumb-num">1</span><span class="sb-thumb-preview sb-grad-1"><em>Title</em></span></div>
+                    <div class="sb-thumb" data-slide="2"><span class="sb-thumb-num">2</span><span class="sb-thumb-preview sb-grad-2"><em>Market</em></span></div>
+                    <div class="sb-thumb" data-slide="3"><span class="sb-thumb-num">3</span><span class="sb-thumb-preview sb-grad-3"><em>ICP</em></span></div>
+                    <div class="sb-thumb" data-slide="4"><span class="sb-thumb-num">4</span><span class="sb-thumb-preview sb-grad-4"><em>Launch</em></span></div>
+                    <div class="sb-thumb" data-slide="5"><span class="sb-thumb-num">5</span><span class="sb-thumb-preview sb-grad-5"><em>Channels</em></span></div>
+                    <div class="sb-thumb" data-slide="6"><span class="sb-thumb-num">6</span><span class="sb-thumb-preview sb-grad-6"><em>Next</em></span></div>
+                  </div>
+                  <div class="sb-slide-main">
+                    <div class="sb-slide-canvas sb-grad-1" id="sb-slide-canvas">
+                      <p class="sb-slide-eyebrow">Studio &middot; Slide deck</p>
+                      <h2 class="sb-slide-title">Product Launch 2026</h2>
+                      <p class="sb-slide-sub">Go-to-market playbook</p>
+                      <ul class="sb-slide-bullets">
+                        <li>Audience &amp; positioning</li>
+                        <li>Channel mix</li>
+                        <li>90-day milestones</li>
+                      </ul>
+                    </div>
+                    <div class="sb-slide-meta">
+                      <span>Slide 1 of 6</span>
+                      <span class="mock-dim">Product launch deck &middot; Ready</span>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Progress while converting -->
+            <div class="sb-progress-overlay" id="sb-progress" hidden>
+              <div class="sb-progress-card">
+                <p class="sb-progress-label" id="sb-status">Extracting slide images&hellip;</p>
+                <div class="mock-progress">
+                  <div class="mock-progress-fill" id="sb-fill"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- After: finished blog article with inline images -->
+            <div class="sb-view" id="sb-view-blog" data-sb-view="blog" hidden>
+              <div class="sb-blog-chrome">
+                <span class="sb-blog-badge">Blog ready</span>
+                <div class="mock-downloads" id="sb-dl">
+                  <button type="button" class="mock-format is-done">MD</button>
+                  <button type="button" class="mock-format is-done">HTML</button>
+                  <button type="button" class="mock-format is-done">DOCX</button>
+                </div>
+              </div>
+              <article class="sb-blog-article" id="sb-article">
+                <header class="sb-blog-header">
+                  <p class="sb-blog-kicker">From Studio slide deck</p>
+                  <h1 class="sb-blog-title">Product Launch 2026: Go-to-market playbook</h1>
+                  <p class="sb-blog-byline">NotebookTools &middot; Converted from 6 slides &middot; Oct 2026</p>
+                </header>
+
+                <figure class="sb-figure">
+                  <div class="sb-fig-block sb-grad-1" role="img" aria-label="Title slide visual">
+                    <span class="sb-fig-overlay">Product Launch 2026</span>
+                  </div>
+                  <figcaption>Figure 1 &mdash; Title overview from the deck</figcaption>
+                </figure>
+
+                <h2>Why this launch matters</h2>
+                <p>Your Studio deck framed the launch as a focused push into mid-market teams that already research with NotebookLM. The blog keeps that narrative and turns each slide into a scannable section.</p>
+
+                <figure class="sb-figure">
+                  <div class="sb-fig-block sb-grad-2" role="img" aria-label="Market slide visual">
+                    <span class="sb-fig-overlay">Market snapshot</span>
+                  </div>
+                  <figcaption>Figure 2 &mdash; Market &amp; opportunity slide</figcaption>
+                </figure>
+
+                <h2>Ideal customer profile</h2>
+                <p>Operators who manage research libraries, share briefs with stakeholders, and need exports that travel outside the notebook. Position the product as the bridge from Studio artifacts to publishable guides.</p>
+
+                <figure class="sb-figure">
+                  <div class="sb-fig-block sb-grad-4" role="img" aria-label="Launch timeline visual">
+                    <span class="sb-fig-overlay">90-day launch plan</span>
+                  </div>
+                  <figcaption>Figure 3 &mdash; Launch timeline from slide 4</figcaption>
+                </figure>
+
+                <h2>Channel mix</h2>
+                <p>Lead with product-led content (this blog), amplify with short clips from the deck, and route readers into a NotebookLM notebook that holds the source slides.</p>
+
+                <figure class="sb-figure">
+                  <div class="sb-fig-block sb-grad-5" role="img" aria-label="Channels slide visual">
+                    <span class="sb-fig-overlay">Channels &amp; assets</span>
+                  </div>
+                  <figcaption>Figure 4 &mdash; Channels &amp; assets slide</figcaption>
+                </figure>
+
+                <h2>What to do next</h2>
+                <p>Export Markdown or HTML, drop the images into your CMS, and keep the Studio deck linked so updates stay one refresh away.</p>
+              </article>
             </div>
           </div>
         </div>
@@ -988,7 +1069,7 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Generate a slide deck</strong><p>Create a Studio slide deck in your NotebookLM notebook.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Open Blog workflow</strong><p>Use the NotebookTools blog workflow bar on NotebookLM.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick the deck</strong><p>Choose a ready slide deck and optional instructions.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Build &amp; export</strong><p>Assemble the post with slide images and download Markdown, HTML, or more.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Generate a slide deck</strong><p>Create a Studio slide deck in your NotebookLM notebook.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Convert to blog</strong><p>Use NotebookTools Convert to blog on the Studio deck view.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Watch progress</strong><p>Slide images are extracted and copy is assembled into a post.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Read &amp; export</strong><p>Review the finished article with inline images, then download Markdown, HTML, or Docs.</p></div></li>
         </ol>
       </section>
         </article>
