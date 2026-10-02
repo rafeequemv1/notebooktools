@@ -47,6 +47,13 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 
 ### Core
 - Home: https://www.notebooktools.com/
+- Features hub: https://www.notebooktools.com/features
+- YouTube import demo: https://www.notebooktools.com/features/add-youtube
+- Bulk import demo: https://www.notebooktools.com/features/bulk-import
+- Notebooks hub demo: https://www.notebooktools.com/features/notebooks-hub
+- Drive refresh demo: https://www.notebooktools.com/features/drive-refresh
+- Studio & podcasts demo: https://www.notebooktools.com/features/studio-podcasts
+- Prompt library demo: https://www.notebooktools.com/features/prompts
 - Blog hub: https://www.notebooktools.com/blog
 - Support: https://www.notebooktools.com/support
 - Privacy: https://www.notebooktools.com/privacy

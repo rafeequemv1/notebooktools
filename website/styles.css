@@ -2747,3 +2747,17 @@ h1, h2, h3, p {
     font-size: 44px;
   }
 }
+
+
+/* Feature card deep-links to /features/* pages */
+.feature-card .see-how {
+  color: var(--accent);
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.feature-card .see-how:hover {
+  text-decoration: underline;
+}
