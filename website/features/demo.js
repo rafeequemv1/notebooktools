@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   "use strict";
 
   function $(sel, root) {
@@ -6,6 +6,31 @@
   }
   function $all(sel, root) {
     return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  }
+
+  function prefersReducedMotion() {
+    return (
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  function wait(ms) {
+    if (prefersReducedMotion()) return Promise.resolve();
+    return new Promise(function (resolve) {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  function sequence(steps) {
+    var chain = Promise.resolve();
+    steps.forEach(function (step) {
+      chain = chain.then(function () {
+        if (typeof step === "function") return step();
+        return wait(step);
+      });
+    });
+    return chain;
   }
 
   /* ---- YouTube demo ---- */
@@ -17,12 +42,111 @@
     var newSrc = $("#yt-new-source", root);
     var countEl = $("#yt-source-count", root);
     var titleEl = $("#yt-nb-title", root);
+    var addBtn = $("#yt-add-btn", root);
     var selectedName = "NotebookLM notes";
+    var autoRunning = false;
 
     function showPicker(show) {
       if (!picker) return;
-      if (show) picker.removeAttribute("hidden");
-      else picker.setAttribute("hidden", "");
+      if (show) {
+        picker.removeAttribute("hidden");
+        picker.classList.add("is-visible");
+      } else {
+        picker.setAttribute("hidden", "");
+        picker.classList.remove("is-visible");
+      }
+    }
+
+    function reset() {
+      if (notebook) {
+        notebook.setAttribute("hidden", "");
+        notebook.classList.remove("is-active", "is-entering");
+      }
+      if (watch) {
+        watch.removeAttribute("hidden");
+        watch.classList.add("is-active");
+      }
+      if (newSrc) {
+        newSrc.setAttribute("hidden", "");
+        newSrc.classList.remove("is-appearing");
+      }
+      if (countEl) countEl.textContent = "2 sources";
+      if (toast) toast.setAttribute("hidden", "");
+      if (addBtn) addBtn.classList.remove("is-pulse", "is-clicked");
+      showPicker(false);
+    }
+
+    function confirmAdd() {
+      showPicker(false);
+      if (watch) {
+        watch.classList.add("is-exiting");
+        setTimeout(function () {
+          watch.setAttribute("hidden", "");
+          watch.classList.remove("is-active", "is-exiting");
+        }, prefersReducedMotion() ? 0 : 280);
+      }
+      if (notebook) {
+        notebook.removeAttribute("hidden");
+        notebook.classList.add("is-active", "is-entering");
+      }
+      if (titleEl) titleEl.textContent = selectedName;
+      return wait(prefersReducedMotion() ? 0 : 350).then(function () {
+        if (newSrc) {
+          newSrc.removeAttribute("hidden");
+          newSrc.classList.add("is-appearing");
+          if (countEl) countEl.textContent = "3 sources";
+          if (toast) {
+            toast.textContent = "Added to " + selectedName + " ✓";
+            toast.removeAttribute("hidden");
+            setTimeout(function () {
+              toast.setAttribute("hidden", "");
+            }, 2200);
+          }
+        }
+      });
+    }
+
+    function runAutoplay() {
+      if (autoRunning) return;
+      autoRunning = true;
+      reset();
+      return sequence([
+        600,
+        function () {
+          if (addBtn) addBtn.classList.add("is-pulse");
+        },
+        900,
+        function () {
+          if (addBtn) {
+            addBtn.classList.remove("is-pulse");
+            addBtn.classList.add("is-clicked");
+          }
+          showPicker(true);
+        },
+        700,
+        function () {
+          if (addBtn) addBtn.classList.remove("is-clicked");
+          var items = $all(".demo-nb-item", root);
+          items.forEach(function (el, i) {
+            el.classList.toggle("is-selected", i === 2);
+          });
+          var sel = items[2];
+          if (sel) selectedName = sel.getAttribute("data-name") || selectedName;
+        },
+        800,
+        function () {
+          var confirm = $('[data-action="confirm-add"]', root);
+          if (confirm) confirm.classList.add("is-clicked");
+          return confirmAdd().then(function () {
+            var confirm2 = $('[data-action="confirm-add"]', root);
+            if (confirm2) confirm2.classList.remove("is-clicked");
+          });
+        },
+        400,
+        function () {
+          autoRunning = false;
+        },
+      ]);
     }
 
     root.addEventListener("click", function (e) {
@@ -30,7 +154,9 @@
       if (!t) return;
       var action = t.getAttribute("data-action");
 
-      if (action === "open-picker") {
+      if (action === "play-demo") {
+        runAutoplay();
+      } else if (action === "open-picker") {
         showPicker(true);
       } else if (action === "close-picker") {
         showPicker(false);
@@ -40,49 +166,32 @@
         });
         selectedName = t.getAttribute("data-name") || selectedName;
       } else if (action === "confirm-add") {
-        showPicker(false);
-        if (watch) watch.setAttribute("hidden", "");
-        if (notebook) {
-          notebook.removeAttribute("hidden");
-          notebook.classList.add("is-active");
-        }
-        if (titleEl) titleEl.textContent = selectedName;
-        if (newSrc) {
-          newSrc.setAttribute("hidden", "");
-          setTimeout(function () {
-            newSrc.removeAttribute("hidden");
-            if (countEl) countEl.textContent = "3 sources";
-            if (toast) {
-              toast.textContent = "Added to " + selectedName + " ✓";
-              toast.removeAttribute("hidden");
-              setTimeout(function () {
-                toast.setAttribute("hidden", "");
-              }, 2200);
-            }
-          }, 350);
-        }
+        confirmAdd();
       } else if (action === "reset-yt") {
-        if (notebook) {
-          notebook.setAttribute("hidden", "");
-          notebook.classList.remove("is-active");
-        }
-        if (watch) {
-          watch.removeAttribute("hidden");
-          watch.classList.add("is-active");
-        }
-        if (newSrc) newSrc.setAttribute("hidden", "");
-        if (countEl) countEl.textContent = "2 sources";
-        if (toast) toast.setAttribute("hidden", "");
-        showPicker(false);
+        reset();
       }
     });
+
+    // Also listen on page for Play demo outside root
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest('[data-action="play-demo"]');
+      if (!t || !document.body.contains(root)) return;
+      if (root.contains(t) || t.closest(".feature-demo-section")) {
+        if ($('[data-demo="youtube"]') === root || root.closest(".feature-demo-section") === t.closest(".feature-demo-section")) {
+          runAutoplay();
+        }
+      }
+    });
+
+    setTimeout(function () {
+      if (!autoRunning) runAutoplay();
+    }, 900);
   }
 
   /* ---- Bulk demo ---- */
   function initBulkDemo(root) {
     var fill = $("#bulk-fill", root);
     var text = $("#bulk-text", root);
-    var list = $("#bulk-list", root);
     var nlm = $("#bulk-nlm-sources", root);
     var startBtn = $("#bulk-start", root);
     var resetBtn = $("#bulk-reset", root);
@@ -108,6 +217,68 @@
       }
     }
 
+    function runImport() {
+      if (running) return Promise.resolve();
+      running = true;
+      if (startBtn) {
+        startBtn.disabled = true;
+        startBtn.classList.add("is-clicked");
+      }
+      var items = $all(".bulk-item", root).filter(function (item) {
+        var cb = $("input[type=checkbox]", item);
+        return cb && cb.checked;
+      });
+      var total = items.length || 1;
+      var i = 0;
+
+      return new Promise(function (resolve) {
+        function step() {
+          if (i >= items.length) {
+            if (text) text.textContent = items.length + " imported · done";
+            if (fill) fill.style.width = "100%";
+            if (resetBtn) resetBtn.removeAttribute("hidden");
+            if (startBtn) startBtn.classList.remove("is-clicked");
+            running = false;
+            resolve();
+            return;
+          }
+          var item = items[i];
+          item.classList.add("is-running");
+          var st = $(".bulk-status", item);
+          if (st) st.textContent = "Importing…";
+          if (text) text.textContent = "Importing " + (i + 1) + " of " + items.length + "…";
+          if (fill) fill.style.width = Math.round(((i + 0.5) / total) * 100) + "%";
+
+          setTimeout(function () {
+            item.classList.remove("is-running");
+            item.classList.add("is-done");
+            if (st) st.textContent = "Added ✓";
+            if (nlm) {
+              var label = item.querySelector("label");
+              var name = label ? label.textContent.replace(/^\s*/, "").trim() : "Source";
+              name = name.replace(/\s+/g, " ");
+              if (name.length > 36) name = name.slice(0, 34) + "…";
+              var li = document.createElement("li");
+              li.className = "nlm-source nlm-source-new bulk-added is-appearing";
+              li.innerHTML =
+                '<span class="nlm-src-icon nlm-src-web">+</span><span class="nlm-src-name"></span><span class="nlm-src-badge">New</span>';
+              li.querySelector(".nlm-src-name").textContent = name;
+              nlm.appendChild(li);
+            }
+            if (fill) fill.style.width = Math.round(((i + 1) / total) * 100) + "%";
+            i += 1;
+            setTimeout(step, prefersReducedMotion() ? 40 : 280);
+          }, prefersReducedMotion() ? 40 : 520);
+        }
+        step();
+      });
+    }
+
+    function runAutoplay() {
+      reset();
+      return wait(500).then(runImport);
+    }
+
     root.addEventListener("click", function (e) {
       var t = e.target.closest("[data-action]");
       if (!t) return;
@@ -116,54 +287,23 @@
         reset();
         return;
       }
-      if (action !== "bulk-start" || running) return;
-      running = true;
-      if (startBtn) startBtn.disabled = true;
-      var items = $all(".bulk-item", root).filter(function (item) {
-        var cb = $("input[type=checkbox]", item);
-        return cb && cb.checked;
-      });
-      var total = items.length || 1;
-      var i = 0;
-
-      function step() {
-        if (i >= items.length) {
-          if (text) text.textContent = items.length + " imported · done";
-          if (fill) fill.style.width = "100%";
-          if (resetBtn) resetBtn.removeAttribute("hidden");
-          running = false;
-          return;
-        }
-        var item = items[i];
-        item.classList.add("is-running");
-        var st = $(".bulk-status", item);
-        if (st) st.textContent = "Importing…";
-        if (text) text.textContent = "Importing " + (i + 1) + " of " + items.length + "…";
-        if (fill) fill.style.width = Math.round(((i + 0.5) / total) * 100) + "%";
-
-        setTimeout(function () {
-          item.classList.remove("is-running");
-          item.classList.add("is-done");
-          if (st) st.textContent = "Added ✓";
-          if (nlm) {
-            var label = item.querySelector("label");
-            var name = label ? label.textContent.replace(/^\s*/, "").trim() : "Source";
-            name = name.replace(/\s+/g, " ");
-            if (name.length > 36) name = name.slice(0, 34) + "…";
-            var li = document.createElement("li");
-            li.className = "nlm-source nlm-source-new bulk-added";
-            li.innerHTML =
-              '<span class="nlm-src-icon nlm-src-web">+</span><span class="nlm-src-name"></span><span class="nlm-src-badge">New</span>';
-            li.querySelector(".nlm-src-name").textContent = name;
-            nlm.appendChild(li);
-          }
-          if (fill) fill.style.width = Math.round(((i + 1) / total) * 100) + "%";
-          i += 1;
-          setTimeout(step, 280);
-        }, 520);
+      if (action === "play-demo") {
+        runAutoplay();
+        return;
       }
-      step();
+      if (action !== "bulk-start" || running) return;
+      runImport();
     });
+
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest('[data-action="play-demo"]');
+      if (!t) return;
+      if (t.closest(".feature-demo-section") && $('[data-demo="bulk"]') === root) {
+        runAutoplay();
+      }
+    });
+
+    setTimeout(runAutoplay, 800);
   }
 
   /* ---- Hub demo ---- */
@@ -173,6 +313,7 @@
     var hint = $("#hub-hint", root);
     var filter = "all";
     var folder = "all";
+    var autoRunning = false;
 
     function apply() {
       var q = (search && search.value ? search.value : "").toLowerCase().trim();
@@ -198,20 +339,89 @@
 
     if (search) search.addEventListener("input", apply);
 
+    function typeSearch(text) {
+      if (!search) return Promise.resolve();
+      search.value = "";
+      apply();
+      if (prefersReducedMotion()) {
+        search.value = text;
+        apply();
+        return Promise.resolve();
+      }
+      var i = 0;
+      return new Promise(function (resolve) {
+        function tick() {
+          if (i >= text.length) {
+            resolve();
+            return;
+          }
+          search.value = text.slice(0, i + 1);
+          apply();
+          i += 1;
+          setTimeout(tick, 90);
+        }
+        tick();
+      });
+    }
+
+    function setFilter(f) {
+      filter = f;
+      $all('[data-action="hub-filter"]', root).forEach(function (b) {
+        var match = (b.getAttribute("data-filter") || "all") === f;
+        b.classList.toggle("soft", !match);
+        if (match) b.classList.remove("soft");
+        else b.classList.add("soft");
+      });
+      apply();
+    }
+
+    function pulseStars() {
+      $all('.nlm-nb-card[data-starred="1"]', grid).forEach(function (card) {
+        card.classList.add("is-star-pulse");
+        setTimeout(function () {
+          card.classList.remove("is-star-pulse");
+        }, 900);
+      });
+    }
+
+    function runAutoplay() {
+      if (autoRunning) return;
+      autoRunning = true;
+      filter = "all";
+      folder = "all";
+      setFilter("all");
+      $all('[data-action="hub-folder"]', root).forEach(function (b) {
+        b.classList.toggle("is-active", (b.getAttribute("data-folder") || "all") === "all");
+      });
+      return sequence([
+        function () {
+          return typeSearch("AI");
+        },
+        700,
+        function () {
+          return typeSearch("");
+        },
+        400,
+        function () {
+          setFilter("starred");
+          pulseStars();
+        },
+        1200,
+        function () {
+          setFilter("all");
+          autoRunning = false;
+        },
+      ]);
+    }
+
     root.addEventListener("click", function (e) {
       var t = e.target.closest("[data-action]");
       if (!t) return;
       var action = t.getAttribute("data-action");
-      if (action === "hub-filter") {
-        filter = t.getAttribute("data-filter") || "all";
-        $all('[data-action="hub-filter"]', root).forEach(function (b) {
-          b.classList.toggle("soft", b !== t);
-          if (b === t) b.classList.remove("soft");
-          else b.classList.add("soft");
-        });
-        // Ensure clicked is "active" style: remove soft from selected
-        t.classList.remove("soft");
-        apply();
+      if (action === "play-demo") {
+        runAutoplay();
+      } else if (action === "hub-filter") {
+        setFilter(t.getAttribute("data-filter") || "all");
       } else if (action === "hub-folder") {
         folder = t.getAttribute("data-folder") || "all";
         $all('[data-action="hub-folder"]', root).forEach(function (b) {
@@ -220,11 +430,22 @@
         apply();
       }
     });
+
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest('[data-action="play-demo"]');
+      if (!t) return;
+      if (t.closest(".feature-demo-section") && $('[data-demo="hub"]') === root) {
+        runAutoplay();
+      }
+    });
+
+    setTimeout(runAutoplay, 900);
   }
 
   /* ---- Drive refresh ---- */
   function initDriveDemo(root) {
     var status = $("#drive-status", root);
+    var autoRunning = false;
 
     function refreshRow(row) {
       if (!row || row.getAttribute("data-stale") !== "1") return Promise.resolve();
@@ -240,7 +461,13 @@
             btn.style.visibility = "hidden";
           }
           var badge = $(".nlm-src-badge", row);
-          if (badge) badge.remove();
+          if (badge) {
+            badge.classList.add("is-updated");
+            badge.textContent = "Updated";
+            setTimeout(function () {
+              badge.remove();
+            }, prefersReducedMotion() ? 0 : 700);
+          }
           var time = $(".drive-time", row);
           if (time) {
             time.classList.remove("stale");
@@ -248,40 +475,119 @@
             time.textContent = label + " · Synced · just now";
           }
           resolve();
-        }, 900);
+        }, prefersReducedMotion() ? 80 : 900);
       });
+    }
+
+    function restoreDemo() {
+      var rows = $all(".drive-row", root);
+      rows.forEach(function (row, idx) {
+        if (idx > 1) return;
+        row.setAttribute("data-stale", "1");
+        row.classList.remove("is-refreshing");
+        var btn = $(".nlm-refresh-btn", row);
+        if (btn) {
+          btn.style.visibility = "";
+          btn.classList.remove("is-spinning");
+        }
+        var time = $(".drive-time", row);
+        if (time && idx === 0) {
+          time.classList.add("stale");
+          time.textContent = "Google Doc · Updated on Drive · 2h ago";
+        }
+        if (time && idx === 1) {
+          time.classList.add("stale");
+          time.textContent = "Google Slides · Updated on Drive · yesterday";
+        }
+        if (!$(".nlm-src-badge", row)) {
+          var badge = document.createElement("span");
+          badge.className = "nlm-src-badge warn";
+          badge.textContent = "Update available";
+          var meta = $(".drive-meta", row);
+          if (meta && meta.nextSibling) row.insertBefore(badge, meta.nextSibling);
+          else row.appendChild(badge);
+        } else {
+          var b = $(".nlm-src-badge", row);
+          b.className = "nlm-src-badge warn";
+          b.textContent = "Update available";
+        }
+      });
+      if (status) status.textContent = "";
+    }
+
+    function runRefreshAll() {
+      var stale = $all('.drive-row[data-stale="1"]', root);
+      if (!stale.length) {
+        if (status) status.textContent = "All Drive sources are up to date";
+        return Promise.resolve();
+      }
+      if (status) status.textContent = "Refreshing " + stale.length + " sources…";
+      var chain = Promise.resolve();
+      stale.forEach(function (row) {
+        chain = chain.then(function () {
+          return refreshRow(row);
+        });
+      });
+      return chain.then(function () {
+        if (status) status.textContent = "All Drive sources refreshed ✓";
+      });
+    }
+
+    function runAutoplay() {
+      if (autoRunning) return;
+      autoRunning = true;
+      restoreDemo();
+      return sequence([
+        600,
+        function () {
+          $all(".nlm-src-badge.warn", root).forEach(function (b) {
+            b.classList.add("is-pulse");
+          });
+        },
+        800,
+        function () {
+          var btn = $("#drive-refresh-all", root);
+          if (btn) btn.classList.add("is-clicked");
+          return runRefreshAll().then(function () {
+            if (btn) btn.classList.remove("is-clicked");
+            $all(".nlm-src-badge", root).forEach(function (b) {
+              b.classList.remove("is-pulse");
+            });
+            autoRunning = false;
+          });
+        },
+      ]);
     }
 
     root.addEventListener("click", function (e) {
       var t = e.target.closest("[data-action]");
       if (!t) return;
       var action = t.getAttribute("data-action");
-      if (action === "drive-one") {
+      if (action === "play-demo") {
+        runAutoplay();
+      } else if (action === "drive-one") {
         var row = t.closest(".drive-row");
         if (status) status.textContent = "Refreshing source…";
         refreshRow(row).then(function () {
           if (status) status.textContent = "Source updated from Google Drive ✓";
         });
       } else if (action === "drive-refresh") {
-        var stale = $all('.drive-row[data-stale="1"]', root);
-        if (!stale.length) {
-          if (status) status.textContent = "All Drive sources are up to date";
-          return;
-        }
-        if (status) status.textContent = "Refreshing " + stale.length + " sources…";
         t.disabled = true;
-        var chain = Promise.resolve();
-        stale.forEach(function (row) {
-          chain = chain.then(function () {
-            return refreshRow(row);
-          });
-        });
-        chain.then(function () {
+        runRefreshAll().then(function () {
           t.disabled = false;
-          if (status) status.textContent = "All Drive sources refreshed ✓";
         });
       }
     });
+
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest('[data-action="play-demo"]');
+      if (!t) return;
+      if (t.closest(".feature-demo-section") && $('[data-demo="drive"]') === root) {
+        runAutoplay();
+      }
+    });
+
+    setTimeout(runAutoplay, 900);
   }
 
   /* ---- Studio / podcast ---- */
@@ -292,49 +598,107 @@
     var genBtn = $("#studio-gen", root);
     var resetBtn = $("#studio-reset", root);
     var playBtn = $('[data-action="podcast-toggle"]', root);
+    var autoRunning = false;
+
+    function reset() {
+      if (progress) progress.setAttribute("hidden", "");
+      if (player) {
+        player.setAttribute("hidden", "");
+        player.classList.remove("is-appearing");
+      }
+      if (resetBtn) resetBtn.setAttribute("hidden", "");
+      if (genBtn) {
+        genBtn.disabled = false;
+        genBtn.classList.remove("is-clicked");
+        var cta2 = $(".studio-cta", genBtn);
+        if (cta2) cta2.textContent = "Generate";
+      }
+      if (playBtn) {
+        playBtn.classList.remove("is-playing");
+        playBtn.textContent = "▶";
+      }
+      if (progress) progress.classList.remove("is-active");
+    }
+
+    function runGenerate() {
+      if (genBtn) {
+        genBtn.disabled = true;
+        genBtn.classList.add("is-clicked");
+      }
+      if (progress) {
+        progress.removeAttribute("hidden");
+        progress.classList.add("is-active");
+      }
+      if (player) player.setAttribute("hidden", "");
+      if (progressText) progressText.textContent = "Generating Audio Overview…";
+      return sequence([
+        900,
+        function () {
+          if (progressText) progressText.textContent = "Mixing host dialogue…";
+        },
+        1100,
+        function () {
+          if (progress) {
+            progress.setAttribute("hidden", "");
+            progress.classList.remove("is-active");
+          }
+          if (player) {
+            player.removeAttribute("hidden");
+            player.classList.add("is-appearing");
+          }
+          if (resetBtn) resetBtn.removeAttribute("hidden");
+          if (genBtn) {
+            var cta = $(".studio-cta", genBtn);
+            if (cta) cta.textContent = "Ready";
+            genBtn.classList.remove("is-clicked");
+          }
+          if (playBtn) {
+            playBtn.classList.add("is-playing");
+            playBtn.textContent = "❚❚";
+          }
+        },
+      ]);
+    }
+
+    function runAutoplay() {
+      if (autoRunning) return;
+      autoRunning = true;
+      reset();
+      return wait(500)
+        .then(runGenerate)
+        .then(function () {
+          autoRunning = false;
+        });
+    }
 
     root.addEventListener("click", function (e) {
       var t = e.target.closest("[data-action]");
       if (!t) return;
       var action = t.getAttribute("data-action");
 
-      if (action === "studio-gen") {
-        if (genBtn) genBtn.disabled = true;
-        if (progress) progress.removeAttribute("hidden");
-        if (player) player.setAttribute("hidden", "");
-        if (progressText) progressText.textContent = "Generating Audio Overview…";
-        setTimeout(function () {
-          if (progressText) progressText.textContent = "Mixing host dialogue…";
-        }, 900);
-        setTimeout(function () {
-          if (progress) progress.setAttribute("hidden", "");
-          if (player) player.removeAttribute("hidden");
-          if (resetBtn) resetBtn.removeAttribute("hidden");
-          if (genBtn) {
-            var cta = $(".studio-cta", genBtn);
-            if (cta) cta.textContent = "Ready";
-          }
-        }, 2200);
+      if (action === "play-demo") {
+        runAutoplay();
+      } else if (action === "studio-gen") {
+        runGenerate();
       } else if (action === "podcast-toggle") {
         if (!playBtn) return;
         var playing = playBtn.classList.toggle("is-playing");
         playBtn.textContent = playing ? "❚❚" : "▶";
         playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
       } else if (action === "studio-reset") {
-        if (progress) progress.setAttribute("hidden", "");
-        if (player) player.setAttribute("hidden", "");
-        if (resetBtn) resetBtn.setAttribute("hidden", "");
-        if (genBtn) {
-          genBtn.disabled = false;
-          var cta2 = $(".studio-cta", genBtn);
-          if (cta2) cta2.textContent = "Generate";
-        }
-        if (playBtn) {
-          playBtn.classList.remove("is-playing");
-          playBtn.textContent = "▶";
-        }
+        reset();
       }
     });
+
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest('[data-action="play-demo"]');
+      if (!t) return;
+      if (t.closest(".feature-demo-section") && $('[data-demo="studio"]') === root) {
+        runAutoplay();
+      }
+    });
+
+    setTimeout(runAutoplay, 900);
   }
 
   /* ---- Prompts ---- */
@@ -342,6 +706,7 @@
     var input = $("#prompt-input", root);
     var menu = $("#prompt-menu", root);
     var messages = $("#prompt-messages", root);
+    var autoRunning = false;
 
     function showMenu(show) {
       if (!menu) return;
@@ -352,6 +717,7 @@
     function insertPrompt(text) {
       if (!input) return;
       input.value = text;
+      input.classList.add("has-chip");
       showMenu(false);
       input.focus();
     }
@@ -361,25 +727,89 @@
       var text = input.value.trim();
       if (!text) return;
       var user = document.createElement("div");
-      user.className = "nlm-msg user";
+      user.className = "nlm-msg user is-appearing";
       user.textContent = text;
       messages.appendChild(user);
       input.value = "";
+      input.classList.remove("has-chip");
       showMenu(false);
       setTimeout(function () {
         var bot = document.createElement("div");
-        bot.className = "nlm-msg bot";
+        bot.className = "nlm-msg bot is-appearing";
         bot.textContent =
           "Demo reply — in NotebookLM, this prompt would run against your sources with citations.";
         messages.appendChild(bot);
         messages.scrollTop = messages.scrollHeight;
-      }, 450);
+      }, prefersReducedMotion() ? 40 : 450);
+    }
+
+    function clearMessagesExtra() {
+      if (!messages) return;
+      $all(".nlm-msg", messages).forEach(function (el, i) {
+        if (i === 0) return;
+        el.remove();
+      });
+      if (input) {
+        input.value = "";
+        input.classList.remove("has-chip");
+      }
+      showMenu(false);
+    }
+
+    function typeSlash() {
+      if (!input) return Promise.resolve();
+      if (prefersReducedMotion()) {
+        input.value = "/";
+        showMenu(true);
+        return Promise.resolve();
+      }
+      return new Promise(function (resolve) {
+        input.value = "";
+        showMenu(false);
+        setTimeout(function () {
+          input.value = "/";
+          input.classList.add("is-typing");
+          showMenu(true);
+          setTimeout(function () {
+            input.classList.remove("is-typing");
+            resolve();
+          }, 400);
+        }, 200);
+      });
+    }
+
+    function runAutoplay() {
+      if (autoRunning) return;
+      autoRunning = true;
+      clearMessagesExtra();
+      return sequence([
+        400,
+        function () {
+          return typeSlash();
+        },
+        700,
+        function () {
+          var item = $(".prompt-slash-item", menu);
+          if (item) {
+            item.classList.add("is-highlight");
+            insertPrompt(item.getAttribute("data-text") || "");
+            setTimeout(function () {
+              item.classList.remove("is-highlight");
+            }, 500);
+          }
+        },
+        600,
+        function () {
+          send();
+          autoRunning = false;
+        },
+      ]);
     }
 
     if (input) {
       input.addEventListener("input", function () {
         var v = input.value;
-        showMenu(v === "/" || v.indexOf("/") === 0 && v.length <= 12);
+        showMenu(v === "/" || (v.indexOf("/") === 0 && v.length <= 12));
       });
       input.addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
@@ -396,12 +826,24 @@
       if (!t) return;
       var action = t.getAttribute("data-action");
       var text = t.getAttribute("data-text") || "";
-      if (action === "insert-prompt" || action === "chip-prompt") {
+      if (action === "play-demo") {
+        runAutoplay();
+      } else if (action === "insert-prompt" || action === "chip-prompt") {
         insertPrompt(text);
       } else if (action === "prompt-send") {
         send();
       }
     });
+
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest('[data-action="play-demo"]');
+      if (!t) return;
+      if (t.closest(".feature-demo-section") && $('[data-demo="prompts"]') === root) {
+        runAutoplay();
+      }
+    });
+
+    setTimeout(runAutoplay, 900);
   }
 
   function boot() {

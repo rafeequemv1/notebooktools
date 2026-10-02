@@ -58,10 +58,10 @@
     <main>
       <nav class="feature-breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a>
-        <span aria-hidden="true">/</span>
+        <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
         <a href="/features">Features</a>
-        <span aria-hidden="true">/</span>
-        <span>YouTube import</span>
+        <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">Add YouTube</span>
       </nav>
 
       <section class="feature-hero">
@@ -79,36 +79,100 @@
       <section class="feature-demo-section">
         <div class="section-head center">
           <p class="eyebrow">See it</p>
-          <h2>Interactive demo</h2>
+          <h2>Interactive demo · YouTube watch page chrome · not a live session</h2>
           <p class="section-lead">A visual recreation of the NotebookLM + NotebookTools flow. Labeled as demo — no live API.</p>
+          <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
         </div>
         
         <div class="demo-shell" data-demo="youtube">
           <p class="demo-label">Interactive demo · not a live NotebookLM session</p>
           <div class="demo-stage" id="yt-demo-stage">
-            <!-- Step A: YouTube page + Add button -->
+            <!-- Step A: YouTube watch page chrome + Add button -->
             <div class="demo-panel is-active" data-panel="watch">
               <div class="browser-chrome">
                 <div class="browser-dots"><span></span><span></span><span></span></div>
                 <div class="browser-url">youtube.com/watch?v=SE753Tm913s</div>
               </div>
-              <div class="yt-page">
-                <div class="yt-player-wrap">
-                  <iframe
-                    class="yt-iframe"
-                    src="https://www.youtube-nocookie.com/embed/SE753Tm913s?rel=0"
-                    title="NotebookLM Audio Overviews — Google"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    loading="lazy"></iframe>
-                </div>
-                <div class="yt-meta">
-                  <h3 class="yt-title">Join and interact with NotebookLM Audio Overviews</h3>
-                  <p class="yt-channel">Google · Official</p>
-                  <button type="button" class="nt-add-btn" id="yt-add-btn" data-action="open-picker">
-                    <img src="../assets/logo-mark-32.png" alt="" width="18" height="18">
-                    Add to NotebookLM
-                  </button>
+              <div class="yt-watch" aria-label="YouTube watch page mock">
+                <header class="yt-masthead">
+                  <div class="yt-mast-left">
+                    <button type="button" class="yt-icon-btn yt-menu" aria-label="Menu" tabindex="-1">
+                      <span></span><span></span><span></span>
+                    </button>
+                    <div class="yt-logo" aria-hidden="true">
+                      <span class="yt-logo-play"></span>
+                      <span class="yt-logo-text">YouTube</span>
+                    </div>
+                  </div>
+                  <div class="yt-search">
+                    <input type="search" class="yt-search-input" placeholder="Search" value="" readonly tabindex="-1" aria-hidden="true">
+                    <button type="button" class="yt-search-btn" tabindex="-1" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </button>
+                  </div>
+                  <div class="yt-mast-right" aria-hidden="true">
+                    <span class="yt-icon-stub"></span>
+                    <span class="yt-icon-stub"></span>
+                    <span class="yt-avatar-stub"></span>
+                  </div>
+                </header>
+                <div class="yt-primary-cols">
+                  <div class="yt-primary">
+                    <div class="yt-player-wrap">
+                      <iframe
+                        class="yt-iframe"
+                        src="https://www.youtube-nocookie.com/embed/SE753Tm913s?rel=0"
+                        title="NotebookLM Audio Overviews — Google"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        loading="lazy"></iframe>
+                    </div>
+                    <h3 class="yt-title">Join and interact with NotebookLM Audio Overviews</h3>
+                    <div class="yt-owner-row">
+                      <div class="yt-channel-block">
+                        <span class="yt-channel-avatar" aria-hidden="true">G</span>
+                        <div class="yt-channel-meta">
+                          <p class="yt-channel">Google</p>
+                          <p class="yt-subs">12.4M subscribers</p>
+                        </div>
+                        <button type="button" class="yt-subscribe" tabindex="-1">Subscribe</button>
+                      </div>
+                    </div>
+                    <div class="yt-actions-row">
+                      <div class="yt-action-pills" aria-hidden="true">
+                        <span class="yt-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> 42K</span>
+                        <span class="yt-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2z"/></svg></span>
+                        <span class="yt-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg> Share</span>
+                        <span class="yt-pill">…</span>
+                      </div>
+                      <button type="button" class="nt-add-btn" id="yt-add-btn" data-action="open-picker">
+                        <img src="../assets/logo-mark-32.png" alt="" width="18" height="18">
+                        Add to NotebookLM
+                      </button>
+                    </div>
+                    <div class="yt-desc">
+                      <p class="yt-desc-stats">248K views · 1 year ago</p>
+                      <p class="yt-desc-text">Learn how to join and interact with NotebookLM Audio Overviews. Ask questions, dig deeper, and turn research into conversation.</p>
+                    </div>
+                  </div>
+                  <aside class="yt-secondary" aria-hidden="true">
+                    <div class="yt-suggest">
+                      <div class="yt-thumb"></div>
+                      <div class="yt-suggest-meta"><span class="yt-suggest-title"></span><span class="yt-suggest-sub"></span></div>
+                    </div>
+                    <div class="yt-suggest">
+                      <div class="yt-thumb t2"></div>
+                      <div class="yt-suggest-meta"><span class="yt-suggest-title long"></span><span class="yt-suggest-sub"></span></div>
+                    </div>
+                    <div class="yt-suggest">
+                      <div class="yt-thumb t3"></div>
+                      <div class="yt-suggest-meta"><span class="yt-suggest-title"></span><span class="yt-suggest-sub"></span></div>
+                    </div>
+                    <div class="yt-suggest">
+                      <div class="yt-thumb t4"></div>
+                      <div class="yt-suggest-meta"><span class="yt-suggest-title mid"></span><span class="yt-suggest-sub"></span></div>
+                    </div>
+                  </aside>
                 </div>
               </div>
             </div>

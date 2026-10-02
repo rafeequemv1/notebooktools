@@ -58,10 +58,10 @@
     <main>
       <nav class="feature-breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a>
-        <span aria-hidden="true">/</span>
+        <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
         <a href="/features">Features</a>
-        <span aria-hidden="true">/</span>
-        <span>Prompts</span>
+        <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">Prompt library</span>
       </nav>
 
       <section class="feature-hero">
@@ -81,6 +81,7 @@
           <p class="eyebrow">See it</p>
           <h2>Interactive demo</h2>
           <p class="section-lead">A visual recreation of the NotebookLM + NotebookTools flow. Labeled as demo — no live API.</p>
+          <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
         </div>
         
         <div class="demo-shell" data-demo="prompts">
