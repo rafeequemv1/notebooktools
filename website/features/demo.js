@@ -1014,7 +1014,7 @@
   var FEATURE_META = {
     overview: {
       title: "Features â€“ NotebookTools for NotebookLM",
-      description: "Explore NotebookTools features with interactive demos: YouTube import, bulk queue, notebooks hub, Drive refresh, Studio & podcasts, and prompt library.",
+      description: "Explore NotebookTools features with interactive demos: YouTube, bulk import, notebooks hub, Drive refresh, Studio, prompts, webpage, X, highlights, chat export, slides-to-blog, and snapshots.",
       name: "Features",
       path: "/features",
       demo: null
@@ -1060,6 +1060,48 @@
       name: "Prompt library",
       path: "/features/prompts",
       demo: "prompts"
+    },
+    "add-webpage": {
+      title: "Add webpage to NotebookLM — NotebookTools",
+      description: "Add any webpage to NotebookLM from the NotebookTools side panel. One click imports the current tab URL as a source.",
+      name: "Add webpage",
+      path: "/features/add-webpage",
+      demo: "webpage"
+    },
+    "x-twitter": {
+      title: "Import X / Twitter to NotebookLM — NotebookTools",
+      description: "Import X (Twitter) posts and threads into NotebookLM as clean text sources with the NotebookTools in-page button.",
+      name: "X / Twitter",
+      path: "/features/x-twitter",
+      demo: "xtwitter"
+    },
+    "highlights": {
+      title: "Highlight text to NotebookLM — NotebookTools",
+      description: "Select text on any page, right-click, and add the highlight to NotebookLM as a text source with NotebookTools.",
+      name: "Highlights",
+      path: "/features/highlights",
+      demo: "highlights"
+    },
+    "chat-export": {
+      title: "Export NotebookLM chat — NotebookTools",
+      description: "Export NotebookLM conversations from the page with NotebookTools. Download Markdown, plain text, or open a printable PDF view.",
+      name: "Chat export",
+      path: "/features/chat-export",
+      demo: "chatexport"
+    },
+    "slides-to-blog": {
+      title: "Slides / PPT deck to blog — NotebookTools",
+      description: "Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.",
+      name: "Slides to blog",
+      path: "/features/slides-to-blog",
+      demo: "slidestoblog"
+    },
+    "snapshots": {
+      title: "Snapshots & PDF capture — NotebookTools",
+      description: "Capture webpage snapshots with NotebookTools, annotate them, and assemble PDF or guide exports for NotebookLM workflows.",
+      name: "Snapshots",
+      path: "/features/snapshots",
+      demo: "snapshots"
     }
   };
 
@@ -1220,6 +1262,358 @@
   }
 
 
+
+  /* ---- Webpage demo ---- */
+  function initWebpageDemo(root) {
+    var addBtn = $("#wp-add", root);
+    var toast = $("#wp-toast", root);
+    var running = false;
+    function reset() {
+      if (toast) toast.setAttribute("hidden", "");
+      if (addBtn) addBtn.classList.remove("is-clicked");
+    }
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        350,
+        function () { return moveCursorTo(addBtn, { shell: root }); },
+        function () {
+          if (addBtn) addBtn.classList.add("is-clicked");
+          if (toast) toast.removeAttribute("hidden");
+        },
+        1600,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action]");
+      if (!t) return;
+      if (t.getAttribute("data-action") === "wp-add") {
+        if (addBtn) addBtn.classList.add("is-clicked");
+        if (toast) toast.removeAttribute("hidden");
+      }
+    });
+    registerDemo("webpage", { play: runAutoplay });
+  }
+
+  /* ---- X / Twitter demo ---- */
+  function initXTwitterDemo(root) {
+    var addBtn = $("#x-add-btn", root);
+    var picker = $("#x-picker", root);
+    var confirm = $("#x-confirm", root);
+    var toast = $("#x-toast", root);
+    var running = false;
+    function reset() {
+      if (picker) picker.setAttribute("hidden", "");
+      if (toast) toast.setAttribute("hidden", "");
+      if (addBtn) addBtn.classList.remove("is-clicked");
+    }
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        350,
+        function () { return moveCursorTo(addBtn, { shell: root }); },
+        function () {
+          if (addBtn) addBtn.classList.add("is-clicked");
+          if (picker) picker.removeAttribute("hidden");
+        },
+        400,
+        function () { return moveCursorTo(confirm, { shell: root }); },
+        function () {
+          if (picker) picker.setAttribute("hidden", "");
+          if (toast) toast.removeAttribute("hidden");
+        },
+        1500,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action]");
+      if (!t) return;
+      var a = t.getAttribute("data-action");
+      if (a === "x-open") {
+        if (picker) picker.removeAttribute("hidden");
+      } else if (a === "x-confirm") {
+        if (picker) picker.setAttribute("hidden", "");
+        if (toast) toast.removeAttribute("hidden");
+      }
+    });
+    registerDemo("xtwitter", { play: runAutoplay });
+  }
+
+  /* ---- Highlights demo ---- */
+  function initHighlightsDemo(root) {
+    var mark = $("#hl-mark", root);
+    var menu = $("#hl-menu", root);
+    var addBtn = $("#hl-add", root);
+    var toast = $("#hl-toast", root);
+    var running = false;
+    function reset() {
+      if (menu) menu.setAttribute("hidden", "");
+      if (toast) toast.setAttribute("hidden", "");
+      if (mark) mark.classList.add("is-selected");
+    }
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        350,
+        function () { return moveCursorTo(mark, { shell: root, click: true }); },
+        function () { if (menu) menu.removeAttribute("hidden"); },
+        400,
+        function () { return moveCursorTo(addBtn, { shell: root }); },
+        function () {
+          if (menu) menu.setAttribute("hidden", "");
+          if (toast) toast.removeAttribute("hidden");
+        },
+        1500,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action], #hl-mark");
+      if (!t) return;
+      if (t.id === "hl-mark") {
+        if (menu) menu.removeAttribute("hidden");
+      } else if (t.getAttribute("data-action") === "hl-add") {
+        if (menu) menu.setAttribute("hidden", "");
+        if (toast) toast.removeAttribute("hidden");
+      }
+    });
+    registerDemo("highlights", { play: runAutoplay });
+  }
+
+  /* ---- Chat export demo ---- */
+  function initChatExportDemo(root) {
+    var btn = $("#ce-btn", root);
+    var menu = $("#ce-menu", root);
+    var md = $("#ce-md", root);
+    var toast = $("#ce-toast", root);
+    var running = false;
+    function reset() {
+      if (menu) menu.setAttribute("hidden", "");
+      if (toast) toast.setAttribute("hidden", "");
+    }
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        350,
+        function () { return moveCursorTo(btn, { shell: root }); },
+        function () { if (menu) menu.removeAttribute("hidden"); },
+        400,
+        function () { return moveCursorTo(md, { shell: root }); },
+        function () {
+          if (menu) menu.setAttribute("hidden", "");
+          if (toast) {
+            toast.textContent = "Downloaded conversation.md ✓";
+            toast.removeAttribute("hidden");
+          }
+        },
+        1500,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action]");
+      if (!t) return;
+      var a = t.getAttribute("data-action");
+      if (a === "ce-open") {
+        if (menu) menu.removeAttribute("hidden");
+      } else if (a === "ce-format") {
+        var fmt = t.getAttribute("data-fmt") || "md";
+        if (menu) menu.setAttribute("hidden", "");
+        if (toast) {
+          toast.textContent =
+            fmt === "pdf"
+              ? "PDF view opened ✓"
+              : "Downloaded conversation." + fmt + " ✓";
+          toast.removeAttribute("hidden");
+        }
+      }
+    });
+    registerDemo("chatexport", { play: runAutoplay });
+  }
+
+  /* ---- Slides to blog demo ---- */
+  function initSlidesToBlogDemo(root) {
+    var btn = $("#sb-btn", root);
+    var panel = $("#sb-panel", root);
+    var build = $("#sb-build", root);
+    var progress = $("#sb-progress", root);
+    var fill = $("#sb-fill", root);
+    var status = $("#sb-status", root);
+    var dl = $("#sb-dl", root);
+    var running = false;
+    function reset() {
+      if (panel) panel.setAttribute("hidden", "");
+      if (progress) progress.setAttribute("hidden", "");
+      if (status) status.setAttribute("hidden", "");
+      if (dl) dl.setAttribute("hidden", "");
+      if (fill) fill.style.width = "0%";
+      if (build) build.disabled = false;
+    }
+    function runBuild() {
+      if (progress) progress.removeAttribute("hidden");
+      if (status) {
+        status.textContent = "Extracting slide images…";
+        status.removeAttribute("hidden");
+      }
+      if (fill) fill.style.width = "35%";
+      return wait(prefersReducedMotion() ? 80 : 700).then(function () {
+        if (status) status.textContent = "Assembling blog with deck images…";
+        if (fill) fill.style.width = "75%";
+        return wait(prefersReducedMotion() ? 80 : 700);
+      }).then(function () {
+        if (fill) fill.style.width = "100%";
+        if (status) status.textContent = "Blog ready — download below";
+        if (dl) dl.removeAttribute("hidden");
+      });
+    }
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        350,
+        function () { return moveCursorTo(btn, { shell: root }); },
+        function () { if (panel) panel.removeAttribute("hidden"); },
+        400,
+        function () { return moveCursorTo(build, { shell: root }); },
+        function () {
+          if (build) build.disabled = true;
+          return runBuild();
+        },
+        800,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action]");
+      if (!t) return;
+      var a = t.getAttribute("data-action");
+      if (a === "sb-open") {
+        if (panel) panel.removeAttribute("hidden");
+      } else if (a === "sb-build") {
+        runBuild();
+      }
+    });
+    registerDemo("slidestoblog", { play: runAutoplay });
+  }
+
+  /* ---- Snapshots demo ---- */
+  function initSnapshotsDemo(root) {
+    var start = $("#snap-start", root);
+    var marquee = $("#snap-marquee", root);
+    var thumbs = $("#snap-thumbs", root);
+    var empty = $("#snap-empty", root);
+    var pdfBtn = $("#snap-pdf", root);
+    var toast = $("#snap-toast", root);
+    var running = false;
+    var shotCount = 0;
+    function reset() {
+      shotCount = 0;
+      if (marquee) marquee.setAttribute("hidden", "");
+      if (toast) toast.setAttribute("hidden", "");
+      if (pdfBtn) pdfBtn.setAttribute("hidden", "");
+      if (empty) {
+        empty.removeAttribute("hidden");
+        empty.textContent = "No shots yet";
+      }
+      if (thumbs) {
+        $all(".mock-snap-thumb", thumbs).forEach(function (el) { el.remove(); });
+      }
+    }
+    function addThumb() {
+      shotCount += 1;
+      if (empty) empty.setAttribute("hidden", "");
+      if (thumbs) {
+        var t = document.createElement("div");
+        t.className = "mock-snap-thumb is-appearing";
+        t.textContent = "Shot " + shotCount;
+        thumbs.appendChild(t);
+      }
+      if (pdfBtn) pdfBtn.removeAttribute("hidden");
+    }
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        350,
+        function () { return moveCursorTo(start, { shell: root }); },
+        function () {
+          if (marquee) marquee.removeAttribute("hidden");
+        },
+        600,
+        function () {
+          if (marquee) marquee.setAttribute("hidden", "");
+          addThumb();
+        },
+        400,
+        function () { return moveCursorTo(pdfBtn, { shell: root }); },
+        function () {
+          if (toast) {
+            toast.textContent = "PDF ready ✓";
+            toast.removeAttribute("hidden");
+          }
+        },
+        1400,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action]");
+      if (!t) return;
+      var a = t.getAttribute("data-action");
+      if (a === "snap-start") {
+        if (marquee) {
+          marquee.removeAttribute("hidden");
+          setTimeout(function () {
+            marquee.setAttribute("hidden", "");
+            addThumb();
+          }, prefersReducedMotion() ? 40 : 500);
+        } else addThumb();
+      } else if (a === "snap-pdf") {
+        if (toast) {
+          toast.textContent = "PDF ready ✓";
+          toast.removeAttribute("hidden");
+        }
+      }
+    });
+    registerDemo("snapshots", { play: runAutoplay });
+  }
+
 function boot() {
     var yt = $('[data-demo="youtube"]');
     if (yt) initYoutubeDemo(yt);
@@ -1233,6 +1627,18 @@ function boot() {
     if (studio) initStudioDemo(studio);
     var prompts = $('[data-demo="prompts"]');
     if (prompts) initPromptsDemo(prompts);
+    var webpage = $('[data-demo="webpage"]');
+    if (webpage) initWebpageDemo(webpage);
+    var xtwitter = $('[data-demo="xtwitter"]');
+    if (xtwitter) initXTwitterDemo(xtwitter);
+    var highlights = $('[data-demo="highlights"]');
+    if (highlights) initHighlightsDemo(highlights);
+    var chatexport = $('[data-demo="chatexport"]');
+    if (chatexport) initChatExportDemo(chatexport);
+    var slidestoblog = $('[data-demo="slidestoblog"]');
+    if (slidestoblog) initSlidesToBlogDemo(slidestoblog);
+    var snapshots = $('[data-demo="snapshots"]');
+    if (snapshots) initSnapshotsDemo(snapshots);
 
     if ($(".md-layout")) {
       wireMasterDetail();

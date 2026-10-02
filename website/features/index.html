@@ -18,13 +18,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/features/features.css">
-    <title>Features – NotebookTools for NotebookLM</title>
-    <meta name="description" content="Explore NotebookTools features with interactive demos: YouTube import, bulk queue, notebooks hub, Drive refresh, Studio & podcasts, and prompt library.">
+    <title>Features — NotebookTools for NotebookLM</title>
+    <meta name="description" content="Explore NotebookTools features with interactive demos: YouTube, bulk import, notebooks hub, Drive refresh, Studio, prompts, webpage, X, highlights, chat export, slides-to-blog, and snapshots.">
     <link rel="canonical" href="https://www.notebooktools.com/features">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
-    <meta property="og:title" content="Features – NotebookTools">
-    <meta property="og:description" content="Explore NotebookTools features with interactive demos: YouTube import, bulk queue, notebooks hub, Drive refresh, Studio & podcasts, and prompt library.">
+    <meta property="og:title" content="Features — NotebookTools for NotebookLM">
+    <meta property="og:description" content="Explore NotebookTools features with interactive demos: YouTube, bulk import, notebooks hub, Drive refresh, Studio, prompts, webpage, X, highlights, chat export, slides-to-blog, and snapshots.">
     <meta property="og:url" content="https://www.notebooktools.com/features">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -68,6 +68,12 @@
           <option value="drive-refresh">Drive refresh</option>
           <option value="studio-podcasts">Studio & podcasts</option>
           <option value="prompts">Prompt library</option>
+          <option value="add-webpage">Add webpage</option>
+          <option value="x-twitter">X / Twitter</option>
+          <option value="highlights">Highlights</option>
+          <option value="chat-export">Chat export</option>
+          <option value="slides-to-blog">Slides to blog</option>
+          <option value="snapshots">Snapshots</option>
         </select>
       </div>
       <div class="md-layout">
@@ -77,7 +83,7 @@
           <h2 class="md-sidebar-title">Explore</h2>
         </div>
         <nav class="md-nav" id="features-nav">
-          <a class="md-nav-item md-nav-overview" href="/features" class="is-active" aria-current="page" data-feature="overview">
+          <a class="md-nav-item md-nav-overview is-active" href="/features" aria-current="page" data-feature="overview">
             <span class="md-nav-icon md-icon-overview"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Overview</span>
@@ -124,6 +130,48 @@
             <span class="md-nav-text">
               <span class="md-nav-title">Prompt library</span>
               <span class="md-nav-desc">Curated prompts in the side panel — type / in NotebookLM…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/add-webpage" data-feature="add-webpage">
+            <span class="md-nav-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Add webpage</span>
+              <span class="md-nav-desc">Import the current tab URL from the side panel into any notebook.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/x-twitter" data-feature="x-twitter">
+            <span class="md-nav-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">X / Twitter</span>
+              <span class="md-nav-desc">Import threads and posts as clean text sources.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/highlights" data-feature="highlights">
+            <span class="md-nav-icon md-icon-highlights"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19l3.5-1L19 7.5 16.5 5 5 16.5V19z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.5 7l2.5 2.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Highlights</span>
+              <span class="md-nav-desc">Select text → right-click → Add to NotebookLM.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/chat-export" data-feature="chat-export">
+            <span class="md-nav-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Chat export</span>
+              <span class="md-nav-desc">Export NotebookLM conversations — Markdown, text, or PDF.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/slides-to-blog" data-feature="slides-to-blog">
+            <span class="md-nav-icon md-icon-slidestoblog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h4M7 12h10M7 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 7l3 2-3 2V7z" fill="currentColor"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Slides to blog</span>
+              <span class="md-nav-desc">Turn a NotebookLM slide deck into a blog or guide with images.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/snapshots" data-feature="snapshots">
+            <span class="md-nav-icon md-icon-snapshots"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 6l1.5-2h5L16 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Snapshots</span>
+              <span class="md-nav-desc">Capture screen areas, annotate, and assemble PDF or guide exports.</span>
             </span>
           </a>
         </nav>
@@ -183,6 +231,48 @@
               <span class="md-overview-body">
                 <strong>Prompt library</strong>
                 <span>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="add-webpage" data-action="select-feature">
+              <span class="md-overview-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Add webpage</strong>
+                <span>Import the current tab URL from the side panel — any article or docs page.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="x-twitter" data-action="select-feature">
+              <span class="md-overview-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>X / Twitter import</strong>
+                <span>Import threads and posts as clean text sources with one click.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="highlights" data-action="select-feature">
+              <span class="md-overview-icon md-icon-highlights"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19l3.5-1L19 7.5 16.5 5 5 16.5V19z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.5 7l2.5 2.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Highlights</strong>
+                <span>Select text → right-click → Add to NotebookLM as a clean text source.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="chat-export" data-action="select-feature">
+              <span class="md-overview-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Chat export</strong>
+                <span>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="slides-to-blog" data-action="select-feature">
+              <span class="md-overview-icon md-icon-slidestoblog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h4M7 12h10M7 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 7l3 2-3 2V7z" fill="currentColor"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Slides to blog</strong>
+                <span>Turn a Studio slide deck into a blog or guide with slide images and export formats.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="snapshots" data-action="select-feature">
+              <span class="md-overview-icon md-icon-snapshots"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 6l1.5-2h5L16 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Snapshots</strong>
+                <span>Capture screen areas (Alt+Shift+S), annotate, and assemble PDF or guide exports.</span>
               </span>
             </button>
           </div>
@@ -711,6 +801,235 @@
         </ol>
       </section>
         </article>
+        <article class="md-panel" data-panel="add-webpage" id="panel-add-webpage" hidden>
+          <h1 class="sr-only">Add webpage</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="webpage">
+          <div class="mock-demo mock-webpage">
+            <div class="mock-browser-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">docs.example.com/guide</span></div>
+            <div class="mock-split">
+              <div class="mock-page">
+                <h3 class="mock-h">Product architecture guide</h3>
+                <p class="mock-p">A long-form article you want in NotebookLM…</p>
+                <p class="mock-p mock-dim">Scroll, read, then import from the side panel.</p>
+              </div>
+              <aside class="mock-sidepanel" id="wp-sidepanel">
+                <div class="mock-sp-head">NotebookTools</div>
+                <div class="mock-sp-modes"><span class="is-on">Web</span><span>YouTube</span></div>
+                <p class="mock-sp-preview" id="wp-preview">docs.example.com/guide</p>
+                <button type="button" class="mock-primary" id="wp-add" data-action="wp-add">Add to NotebookLM</button>
+                <p class="mock-toast" id="wp-toast" hidden>Added to Research notes ✓</p>
+              </aside>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a page</strong><p>Browse to any article, docs site, or research page in Chrome.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Open the side panel</strong><p>Click NotebookTools and stay on the Web import mode.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose an existing notebook or create a new one.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Add to NotebookLM</strong><p>One click sends the page URL as a NotebookLM source.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="x-twitter" id="panel-x-twitter" hidden>
+          <h1 class="sr-only">X / Twitter</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="xtwitter">
+          <div class="mock-demo mock-x">
+            <div class="mock-browser-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">x.com/user/status/…</span></div>
+            <div class="mock-x-feed">
+              <article class="mock-tweet is-focus" id="x-tweet">
+                <div class="mock-tweet-meta">@researcher · 2h</div>
+                <p class="mock-tweet-body">Thread: five papers that changed how we think about retrieval-augmented generation…</p>
+                <button type="button" class="mock-nt-btn" id="x-add-btn" data-action="x-open">+ NotebookLM</button>
+              </article>
+              <div class="mock-picker" id="x-picker" hidden>
+                <p class="mock-picker-title">Add thread to</p>
+                <button type="button" class="mock-nb-item is-selected" data-action="x-pick">Research notes</button>
+                <button type="button" class="mock-nb-item" data-action="x-pick">AI reading list</button>
+                <button type="button" class="mock-primary" id="x-confirm" data-action="x-confirm">Import as text</button>
+              </div>
+              <p class="mock-toast" id="x-toast" hidden>Thread imported ✓</p>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a post or thread</strong><p>Go to an X/Twitter status or article page.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click NotebookTools</strong><p>Use the in-page button on supported X pages.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Choose a notebook</strong><p>Pick where the cleaned text should land.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Import as text</strong><p>The thread is saved as a NotebookLM text source.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="highlights" id="panel-highlights" hidden>
+          <h1 class="sr-only">Highlights</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="highlights">
+          <div class="mock-demo mock-highlights">
+            <div class="mock-browser-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">nature.com/articles/…</span></div>
+            <div class="mock-article">
+              <p class="mock-p">Researchers found that smaller models with better retrieval often beat larger ones on grounded QA.</p>
+              <p class="mock-p"><mark class="mock-mark is-selected" id="hl-mark">Select this sentence — the key claim you want saved.</mark> Further experiments confirmed the pattern.</p>
+              <div class="mock-ctx" id="hl-menu" hidden>
+                <button type="button" class="mock-ctx-item" id="hl-add" data-action="hl-add">Add to NotebookLM</button>
+                <button type="button" class="mock-ctx-item muted">Copy</button>
+              </div>
+              <p class="mock-toast" id="hl-toast" hidden>Highlight added as text source ✓</p>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Select text</strong><p>Highlight a passage on any webpage.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Right-click</strong><p>Open the context menu and choose Add to NotebookLM.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose an existing notebook or create new.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Saved as text</strong><p>Your highlight becomes a NotebookLM text source.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="chat-export" id="panel-chat-export" hidden>
+          <h1 class="sr-only">Chat export</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="chatexport">
+          <div class="mock-demo mock-chat-export">
+            <div class="nlm-app nlm-app-export">
+              <header class="nlm-topbar"><div class="nlm-top-left"><span class="nlm-logo-dot"></span><span class="nlm-notebook-title">Research — AI tools</span></div>
+                <button type="button" class="mock-export-btn" id="ce-btn" data-action="ce-open">Export chat</button>
+              </header>
+              <div class="nlm-body ce-body">
+                <section class="nlm-chat">
+                  <div class="nlm-messages">
+                    <div class="nlm-msg bot">Here are the five themes across your sources…</div>
+                    <div class="nlm-msg user">Turn that into a one-page brief.</div>
+                    <div class="nlm-msg bot">Brief draft ready — citations included.</div>
+                  </div>
+                </section>
+                <div class="mock-export-menu" id="ce-menu" hidden>
+                  <button type="button" class="mock-format" data-action="ce-format" data-fmt="md" id="ce-md">Markdown</button>
+                  <button type="button" class="mock-format" data-action="ce-format" data-fmt="txt">Plain text</button>
+                  <button type="button" class="mock-format" data-action="ce-format" data-fmt="pdf">PDF</button>
+                </div>
+                <p class="mock-toast" id="ce-toast" hidden>Downloaded conversation.md ✓</p>
+              </div>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook chat</strong><p>Work in NotebookLM as usual.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Open export</strong><p>Use the NotebookTools chat export control on the page.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a format</strong><p>Choose Markdown, plain text, or PDF print view.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Save your trail</strong><p>Download the conversation for notes, sharing, or archives.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="slides-to-blog" id="panel-slides-to-blog" hidden>
+          <h1 class="sr-only">Slides to blog</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="slidestoblog">
+          <div class="mock-demo mock-slides-blog">
+            <div class="nlm-app">
+              <header class="nlm-topbar"><div class="nlm-top-left"><span class="nlm-logo-dot"></span><span class="nlm-notebook-title">Launch deck notebook</span></div>
+                <button type="button" class="mock-blog-btn" id="sb-btn" data-action="sb-open">Blog workflow</button>
+              </header>
+              <div class="mock-sb-body">
+                <div class="mock-deck-card">
+                  <div class="mock-deck-thumb">Slides · 12</div>
+                  <strong>Product launch deck</strong>
+                  <span class="mock-dim">Studio artifact · Ready</span>
+                </div>
+                <div class="mock-blog-panel" id="sb-panel" hidden>
+                  <label class="mock-label">Slide deck</label>
+                  <div class="mock-select is-on">Product launch deck (12 slides)</div>
+                  <button type="button" class="mock-primary" id="sb-build" data-action="sb-build">Build blog</button>
+                  <div class="mock-progress" id="sb-progress" hidden>
+                    <div class="mock-progress-fill" id="sb-fill"></div>
+                  </div>
+                  <p class="mock-status" id="sb-status" hidden>Extracting slide images…</p>
+                  <div class="mock-downloads" id="sb-dl" hidden>
+                    <button type="button" class="mock-format is-done">MD</button>
+                    <button type="button" class="mock-format is-done">HTML</button>
+                    <button type="button" class="mock-format is-done">DOCX</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Generate a slide deck</strong><p>Create a Studio slide deck in your NotebookLM notebook.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Open Blog workflow</strong><p>Use the NotebookTools blog workflow bar on NotebookLM.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick the deck</strong><p>Choose a ready slide deck and optional instructions.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Build &amp; export</strong><p>Assemble the post with slide images and download Markdown, HTML, or more.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="snapshots" id="panel-snapshots" hidden>
+          <h1 class="sr-only">Snapshots</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="snapshots">
+          <div class="mock-demo mock-snapshots">
+            <div class="mock-browser-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">app.example.com/settings</span></div>
+            <div class="mock-snap-stage">
+              <div class="mock-page-dim">
+                <div class="mock-ui-block"></div>
+                <div class="mock-ui-block short"></div>
+              </div>
+              <div class="mock-marquee" id="snap-marquee" hidden></div>
+              <button type="button" class="mock-primary mock-snap-trigger" id="snap-start" data-action="snap-start">Capture area (Alt+Shift+S)</button>
+              <aside class="mock-snap-tray" id="snap-tray">
+                <div class="mock-sp-head">Snapshots</div>
+                <div class="mock-snap-thumbs" id="snap-thumbs">
+                  <p class="mock-dim" id="snap-empty">No shots yet</p>
+                </div>
+                <button type="button" class="mock-primary" id="snap-pdf" data-action="snap-pdf" hidden>Assemble PDF</button>
+                <p class="mock-toast" id="snap-toast" hidden>PDF ready ✓</p>
+              </aside>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Start a capture</strong><p>Press Alt+Shift+S or use Capture snapshot area from the menu.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Select &amp; annotate</strong><p>Drag to select a region, then mark up what matters.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Save to Snapshots</strong><p>Shots land in the side panel Snapshots tab.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Assemble PDF or guide</strong><p>Combine snapshots into a PDF or guide workflow for NotebookLM.</p></div></li>
+        </ol>
+      </section>
+        </article>
         </div>
       </div>
       <noscript class="md-noscript-seo">
@@ -721,6 +1040,12 @@
           <li><h2>Google Drive source refresh</h2><p>Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.</p><p>See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</p></li>
           <li><h2>Studio & podcasts</h2><p>NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.</p><p>Generate Audio Overviews and play podcasts across every notebook in one player.</p></li>
           <li><h2>Prompt library</h2><p>NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.</p><p>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</p></li>
+          <li><h2>Add webpage</h2><p>Add any webpage to NotebookLM from the NotebookTools side panel. One click imports the current tab URL as a source.</p><p>Import the current tab URL from the side panel — any article or docs page.</p></li>
+          <li><h2>X / Twitter import</h2><p>Import X (Twitter) posts and threads into NotebookLM as clean text sources with the NotebookTools in-page button.</p><p>Import threads and posts as clean text sources with one click.</p></li>
+          <li><h2>Highlights</h2><p>Select text on any page, right-click, and add the highlight to NotebookLM as a text source with NotebookTools.</p><p>Select text → right-click → Add to NotebookLM as a clean text source.</p></li>
+          <li><h2>Chat export</h2><p>Export NotebookLM conversations from the page with NotebookTools. Download Markdown, plain text, or open a printable PDF view.</p><p>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</p></li>
+          <li><h2>Slides to blog</h2><p>Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.</p><p>Turn a Studio slide deck into a blog or guide with slide images and export formats.</p></li>
+          <li><h2>Snapshots</h2><p>Capture webpage snapshots with NotebookTools, annotate them, and assemble PDF or guide exports for NotebookLM workflows.</p><p>Capture screen areas (Alt+Shift+S), annotate, and assemble PDF or guide exports.</p></li>
         </ul>
       </noscript>
     </main>
