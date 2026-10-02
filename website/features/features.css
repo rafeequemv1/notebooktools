@@ -2012,6 +2012,10 @@
 }
 
 .demo-play-btn {
+  margin-top: 0;
+}
+
+.md-demo-head .demo-play-btn {
   margin-top: 16px;
 }
 
@@ -2545,7 +2549,45 @@
 }
 
 .feature-master .feature-breadcrumb {
-  margin: 1rem 0 0.75rem;
+  position: static;
+  top: auto;
+  z-index: auto;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: transparent;
+  border-bottom: none;
+  color: #5f6368;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 400;
+  gap: 0.35rem;
+  margin: 0.35rem 0 0.5rem;
+  padding: 0;
+  max-width: none;
+  width: auto;
+  line-height: 1.3;
+}
+
+.feature-master .feature-breadcrumb a {
+  color: #5f6368;
+  text-decoration: none;
+}
+
+.feature-master .feature-breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.feature-master .feature-breadcrumb-sep {
+  color: #bdc1c6;
+  font-weight: 400;
+  user-select: none;
+}
+
+.feature-master .feature-breadcrumb [aria-current="page"] {
+  color: #3c4043;
+  font-weight: 500;
 }
 
 .md-mobile-select-wrap {
@@ -2821,4 +2863,200 @@
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+/* ========== Master-detail polish: minimal crumbs, equal demos ========== */
+
+.feature-master .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.feature-master .md-main {
+  padding-top: 0;
+}
+
+.feature-master .md-demo-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 0 0.45rem;
+  min-height: 2rem;
+}
+
+.feature-master .md-demo-toolbar .demo-play-btn {
+  margin-top: 0;
+}
+
+.feature-master .md-demo {
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+/* Equal-size demo stage for every feature — no jump when switching */
+.feature-master .demo-shell {
+  --md-demo-h: calc(100vh - 10.25rem);
+  max-width: none;
+  margin: 0;
+  width: 100%;
+  height: var(--md-demo-h);
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.feature-master .demo-label {
+  display: none;
+}
+
+.feature-master .demo-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Panels that live directly in demo-shell (bulk, hub, etc.) fill the stage */
+.feature-master .demo-shell > .browser-chrome {
+  flex-shrink: 0;
+}
+
+.feature-master .demo-shell > .bulk-demo,
+.feature-master .demo-shell > .hub-demo,
+.feature-master .demo-shell > .nlm-app,
+.feature-master .demo-shell > .yt-watch {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.feature-master .demo-panel[hidden] {
+  display: none !important;
+}
+
+.feature-master .demo-panel.is-active {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.feature-master .demo-panel.is-active > .browser-chrome {
+  flex-shrink: 0;
+}
+
+.feature-master .demo-panel.is-active > .yt-watch,
+.feature-master .demo-panel.is-active > .nlm-app,
+.feature-master .demo-panel.is-active > .bulk-demo,
+.feature-master .demo-panel.is-active > .hub-demo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.feature-master .nlm-app {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-master .nlm-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+}
+
+.feature-master .nlm-sources.wide {
+  min-height: 0;
+}
+
+.feature-master .yt-watch {
+  min-height: 0;
+  height: 100%;
+}
+
+.feature-master .bulk-demo,
+.feature-master .hub-demo {
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.feature-master .demo-reset {
+  flex-shrink: 0;
+  margin: 8px auto 0;
+}
+
+/* How-it-works sits below the dominant demo */
+.feature-master .feature-how {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 960px) {
+  .feature-master .demo-shell {
+    --md-demo-h: calc(100vh - 12.5rem);
+    min-height: 480px;
+  }
+}
+
+@media (max-width: 640px) {
+  .feature-master .demo-shell {
+    --md-demo-h: calc(100vh - 13.5rem);
+    min-height: 420px;
+  }
+
+  .feature-master .md-demo-toolbar {
+    justify-content: stretch;
+  }
+
+  .feature-master .md-demo-toolbar .demo-play-btn {
+    width: 100%;
+  }
+}
+
+.feature-master .demo-shell > .demo-status {
+  flex-shrink: 0;
+  padding: 6px 4px 0;
+}
+
+.feature-master .demo-shell > .nlm-app {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.feature-master .md-layout {
+  min-height: calc(100vh - 8.5rem);
+  align-items: stretch;
+}
+
+.feature-master .md-detail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.feature-master .md-panel.is-active {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.feature-master .md-panel.is-active > .md-demo {
+  flex: 0 0 auto;
 }
