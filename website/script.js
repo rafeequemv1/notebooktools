@@ -213,3 +213,36 @@ initBlogToc();
 enhancePromptBlocks();
 initPromptCopy();
 initPromptFilter();
+
+const CHECKOUT_SUCCESS_PARAM = "checkout";
+const CHECKOUT_SUCCESS_VALUE = "success";
+
+function initCheckoutSuccessBanner() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get(CHECKOUT_SUCCESS_PARAM) !== CHECKOUT_SUCCESS_VALUE) {
+    return;
+  }
+
+  const banner = document.getElementById("checkout-success");
+  if (!banner) {
+    return;
+  }
+
+  banner.hidden = false;
+
+  const dismiss = banner.querySelector(".checkout-success-dismiss");
+  if (dismiss) {
+    dismiss.addEventListener("click", () => {
+      banner.hidden = true;
+    });
+  }
+
+  const install = document.getElementById("install");
+  if (install) {
+    window.setTimeout(() => {
+      install.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
+  }
+}
+
+initCheckoutSuccessBanner();

@@ -15,7 +15,7 @@
     <title>NotebookTools — Import, Organize &amp; Power NotebookLM</title>
     <meta
       name="description"
-      content="Free Chrome extension for NotebookLM: bulk import YouTube, web &amp; X, notebooks hub with folders, duplicate cleanup, Drive source refresh, podcast player, Studio tools, and prompt library."
+      content="NotebookTools for NotebookLM — lifetime Chrome extension. Bulk import, notebooks hub, Studio tools, podcast player &amp; prompts. One-time $49 (₹2,500 in India)."
     >
     <meta name="keywords" content="NotebookLM, Chrome extension, import YouTube to NotebookLM, NotebookTools, bulk import, podcast player, NotebookLM prompts">
     <meta name="author" content="NotebookTools">
@@ -31,18 +31,18 @@
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:locale" content="en_US">
     <meta property="og:title" content="NotebookTools — Import, Organize &amp; Power NotebookLM">
-    <meta property="og:description" content="Bulk import, notebooks hub, duplicate cleanup, podcast player, Studio tools, prompts &amp; more — free Chrome extension for NotebookLM.">
+    <meta property="og:description" content="Bulk import, notebooks hub, Studio tools, podcasts &amp; prompts — lifetime Chrome extension for NotebookLM. $49 once · ₹2,500 in India.">
     <meta property="og:url" content="https://www.notebooktools.com/">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NotebookTools — Import to NotebookLM">
-    <meta name="twitter:description" content="Everything you need to feed and manage NotebookLM — import, organize, Studio, podcasts, prompts. Free.">
+    <meta name="twitter:description" content="Import, organize, Studio, podcasts &amp; prompts for NotebookLM. Lifetime license — $49 once · ₹2,500 in India.">
     <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
-    <meta name="theme-color" content="#fdfbf7">
+    <meta name="theme-color" content="#faf9f7">
     <link rel="icon" href="assets/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script type="application/ld+json">
     {
@@ -52,7 +52,7 @@
           "@type": "WebSite",
           "name": "NotebookTools",
           "url": "https://www.notebooktools.com/",
-          "description": "Free Chrome extension for importing and managing Google NotebookLM notebooks.",
+          "description": "Chrome extension for importing and managing Google NotebookLM notebooks. Lifetime license — $49 USD, ₹2,500 in India.",
           "inLanguage": "en-US"
         },
         {
@@ -67,7 +67,7 @@
           "name": "NotebookTools",
           "applicationCategory": "BrowserApplication",
           "operatingSystem": "Chrome",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "offers": { "@type": "Offer", "price": "49", "priceCurrency": "USD" },
           "description": "Import, organize, and extend NotebookLM with bulk import, notebooks hub, duplicate cleanup, podcast player, Studio tools, and prompt library.",
           "url": "https://www.notebooktools.com/",
           "downloadUrl": "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj",
@@ -89,6 +89,13 @@
     </script>
   </head>
   <body>
+    <div id="checkout-success" class="checkout-success" hidden role="status">
+      <div class="checkout-success-inner">
+        <p><strong>Thanks for your purchase!</strong> Check your email for the Dodo Payments receipt. Next, install the extension from the Chrome Web Store.</p>
+        <a class="button button-primary button-sm" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">Install extension</a>
+        <button type="button" class="checkout-success-dismiss" aria-label="Dismiss">&times;</button>
+      </div>
+    </div>
     <header class="site-header">
       <a class="logo" href="/">
         <img class="logo-img logo-mark-header" src="assets/logo-mark-32.png" alt="NotebookTools logo" width="32" height="32">
@@ -103,9 +110,12 @@
         <a href="/support">Support</a>
         <a href="#install">Install</a>
       </nav>
-      <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
-        <img class="chrome-store-badge chrome-store-badge-sm" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
-      </a>
+      <div class="header-cta-group">
+        <a class="button button-primary button-sm header-buy" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime</a>
+        <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+          <img class="chrome-store-badge chrome-store-badge-sm" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+        </a>
+      </div>
     </header>
 
     <main>
@@ -113,12 +123,12 @@
         <div class="hero-glow" aria-hidden="true"></div>
         <div class="hero-inner">
           <div class="hero-copy">
-            <p class="eyebrow">Built for NotebookLM</p>
+            <p class="eyebrow">Lifetime Chrome extension for NotebookLM</p>
             <h1>Import faster. Organize smarter. Use NotebookLM fully.</h1>
             <p class="lead">
-              NotebookTools is the free Chrome extension that goes beyond one-click import —
-              bulk queues, a full notebooks hub, duplicate cleanup, Drive refresh, podcast playback,
-              Studio tools, and a prompt library. All using your existing Google sign-in.
+              The lifetime Chrome extension for NotebookLM — bulk import, a full notebooks hub,
+              duplicate cleanup, Drive refresh, Studio tools, podcast playback, and prompts.
+              Pay once. Uses your existing Google sign-in.
             </p>
 
             <div class="brand-flow brand-flow-lg" aria-label="Sources to NotebookLM">
@@ -134,16 +144,16 @@
             </div>
 
             <div class="hero-actions">
+              <a class="button button-primary button-lg" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
               <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
                 <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
               </a>
-              <a class="button button-ghost" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">Open NotebookLM</a>
             </div>
 
             <ul class="hero-trust">
-              <li>Free — every feature included</li>
+              <li>$49 · ₹2,500 in India</li>
+              <li>One-time · no subscription</li>
               <li>Uses your NotebookLM session</li>
-              <li>No extra account or backend</li>
             </ul>
           </div>
 
@@ -256,7 +266,7 @@
         <div class="section-head center">
           <p class="eyebrow">Features</p>
           <h2>Everything in one extension</h2>
-          <p class="section-lead">Premium, minimal UI — designed to match NotebookLM’s research workflow.</p>
+          <p class="section-lead">A calm, focused toolkit that matches how you already research in NotebookLM.</p>
         </div>
 
         <div class="feature-category">
@@ -441,13 +451,39 @@
       <section class="pricing" id="pricing">
         <div class="section-head center">
           <p class="eyebrow">Pricing</p>
-          <h2>Free — full access</h2>
-          <p class="section-lead">Every feature. No paywall. No subscription. Just your Google sign-in.</p>
+          <h2>Lifetime access — pay once</h2>
+          <p class="section-lead">No subscription. Every feature included. Same checkout link worldwide.</p>
         </div>
+
+        <div class="pricing-compare" aria-label="How NotebookTools compares">
+          <div class="compare-card">
+            <p class="compare-label">Free tools</p>
+            <p class="compare-price">Free</p>
+            <p class="compare-note">Useful start — then limits, watermarks, or missing bulk &amp; hub features.</p>
+          </div>
+          <div class="compare-card">
+            <p class="compare-label">Typical subscriptions</p>
+            <p class="compare-price">~$59<span>/yr</span></p>
+            <p class="compare-note">Recurring bills for import helpers that stay thin on organization &amp; Studio.</p>
+          </div>
+          <div class="compare-card">
+            <p class="compare-label">Typical lifetime</p>
+            <p class="compare-price">~$99</p>
+            <p class="compare-note">One-time peers often land near three figures for a similar promise.</p>
+          </div>
+          <div class="compare-card compare-card-accent">
+            <p class="compare-label">NotebookTools</p>
+            <p class="compare-price">$49</p>
+            <p class="compare-note">Lifetime · full toolkit · ₹2,500 in India on the same link.</p>
+          </div>
+        </div>
+
         <div class="pricing-card">
-          <div class="pricing-badge">Free</div>
+          <div class="pricing-badge">Lifetime license</div>
           <h3>NotebookTools</h3>
-          <p class="pricing-price">$0 <span>forever</span></p>
+          <p class="pricing-price">$49 <span>one-time</span></p>
+          <p class="pricing-inr">₹2,500 in India · same checkout</p>
+          <p class="pricing-lead">Checkout via Dodo Payments. You get a receipt/license email, then install from the Chrome Web Store. Account-based unlock in extension settings arrives with Supabase later — your receipt is proof of purchase for now.</p>
           <ul class="pricing-features">
             <li>Side panel import — web, YouTube, X, text, bulk queue</li>
             <li>Extract links from article content (context menu)</li>
@@ -460,9 +496,13 @@
             <li>Prompt library &amp; <code>/</code> slash on NotebookLM</li>
             <li>Chat export &amp; notes panel</li>
           </ul>
-          <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
-            <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
-          </a>
+          <div class="pricing-actions">
+            <a class="button button-primary button-lg pricing-buy" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+            <p class="pricing-fine">India checkout shows ₹2,500 automatically</p>
+            <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+              <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Install extension — Chrome Web Store" width="248" height="60">
+            </a>
+          </div>
         </div>
       </section>
 
@@ -475,13 +515,13 @@
           <details class="faq-item">
             <summary>What is NotebookTools?</summary>
             <div class="faq-answer">
-              <p>NotebookTools is a free Chrome extension that helps you import content into Google NotebookLM and manage notebooks from a dedicated app — bulk import, organization, duplicate cleanup, Drive refresh, Studio tools, podcast playback, and prompts.</p>
+              <p>NotebookTools is a Chrome extension that helps you import content into Google NotebookLM and manage notebooks from a dedicated app — bulk import, organization, duplicate cleanup, Drive refresh, Studio tools, podcast playback, and prompts. Lifetime license via a one-time purchase.</p>
             </div>
           </details>
           <details class="faq-item">
             <summary>Is NotebookTools free?</summary>
             <div class="faq-answer">
-              <p>Yes. Every feature is free with no paywall, subscription, or premium tier.</p>
+              <p>No — NotebookTools is a one-time lifetime purchase: <strong>$49 USD</strong> globally, or <strong>₹2,500 INR</strong> when checking out from India (same link: dodo.pe/notebooktools). No subscription. After payment you get a Dodo Payments receipt/license email, then install from the Chrome Web Store. Account-based unlock in extension settings comes later with Supabase; your receipt is proof of purchase for now.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -503,6 +543,12 @@
             </div>
           </details>
           <details class="faq-item">
+            <summary>Why $49 instead of a subscription?</summary>
+            <div class="faq-answer">
+              <p>Many NotebookLM companions charge around <strong>$59/year</strong> or near <strong>$99</strong> for lifetime. Free tools often cap imports or features. NotebookTools is a simple lifetime license at <strong>$49</strong> (₹2,500 in India) — import, organize, Studio, podcasts, and prompts included, with no recurring bill.</p>
+            </div>
+          </details>
+          <details class="faq-item">
             <summary>Does NotebookTools collect my data?</summary>
             <div class="faq-answer">
               <p>No backend server stores your notebooks or sources. Imports go directly from your browser to NotebookLM using your session. See our <a href="/privacy">privacy policy</a>.</p>
@@ -516,16 +562,17 @@
         <div class="install-panel">
           <div class="install-copy">
             <p class="eyebrow">Get started</p>
-            <h2>Build your NotebookLM library today</h2>
+            <h2>Buy once, then install</h2>
             <p>
-              Install NotebookTools, open NotebookLM once to sign in, then import your first
-              video, page, or batch of links in seconds.
+              Purchase a lifetime license ($49 · ₹2,500 in India), install from the Chrome Web Store,
+              open NotebookLM once to sign in, then import your first video, page, or batch of links.
             </p>
+            <a class="button button-primary button-lg" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
             <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
               <img class="chrome-store-badge" src="assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
             </a>
             <a class="button button-ghost button-lg install-secondary" href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-            <p class="install-note">Requires Chrome and a signed-in NotebookLM account.</p>
+            <p class="install-note">After purchase: install from the Chrome Web Store. Requires Chrome and a signed-in NotebookLM account.</p>
           </div>
           <ul class="install-benefits">
             <li>Import · Organize · Studio · Podcast · Prompts</li>
