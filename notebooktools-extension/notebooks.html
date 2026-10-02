@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Notebooks — NotebookTools</title>
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="notebooks.css">
+  </head>
+  <body class="notebooks-body">
+    <div class="notebooks-app">
+      <header class="notebooks-header">
+        <div class="notebooks-header-top">
+          <img class="notebooks-logo" src="logo.png" alt="NotebookTools" width="132" height="16">
+          <div class="notebooks-header-actions">
+            <button type="button" class="header-icon-btn settings-btn" data-open-settings title="Settings" aria-label="Settings">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Dark mode" title="Dark mode">
+              <svg class="theme-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="theme-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="view-toggle" role="group" aria-label="View mode">
+              <button type="button" class="view-toggle-btn" id="viewFoldersButton" data-view="folders" title="Folder view" aria-label="Folder view">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </button>
+              <button type="button" class="view-toggle-btn is-active" id="viewGridButton" data-view="grid" title="Grid view" aria-label="Grid view">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/></svg>
+              </button>
+              <button type="button" class="view-toggle-btn" id="viewListButton" data-view="list" title="List view" aria-label="List view">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="1" y="2" width="12" height="2" rx="1" fill="currentColor"/><rect x="1" y="6" width="12" height="2" rx="1" fill="currentColor"/><rect x="1" y="10" width="12" height="2" rx="1" fill="currentColor"/></svg>
+              </button>
+            </div>
+            <button type="button" class="icon-btn" id="refreshButton" title="Refresh notebooks" aria-label="Refresh notebooks">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="profile-wrap">
+              <button type="button" class="profile-btn" id="profileButton" title="Switch account" aria-haspopup="true" aria-expanded="false">
+                <span id="profileInitial">A</span>
+              </button>
+              <div class="profile-dropdown" id="profileDropdown" hidden></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <nav class="app-tabs" id="appTabs" role="tablist" aria-label="Notebook sections">
+        <button type="button" class="app-tab is-active" data-app-tab="notebooks" role="tab">Notebooks</button>
+        <button type="button" class="app-tab" data-app-tab="podcast" role="tab">Podcast</button>
+        <button type="button" class="app-tab" data-app-tab="sources" role="tab" hidden>Sources</button>
+        <button type="button" class="app-tab" data-app-tab="studio" role="tab" hidden>Studio</button>
+        <button type="button" class="app-tab" data-app-tab="notes" role="tab" hidden>Notes</button>
+      </nav>
+
+      <div class="notebooks-list-chrome" id="notebooksListChrome">
+        <h1 class="notebooks-title" data-i18n="yourNotebooks">Your notebooks</h1>
+        <div class="notebooks-toolbar">
+          <input id="searchInput" type="search" class="notebooks-search" data-i18n-placeholder="searchNotebooks" placeholder="Search notebooks" autocomplete="off" aria-label="Search notebooks">
+          <button type="button" class="button secondary compact" id="createButton" data-i18n="newNotebook">New notebook</button>
+        </div>
+        <nav class="folder-breadcrumb" id="folderBreadcrumb" hidden>
+          <button type="button" class="folder-back-btn" id="folderBackButton">← Folders</button>
+          <span class="folder-current" id="folderCurrentName"></span>
+        </nav>
+        <nav class="folder-bar" id="folderBar" aria-label="Folders"></nav>
+        <nav class="tag-bar" id="tagBar" aria-label="Tags"></nav>
+        <div class="notebooks-toolbar-row">
+          <button type="button" class="nb-tool-btn" id="notebooksSelectToggle">Select</button>
+          <button type="button" class="nb-tool-btn is-danger" id="notebooksBulkDelete" hidden>Delete</button>
+          <label class="sort-field">
+            <span class="sort-label">Sort</span>
+            <select id="sortSelect" class="sort-select" aria-label="Sort notebooks">
+              <option value="title">Title</option>
+              <option value="sources">Sources</option>
+              <option value="tags">Tags</option>
+              <option value="favorites">Favorites</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="notebooks-status" id="pageStatus" role="status" hidden></div>
+
+      <div class="notebooks-list-view" id="notebooksListView">
+        <main class="notebooks-main notebooks-grid" id="notebooksMain" aria-live="polite"></main>
+      </div>
+
+      <section class="podcast-view" id="podcastView" hidden>
+        <div class="podcast-chrome">
+          <h1 class="podcast-title">Podcasts</h1>
+          <p class="podcast-subtitle">Audio Overviews from all your notebooks</p>
+          <div class="podcast-toolbar">
+            <input id="podcastSearch" type="search" class="podcast-search" placeholder="Search podcasts" autocomplete="off" aria-label="Search podcasts">
+            <button type="button" class="button compact" id="podcastScanButton">Scan notebooks</button>
+          </div>
+          <div class="podcast-status" id="podcastStatus" role="status" hidden></div>
+        </div>
+        <div class="podcast-list" id="podcastList"></div>
+        <div class="podcast-player" id="podcastPlayer" hidden>
+          <audio id="podcastAudio" preload="metadata"></audio>
+          <div class="podcast-player-main">
+            <div class="podcast-player-copy">
+              <strong class="podcast-player-title" id="podcastPlayerTitle"></strong>
+              <span class="podcast-player-meta" id="podcastPlayerMeta"></span>
+            </div>
+            <div class="podcast-player-progress" id="podcastPlayerProgress">
+              <span id="podcastPlayerProgressFill"></span>
+            </div>
+            <div class="podcast-player-controls">
+              <button type="button" class="podcast-control-btn" id="podcastPrevButton" aria-label="Previous">Prev</button>
+              <button type="button" class="podcast-control-btn is-primary" id="podcastPlayButton">Play</button>
+              <button type="button" class="podcast-control-btn" id="podcastNextButton" aria-label="Next">Next</button>
+              <span class="podcast-player-time" id="podcastPlayerTime">0:00 / 0:00</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-view" id="notebookDetailView" hidden>
+        <div class="detail-context" id="notebookContextChrome">
+          <div class="detail-head">
+            <div class="detail-head-copy">
+              <h2 class="detail-title" id="detailNotebookTitle"></h2>
+            </div>
+            <div class="detail-head-actions">
+              <div class="detail-notes-wrap">
+                <button type="button" class="button secondary compact" id="detailNotesToggle">Notes</button>
+                <div class="detail-notes-menu" id="detailNotesMenu" hidden></div>
+              </div>
+              <a class="button secondary compact detail-open-btn" id="detailOpenNotebook" href="#" target="_blank" rel="noopener noreferrer">Open in NotebookLM</a>
+            </div>
+          </div>
+        </div>
+        <div class="detail-pane is-active" id="detailSourcesPane" data-pane="sources" role="tabpanel">
+          <div class="detail-pane-inner">
+            <div class="src-toolbar">
+              <input type="search" id="sourcesSearchInput" class="src-search" placeholder="Search sources" autocomplete="off" aria-label="Search sources">
+              <button type="button" class="src-tool-btn" id="sourcesAddBulk">Add sources</button>
+              <button type="button" class="src-tool-btn" id="sourcesCheckFreshness" hidden>Check updates</button>
+              <button type="button" class="src-tool-btn" id="sourcesRefreshStale" hidden>Refresh stale</button>
+              <button type="button" class="src-tool-btn" id="sourcesScanDuplicates" disabled>Scan duplicates</button>
+              <button type="button" class="src-tool-btn" id="sourcesManageButton">Manage</button>
+              <label class="src-view-field">
+                <span class="src-view-label">View</span>
+                <select id="sourcesViewMode" class="src-view-select" aria-label="Sources view mode">
+                  <option value="select" selected>Select</option>
+                  <option value="browse">Browse</option>
+                </select>
+              </label>
+              <button type="button" class="src-tool-btn" id="sourcesBulkExport" hidden>Export selected</button>
+              <button type="button" class="src-tool-btn is-danger" id="sourcesBulkDelete" hidden>Delete selected</button>
+            </div>
+            <div class="src-panel-status" id="sourcesPanelStatus" hidden></div>
+            <nav class="src-panel-filters" id="sourcesFilters" aria-label="Source folders"></nav>
+            <div class="src-panel-list" id="sourcesList"></div>
+          </div>
+        </div>
+        <div class="detail-pane" id="detailStudioPane" data-pane="studio" role="tabpanel" hidden>
+          <div class="detail-pane-inner">
+            <div class="studio-app" id="studioApp"></div>
+          </div>
+        </div>
+        <div class="detail-pane" id="detailNotesPane" data-pane="notes" role="tabpanel" hidden>
+          <div class="detail-pane-inner notes-layout">
+            <div class="notes-panel-status" id="notesPanelStatus" hidden></div>
+            <div class="notes-list" id="notesList"></div>
+            <div class="notes-viewer" id="notesViewer" hidden></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="nt-modal" id="srcEditModal" hidden>
+      <div class="nt-modal-backdrop" id="srcEditBackdrop"></div>
+      <div class="nt-modal-card src-edit-card" role="dialog" aria-modal="true" aria-labelledby="srcEditTitleLabel">
+        <h2 class="nt-modal-title" id="srcEditTitleLabel">Edit source</h2>
+        <input type="text" class="nt-modal-input" id="srcEditTitle" maxlength="120" aria-label="Source title">
+        <textarea class="nt-modal-textarea" id="srcEditText" rows="10" aria-label="Source text"></textarea>
+        <div class="nt-modal-actions">
+          <button type="button" class="button secondary compact" id="srcEditCancel">Cancel</button>
+          <button type="button" class="button compact" id="srcEditSave">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nt-modal" id="srcBulkModal" hidden>
+      <div class="nt-modal-backdrop" id="srcBulkBackdrop"></div>
+      <div class="nt-modal-card src-bulk-card" role="dialog" aria-modal="true" aria-labelledby="srcBulkTitle">
+        <h2 class="nt-modal-title" id="srcBulkTitle">Add sources</h2>
+        <p class="nt-modal-text">Paste webpage or YouTube links, one per line.</p>
+        <div class="src-bulk-actions">
+          <button type="button" class="button secondary compact" id="srcBulkAddTabs">From open tabs</button>
+        </div>
+        <textarea class="nt-modal-textarea src-bulk-paste" id="srcBulkPaste" rows="8" placeholder="https://example.com/article&#10;https://www.youtube.com/watch?v=..." aria-label="Source links"></textarea>
+        <div class="src-bulk-status" id="srcBulkStatus" role="status" hidden></div>
+        <div class="nt-modal-actions">
+          <button type="button" class="button secondary compact" id="srcBulkCancel">Cancel</button>
+          <button type="button" class="button compact" id="srcBulkImport">Import</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nt-modal" id="dupScanModal" hidden>
+      <div class="nt-modal-backdrop" id="dupScanBackdrop"></div>
+      <div class="nt-modal-card dup-scan-card" role="dialog" aria-modal="true" aria-labelledby="dupScanTitle">
+        <div class="dup-scan-head">
+          <h2 class="nt-modal-title" id="dupScanTitle">Find duplicates</h2>
+          <button type="button" class="content-viewer-close" id="dupScanClose" aria-label="Close">×</button>
+        </div>
+        <div class="dup-scan-status" id="dupScanStatus" role="status" hidden></div>
+        <div class="dup-scan-body" id="dupScanBody"></div>
+        <div class="nt-modal-actions dup-scan-actions">
+          <button type="button" class="button secondary compact" id="dupScanSecondary" hidden>Back</button>
+          <button type="button" class="button compact" id="dupScanPrimary">Run fast scan</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="nt-modal" id="srcManageModal" hidden>
+      <div class="nt-modal-backdrop" id="srcManageBackdrop"></div>
+      <div class="nt-modal-card manage-modal-card" role="dialog" aria-modal="true" aria-labelledby="srcManageTitle">
+        <div class="manage-modal-head">
+          <h2 class="nt-modal-title" id="srcManageTitle">Manage sources</h2>
+          <button type="button" class="content-viewer-close" id="srcManageClose" aria-label="Close">×</button>
+        </div>
+        <div class="manage-modal-toolbar">
+          <button type="button" class="button secondary compact" id="srcManageSelectAll">Select all</button>
+          <span class="manage-modal-count" id="srcManageCount">0 selected</span>
+          <div class="manage-modal-actions-inline">
+            <button type="button" class="button secondary compact" id="srcManageOrganize" disabled>Organize</button>
+            <button type="button" class="button compact nt-modal-danger" id="srcManageDelete" disabled>Delete</button>
+          </div>
+        </div>
+        <div class="manage-folder-panel" id="srcManageFolderPanel" hidden>
+          <p class="manage-folder-label">Move selected into folder</p>
+          <div class="manage-folder-list" id="srcManageFolderList"></div>
+          <div class="manage-folder-new">
+            <input type="text" class="nt-modal-input" id="srcManageNewFolder" maxlength="60" placeholder="New folder name" aria-label="New folder name">
+            <button type="button" class="button secondary compact" id="srcManageCreateFolder">Create</button>
+          </div>
+          <button type="button" class="button secondary compact" id="srcManageUnfile">Remove from folders</button>
+        </div>
+        <div class="manage-modal-list" id="srcManageList"></div>
+        <div class="manage-modal-status" id="srcManageStatus" role="status" hidden></div>
+      </div>
+    </div>
+
+    <div class="nt-modal" id="studioManageModal" hidden>
+      <div class="nt-modal-backdrop" id="studioManageBackdrop"></div>
+      <div class="nt-modal-card manage-modal-card" role="dialog" aria-modal="true" aria-labelledby="studioManageTitle">
+        <div class="manage-modal-head">
+          <h2 class="nt-modal-title" id="studioManageTitle">Manage Studio files</h2>
+          <button type="button" class="content-viewer-close" id="studioManageClose" aria-label="Close">×</button>
+        </div>
+        <div class="manage-modal-toolbar">
+          <button type="button" class="button secondary compact" id="studioManageSelectAll">Select all</button>
+          <span class="manage-modal-count" id="studioManageCount">0 selected</span>
+          <div class="manage-modal-actions-inline">
+            <button type="button" class="button secondary compact" id="studioManageOrganize" disabled>Organize</button>
+            <button type="button" class="button compact nt-modal-danger" id="studioManageDelete" disabled>Delete</button>
+          </div>
+        </div>
+        <div class="manage-folder-panel" id="studioManageFolderPanel" hidden>
+          <p class="manage-folder-label">Move selected into folder</p>
+          <div class="manage-folder-list" id="studioManageFolderList"></div>
+          <div class="manage-folder-new">
+            <input type="text" class="nt-modal-input" id="studioManageNewFolder" maxlength="60" placeholder="New folder name" aria-label="New folder name">
+            <button type="button" class="button secondary compact" id="studioManageCreateFolder">Create</button>
+          </div>
+          <button type="button" class="button secondary compact" id="studioManageUnfile">Remove from folders</button>
+        </div>
+        <div class="manage-modal-list" id="studioManageList"></div>
+        <div class="manage-modal-status" id="studioManageStatus" role="status" hidden></div>
+      </div>
+    </div>
+
+    <div class="nt-modal" id="renameModal" hidden>
+      <div class="nt-modal-backdrop" data-rename-cancel></div>
+      <div class="nt-modal-card" role="dialog" aria-modal="true" aria-labelledby="renameModalTitle">
+        <h2 class="nt-modal-title" id="renameModalTitle">Rename notebook</h2>
+        <input type="text" class="nt-modal-input" id="renameModalInput" maxlength="120" aria-label="Notebook name">
+        <div class="nt-modal-actions">
+          <button type="button" class="button secondary compact" id="renameModalCancel">Cancel</button>
+          <button type="button" class="button compact" id="renameModalConfirm">Rename</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nt-modal" id="deleteModal" hidden>
+      <div class="nt-modal-backdrop" data-modal-cancel></div>
+      <div class="nt-modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <h2 class="nt-modal-title" id="deleteModalTitle">Delete notebook?</h2>
+        <p class="nt-modal-text" id="deleteModalText"></p>
+        <div class="nt-modal-actions">
+          <button type="button" class="button secondary compact" id="deleteModalCancel">Cancel</button>
+          <button type="button" class="button nt-modal-danger compact" id="deleteModalConfirm">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="settings.js"></script>
+    <script src="i18n.js"></script>
+    <script src="settings-ui.js"></script>
+    <script src="utils.js"></script>
+    <script src="media-playback.js"></script>
+    <script src="notebooklm-client.js"></script>
+    <script src="notebooks-cache.js"></script>
+    <script src="notebooks-folders.js"></script>
+    <script src="bulk-import-runner.js"></script>
+    <script src="duplicate-sources.js"></script>
+    <script src="notebooks-sources.js"></script>
+    <script src="notebooks-duplicate-sources.js"></script>
+    <script src="notebooks-bulk-sources.js"></script>
+    <script src="notebooks-notes.js"></script>
+    <script src="notebooks-studio.js"></script>
+    <script src="notebooks-podcast.js"></script>
+    <script src="notebooks-detail.js"></script>
+    <script src="notebooks.js"></script>
+  </body>
+</html>

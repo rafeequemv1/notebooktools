@@ -19,12 +19,12 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/features/features.css">
     <title>Slides / PPT deck to blog — NotebookTools</title>
-    <meta name="description" content="Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.">
+    <meta name="description" content="Turn a Studio slide deck into a blog.">
     <link rel="canonical" href="https://www.notebooktools.com/features/slides-to-blog">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:title" content="Slides / PPT deck to blog — NotebookTools">
-    <meta property="og:description" content="Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.">
+    <meta property="og:description" content="Turn a Studio slide deck into a blog.">
     <meta property="og:url" content="https://www.notebooktools.com/features/slides-to-blog">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -37,7 +37,7 @@
         <span class="logo-text">NotebookTools</span>
       </a>
       <nav class="site-nav">
-        <a href="/features" aria-current="page">Features</a>
+        <a href="/features">Features</a>
         <a href="/#notebooks-app">Notebooks app</a>
         <a href="/#how-it-works">How it works</a>
         <a href="/#pricing">Pricing</a>
@@ -56,9 +56,7 @@
       <nav class="feature-breadcrumb" aria-label="Breadcrumb" id="features-breadcrumb">
         <a href="/">Home</a>
         <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
-        <a href="/features">Features</a>
-        <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
-        <span aria-current="page" id="bc-current">Slides to blog</span>
+        <span>Features</span>
       </nav>
       <div class="md-mobile-select-wrap">
         <label class="md-mobile-label" for="md-feature-select">Feature</label>
@@ -67,6 +65,7 @@
           <option value="add-youtube">Add YouTube</option>
           <option value="bulk-import">Bulk import</option>
           <option value="notebooks-hub">Notebooks hub</option>
+          <option value="manage-sources">Manage sources</option>
           <option value="drive-refresh">Drive refresh</option>
           <option value="studio-podcasts">Studio & podcasts</option>
           <option value="prompts">Prompt library</option>
@@ -111,6 +110,13 @@
             <span class="md-nav-text">
               <span class="md-nav-title">Notebooks hub</span>
               <span class="md-nav-desc">Pin, star, folder, and search every notebook in one calm…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/manage-sources" data-feature="manage-sources">
+            <span class="md-nav-icon md-icon-manage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="15" y="15" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.6"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Manage sources</span>
+              <span class="md-nav-desc">Select all, delete, and organize Sources &amp; Studio into folders.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/drive-refresh" data-feature="drive-refresh">
@@ -182,7 +188,7 @@
         </div>
       </aside>
         <div class="md-detail" id="features-detail" role="region" aria-live="polite">
-        <article class="md-panel is-active" data-panel="overview" id="panel-overview">
+        <article class="md-panel" data-panel="overview" id="panel-overview" hidden>
           <div class="md-panel-intro">
             <p class="eyebrow">NotebookTools</p>
             <h1>See every major feature</h1>
@@ -212,6 +218,13 @@
               <span class="md-overview-body">
                 <strong>Notebooks hub</strong>
                 <span>Pin, star, folder, and search every notebook in one calm dashboard.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="manage-sources" data-action="select-feature">
+              <span class="md-overview-icon md-icon-manage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="15" y="15" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Manage sources</strong>
+                <span>Select all, delete, and organize Sources &amp; Studio files into folders.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="drive-refresh" data-action="select-feature">
@@ -300,7 +313,7 @@
         <div class="demo-shell" data-demo="youtube">
           <div class="demo-stage" id="yt-demo-stage">
             <!-- Step A: YouTube watch page chrome + Add button -->
-            <div class="demo-panel is-active" data-panel="watch">
+            <div class="demo-panel" data-panel="watch">
               <div class="browser-chrome">
                 <div class="browser-dots"><span></span><span></span><span></span></div>
                 <div class="browser-url">youtube.com/watch?v=SE753Tm913s</div>
@@ -487,7 +500,7 @@
           <div class="bulk-demo">
             <div class="bulk-toolbar">
               <div class="bulk-tabs">
-                <button type="button" class="bulk-tab is-active">Open tabs</button>
+                <button type="button" class="bulk-tab">Open tabs</button>
                 <button type="button" class="bulk-tab">Paste URLs</button>
                 <button type="button" class="bulk-tab">Playlist</button>
               </div>
@@ -550,7 +563,7 @@
               </div>
             </div>
             <div class="hub-folders">
-              <button type="button" class="hub-folder is-active" data-action="hub-folder" data-folder="all">All</button>
+              <button type="button" class="hub-folder" data-action="hub-folder" data-folder="all">All</button>
               <button type="button" class="hub-folder" data-action="hub-folder" data-folder="work">Work</button>
               <button type="button" class="hub-folder" data-action="hub-folder" data-folder="study">Study</button>
             </div>
@@ -594,7 +607,72 @@
         </ol>
       </section>
         </article>
-        <article class="md-panel" data-panel="drive-refresh" id="panel-drive-refresh" hidden>
+        
+        <article class="md-panel" data-panel="manage-sources" id="panel-manage-sources" hidden>
+          <h1 class="sr-only">Manage &amp; organize sources</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="manage">
+          <div class="mg-demo" aria-label="Manage sources demo">
+            <div class="mg-app">
+              <div class="mg-toolbar">
+                <span class="mg-toolbar-title">Sources · Research — AI tools</span>
+                <button type="button" class="mg-manage-btn" id="mg-manage-btn" data-action="mg-manage">Manage</button>
+              </div>
+              <p class="mg-hint" id="mg-hint">Click Manage to organize or delete sources</p>
+              <div class="mg-source-list" id="mg-preview-list">
+                <div class="mg-source-row" data-mg-preview><span class="mg-source-title">Transformer survey PDF</span><span class="mg-folder-badge"></span></div>
+                <div class="mg-source-row" data-mg-preview><span class="mg-source-title">YouTube — Attention Is All You Need</span><span class="mg-folder-badge"></span></div>
+                <div class="mg-source-row" data-mg-preview><span class="mg-source-title">Blog: retrieval tips</span><span class="mg-folder-badge"></span></div>
+              </div>
+              <div class="mg-modal" id="mg-modal" hidden>
+                <div class="mg-modal-toolbar">
+                  <button type="button" class="mg-btn" id="mg-select-all" data-action="mg-select-all">Select all</button>
+                  <span class="mg-count" id="mg-count">0 selected</span>
+                  <div class="mg-actions">
+                    <button type="button" class="mg-btn" id="mg-organize" data-action="mg-organize" disabled>Organize</button>
+                    <button type="button" class="mg-btn is-danger" id="mg-delete" data-action="mg-delete" disabled>Delete</button>
+                  </div>
+                </div>
+                <div class="mg-folder-panel" id="mg-folder-panel" hidden>
+                  <button type="button" class="mg-folder-pill" id="mg-folder-work" data-action="mg-folder" data-folder="Work">Work</button>
+                  <button type="button" class="mg-folder-pill" data-action="mg-folder" data-folder="Study">Study</button>
+                </div>
+                <div class="mg-source-list">
+                  <label class="mg-source-row" data-mg-row>
+                    <input type="checkbox" aria-label="Select Transformer survey PDF" />
+                    <span class="mg-source-title">Transformer survey PDF</span>
+                    <span class="mg-folder-badge"></span>
+                  </label>
+                  <label class="mg-source-row" data-mg-row>
+                    <input type="checkbox" aria-label="Select YouTube video" />
+                    <span class="mg-source-title">YouTube — Attention Is All You Need</span>
+                    <span class="mg-folder-badge"></span>
+                  </label>
+                  <label class="mg-source-row" data-mg-row>
+                    <input type="checkbox" aria-label="Select blog" />
+                    <span class="mg-source-title">Blog: retrieval tips</span>
+                    <span class="mg-folder-badge"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open Manage</strong><p>In Sources or Studio, click the top Manage button.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Select sources</strong><p>Tick items individually or use Select all.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Organize into folders</strong><p>Move the selection into a NotebookLM source folder — or a Studio folder for outputs.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Delete the rest</strong><p>Clear clutter in one pass when you’re done reviewing.</p></div></li>
+        </ol>
+      </section>
+        </article>
+<article class="md-panel" data-panel="drive-refresh" id="panel-drive-refresh" hidden>
           <h1 class="sr-only">Google Drive source refresh</h1>
           <section class="feature-demo-section md-demo">
 <div class="md-demo-toolbar">
@@ -947,7 +1025,7 @@
         </ol>
       </section>
         </article>
-                <article class="md-panel" data-panel="slides-to-blog" id="panel-slides-to-blog" hidden>
+                <article class="md-panel is-active" data-panel="slides-to-blog" id="panel-slides-to-blog">
           <h1 class="sr-only">Slides to blog</h1>
           <section class="feature-demo-section md-demo">
 <div class="md-demo-toolbar">
@@ -956,7 +1034,7 @@
         <div class="demo-shell" data-demo="slidestoblog">
           <div class="mock-demo mock-slides-blog">
             <!-- Start: Studio / PPT-like slide deck -->
-            <div class="sb-view is-active" id="sb-view-deck" data-sb-view="deck">
+            <div class="sb-view" id="sb-view-deck" data-sb-view="deck">
               <div class="nlm-app">
                 <header class="nlm-topbar">
                   <div class="nlm-top-left">
@@ -967,7 +1045,7 @@
                 </header>
                 <div class="sb-deck-stage">
                   <div class="sb-filmstrip" aria-hidden="true">
-                    <div class="sb-thumb is-active" data-slide="1"><span class="sb-thumb-num">1</span><span class="sb-thumb-preview sb-grad-1"><em>Title</em></span></div>
+                    <div class="sb-thumb" data-slide="1"><span class="sb-thumb-num">1</span><span class="sb-thumb-preview sb-grad-1"><em>Title</em></span></div>
                     <div class="sb-thumb" data-slide="2"><span class="sb-thumb-num">2</span><span class="sb-thumb-preview sb-grad-2"><em>Market</em></span></div>
                     <div class="sb-thumb" data-slide="3"><span class="sb-thumb-num">3</span><span class="sb-thumb-preview sb-grad-3"><em>ICP</em></span></div>
                     <div class="sb-thumb" data-slide="4"><span class="sb-thumb-num">4</span><span class="sb-thumb-preview sb-grad-4"><em>Launch</em></span></div>

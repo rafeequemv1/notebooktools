@@ -1,12 +1,16 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.2.3",
-  "description": "Import YouTube videos, X posts, webpages, and selected text into NotebookLM — one click from watch pages, popup, or right-click.",
-  "permissions": ["activeTab", "storage", "contextMenus", "tabs"],
+  "version": "0.5.54",
+  "description": "Import YouTube videos, webpages, and screenshots into NotebookLM. Bulk import, snapshots, prompt library, and blog/guide export.",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
+  },
+  "permissions": ["activeTab", "storage", "contextMenus", "tabs", "sidePanel", "scripting"],
   "host_permissions": [
     "https://*/*",
-    "http://*/*"
+    "http://*/*",
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
@@ -18,11 +22,22 @@
   },
   "action": {
     "default_title": "NotebookTools — Import to NotebookLM",
-    "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "commands": {
+    "capture-snapshot": {
+      "suggested_key": {
+        "default": "Alt+Shift+S",
+        "mac": "Alt+Shift+S"
+      },
+      "description": "Capture snapshot area (drag to select, then annotate)"
     }
   },
   "content_scripts": [
@@ -43,6 +58,39 @@
     },
     {
       "matches": [
+        "https://notebooklm.google.com/*"
+      ],
+      "css": ["notebooklm-chat-export.css", "notebooklm-prompt-slash.css", "workflows/blog-creation/blog-with-deck-images/workflow.css", "workflows/snapshots/snapshot-workflow.css"],
+      "js": [
+        "utils.js",
+        "notebooklm-client.js",
+        "snapshot-store.js",
+        "chat-export.js",
+        "notebooklm-chat-extract.js",
+        "workflows/blog-creation/blog-with-deck-images/blog-prompt.js",
+        "workflows/blog-creation/blog-with-deck-images/blog-content-clean.js",
+        "workflows/blog-creation/blog-with-deck-images/blog-assembler.js",
+        "workflows/blog-creation/blog-with-deck-images/blog-chat-automation.js",
+        "workflows/blog-creation/blog-with-deck-images/blog-doc-export.js",
+        "workflows/blog-creation/blog-with-deck-images/blog-history.js",
+        "vendor/pdf-lib/pdf-lib.min.js",
+        "workflows/blog-creation/blog-with-deck-images/slide-pdf-images.js",
+        "workflows/blog-creation/blog-with-deck-images/workflow.js",
+        "workflows/blog-creation/blog-with-deck-images/workflow-ui.js",
+        "workflows/snapshots/snapshot-upload.js",
+        "workflows/snapshots/snapshot-prompt.js",
+        "workflows/snapshots/snapshot-assembler.js",
+        "workflows/snapshots/snapshot-workflow.js",
+        "workflows/snapshots/snapshot-workflow-ui.js",
+        "notebooklm-chat-export-inject.js",
+        "prompt-library-data.js",
+        "notebooklm-prompt-slash.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
         "https://x.com/*",
         "https://twitter.com/*"
       ],
@@ -58,10 +106,59 @@
         "youtube-import.js",
         "platform-import.html",
         "platform-import.js",
+        "chat-export.js",
+        "notebooklm-chat-extract.js",
+        "notebooklm-chat-export.css",
+        "notebooklm-chat-export-inject.js",
         "notebooklm-client.js",
         "notebook-picker.js",
+        "settings.js",
+        "studio-import.js",
+        "i18n.js",
+        "settings-ui.js",
+        "source-limits.js",
         "utils.js",
         "shared.css",
+        "vendor/pdfjs/pdf.min.mjs",
+        "vendor/pdfjs/pdf.worker.min.mjs",
+        "prompt-library.css",
+        "prompt-library-data.js",
+        "prompt-library.js",
+        "notebooklm-prompt-slash.js",
+        "notebooklm-prompt-slash.css",
+        "bulk-queue-store.js",
+        "bulk-import-runner.js",
+        "bulk-import.js",
+        "link-extract.js",
+        "youtube-collector.js",
+        "youtube-batch-preview.js",
+        "bulk-import.css",
+        "notebooks.html",
+        "notebooks.css",
+        "notebooks.js",
+        "media-playback.js",
+        "notebooks-cache.js",
+        "notebooks-folders.js",
+        "notebooks-sources.js",
+        "duplicate-sources.js",
+        "notebooks-duplicate-sources.js",
+        "notebooks-studio.js",
+        "notebooks-podcast.js",
+        "notebooks-notes.js",
+        "notebooks-detail.js",
+        "custom-prompts.js",
+        "theme.js",
+        "snapshot-capture-overlay.js",
+        "snapshot-capture-overlay.css",
+        "snapshot-annotate.js",
+        "snapshot-annotate.css",
+        "snapshot-auto-capture.js",
+        "snapshot-auto-capture.css",
+        "snapshot-capture-page.js",
+        "snapshot-capture.js",
+        "snapshot-store.js",
+        "vendor/html2canvas/html2canvas.min.js",
+        "sidepanel.js",
         "logo.png",
         "icons/icon16.png",
         "icons/icon48.png",

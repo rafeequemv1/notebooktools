@@ -1014,7 +1014,7 @@
   var FEATURE_META = {
     overview: {
       title: "Features â€“ NotebookTools for NotebookLM",
-      description: "Explore NotebookTools features with interactive demos: YouTube, bulk import, notebooks hub, Drive refresh, Studio, prompts, webpage, X, highlights, chat export, slides-to-blog, and snapshots.",
+      description: "Explore NotebookTools features with interactive demos: YouTube, bulk import, notebooks hub, Drive refresh, Studio, manage sources, prompts, webpage, X, highlights, chat export, slides-to-blog, and snapshots.",
       name: "Features",
       path: "/features",
       demo: null
@@ -1095,6 +1095,13 @@
       name: "Slides to blog",
       path: "/features/slides-to-blog",
       demo: "slidestoblog"
+    },
+    "manage-sources": {
+      title: "Manage & organize sources – NotebookTools",
+      description: "Bulk manage NotebookLM sources and Studio files in NotebookTools: select all, delete, and organize into folders from one Manage modal.",
+      name: "Manage sources",
+      path: "/features/manage-sources",
+      demo: "manage"
     },
     "snapshots": {
       title: "Snapshots & PDF capture — NotebookTools",
@@ -1594,6 +1601,190 @@
   }
 
   /* ---- Snapshots demo ---- */
+
+  /* ---- Manage sources / Studio demo ---- */
+  function initManageDemo(root) {
+    var manageBtn = $("#mg-manage-btn", root);
+    var modal = $("#mg-modal", root);
+    var selectAll = $("#mg-select-all", root);
+    var organizeBtn = $("#mg-organize", root);
+    var deleteBtn = $("#mg-delete", root);
+    var folderPanel = $("#mg-folder-panel", root);
+    var folderWork = $("#mg-folder-work", root);
+    var hint = $("#mg-hint", root);
+    var rows = $all("[data-mg-row]", root);
+    var running = false;
+
+    function selectedCount() {
+      return $all("[data-mg-row].is-selected", root).length;
+    }
+
+    function updateChrome() {
+      var n = selectedCount();
+      var countEl = $("#mg-count", root);
+      if (countEl) countEl.textContent = n + " selected";
+      if (selectAll) selectAll.textContent = n && n === rows.length ? "Deselect all" : "Select all";
+      if (organizeBtn) organizeBtn.disabled = n === 0;
+      if (deleteBtn) deleteBtn.disabled = n === 0;
+    }
+
+    function setAll(on) {
+      rows.forEach(function (row) {
+        row.classList.toggle("is-selected", on);
+        var cb = row.querySelector("input");
+        if (cb) cb.checked = on;
+      });
+      updateChrome();
+    }
+
+    function openModal() {
+      if (modal) modal.removeAttribute("hidden");
+      if (manageBtn) manageBtn.classList.add("is-active");
+      if (hint) hint.textContent = "Select sources, then Organize or Delete";
+      updateChrome();
+    }
+
+    function reset() {
+      if (modal) modal.setAttribute("hidden", "");
+      if (folderPanel) folderPanel.setAttribute("hidden", "");
+      if (manageBtn) manageBtn.classList.remove("is-active");
+      rows.forEach(function (row) {
+        row.classList.remove("is-selected", "is-gone", "is-filed");
+        var cb = row.querySelector("input");
+        if (cb) cb.checked = false;
+        var badge = row.querySelector(".mg-folder-badge");
+        if (badge) badge.textContent = "";
+      });
+      if (hint) hint.textContent = "Click Manage to organize or delete sources";
+      updateChrome();
+    }
+
+    function runAutoplay() {
+      if (running) return;
+      running = true;
+      reset();
+      hideDemoCursor(root);
+      return sequence([
+        400,
+        function () {
+          return moveCursorTo(manageBtn, { shell: root });
+        },
+        function () {
+          openModal();
+        },
+        500,
+        function () {
+          return moveCursorTo(selectAll, { shell: root });
+        },
+        function () {
+          setAll(true);
+        },
+        700,
+        function () {
+          return moveCursorTo(organizeBtn, { shell: root });
+        },
+        function () {
+          if (folderPanel) folderPanel.removeAttribute("hidden");
+        },
+        450,
+        function () {
+          return moveCursorTo(folderWork, { shell: root });
+        },
+        function () {
+          rows.forEach(function (row) {
+            row.classList.add("is-filed");
+            var badge = row.querySelector(".mg-folder-badge");
+            if (badge) badge.textContent = "Work";
+          });
+          if (hint) hint.textContent = "3 sources filed into Work";
+          if (folderPanel) folderPanel.setAttribute("hidden", "");
+        },
+        900,
+        function () {
+          // Deselect one, then delete remaining demo beat
+          if (rows[2]) {
+            rows[2].classList.remove("is-selected");
+            var cb = rows[2].querySelector("input");
+            if (cb) cb.checked = false;
+          }
+          updateChrome();
+          return moveCursorTo(deleteBtn, { shell: root });
+        },
+        function () {
+          rows.forEach(function (row) {
+            if (row.classList.contains("is-selected")) {
+              row.classList.add("is-gone");
+              row.classList.remove("is-selected");
+            }
+          });
+          updateChrome();
+          if (hint) hint.textContent = "Deleted selected sources — demo only";
+        },
+        1200,
+        function () {
+          hideDemoCursor(root);
+          running = false;
+        }
+      ]);
+    }
+
+    root.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-action]");
+      if (!t) return;
+      var action = t.getAttribute("data-action");
+      if (action === "mg-manage") openModal();
+      else if (action === "mg-select-all") {
+        setAll(!(selectedCount() && selectedCount() === rows.length));
+      } else if (action === "mg-organize") {
+        if (folderPanel) {
+          if (folderPanel.hasAttribute("hidden")) folderPanel.removeAttribute("hidden");
+          else folderPanel.setAttribute("hidden", "");
+        }
+      } else if (action === "mg-folder") {
+        var name = t.getAttribute("data-folder") || "Work";
+        rows.forEach(function (row) {
+          if (!row.classList.contains("is-selected")) return;
+          row.classList.add("is-filed");
+          var badge = row.querySelector(".mg-folder-badge");
+          if (badge) badge.textContent = name;
+        });
+        if (folderPanel) folderPanel.setAttribute("hidden", "");
+        if (hint) hint.textContent = "Filed into " + name;
+      } else if (action === "mg-delete") {
+        rows.forEach(function (row) {
+          if (row.classList.contains("is-selected")) {
+            row.classList.add("is-gone");
+            row.classList.remove("is-selected");
+          }
+        });
+        updateChrome();
+        if (hint) hint.textContent = "Deleted selected — demo only";
+      } else if (action === "play-demo") {
+        runAutoplay();
+      }
+    });
+
+    rows.forEach(function (row) {
+      row.addEventListener("click", function (e) {
+        if (e.target.closest("button")) return;
+        row.classList.toggle("is-selected");
+        var cb = row.querySelector("input");
+        if (cb) cb.checked = row.classList.contains("is-selected");
+        updateChrome();
+      });
+    });
+
+    var playBtn = document.querySelector('[data-panel="manage-sources"] [data-action="play-demo"]');
+    if (playBtn) {
+      playBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        runAutoplay();
+      });
+    }
+
+    registerDemo("manage", { play: runAutoplay });
+  }
+
   function initSnapshotsDemo(root) {
     var start = $("#snap-start", root);
     var marquee = $("#snap-marquee", root);
@@ -1703,6 +1894,8 @@ function boot() {
     if (chatexport) initChatExportDemo(chatexport);
     var slidestoblog = $('[data-demo="slidestoblog"]');
     if (slidestoblog) initSlidesToBlogDemo(slidestoblog);
+    var manage = $('[data-demo="manage"]');
+    if (manage) initManageDemo(manage);
     var snapshots = $('[data-demo="snapshots"]');
     if (snapshots) initSnapshotsDemo(snapshots);
 
