@@ -4,7 +4,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2BJP0Q9LL"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){{dataLayer.push(arguments);}}
+      function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-K2BJP0Q9LL');
     </script>
@@ -12,31 +12,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#faf9f7">
-    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/features/features.css">
-    <title>Add YouTube to NotebookLM — NotebookTools</title>
+    <title>Add YouTube to NotebookLM – NotebookTools</title>
     <meta name="description" content="Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.">
     <link rel="canonical" href="https://www.notebooktools.com/features/add-youtube">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
-    <meta property="og:title" content="Add YouTube to NotebookLM — NotebookTools">
+    <meta property="og:title" content="Add YouTube to NotebookLM – NotebookTools">
     <meta property="og:description" content="Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.">
     <meta property="og:url" content="https://www.notebooktools.com/features/add-youtube">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Add YouTube to NotebookLM — NotebookTools">
-    <meta name="twitter:description" content="One click on any watch page — video lands in your notebook Sources.">
-    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="robots" content="index, follow">
   </head>
-  <body class="feature-page feature-add-youtube">
+  <body class="feature-page feature-master feature-add-youtube" data-initial-feature="add-youtube">
     <header class="site-header">
       <a class="logo" href="/">
-        <img class="logo-img logo-mark-header" src="../assets/logo-mark-32.png" alt="NotebookTools logo" width="32" height="32">
+        <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="NotebookTools logo" width="32" height="32">
         <span class="logo-text">NotebookTools</span>
       </a>
       <nav class="site-nav">
@@ -51,39 +48,179 @@
       <div class="header-cta-group">
         <a class="button button-primary button-sm header-buy" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime</a>
         <a class="header-cta chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
-          <img class="chrome-store-badge chrome-store-badge-sm" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+          <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
         </a>
       </div>
     </header>
-    <main>
-      <nav class="feature-breadcrumb" aria-label="Breadcrumb">
+    <main class="md-main">
+      <nav class="feature-breadcrumb" aria-label="Breadcrumb" id="features-breadcrumb">
         <a href="/">Home</a>
         <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
         <a href="/features">Features</a>
         <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
-        <span aria-current="page">Add YouTube</span>
+        <span aria-current="page" id="bc-current">Add YouTube</span>
       </nav>
-
-      <section class="feature-hero">
-        <p class="eyebrow">Feature</p>
-        <h1>Add YouTube to NotebookLM</h1>
-        <p class="lead">One click on any watch page — video lands in your notebook Sources.</p>
-        <div class="feature-hero-cta">
-          <a class="button button-primary button-lg" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
-          <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
-            <img class="chrome-store-badge chrome-store-badge-sm" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+      <div class="md-mobile-select-wrap">
+        <label class="md-mobile-label" for="md-feature-select">Feature</label>
+        <select id="md-feature-select" class="md-mobile-select" aria-label="Choose a feature">
+          <option value="overview">Overview</option>
+          <option value="add-youtube" selected>Add YouTube</option>
+          <option value="bulk-import">Bulk import</option>
+          <option value="notebooks-hub">Notebooks hub</option>
+          <option value="drive-refresh">Drive refresh</option>
+          <option value="studio-podcasts">Studio & podcasts</option>
+          <option value="prompts">Prompt library</option>
+        </select>
+      </div>
+      <div class="md-layout">
+<aside class="md-sidebar" aria-label="Features">
+        <div class="md-sidebar-head">
+          <p class="eyebrow">Features</p>
+          <h2 class="md-sidebar-title">Explore</h2>
+        </div>
+        <nav class="md-nav" id="features-nav">
+          <a class="md-nav-item md-nav-overview" href="/features" data-feature="overview">
+            <span class="md-nav-icon md-icon-overview"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Overview</span>
+              <span class="md-nav-desc">All features at a glance</span>
+            </span>
           </a>
+          <a class="md-nav-item" href="/features/add-youtube" data-feature="add-youtube" class="is-active" aria-current="page">
+            <span class="md-nav-icon md-icon-yt"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 9.5v5l5-2.5-5-2.5z" fill="currentColor"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Add YouTube</span>
+              <span class="md-nav-desc">One click on any watch page — video lands in your notebo…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/bulk-import" data-feature="bulk-import">
+            <span class="md-nav-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Bulk import</span>
+              <span class="md-nav-desc">Queue tabs, playlists, and pasted URLs — import dozens w…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/notebooks-hub" data-feature="notebooks-hub">
+            <span class="md-nav-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Notebooks hub</span>
+              <span class="md-nav-desc">Pin, star, folder, and search every notebook in one calm…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/drive-refresh" data-feature="drive-refresh">
+            <span class="md-nav-icon md-icon-drive"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4l8 14H4L12 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Drive refresh</span>
+              <span class="md-nav-desc">See Update available on Docs, Slides, Sheets & Drive PDF…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/studio-podcasts" data-feature="studio-podcasts">
+            <span class="md-nav-icon md-icon-studio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h2l2-5 3 10 2-5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Studio & podcasts</span>
+              <span class="md-nav-desc">Generate Audio Overviews and play podcasts across every …</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/prompts" data-feature="prompts">
+            <span class="md-nav-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Prompt library</span>
+              <span class="md-nav-desc">Curated prompts in the side panel — type / in NotebookLM…</span>
+            </span>
+          </a>
+        </nav>
+        <div class="md-sidebar-cta">
+          <a class="button button-primary button-sm" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
         </div>
-      </section>
-
-      <section class="feature-demo-section">
-        <div class="section-head center">
-          <p class="eyebrow">See it</p>
-          <h2>Interactive demo · YouTube watch page chrome · not a live session</h2>
-          <p class="section-lead">A visual recreation of the NotebookLM + NotebookTools flow. Labeled as demo — no live API.</p>
-          <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
-        </div>
-        
+      </aside>
+        <div class="md-detail" id="features-detail" role="region" aria-live="polite">
+        <article class="md-panel" data-panel="overview" hidden id="panel-overview">
+          <div class="md-panel-intro">
+            <p class="eyebrow">NotebookTools</p>
+            <h1>See every major feature</h1>
+            <p class="lead">Interactive demos recreating NotebookLM’s UI — Sources, chat, and Studio — so you can visualize how NotebookTools fits your research flow. Pick a feature on the left; demos play here.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary button-lg" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="button button-ghost button-lg" href="/#pricing">View pricing</a>
+            </div>
+          </div>
+          <div class="md-overview-grid">
+            <button type="button" class="md-overview-card" data-feature="add-youtube" data-action="select-feature">
+              <span class="md-overview-icon md-icon-yt"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 9.5v5l5-2.5-5-2.5z" fill="currentColor"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Add YouTube to NotebookLM</strong>
+                <span>One click on any watch page — video lands in your notebook Sources.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="bulk-import" data-action="select-feature">
+              <span class="md-overview-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Bulk import queue</strong>
+                <span>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="notebooks-hub" data-action="select-feature">
+              <span class="md-overview-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Notebooks hub</strong>
+                <span>Pin, star, folder, and search every notebook in one calm dashboard.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="drive-refresh" data-action="select-feature">
+              <span class="md-overview-icon md-icon-drive"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4l8 14H4L12 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Google Drive source refresh</strong>
+                <span>See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="studio-podcasts" data-action="select-feature">
+              <span class="md-overview-icon md-icon-studio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h2l2-5 3 10 2-5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Studio & podcasts</strong>
+                <span>Generate Audio Overviews and play podcasts across every notebook in one player.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="prompts" data-action="select-feature">
+              <span class="md-overview-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Prompt library</strong>
+                <span>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</span>
+              </span>
+            </button>
+          </div>
+          <section class="feature-cta-band md-inline-cta">
+            <div class="feature-cta-inner">
+              <h2>Get every feature — lifetime</h2>
+              <p>Buy once: <strong>$49</strong> worldwide · <strong>₹12,500</strong> when checking out from India. Then install from the Chrome Web Store.</p>
+              <div class="feature-cta-actions">
+                <a class="button button-primary button-lg" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+                <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                  <img class="chrome-store-badge" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
+                </a>
+              </div>
+            </div>
+          </section>
+        </article>
+        <article class="md-panel is-active" data-panel="add-youtube" id="panel-add-youtube">
+          <div class="md-panel-intro">
+            <p class="eyebrow">Feature</p>
+            <h1>Add YouTube to NotebookLM</h1>
+            <p class="lead">One click on any watch page — video lands in your notebook Sources.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+              </a>
+            </div>
+          </div>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-head">
+            <div>
+              <p class="eyebrow">Interactive demo</p>
+              <p class="md-demo-note">Visual recreation — not a live NotebookLM session.</p>
+            </div>
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
         <div class="demo-shell" data-demo="youtube">
           <p class="demo-label">Interactive demo · not a live NotebookLM session</p>
           <div class="demo-stage" id="yt-demo-stage">
@@ -250,9 +387,8 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="feature-how">
+          </section>
+<section class="feature-how">
         <div class="section-head center">
           <p class="eyebrow">How it works</p>
           <h2>From install to done</h2>
@@ -261,33 +397,441 @@
           <li class="how-step"><span class="how-num">1</span><div><strong>Open a YouTube video</strong><p>Watch any video or playlist in Chrome with NotebookTools installed.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Add to NotebookLM</strong><p>The button sits on the watch page next to the player.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Search existing notebooks or create a new one — demo shows the picker.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Source appears in NotebookLM</strong><p>The YouTube URL is added as a source in the left Sources panel.</p></div></li>
         </ol>
       </section>
-
-      <section class="feature-related">
-        <div class="section-head center">
-          <p class="eyebrow">Related</p>
-          <h2>Explore more features</h2>
-        </div>
-        <div class="related-grid">
-          <a class="related-card" href="bulk-import.html"><strong>Bulk import queue</strong><span>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</span></a><a class="related-card" href="notebooks-hub.html"><strong>Notebooks hub</strong><span>Pin, star, folder, and search every notebook in one calm dashboard.</span></a><a class="related-card" href="studio-podcasts.html"><strong>Studio & podcasts</strong><span>Generate Audio Overviews and play podcasts across every notebook in one player.</span></a>
-        </div>
-      </section>
-
-      <section class="feature-cta-band">
-        <div class="feature-cta-inner">
-          <h2>Get every feature — lifetime</h2>
-          <p>Buy once: <strong>$49</strong> worldwide · <strong>₹2,500</strong> when checking out from India. Then install from the Chrome Web Store.</p>
-          <div class="feature-cta-actions">
-            <a class="button button-primary button-lg" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
-            <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
-              <img class="chrome-store-badge" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
-            </a>
+          <div class="md-panel-buy">
+            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+          </div>
+        </article>
+        <article class="md-panel" data-panel="bulk-import" id="panel-bulk-import" hidden>
+          <div class="md-panel-intro">
+            <p class="eyebrow">Feature</p>
+            <h1>Bulk import queue</h1>
+            <p class="lead">Queue tabs, playlists, and pasted URLs — import dozens with live progress.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+              </a>
+            </div>
+          </div>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-head">
+            <div>
+              <p class="eyebrow">Interactive demo</p>
+              <p class="md-demo-note">Visual recreation — not a live NotebookLM session.</p>
+            </div>
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="bulk">
+          <p class="demo-label">Interactive demo · bulk queue UI (NotebookTools)</p>
+          <div class="browser-chrome">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="browser-url">chrome-extension://…/bulk-import</div>
+          </div>
+          <div class="bulk-demo">
+            <div class="bulk-toolbar">
+              <div class="bulk-tabs">
+                <button type="button" class="bulk-tab is-active">Open tabs</button>
+                <button type="button" class="bulk-tab">Paste URLs</button>
+                <button type="button" class="bulk-tab">Playlist</button>
+              </div>
+              <button type="button" class="button button-primary button-sm" id="bulk-start" data-action="bulk-start">Import selected</button>
+            </div>
+            <div class="bulk-dest">
+              <span class="bulk-dest-label">Destination</span>
+              <span class="nlm-pill soft">Research — AI tools</span>
+            </div>
+            <ul class="bulk-list" id="bulk-list">
+              <li class="bulk-item" data-i="0"><label><input type="checkbox" checked> <span class="bulk-favicon yt"></span> Introducing NotebookLM Video Overviews</label><span class="bulk-status"></span></li>
+              <li class="bulk-item" data-i="1"><label><input type="checkbox" checked> <span class="bulk-favicon web"></span> blog.google — NotebookLM tips</label><span class="bulk-status"></span></li>
+              <li class="bulk-item" data-i="2"><label><input type="checkbox" checked> <span class="bulk-favicon web"></span> Deep dive: source limits</label><span class="bulk-status"></span></li>
+              <li class="bulk-item" data-i="3"><label><input type="checkbox" checked> <span class="bulk-favicon yt"></span> Audio Overviews interactive</label><span class="bulk-status"></span></li>
+              <li class="bulk-item" data-i="4"><label><input type="checkbox" checked> <span class="bulk-favicon doc"></span> docs.google.com — brief</label><span class="bulk-status"></span></li>
+            </ul>
+            <div class="bulk-progress-wrap">
+              <div class="bulk-progress-bar"><div class="bulk-progress-fill" id="bulk-fill"></div></div>
+              <p class="bulk-progress-text" id="bulk-text">5 selected · ready</p>
+            </div>
+            <!-- Mini NotebookLM sources preview -->
+            <div class="nlm-mini-preview">
+              <div class="nlm-mini-head">NotebookLM · Sources <span class="demo-label-inline">after import</span></div>
+              <ul class="nlm-source-list compact" id="bulk-nlm-sources">
+                <li class="nlm-source muted"><span class="nlm-src-icon nlm-src-doc">D</span><span class="nlm-src-name">Existing notes.md</span></li>
+              </ul>
+            </div>
+            <button type="button" class="demo-reset" data-action="bulk-reset" hidden id="bulk-reset">Replay demo</button>
           </div>
         </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Collect sources</strong><p>Open tabs, paste a list, load a playlist, or extract links from an article.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Review the queue</strong><p>Select what to import, search, and drop noise before you start.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Choose destination</strong><p>Add to an existing notebook or create a new one.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Watch progress</strong><p>Each source imports with success/fail counts — no babysitting.</p></div></li>
+        </ol>
       </section>
+          <div class="md-panel-buy">
+            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+          </div>
+        </article>
+        <article class="md-panel" data-panel="notebooks-hub" id="panel-notebooks-hub" hidden>
+          <div class="md-panel-intro">
+            <p class="eyebrow">Feature</p>
+            <h1>Notebooks hub</h1>
+            <p class="lead">Pin, star, folder, and search every notebook in one calm dashboard.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+              </a>
+            </div>
+          </div>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-head">
+            <div>
+              <p class="eyebrow">Interactive demo</p>
+              <p class="md-demo-note">Visual recreation — not a live NotebookLM session.</p>
+            </div>
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="hub">
+          <p class="demo-label">Interactive demo · NotebookLM-style notebook grid</p>
+          <div class="browser-chrome">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="browser-url">NotebookTools · Notebooks hub</div>
+          </div>
+          <div class="hub-demo">
+            <div class="hub-demo-top">
+              <h3 class="hub-demo-title">My notebooks</h3>
+              <div class="hub-demo-actions">
+                <input type="search" class="demo-input hub-search" id="hub-search" placeholder="Search notebooks…" aria-label="Search notebooks">
+                <button type="button" class="nlm-pill soft" data-action="hub-filter" data-filter="all">All</button>
+                <button type="button" class="nlm-pill" data-action="hub-filter" data-filter="starred">★ Starred</button>
+              </div>
+            </div>
+            <div class="hub-folders">
+              <button type="button" class="hub-folder is-active" data-action="hub-folder" data-folder="all">All</button>
+              <button type="button" class="hub-folder" data-action="hub-folder" data-folder="work">Work</button>
+              <button type="button" class="hub-folder" data-action="hub-folder" data-folder="study">Study</button>
+            </div>
+            <div class="nlm-nb-grid" id="hub-grid">
+              <article class="nlm-nb-card" data-title="Research — AI tools" data-folder="work" data-starred="1">
+                <div class="nlm-nb-cover c1"></div>
+                <div class="nlm-nb-meta"><strong>Research — AI tools</strong><span>12 sources · ★</span></div>
+              </article>
+              <article class="nlm-nb-card" data-title="Product deep dives" data-folder="work" data-starred="0">
+                <div class="nlm-nb-cover c2"></div>
+                <div class="nlm-nb-meta"><strong>Product deep dives</strong><span>8 sources</span></div>
+              </article>
+              <article class="nlm-nb-card" data-title="History seminar" data-folder="study" data-starred="1">
+                <div class="nlm-nb-cover c3"></div>
+                <div class="nlm-nb-meta"><strong>History seminar</strong><span>24 sources · ★</span></div>
+              </article>
+              <article class="nlm-nb-card" data-title="NotebookLM notes" data-folder="work" data-starred="0">
+                <div class="nlm-nb-cover c4"></div>
+                <div class="nlm-nb-meta"><strong>NotebookLM notes</strong><span>5 sources</span></div>
+              </article>
+              <article class="nlm-nb-card" data-title="Exam prep — biology" data-folder="study" data-starred="0">
+                <div class="nlm-nb-cover c5"></div>
+                <div class="nlm-nb-meta"><strong>Exam prep — biology</strong><span>18 sources</span></div>
+              </article>
+              <article class="nlm-nb-card" data-title="Competitor briefs" data-folder="work" data-starred="1">
+                <div class="nlm-nb-cover c6"></div>
+                <div class="nlm-nb-meta"><strong>Competitor briefs</strong><span>9 sources · ★</span></div>
+              </article>
+            </div>
+            <p class="hub-hint" id="hub-hint">Try search, folders, or ★ Starred — demo only</p>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open the Notebooks app</strong><p>Launch from the extension for a full dashboard — not just the side panel.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Organize with folders</strong><p>Group notebooks, pin favorites, and star what you use daily.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Search and filter</strong><p>Find notebooks by title instantly as your library grows.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Bulk cleanup</strong><p>Multi-select notebooks to delete when you’re decluttering.</p></div></li>
+        </ol>
+      </section>
+          <div class="md-panel-buy">
+            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+          </div>
+        </article>
+        <article class="md-panel" data-panel="drive-refresh" id="panel-drive-refresh" hidden>
+          <div class="md-panel-intro">
+            <p class="eyebrow">Feature</p>
+            <h1>Google Drive source refresh</h1>
+            <p class="lead">See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+              </a>
+            </div>
+          </div>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-head">
+            <div>
+              <p class="eyebrow">Interactive demo</p>
+              <p class="md-demo-note">Visual recreation — not a live NotebookLM session.</p>
+            </div>
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="drive">
+          <p class="demo-label">Interactive demo · Sources panel with Drive refresh</p>
+          <div class="browser-chrome">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="browser-url">notebooklm.google.com/notebook/… · Sources</div>
+          </div>
+          <div class="nlm-app nlm-app-focus-sources">
+            <header class="nlm-topbar">
+              <div class="nlm-top-left">
+                <span class="nlm-logo-dot"></span>
+                <span class="nlm-notebook-title">Q3 planning</span>
+              </div>
+            </header>
+            <div class="nlm-body single-rail">
+              <aside class="nlm-sources wide">
+                <div class="nlm-panel-head">
+                  <h4>Sources</h4>
+                  <button type="button" class="button button-sm button-ghost" id="drive-refresh-all" data-action="drive-refresh">Refresh updates</button>
+                </div>
+                <ul class="nlm-source-list" id="drive-list">
+                  <li class="nlm-source drive-row" data-stale="1">
+                    <span class="nlm-src-icon nlm-src-gdoc">G</span>
+                    <div class="drive-meta">
+                      <span class="nlm-src-name">Q3 roadmap</span>
+                      <span class="drive-time stale">Google Doc · Updated on Drive · 2h ago</span>
+                    </div>
+                    <span class="nlm-src-badge warn">Update available</span>
+                    <button type="button" class="nlm-refresh-btn" data-action="drive-one" aria-label="Refresh">↻</button>
+                  </li>
+                  <li class="nlm-source drive-row" data-stale="1">
+                    <span class="nlm-src-icon nlm-src-gslides">S</span>
+                    <div class="drive-meta">
+                      <span class="nlm-src-name">Launch deck</span>
+                      <span class="drive-time stale">Google Slides · Updated on Drive · yesterday</span>
+                    </div>
+                    <span class="nlm-src-badge warn">Update available</span>
+                    <button type="button" class="nlm-refresh-btn" data-action="drive-one" aria-label="Refresh">↻</button>
+                  </li>
+                  <li class="nlm-source drive-row" data-stale="0">
+                    <span class="nlm-src-icon nlm-src-gsheet">⊞</span>
+                    <div class="drive-meta">
+                      <span class="nlm-src-name">Budget sheet</span>
+                      <span class="drive-time">Google Sheets · Synced · just now</span>
+                    </div>
+                  </li>
+                  <li class="nlm-source drive-row" data-stale="0">
+                    <span class="nlm-src-icon nlm-src-pdf">P</span>
+                    <div class="drive-meta">
+                      <span class="nlm-src-name">Vendor PDF</span>
+                      <span class="drive-time">Drive PDF · Synced · 3d ago</span>
+                    </div>
+                  </li>
+                </ul>
+              </aside>
+              <section class="nlm-chat muted-panel">
+                <p class="nlm-chat-hint">Chat stays grounded after you refresh Drive sources.</p>
+              </section>
+            </div>
+          </div>
+          <p class="demo-status" id="drive-status" role="status"></p>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Connect Drive sources</strong><p>Add Google Docs, Slides, Sheets, or Drive PDFs to a notebook as usual.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Spot stale sources</strong><p>NotebookTools surfaces an Update available badge when the file changed.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Refresh in one click</strong><p>Re-sync the source without re-uploading or re-pasting links.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Keep research current</strong><p>Your chat and Studio stay grounded in the latest file versions.</p></div></li>
+        </ol>
+      </section>
+          <div class="md-panel-buy">
+            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+          </div>
+        </article>
+        <article class="md-panel" data-panel="studio-podcasts" id="panel-studio-podcasts" hidden>
+          <div class="md-panel-intro">
+            <p class="eyebrow">Feature</p>
+            <h1>Studio & podcasts</h1>
+            <p class="lead">Generate Audio Overviews and play podcasts across every notebook in one player.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+              </a>
+            </div>
+          </div>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-head">
+            <div>
+              <p class="eyebrow">Interactive demo</p>
+              <p class="md-demo-note">Visual recreation — not a live NotebookLM session.</p>
+            </div>
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="studio">
+          <p class="demo-label">Interactive demo · NotebookLM Studio + podcast player</p>
+          <div class="browser-chrome">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="browser-url">notebooklm.google.com/notebook/…</div>
+          </div>
+          <div class="nlm-app">
+            <header class="nlm-topbar">
+              <div class="nlm-top-left">
+                <span class="nlm-logo-dot"></span>
+                <span class="nlm-notebook-title">History seminar</span>
+              </div>
+            </header>
+            <div class="nlm-body">
+              <aside class="nlm-sources">
+                <div class="nlm-panel-head"><h4>Sources</h4></div>
+                <ul class="nlm-source-list">
+                  <li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf">P</span><span class="nlm-src-name">Lecture 3.pdf</span></li>
+                  <li class="nlm-source"><span class="nlm-src-icon nlm-src-web">W</span><span class="nlm-src-name">smithsonian…</span></li>
+                  <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt">▶</span><span class="nlm-src-name">Documentary clip</span></li>
+                </ul>
+              </aside>
+              <section class="nlm-chat">
+                <div class="nlm-chat-empty">
+                  <p class="nlm-chat-hint">Generate Studio outputs from your sources</p>
+                </div>
+              </section>
+              <aside class="nlm-studio highlight">
+                <div class="nlm-panel-head"><h4>Studio</h4></div>
+                <div class="nlm-studio-cards">
+                  <button type="button" class="nlm-studio-card actionable" id="studio-gen" data-action="studio-gen">
+                    <span>♪</span> Audio Overview
+                    <em class="studio-cta">Generate</em>
+                  </button>
+                  <div class="nlm-studio-card"><span>▤</span> Study guide</div>
+                  <div class="nlm-studio-card"><span>?</span> FAQ</div>
+                </div>
+                <div class="studio-progress" id="studio-progress" hidden>
+                  <div class="waveform" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                  </div>
+                  <p id="studio-progress-text">Generating Audio Overview…</p>
+                </div>
+                <div class="podcast-player" id="podcast-player" hidden>
+                  <div class="podcast-art">♪</div>
+                  <div class="podcast-info">
+                    <strong>Audio Overview</strong>
+                    <span>History seminar · 8:42</span>
+                  </div>
+                  <button type="button" class="podcast-play" data-action="podcast-toggle" aria-label="Play">▶</button>
+                </div>
+              </aside>
+            </div>
+          </div>
+          <button type="button" class="demo-reset" data-action="studio-reset" hidden id="studio-reset">Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open Studio in the hub</strong><p>Pick a notebook and open the Studio panel — styled like NotebookLM’s right rail.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Generate an artifact</strong><p>Create an Audio Overview or other Studio output, then open it in NotebookLM.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Scan for podcasts</strong><p>The podcast tab finds audio across all your notebooks.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Play, queue, resume</strong><p>One player for every Audio Overview — continue where you left off.</p></div></li>
+        </ol>
+      </section>
+          <div class="md-panel-buy">
+            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+          </div>
+        </article>
+        <article class="md-panel" data-panel="prompts" id="panel-prompts" hidden>
+          <div class="md-panel-intro">
+            <p class="eyebrow">Feature</p>
+            <h1>Prompt library</h1>
+            <p class="lead">Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+              <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+                <img class="chrome-store-badge chrome-store-badge-sm" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="58">
+              </a>
+            </div>
+          </div>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-head">
+            <div>
+              <p class="eyebrow">Interactive demo</p>
+              <p class="md-demo-note">Visual recreation — not a live NotebookLM session.</p>
+            </div>
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-demo="prompts">
+          <p class="demo-label">Interactive demo · / prompts in NotebookLM chat</p>
+          <div class="nlm-app nlm-app-prompts">
+            <header class="nlm-topbar">
+              <div class="nlm-top-left">
+                <span class="nlm-logo-dot"></span>
+                <span class="nlm-notebook-title">Research — AI tools</span>
+              </div>
+            </header>
+            <div class="nlm-body">
+              <aside class="nlm-sources">
+                <div class="nlm-panel-head"><h4>Sources</h4></div>
+                <ul class="nlm-source-list">
+                  <li class="nlm-source"><span class="nlm-src-icon nlm-src-web">W</span><span class="nlm-src-name">openai.com/…</span></li>
+                  <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt">▶</span><span class="nlm-src-name">Demo talk</span></li>
+                </ul>
+              </aside>
+              <section class="nlm-chat prompts-chat">
+                <div class="nlm-messages" id="prompt-messages">
+                  <div class="nlm-msg bot">What would you like to explore in these sources?</div>
+                </div>
+                <div class="prompt-slash-menu" id="prompt-menu" hidden>
+                  <button type="button" class="prompt-slash-item" data-action="insert-prompt" data-text="Summarize the key arguments across all sources in 5 bullets.">/summarize — Key arguments in 5 bullets</button>
+                  <button type="button" class="prompt-slash-item" data-action="insert-prompt" data-text="List contradictions or tensions between the sources.">/tensions — Contradictions between sources</button>
+                  <button type="button" class="prompt-slash-item" data-action="insert-prompt" data-text="Draft study questions a student could use to quiz themselves.">/quiz — Study questions</button>
+                </div>
+                <div class="nlm-composer interactive">
+                  <input type="text" id="prompt-input" class="prompt-input" placeholder="Type / for prompts…" autocomplete="off" aria-label="Chat input demo">
+                  <button type="button" class="nlm-send" data-action="prompt-send" aria-label="Send">↑</button>
+                </div>
+              </section>
+              <aside class="nlm-studio prompts-side">
+                <div class="nlm-panel-head"><h4>Prompt library</h4></div>
+                <div class="prompt-chips" id="prompt-chips">
+                  <button type="button" class="prompt-chip" data-action="chip-prompt" data-text="Summarize the key arguments across all sources in 5 bullets.">Summarize</button>
+                  <button type="button" class="prompt-chip" data-action="chip-prompt" data-text="List contradictions or tensions between the sources.">Find tensions</button>
+                  <button type="button" class="prompt-chip" data-action="chip-prompt" data-text="Draft study questions a student could use to quiz themselves.">Study quiz</button>
+                  <button type="button" class="prompt-chip" data-action="chip-prompt" data-text="Explain this like I’m new to the topic, with citations.">ELI5 + cites</button>
+                </div>
+                <p class="prompt-side-hint">Chips insert into chat — same as typing <code>/</code></p>
+              </aside>
+            </div>
+          </div>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Browse the library</strong><p>Open the side panel Prompts tab for curated research prompts.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Type / in chat</strong><p>In NotebookLM’s chat box, slash opens matching prompts.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Insert and run</strong><p>Pick a prompt — it fills the chat ready to send.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Save your own</strong><p>Keep a personal set of go-to prompts next to the curated ones.</p></div></li>
+        </ol>
+      </section>
+          <div class="md-panel-buy">
+            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+          </div>
+        </article>
+        </div>
+      </div>
+      <noscript class="md-noscript-seo">
+        <ul>
+          <li><h2>Add YouTube to NotebookLM</h2><p>Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.</p><p>One click on any watch page — video lands in your notebook Sources.</p></li>
+        </ul>
+      </noscript>
     </main>
     <footer class="site-footer">
       <div class="footer-brand">
-        <img class="logo-img logo-footer" src="../assets/logo-wordmark-sm.png" alt="NotebookTools" width="120" height="20">
+        <img class="logo-img logo-footer" src="/assets/logo-wordmark-sm.png" alt="NotebookTools" width="120" height="20">
         <p>NotebookTools is an independent tool for NotebookLM. Not affiliated with Google.</p>
       </div>
       <div class="footer-links">
@@ -298,6 +842,6 @@
         <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM</a>
       </div>
     </footer>
-    <script src="demo.js"></script>
+    <script src="/features/demo.js"></script>
   </body>
 </html>

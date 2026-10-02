@@ -172,20 +172,18 @@
       }
     });
 
-    // Also listen on page for Play demo outside root
+    // Play demo button sits in section head (outside demo-shell root)
     document.addEventListener("click", function (e) {
       var t = e.target.closest('[data-action="play-demo"]');
       if (!t || !document.body.contains(root)) return;
-      if (root.contains(t) || t.closest(".feature-demo-section")) {
-        if ($('[data-demo="youtube"]') === root || root.closest(".feature-demo-section") === t.closest(".feature-demo-section")) {
-          runAutoplay();
-        }
+      if (t.closest(".feature-demo-section") === root.closest(".feature-demo-section")) {
+        runAutoplay();
       }
     });
 
-    setTimeout(function () {
-      if (!autoRunning) runAutoplay();
-    }, 900);
+    /* autoplay deferred to master-detail router */
+  
+    registerDemo("youtube", { play: runAutoplay });
   }
 
   /* ---- Bulk demo ---- */
@@ -297,13 +295,15 @@
 
     document.addEventListener("click", function (e) {
       var t = e.target.closest('[data-action="play-demo"]');
-      if (!t) return;
-      if (t.closest(".feature-demo-section") && $('[data-demo="bulk"]') === root) {
+      if (!t || !document.body.contains(root)) return;
+      if (t.closest(".feature-demo-section") === root.closest(".feature-demo-section")) {
         runAutoplay();
       }
     });
 
-    setTimeout(runAutoplay, 800);
+    /* autoplay deferred to master-detail router */
+  
+    registerDemo("bulk", { play: runAutoplay });
   }
 
   /* ---- Hub demo ---- */
@@ -433,13 +433,15 @@
 
     document.addEventListener("click", function (e) {
       var t = e.target.closest('[data-action="play-demo"]');
-      if (!t) return;
-      if (t.closest(".feature-demo-section") && $('[data-demo="hub"]') === root) {
+      if (!t || !document.body.contains(root)) return;
+      if (t.closest(".feature-demo-section") === root.closest(".feature-demo-section")) {
         runAutoplay();
       }
     });
 
-    setTimeout(runAutoplay, 900);
+    /* autoplay deferred to master-detail router */
+  
+    registerDemo("hub", { play: runAutoplay });
   }
 
   /* ---- Drive refresh ---- */
@@ -581,13 +583,15 @@
 
     document.addEventListener("click", function (e) {
       var t = e.target.closest('[data-action="play-demo"]');
-      if (!t) return;
-      if (t.closest(".feature-demo-section") && $('[data-demo="drive"]') === root) {
+      if (!t || !document.body.contains(root)) return;
+      if (t.closest(".feature-demo-section") === root.closest(".feature-demo-section")) {
         runAutoplay();
       }
     });
 
-    setTimeout(runAutoplay, 900);
+    /* autoplay deferred to master-detail router */
+  
+    registerDemo("drive", { play: runAutoplay });
   }
 
   /* ---- Studio / podcast ---- */
@@ -692,13 +696,15 @@
 
     document.addEventListener("click", function (e) {
       var t = e.target.closest('[data-action="play-demo"]');
-      if (!t) return;
-      if (t.closest(".feature-demo-section") && $('[data-demo="studio"]') === root) {
+      if (!t || !document.body.contains(root)) return;
+      if (t.closest(".feature-demo-section") === root.closest(".feature-demo-section")) {
         runAutoplay();
       }
     });
 
-    setTimeout(runAutoplay, 900);
+    /* autoplay deferred to master-detail router */
+  
+    registerDemo("studio", { play: runAutoplay });
   }
 
   /* ---- Prompts ---- */
@@ -837,16 +843,229 @@
 
     document.addEventListener("click", function (e) {
       var t = e.target.closest('[data-action="play-demo"]');
-      if (!t) return;
-      if (t.closest(".feature-demo-section") && $('[data-demo="prompts"]') === root) {
+      if (!t || !document.body.contains(root)) return;
+      if (t.closest(".feature-demo-section") === root.closest(".feature-demo-section")) {
         runAutoplay();
       }
     });
 
-    setTimeout(runAutoplay, 900);
+    /* autoplay deferred to master-detail router */
+  
+    registerDemo("prompts", { play: runAutoplay });
   }
 
-  function boot() {
+  
+  /* ---- Master-detail Features router ---- */
+  var FEATURE_META = {
+    overview: {
+      title: "Features – NotebookTools for NotebookLM",
+      description: "Explore NotebookTools features with interactive demos: YouTube import, bulk queue, notebooks hub, Drive refresh, Studio & podcasts, and prompt library.",
+      name: "Features",
+      path: "/features",
+      demo: null
+    },
+    "add-youtube": {
+      title: "Add YouTube to NotebookLM – NotebookTools",
+      description: "Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.",
+      name: "Add YouTube",
+      path: "/features/add-youtube",
+      demo: "youtube"
+    },
+    "bulk-import": {
+      title: "Bulk import queue – NotebookTools",
+      description: "Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.",
+      name: "Bulk import",
+      path: "/features/bulk-import",
+      demo: "bulk"
+    },
+    "notebooks-hub": {
+      title: "Notebooks hub – NotebookTools",
+      description: "NotebookTools notebooks hub — a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.",
+      name: "Notebooks hub",
+      path: "/features/notebooks-hub",
+      demo: "hub"
+    },
+    "drive-refresh": {
+      title: "Google Drive source refresh – NotebookTools",
+      description: "Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.",
+      name: "Drive refresh",
+      path: "/features/drive-refresh",
+      demo: "drive"
+    },
+    "studio-podcasts": {
+      title: "Studio & podcasts – NotebookTools",
+      description: "NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.",
+      name: "Studio & podcasts",
+      path: "/features/studio-podcasts",
+      demo: "studio"
+    },
+    prompts: {
+      title: "Prompt library – NotebookTools",
+      description: "NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.",
+      name: "Prompt library",
+      path: "/features/prompts",
+      demo: "prompts"
+    }
+  };
+
+  var demoControllers = {};
+  var currentFeature = null;
+
+  function setMeta(feature) {
+    var meta = FEATURE_META[feature];
+    if (!meta) return;
+    document.title = meta.title;
+    var desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", meta.description);
+    var ogt = document.querySelector('meta[property="og:title"]');
+    if (ogt) ogt.setAttribute("content", meta.title);
+    var ogd = document.querySelector('meta[property="og:description"]');
+    if (ogd) ogd.setAttribute("content", meta.description);
+    var ogu = document.querySelector('meta[property="og:url"]');
+    if (ogu) ogu.setAttribute("content", "https://www.notebooktools.com" + meta.path);
+    var can = document.querySelector('link[rel="canonical"]');
+    if (can) can.setAttribute("href", "https://www.notebooktools.com" + meta.path);
+  }
+
+  function updateBreadcrumb(feature) {
+    var bc = $("#features-breadcrumb");
+    if (!bc) return;
+    if (feature === "overview") {
+      bc.innerHTML =
+        '<a href="/">Home</a>' +
+        '<span class="feature-breadcrumb-sep" aria-hidden="true">/</span>' +
+        '<span aria-current="page">Features</span>';
+      return;
+    }
+    var meta = FEATURE_META[feature];
+    var name = meta ? meta.name : feature;
+    bc.innerHTML =
+      '<a href="/">Home</a>' +
+      '<span class="feature-breadcrumb-sep" aria-hidden="true">/</span>' +
+      '<a href="/features">Features</a>' +
+      '<span class="feature-breadcrumb-sep" aria-hidden="true">/</span>' +
+      '<span aria-current="page" id="bc-current"></span>';
+    var cur = $("#bc-current", bc);
+    if (cur) cur.textContent = name;
+  }
+
+  function updateNav(feature) {
+    $all("#features-nav .md-nav-item").forEach(function (el) {
+      var slug = el.getAttribute("data-feature");
+      var on = slug === feature;
+      el.classList.toggle("is-active", on);
+      if (on) el.setAttribute("aria-current", "page");
+      else el.removeAttribute("aria-current");
+    });
+    var sel = $("#md-feature-select");
+    if (sel && sel.value !== feature) sel.value = feature;
+  }
+
+  function showPanel(feature) {
+    $all(".md-panel").forEach(function (panel) {
+      var match = panel.getAttribute("data-panel") === feature;
+      panel.classList.toggle("is-active", match);
+      if (match) panel.removeAttribute("hidden");
+      else panel.setAttribute("hidden", "");
+    });
+  }
+
+  function playActiveDemo(feature) {
+    var meta = FEATURE_META[feature];
+    if (!meta || !meta.demo) return;
+    var ctrl = demoControllers[meta.demo];
+    if (ctrl && typeof ctrl.play === "function") {
+      setTimeout(function () {
+        ctrl.play();
+      }, 350);
+    }
+  }
+
+  function selectFeature(feature, opts) {
+    opts = opts || {};
+    if (!FEATURE_META[feature]) feature = "overview";
+    if (feature === currentFeature && !opts.force) return;
+    currentFeature = feature;
+    showPanel(feature);
+    updateNav(feature);
+    updateBreadcrumb(feature);
+    setMeta(feature);
+    document.body.setAttribute("data-initial-feature", feature);
+    if (opts.push !== false) {
+      var meta = FEATURE_META[feature];
+      var url = meta.path;
+      if (opts.replace) {
+        history.replaceState({ feature: feature }, meta.title, url);
+      } else {
+        history.pushState({ feature: feature }, meta.title, url);
+      }
+    }
+    if (opts.play !== false && feature !== "overview") {
+      playActiveDemo(feature);
+    }
+    var detail = $("#features-detail");
+    if (detail && opts.scroll !== false) {
+      var top = detail.getBoundingClientRect().top + window.scrollY - 80;
+      if (window.scrollY > top + 40 || opts.scroll === true) {
+        window.scrollTo({ top: Math.max(0, top), behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      }
+    }
+  }
+
+  function pathToFeature() {
+    var path = (location.pathname || "").replace(/\/+$/, "") || "/";
+    if (path === "/features" || path === "/features/index" || path === "/features/index.html") {
+      return "overview";
+    }
+    var m = path.match(/\/features\/([^/]+?)(?:\.html)?$/);
+    if (m && FEATURE_META[m[1]]) return m[1];
+    var initial = document.body.getAttribute("data-initial-feature");
+    if (initial && FEATURE_META[initial]) return initial;
+    return "overview";
+  }
+
+  function wireMasterDetail() {
+    if (!$(".md-layout")) return;
+
+    document.addEventListener("click", function (e) {
+      var nav = e.target.closest("[data-feature]");
+      if (!nav) return;
+      if (nav.tagName === "SELECT") return;
+      var feature = nav.getAttribute("data-feature");
+      if (!feature || !FEATURE_META[feature]) return;
+      // Overview cards + sidebar + select-feature buttons
+      if (
+        nav.classList.contains("md-nav-item") ||
+        nav.getAttribute("data-action") === "select-feature" ||
+        nav.classList.contains("md-overview-card")
+      ) {
+        e.preventDefault();
+        selectFeature(feature, { play: feature !== "overview" });
+      }
+    });
+
+    var sel = $("#md-feature-select");
+    if (sel) {
+      sel.addEventListener("change", function () {
+        selectFeature(sel.value, { play: sel.value !== "overview" });
+      });
+    }
+
+    window.addEventListener("popstate", function (e) {
+      var feature = (e.state && e.state.feature) || pathToFeature();
+      selectFeature(feature, { push: false, play: true });
+    });
+
+    var initial = pathToFeature();
+    selectFeature(initial, { replace: true, play: initial !== "overview", scroll: false });
+  }
+
+  function registerDemo(key, api) {
+    demoControllers[key] = api;
+  }
+
+
+function boot() {
     var yt = $('[data-demo="youtube"]');
     if (yt) initYoutubeDemo(yt);
     var bulk = $('[data-demo="bulk"]');
@@ -859,7 +1078,19 @@
     if (studio) initStudioDemo(studio);
     var prompts = $('[data-demo="prompts"]');
     if (prompts) initPromptsDemo(prompts);
+
+    if ($(".md-layout")) {
+      wireMasterDetail();
+    } else {
+      // Legacy single-feature pages: autoplay once
+      Object.keys(demoControllers).forEach(function (k) {
+        if (demoControllers[k] && demoControllers[k].play) {
+          setTimeout(demoControllers[k].play, 800);
+        }
+      });
+    }
   }
+
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);
