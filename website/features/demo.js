@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   "use strict";
 
   function $(sel, root) {
@@ -31,6 +31,107 @@
       });
     });
     return chain;
+  }
+
+
+  function ensureDemoCursor(shell) {
+    if (!shell) return null;
+    var cursor = shell.querySelector(".demo-cursor");
+    if (cursor) return cursor;
+    cursor = document.createElement("div");
+    cursor.className = "demo-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    cursor.innerHTML =
+      '<svg class="demo-cursor-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M4.5 2.8v17.2c0 .4.5.6.8.4l5.1-4.4c.2-.1.4-.2.6-.2h7.1c.4 0 .6-.5.3-.8L5.3 2.4a.5.5 0 0 0-.8.4z" fill="#fff" stroke="#202124" stroke-width="1.4" stroke-linejoin="round"/>' +
+      "</svg>" +
+      '<span class="demo-cursor-ripple"></span>';
+    shell.appendChild(cursor);
+    return cursor;
+  }
+
+  function hideDemoCursor(shell) {
+    if (!shell) return;
+    var cursor = shell.querySelector(".demo-cursor");
+    if (!cursor) return;
+    cursor.classList.remove("is-visible", "is-clicking");
+    cursor.style.opacity = "0";
+  }
+
+  /**
+   * Animate the guided cursor to an element inside .demo-shell, play a click
+   * ripple, then resolve so the caller can run the real demo step.
+   * @param {Element} el
+   * @param {{shell?: Element, duration?: number, click?: boolean, clickMs?: number, offsetX?: number, offsetY?: number}} opts
+   */
+  function moveCursorTo(el, opts) {
+    opts = opts || {};
+    if (!el) return Promise.resolve();
+    var shell = opts.shell || el.closest(".demo-shell");
+    if (!shell) return Promise.resolve();
+
+    var cursor = ensureDemoCursor(shell);
+    if (!cursor) return Promise.resolve();
+
+    var shellRect = shell.getBoundingClientRect();
+    var elRect = el.getBoundingClientRect();
+    var ox = opts.offsetX != null ? opts.offsetX : 0;
+    var oy = opts.offsetY != null ? opts.offsetY : 0;
+    var x = elRect.left - shellRect.left + shell.scrollLeft + elRect.width / 2 + ox;
+    var y = elRect.top - shellRect.top + shell.scrollTop + elRect.height / 2 + oy;
+    // Tip of the arrow sits near (6, 4) in the 24x24 graphic
+    var tipX = 6;
+    var tipY = 4;
+    var target = "translate(" + (x - tipX) + "px, " + (y - tipY) + "px)";
+    var duration = opts.duration != null ? opts.duration : 480;
+    var doClick = opts.click !== false;
+    var clickMs = opts.clickMs != null ? opts.clickMs : 280;
+    var reduced = prefersReducedMotion();
+
+    cursor.classList.add("is-visible");
+    cursor.classList.remove("is-clicking");
+
+    if (reduced) {
+      cursor.style.transition = "none";
+      cursor.style.opacity = "1";
+      cursor.style.transform = target;
+      if (!doClick) return Promise.resolve();
+      cursor.classList.add("is-clicking");
+      return wait(Math.min(clickMs, 80)).then(function () {
+        cursor.classList.remove("is-clicking");
+      });
+    }
+
+    // If cursor was hidden, seed a start position slightly above/left of target
+    if (!cursor.style.transform || cursor.style.opacity === "0" || getComputedStyle(cursor).opacity === "0") {
+      cursor.style.transition = "none";
+      cursor.style.opacity = "0";
+      cursor.style.transform =
+        "translate(" + (x - tipX - 36) + "px, " + (y - tipY - 28) + "px)";
+      // force reflow
+      void cursor.offsetWidth;
+    }
+
+    cursor.style.opacity = "1";
+    cursor.style.transition =
+      "transform " +
+      duration +
+      "ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms ease";
+    cursor.style.transform = target;
+
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        if (!doClick) {
+          resolve();
+          return;
+        }
+        cursor.classList.add("is-clicking");
+        setTimeout(function () {
+          cursor.classList.remove("is-clicking");
+          resolve();
+        }, clickMs);
+      }, duration);
+    });
   }
 
   /* ---- YouTube demo ---- */
@@ -96,7 +197,7 @@
           newSrc.classList.add("is-appearing");
           if (countEl) countEl.textContent = "3 sources";
           if (toast) {
-            toast.textContent = "Added to " + selectedName + " ✓";
+            toast.textContent = "Added to " + selectedName + " âœ“";
             toast.removeAttribute("hidden");
             setTimeout(function () {
               toast.setAttribute("hidden", "");
@@ -110,12 +211,13 @@
       if (autoRunning) return;
       autoRunning = true;
       reset();
+      hideDemoCursor(root);
       return sequence([
-        600,
+        400,
         function () {
           if (addBtn) addBtn.classList.add("is-pulse");
+          return moveCursorTo(addBtn, { shell: root });
         },
-        900,
         function () {
           if (addBtn) {
             addBtn.classList.remove("is-pulse");
@@ -123,27 +225,32 @@
           }
           showPicker(true);
         },
-        700,
+        500,
         function () {
           if (addBtn) addBtn.classList.remove("is-clicked");
           var items = $all(".demo-nb-item", root);
-          items.forEach(function (el, i) {
-            el.classList.toggle("is-selected", i === 2);
+          var sel = items[2] || items[0];
+          return moveCursorTo(sel, { shell: root }).then(function () {
+            items.forEach(function (el) {
+              el.classList.toggle("is-selected", el === sel);
+            });
+            if (sel) selectedName = sel.getAttribute("data-name") || selectedName;
           });
-          var sel = items[2];
-          if (sel) selectedName = sel.getAttribute("data-name") || selectedName;
         },
-        800,
+        450,
         function () {
           var confirm = $('[data-action="confirm-add"]', root);
-          if (confirm) confirm.classList.add("is-clicked");
-          return confirmAdd().then(function () {
-            var confirm2 = $('[data-action="confirm-add"]', root);
-            if (confirm2) confirm2.classList.remove("is-clicked");
+          return moveCursorTo(confirm, { shell: root }).then(function () {
+            if (confirm) confirm.classList.add("is-clicked");
+            return confirmAdd().then(function () {
+              var confirm2 = $('[data-action="confirm-add"]', root);
+              if (confirm2) confirm2.classList.remove("is-clicked");
+            });
           });
         },
-        400,
+        350,
         function () {
+          hideDemoCursor(root);
           autoRunning = false;
         },
       ]);
@@ -198,7 +305,7 @@
     function reset() {
       running = false;
       if (fill) fill.style.width = "0%";
-      if (text) text.textContent = "5 selected · ready";
+      if (text) text.textContent = "5 selected Â· ready";
       if (startBtn) startBtn.disabled = false;
       if (resetBtn) resetBtn.setAttribute("hidden", "");
       $all(".bulk-item", root).forEach(function (item) {
@@ -232,7 +339,7 @@
       return new Promise(function (resolve) {
         function step() {
           if (i >= items.length) {
-            if (text) text.textContent = items.length + " imported · done";
+            if (text) text.textContent = items.length + " imported Â· done";
             if (fill) fill.style.width = "100%";
             if (resetBtn) resetBtn.removeAttribute("hidden");
             if (startBtn) startBtn.classList.remove("is-clicked");
@@ -243,19 +350,19 @@
           var item = items[i];
           item.classList.add("is-running");
           var st = $(".bulk-status", item);
-          if (st) st.textContent = "Importing…";
-          if (text) text.textContent = "Importing " + (i + 1) + " of " + items.length + "…";
+          if (st) st.textContent = "Importingâ€¦";
+          if (text) text.textContent = "Importing " + (i + 1) + " of " + items.length + "â€¦";
           if (fill) fill.style.width = Math.round(((i + 0.5) / total) * 100) + "%";
 
           setTimeout(function () {
             item.classList.remove("is-running");
             item.classList.add("is-done");
-            if (st) st.textContent = "Added ✓";
+            if (st) st.textContent = "Added âœ“";
             if (nlm) {
               var label = item.querySelector("label");
               var name = label ? label.textContent.replace(/^\s*/, "").trim() : "Source";
               name = name.replace(/\s+/g, " ");
-              if (name.length > 36) name = name.slice(0, 34) + "…";
+              if (name.length > 36) name = name.slice(0, 34) + "â€¦";
               var li = document.createElement("li");
               li.className = "nlm-source nlm-source-new bulk-added is-appearing";
               li.innerHTML =
@@ -274,7 +381,20 @@
 
     function runAutoplay() {
       reset();
-      return wait(500).then(runImport);
+      hideDemoCursor(root);
+      return sequence([
+        400,
+        function () {
+          return moveCursorTo(startBtn, { shell: root });
+        },
+        function () {
+          return runImport();
+        },
+        200,
+        function () {
+          hideDemoCursor(root);
+        },
+      ]);
     }
 
     root.addEventListener("click", function (e) {
@@ -332,8 +452,8 @@
       if (hint) {
         hint.textContent =
           visible === 0
-            ? "No notebooks match — try clearing search"
-            : visible + " notebook" + (visible === 1 ? "" : "s") + " · demo only";
+            ? "No notebooks match â€” try clearing search"
+            : visible + " notebook" + (visible === 1 ? "" : "s") + " Â· demo only";
       }
     }
 
@@ -390,10 +510,15 @@
       filter = "all";
       folder = "all";
       setFilter("all");
+      hideDemoCursor(root);
       $all('[data-action="hub-folder"]', root).forEach(function (b) {
         b.classList.toggle("is-active", (b.getAttribute("data-folder") || "all") === "all");
       });
       return sequence([
+        300,
+        function () {
+          return moveCursorTo(search, { shell: root, click: false });
+        },
         function () {
           return typeSearch("AI");
         },
@@ -401,15 +526,22 @@
         function () {
           return typeSearch("");
         },
-        400,
+        350,
         function () {
-          setFilter("starred");
-          pulseStars();
+          var starredBtn = $('[data-action="hub-filter"][data-filter="starred"]', root);
+          return moveCursorTo(starredBtn, { shell: root }).then(function () {
+            setFilter("starred");
+            pulseStars();
+          });
         },
         1200,
         function () {
-          setFilter("all");
-          autoRunning = false;
+          var allBtn = $('[data-action="hub-filter"][data-filter="all"]', root);
+          return moveCursorTo(allBtn, { shell: root }).then(function () {
+            setFilter("all");
+            hideDemoCursor(root);
+            autoRunning = false;
+          });
         },
       ]);
     }
@@ -473,8 +605,8 @@
           var time = $(".drive-time", row);
           if (time) {
             time.classList.remove("stale");
-            var label = time.textContent.split("·")[0].trim();
-            time.textContent = label + " · Synced · just now";
+            var label = time.textContent.split("Â·")[0].trim();
+            time.textContent = label + " Â· Synced Â· just now";
           }
           resolve();
         }, prefersReducedMotion() ? 80 : 900);
@@ -495,11 +627,11 @@
         var time = $(".drive-time", row);
         if (time && idx === 0) {
           time.classList.add("stale");
-          time.textContent = "Google Doc · Updated on Drive · 2h ago";
+          time.textContent = "Google Doc Â· Updated on Drive Â· 2h ago";
         }
         if (time && idx === 1) {
           time.classList.add("stale");
-          time.textContent = "Google Slides · Updated on Drive · yesterday";
+          time.textContent = "Google Slides Â· Updated on Drive Â· yesterday";
         }
         if (!$(".nlm-src-badge", row)) {
           var badge = document.createElement("span");
@@ -523,7 +655,7 @@
         if (status) status.textContent = "All Drive sources are up to date";
         return Promise.resolve();
       }
-      if (status) status.textContent = "Refreshing " + stale.length + " sources…";
+      if (status) status.textContent = "Refreshing " + stale.length + " sourcesâ€¦";
       var chain = Promise.resolve();
       stale.forEach(function (row) {
         chain = chain.then(function () {
@@ -531,7 +663,7 @@
         });
       });
       return chain.then(function () {
-        if (status) status.textContent = "All Drive sources refreshed ✓";
+        if (status) status.textContent = "All Drive sources refreshed âœ“";
       });
     }
 
@@ -539,23 +671,27 @@
       if (autoRunning) return;
       autoRunning = true;
       restoreDemo();
+      hideDemoCursor(root);
       return sequence([
-        600,
+        500,
         function () {
           $all(".nlm-src-badge.warn", root).forEach(function (b) {
             b.classList.add("is-pulse");
           });
         },
-        800,
+        500,
         function () {
           var btn = $("#drive-refresh-all", root);
-          if (btn) btn.classList.add("is-clicked");
-          return runRefreshAll().then(function () {
-            if (btn) btn.classList.remove("is-clicked");
-            $all(".nlm-src-badge", root).forEach(function (b) {
-              b.classList.remove("is-pulse");
+          return moveCursorTo(btn, { shell: root }).then(function () {
+            if (btn) btn.classList.add("is-clicked");
+            return runRefreshAll().then(function () {
+              if (btn) btn.classList.remove("is-clicked");
+              $all(".nlm-src-badge", root).forEach(function (b) {
+                b.classList.remove("is-pulse");
+              });
+              hideDemoCursor(root);
+              autoRunning = false;
             });
-            autoRunning = false;
           });
         },
       ]);
@@ -569,9 +705,9 @@
         runAutoplay();
       } else if (action === "drive-one") {
         var row = t.closest(".drive-row");
-        if (status) status.textContent = "Refreshing source…";
+        if (status) status.textContent = "Refreshing sourceâ€¦";
         refreshRow(row).then(function () {
-          if (status) status.textContent = "Source updated from Google Drive ✓";
+          if (status) status.textContent = "Source updated from Google Drive âœ“";
         });
       } else if (action === "drive-refresh") {
         t.disabled = true;
@@ -619,7 +755,7 @@
       }
       if (playBtn) {
         playBtn.classList.remove("is-playing");
-        playBtn.textContent = "▶";
+        playBtn.textContent = "â–¶";
       }
       if (progress) progress.classList.remove("is-active");
     }
@@ -634,11 +770,11 @@
         progress.classList.add("is-active");
       }
       if (player) player.setAttribute("hidden", "");
-      if (progressText) progressText.textContent = "Generating Audio Overview…";
+      if (progressText) progressText.textContent = "Generating Audio Overviewâ€¦";
       return sequence([
         900,
         function () {
-          if (progressText) progressText.textContent = "Mixing host dialogue…";
+          if (progressText) progressText.textContent = "Mixing host dialogueâ€¦";
         },
         1100,
         function () {
@@ -658,7 +794,7 @@
           }
           if (playBtn) {
             playBtn.classList.add("is-playing");
-            playBtn.textContent = "❚❚";
+            playBtn.textContent = "âšâš";
           }
         },
       ]);
@@ -668,11 +804,21 @@
       if (autoRunning) return;
       autoRunning = true;
       reset();
-      return wait(500)
-        .then(runGenerate)
-        .then(function () {
+      hideDemoCursor(root);
+      return sequence([
+        400,
+        function () {
+          return moveCursorTo(genBtn, { shell: root });
+        },
+        function () {
+          return runGenerate();
+        },
+        250,
+        function () {
+          hideDemoCursor(root);
           autoRunning = false;
-        });
+        },
+      ]);
     }
 
     root.addEventListener("click", function (e) {
@@ -687,7 +833,7 @@
       } else if (action === "podcast-toggle") {
         if (!playBtn) return;
         var playing = playBtn.classList.toggle("is-playing");
-        playBtn.textContent = playing ? "❚❚" : "▶";
+        playBtn.textContent = playing ? "âšâš" : "â–¶";
         playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
       } else if (action === "studio-reset") {
         reset();
@@ -743,7 +889,7 @@
         var bot = document.createElement("div");
         bot.className = "nlm-msg bot is-appearing";
         bot.textContent =
-          "Demo reply — in NotebookLM, this prompt would run against your sources with citations.";
+          "Demo reply â€” in NotebookLM, this prompt would run against your sources with citations.";
         messages.appendChild(bot);
         messages.scrollTop = messages.scrollHeight;
       }, prefersReducedMotion() ? 40 : 450);
@@ -788,26 +934,35 @@
       if (autoRunning) return;
       autoRunning = true;
       clearMessagesExtra();
+      hideDemoCursor(root);
       return sequence([
-        400,
+        300,
+        function () {
+          return moveCursorTo(input, { shell: root, click: false });
+        },
         function () {
           return typeSlash();
         },
-        700,
+        500,
         function () {
           var item = $(".prompt-slash-item", menu);
-          if (item) {
+          if (!item) return;
+          return moveCursorTo(item, { shell: root }).then(function () {
             item.classList.add("is-highlight");
             insertPrompt(item.getAttribute("data-text") || "");
             setTimeout(function () {
               item.classList.remove("is-highlight");
             }, 500);
-          }
+          });
         },
-        600,
+        500,
         function () {
-          send();
-          autoRunning = false;
+          var sendBtn = $('[data-action="prompt-send"]', root);
+          return moveCursorTo(sendBtn, { shell: root }).then(function () {
+            send();
+            hideDemoCursor(root);
+            autoRunning = false;
+          });
         },
       ]);
     }
@@ -858,49 +1013,49 @@
   /* ---- Master-detail Features router ---- */
   var FEATURE_META = {
     overview: {
-      title: "Features – NotebookTools for NotebookLM",
+      title: "Features â€“ NotebookTools for NotebookLM",
       description: "Explore NotebookTools features with interactive demos: YouTube import, bulk queue, notebooks hub, Drive refresh, Studio & podcasts, and prompt library.",
       name: "Features",
       path: "/features",
       demo: null
     },
     "add-youtube": {
-      title: "Add YouTube to NotebookLM – NotebookTools",
+      title: "Add YouTube to NotebookLM â€“ NotebookTools",
       description: "Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.",
       name: "Add YouTube",
       path: "/features/add-youtube",
       demo: "youtube"
     },
     "bulk-import": {
-      title: "Bulk import queue – NotebookTools",
+      title: "Bulk import queue â€“ NotebookTools",
       description: "Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.",
       name: "Bulk import",
       path: "/features/bulk-import",
       demo: "bulk"
     },
     "notebooks-hub": {
-      title: "Notebooks hub – NotebookTools",
-      description: "NotebookTools notebooks hub — a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.",
+      title: "Notebooks hub â€“ NotebookTools",
+      description: "NotebookTools notebooks hub â€” a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.",
       name: "Notebooks hub",
       path: "/features/notebooks-hub",
       demo: "hub"
     },
     "drive-refresh": {
-      title: "Google Drive source refresh – NotebookTools",
+      title: "Google Drive source refresh â€“ NotebookTools",
       description: "Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.",
       name: "Drive refresh",
       path: "/features/drive-refresh",
       demo: "drive"
     },
     "studio-podcasts": {
-      title: "Studio & podcasts – NotebookTools",
-      description: "NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.",
+      title: "Studio & podcasts â€“ NotebookTools",
+      description: "NotebookLM Studio tools in NotebookTools â€” generate audio overviews, open artifacts, and play podcasts across notebooks in one player.",
       name: "Studio & podcasts",
       path: "/features/studio-podcasts",
       demo: "studio"
     },
     prompts: {
-      title: "Prompt library – NotebookTools",
+      title: "Prompt library â€“ NotebookTools",
       description: "NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.",
       name: "Prompt library",
       path: "/features/prompts",
@@ -1098,3 +1253,4 @@ function boot() {
     boot();
   }
 })();
+

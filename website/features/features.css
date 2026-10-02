@@ -1,4 +1,4 @@
-/* Feature pages + NotebookLM-style demo chrome
+﻿/* Feature pages + NotebookLM-style demo chrome
    Extends website/styles.css tokens (--bg, --accent, etc.) */
 
 .feature-page .feature-breadcrumb {
@@ -281,7 +281,7 @@
   text-align: center;
 }
 
-/* Hub grid — 2-col rich cards */
+/* Hub grid â€” 2-col rich cards */
 .feat-hub-grid {
   display: grid;
   gap: 24px;
@@ -795,6 +795,68 @@
   padding: 12px 12px 16px;
   position: relative;
 }
+
+
+/* ========== Guided demo cursor ========== */
+
+.demo-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-80px, -80px);
+  will-change: transform, opacity;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+}
+
+.demo-cursor.is-visible {
+  opacity: 1;
+}
+
+.demo-cursor-arrow {
+  display: block;
+  width: 24px;
+  height: 24px;
+  transform-origin: 6px 4px;
+  transition: transform 0.1s ease;
+}
+
+.demo-cursor-ripple {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(26, 115, 232, 0.4);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.demo-cursor.is-clicking .demo-cursor-arrow {
+  transform: scale(0.86);
+}
+
+.demo-cursor.is-clicking .demo-cursor-ripple {
+  animation: demo-cursor-ripple 0.38s ease-out;
+}
+
+@keyframes demo-cursor-ripple {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
 
 .demo-label {
   color: var(--subtle);
@@ -2532,11 +2594,14 @@
   .nlm-refresh-btn.is-spinning,
   .nlm-src-badge.warn.is-pulse,
   .studio-progress.is-active .waveform i,
-  .demo-modal.is-visible {
+  .demo-modal.is-visible,
+  .demo-cursor.is-clicking .demo-cursor-ripple {
     animation: none !important;
   }
   .bulk-progress-fill,
-  .nlm-nb-card {
+  .nlm-nb-card,
+  .demo-cursor,
+  .demo-cursor-arrow {
     transition: none !important;
   }
 }
@@ -2900,7 +2965,7 @@
   padding: 0;
 }
 
-/* Equal-size demo stage for every feature — no jump when switching */
+/* Equal-size demo stage for every feature â€” no jump when switching */
 .feature-master .demo-shell {
   --md-demo-h: calc(100vh - 10.25rem);
   max-width: none;
@@ -3060,3 +3125,4 @@
 .feature-master .md-panel.is-active > .md-demo {
   flex: 0 0 auto;
 }
+
