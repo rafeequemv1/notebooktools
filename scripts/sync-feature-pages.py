@@ -12,17 +12,26 @@ from pathlib import Path
 FEATURES = Path(__file__).resolve().parent.parent / "website" / "features"
 MAIN_RE = re.compile(r"<main\b.*?</main>", re.S)
 NLM = FEATURES / "nlm"
-SCRIPTS = [
+SCRIPTS_BEFORE_DEMO = [
     '<script src="/features/nlm/nlm-config.js"></script>',
     '<script src="/features/nlm/nlm-shell.js"></script>',
+    '<script src="/features/surfaces/surfaces.js"></script>',
+]
+SCRIPTS_AFTER_DEMO = [
+    '<script src="/features/demo-scenes.js"></script>',
 ]
 
 
 def icon_names() -> str:
-    """Every Material Symbol the NotebookLM shell uses ("ms:<name>")."""
+    """Every Material Symbol the demos use: "ms:<name>" or ms("<name>") in
+    the shell/surface scripts, and nlm-ms glyphs written into the markup."""
     names = set()
-    for f in ("nlm-config.js", "nlm-shell.js"):
-        names |= set(re.findall(r'"ms:([a-z0-9_]+)"', (NLM / f).read_text(encoding="utf-8")))
+    for f in [NLM / "nlm-config.js", NLM / "nlm-shell.js", FEATURES / "surfaces" / "surfaces.js", FEATURES / "demo-scenes.js"]:
+        text = f.read_text(encoding="utf-8")
+        names |= set(re.findall(r'"ms:([a-z0-9_]+)"', text))
+        names |= set(re.findall(r'\bms\("([a-z0-9_]+)"', text))
+    html = (FEATURES / "index.html").read_text(encoding="utf-8")
+    names |= set(re.findall(r'class="nlm-ms[^"]*"[^>]*>([a-z0-9_]+)<', html))
     return ",".join(sorted(names))
 
 
@@ -32,6 +41,7 @@ def head_links() -> list:
         '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&amp;icon_names='
         + icon_names() + '&amp;display=block" rel="stylesheet">',
         '<link rel="stylesheet" href="/features/nlm/nlm-ui.css">',
+        '<link rel="stylesheet" href="/features/surfaces/surfaces.css">',
     ]
 
 
@@ -64,13 +74,16 @@ def main() -> None:
         new = MAIN_RE.sub(lambda _: activate(master, feature), text, count=1)
         # Drop older copies of the NotebookLM links, then add the current ones.
         new = re.sub(r'\n\s*<link href="https://fonts\.googleapis\.com/css2\?family=(Google\+Sans|Material\+Symbols)[^"]*" rel="stylesheet">', "", new)
-        new = re.sub(r'\n\s*<link rel="stylesheet" href="/features/(nlm/)?nlm-ui\.css">', "", new)
+        new = re.sub(r'\n\s*<link rel="stylesheet" href="/features/((nlm/)?nlm-ui|surfaces/surfaces)\.css">', "", new)
         anchor = '<link rel="stylesheet" href="/features/features.css">'
         new = new.replace(anchor, anchor + "".join("\n    " + l for l in head_links()), 1)
         demo = '<script src="/features/demo.js"></script>'
-        for tag in SCRIPTS:
+        for tag in SCRIPTS_BEFORE_DEMO:
             if tag not in new:
                 new = new.replace(demo, tag + "\n    " + demo, 1)
+        for tag in reversed(SCRIPTS_AFTER_DEMO):
+            if tag not in new:
+                new = new.replace(demo, demo + "\n    " + tag, 1)
         if new != text:
             page.write_text(new, encoding="utf-8")
             changed += 1
