@@ -19,7 +19,8 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/features/features.css">
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&amp;family=Google+Sans+Text:wght@400;500;700&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/features/nlm-ui.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&amp;icon_names=add,apps,arrow_forward,arrow_upward,auto_fix,brush,chevron_right,content_copy,dark_mode,data_usage,delete,dock_to_left,dock_to_right,edit,expand_more,extension,feedback,flowchart,format_list_bulleted,forum,help,info,ios_share,keep,language,license,more_vert,notifications,open_in_new,picture_as_pdf,play_arrow,quiz,settings,share,sort,stacked_bar_chart,subdirectory_arrow_right,thumb_down,thumb_up,trending_up,tune,videocam&amp;display=block" rel="stylesheet">
+    <link rel="stylesheet" href="/features/nlm/nlm-ui.css">
     <link rel="stylesheet" href="/theme.css">
     <title>Notebooks hub – NotebookTools</title>
     <meta name="description" content="NotebookTools notebooks hub.">
@@ -433,34 +434,14 @@
                 <div class="browser-dots"><span></span><span></span><span></span></div>
                 <div class="browser-url">notebooklm.google.com/notebook/…</div>
               </div>
-              <div class="nlm-app">
-                <header class="nlm-topbar">
-                  <div class="nlm-top-left">
-                    <span class="nlm-logo-dot" aria-hidden="true"></span>
-                    <span class="nlm-notebook-title" id="yt-nb-title">NotebookLM notes</span>
-                  </div>
-                  <div class="nlm-top-right">
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Create notebook</span>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 23q-.8 0-1.4-.6T4 21V10q0-.8.6-1.4T6 8h3v2H6v11h12V10h-3V8h3q.8 0 1.4.6T20 10v11q0 .8-.6 1.4T18 23zm5-7V4.8L9.4 6.4 8 5l4-4 4 4-1.4 1.4L13 4.8V16z"/></svg>Share</span>
-                    <span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.25 22-.4-3.2q-.33-.13-.61-.3t-.56-.37L4.7 19.4l-2.75-4.75 2.58-1.95q-.03-.18-.03-.34v-.68q0-.16.03-.34L1.95 9.4 4.7 4.65l2.98 1.25q.28-.2.58-.37t.6-.3L9.25 2h5.5l.4 3.2q.33.13.61.3t.56.37l2.98-1.25 2.75 4.75-2.58 1.95q.03.18.03.34v.68q0 .16-.05.34l2.58 1.95-2.75 4.75-2.95-1.25q-.28.2-.58.38t-.6.29l-.4 3.2zm2.8-6.5q1.45 0 2.48-1.02T15.55 12t-1.02-2.47-2.48-1.03q-1.48 0-2.49 1.03T8.55 12t1.01 2.48 2.49 1.02m0-2q-.63 0-1.06-.44T10.55 12t.44-1.06 1.06-.44 1.06.44.44 1.06-.44 1.06-1.06.44"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 20q-.8 0-1.4-.6T4 18t.6-1.4T6 16t1.4.6T8 18t-.6 1.4T6 20m6 0q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 18t.6-1.4T18 16t1.4.6T20 18t-.6 1.4-1.4.6M6 14q-.8 0-1.4-.6T4 12t.6-1.4T6 10t1.4.6T8 12t-.6 1.4T6 14m6 0q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 12t.6-1.4T18 10t1.4.6T20 12t-.6 1.4-1.4.6M6 8q-.8 0-1.4-.6T4 6t.6-1.4T6 4t1.4.6T8 6t-.6 1.4T6 8m6 0q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8m6 0q-.8 0-1.4-.6T16 6t.6-1.4T18 4t1.4.6T20 6t-.6 1.4T18 8"/></svg></span>
-                    <span class="nlm-avatar" aria-hidden="true">R</span>
-                  </div>
+              <div class="nlm-app" data-mobile-tab="sources">
+                <header class="nlm-topbar" data-nlm="topbar">
+                  <span class="nlm-notebook-title" id="yt-nb-title">NotebookLM notes</span>
                 </header>
                 <div class="nlm-body">
                   <aside class="nlm-sources">
-                    <div class="nlm-panel-head"><h4>Sources</h4><span class="nlm-panel-toggle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h14q.8 0 1.4.6T21 5v14q0 .8-.6 1.4T19 21zm3-2V5H5v14zm2 0h9V5h-9z"/></svg></span></div>
-                    <div class="nlm-src-tools" aria-hidden="true">
-                      <span class="nlm-soft-btn"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Add sources</span>
-                      <div class="nlm-src-search">
-                        <span class="nlm-src-search-ph">Search the web for new sources</span>
-                        <div class="nlm-src-search-row">
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M12 22q-2.05 0-3.87-.79t-3.18-2.16-2.16-3.18T2 12t.79-3.89 2.16-3.17 3.18-2.15T12 2t3.89.79 3.17 2.15 2.15 3.17T22 12t-.79 3.87-2.15 3.18-3.17 2.16T12 22m0-2.05q.65-.9 1.13-1.87T13.9 16h-3.8q.3 1.1.78 2.08T12 19.95m-2.6-.4q-.45-.83-.79-1.71T8.05 16H5.1q.73 1.25 1.82 2.18T9.4 19.55m5.2 0q1.38-.45 2.48-1.38T18.9 16h-2.95q-.23.95-.56 1.84t-.79 1.71M4.25 14h3.4q-.08-.5-.11-.99T7.5 12t.04-1.01.11-.99h-3.4q-.13.5-.19.99T4 12t.06 1.01.19.99m5.4 0h4.7q.08-.5.11-.99T14.5 12t-.04-1.01-.11-.99h-4.7q-.08.5-.11.99T9.5 12t.04 1.01.11.99m6.7 0h3.4q.13-.5.19-.99T20 12t-.06-1.01-.19-.99h-3.4q.08.5.11.99t.04 1.01-.04 1.01-.11.99m-.4-6h2.95q-.73-1.25-1.82-2.17T14.6 4.45q.45.83.79 1.71T15.95 8M10.1 8h3.8q-.3-1.1-.78-2.07T12 4.05q-.65.9-1.12 1.88T10.1 8m-5 0h2.95q.23-.95.56-1.84t.79-1.71Q8.02 4.9 6.92 5.83T5.1 8"/></svg>Web<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25z"/></svg>Fast research<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-src-go"><svg viewBox="0 0 24 24"><path d="M16.2 13H4v-2h12.2l-5.6-5.6L12 4l8 8-8 8-1.4-1.4z"/></svg></span>
-                        </div>
-                      </div>
-                      <div class="nlm-select-all"><svg viewBox="0 0 24 24"><path d="M10 18v-2h4v2zm-4-5v-2h12v2zM3 8V6h18v2z"/></svg><span>Select all</span><i class="nlm-check"></i></div>
-                    </div>
+                    <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+                    <div data-nlm="source-tools"></div>
                     <ul class="nlm-source-list" id="yt-source-list">
                       <li class="nlm-source"><span class="nlm-src-icon nlm-src-doc">D</span><span class="nlm-src-name">Product brief.pdf</span></li>
                       <li class="nlm-source"><span class="nlm-src-icon nlm-src-web">W</span><span class="nlm-src-name">blog.google/…</span></li>
@@ -474,32 +455,17 @@
                   </aside>
                   <section class="nlm-chat">
                     <div class="nlm-chat-scroll">
-                      <div class="nlm-nb-head">
-                        <span class="nlm-nb-emoji" aria-hidden="true">📒</span>
-                        <h5>NotebookLM notes</h5>
-                        <p>3 sources · 5 Sept 2026</p>
-                      </div>
+                      <div data-nlm="nb-head" data-title="NotebookLM notes" data-meta="3 sources · 5 Sept 2026"></div>
                       <p class="nlm-summary">These sources explain how <strong>Audio Overviews</strong> turn your documents into a two-host conversation. The product brief covers the <strong>launch goals</strong>, while Google's post walks through <strong>language support</strong> and how to steer the hosts with a custom focus.</p>
-                      <div class="nlm-msg-actions" aria-hidden="true"><span class="nlm-save"><svg viewBox="0 0 24 24"><path d="m16 12 2 2v2h-5v6l-1 1-1-1v-6H6v-2l2-2V5H7V3h10v2h-1zm-7.15 2h6.3L14 12.85V5h-4v7.85z"/></svg>Save to note</span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18q-.8 0-1.4-.6T7 16V4q0-.8.6-1.4T9 2h9q.8 0 1.4.6T20 4v12q0 .8-.6 1.4T18 18zm0-2h9V4H9zm-4 6q-.8 0-1.4-.6T3 20V6h2v14h11v2z"/></svg></span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 21H7V8l7-7 1.25 1.25q.18.18.29.48t.11.57v.35L14.55 8H21q.8 0 1.4.6T23 10v2q0 .18-.04.38t-.11.37l-3 7.05q-.23.5-.75.85T18 21m-9-2h9l3-7v-2h-9l1.35-5.5L9 8.85zM9 8.85V19zM7 8v2H4v9h3v2H2V8z"/></svg></span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h11v13l-7 7-1.25-1.25q-.18-.18-.29-.48t-.11-.57v-.35L9.45 16H3q-.8 0-1.4-.6T1 14v-2q0-.18.04-.38t.11-.37l3-7.05q.23-.5.75-.85T6 3m9 2H6l-3 7v2h9l-1.35 5.5L15 15.15zm0 10.15V5zM17 16v-2h3V5h-3V3h5v13z"/></svg></span></div>
-                      <div class="nlm-suggest" aria-hidden="true"><div class="nlm-suggest-card">What are the key takeaways from the video?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div><div class="nlm-suggest-card">How do Audio Overviews choose what to cover?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div><div class="nlm-suggest-card">Summarize the launch in five bullet points<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div></div>
+                      <div data-nlm="msg-actions"></div>
+                      <div data-nlm="suggest"><div class="nlm-suggest-card">What are the key takeaways from the video?</div><div class="nlm-suggest-card">How do Audio Overviews choose what to cover?</div><div class="nlm-suggest-card">Summarize the launch in five bullet points</div></div>
                     </div>
-                    <div class="nlm-composer" aria-hidden="true"><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 21v-6h2v2h8v2h-8v2zm-8-2v-2h6v2zm4-4v-2H3v-2h4V9h2v6zm4-2v-2h10v2zm4-4V3h2v2h4v2h-4v2zM3 7V5h10v2z"/></svg></span><span class="nlm-composer-ph">Ask a question or create something</span><span class="nlm-composer-count">3 sources</span><span class="nlm-send"><svg viewBox="0 0 24 24"><path d="M11 20V7.8l-5.6 5.6L4 12l8-8 8 8-1.4 1.4L13 7.8V20z"/></svg></span></div>
-                    <p class="nlm-disclaimer">NotebookLM can make mistakes, so double-check it.</p>
+                    <div data-nlm="composer" data-sources="3"></div>
                   </section>
                   <aside class="nlm-studio">
-                    <div class="nlm-panel-head"><h4>Studio</h4><span class="nlm-panel-toggle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h14q.8 0 1.4.6T21 5v14q0 .8-.6 1.4T19 21zm3-2V5H5v14zm2 0h9V5h-9z"/></svg></span></div>
-                    <div class="nlm-studio-banner" aria-hidden="true">Create an Audio Overview in: <span>हिन्दी, বাংলা, ગુજરાતી, ಕನ್ನಡ, മലയാളം, मराठी, ਪੰਜਾਬੀ, தமிழ், తెలుగు</span></div>
-                  <div class="nlm-studio-grid">
-                    <div class="nlm-tile t-audio" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M3 15V9h2v6zm4 3V6h2v12zm4 4V2h2v20zm4-4V6h2v12z"/><path d="M19.5 3l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4L17.5 5l1.4-.6z"/></svg></span>Audio Overview</div>
-                    <div class="nlm-tile t-slides" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M4 20q-.8 0-1.4-.6T2 18V6q0-.8.6-1.4T4 4h16q.8 0 1.4.6T22 6v12q0 .8-.6 1.4T20 20zm0-2h16V6H4zm2-2h12V8H6zm2-2v-4h8v4z"/></svg></span>Slide deck</div>
-                    <div class="nlm-tile t-video" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M4 20q-.8 0-1.4-.6T2 18V6q0-.8.6-1.4T4 4h12q.8 0 1.4.6T18 6v4.5l4-4v11l-4-4V18q0 .8-.6 1.4T16 20zm0-2h12V6H4zm0 0V6z"/></svg></span>Video Overview</div>
-                    <div class="nlm-tile t-mind" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M15 21v-3h-4V8H9v3H2V4h7v3h6V4h7v7h-7V8h-2v8h2v-3h7v7h-7zm2-12h3V6h-3zm0 9h3v-3h-3zM4 9h3V6H4z"/></svg></span>Mind Map</div>
-                    <div class="nlm-tile t-reports" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h9v2H5v14h14v-9h2v9q0 .8-.6 1.4T19 21zm2-4v-2h10v2zm0-3v-2h10v2zm0-3V9h6v2zM17 9V7h-2V5h2V3h2v2h2v2h-2v2z"/></svg></span>Reports<em class="nlm-new">New!</em></div>
-                    <div class="nlm-tile t-flash" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M9 22q-.8 0-1.4-.6T7 20V8q0-.8.6-1.4T9 6h10q.8 0 1.4.6T21 8v12q0 .8-.6 1.4T19 22zm0-2h10V8H9zm-4-2V4q0-.8.6-1.4T7 2h10v2H7v14z"/></svg></span>Flashcards</div>
-                    <div class="nlm-tile t-quiz" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M14 15q.43 0 .73-.3t.3-.73-.3-.72-.73-.3-.72.3-.3.72.3.73.72.3m-.75-3.2h1.5q0-.73.15-1.06t.7-.89q.75-.75 1-1.21t.25-1.09q0-1.13-.79-1.84T14 5q-1.03 0-1.8.58T11.13 7.1l1.37.57q.23-.63.63-.95T14 6.4q.6 0 .98.34t.37.86q0 .38-.21.71t-.74.86q-.88.75-1.01 1.18t-.14 1.45M8 18q-.8 0-1.4-.6T6 16V4q0-.8.6-1.4T8 2h12q.8 0 1.4.6T22 4v12q0 .8-.6 1.4T20 18zm0-2h12V4H8zm-4 6q-.8 0-1.4-.6T2 20V6h2v14h14v2z"/></svg></span>Quiz</div>
-                    <div class="nlm-tile t-info" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M4 21V9h3v12zm6.5 0V3h3v18zM17 21v-7h3v7z"/></svg></span>Infographic</div>
-                    <div class="nlm-tile t-table" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M3 19v-2h2v2zm0-6v-2h2v2zm0-6V5h2v2zm4 12v-2h14v2zm0-6v-2h14v2zm0-6V5h14v2z"/></svg></span>Data table</div>
-                  </div>
+                    <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+                    <div data-nlm="studio"></div>
+                  <div class="nlm-artifacts"><div data-nlm="artifact" data-type="slides" data-title="Audio Overviews explained" data-meta="2 sources · 3d ago"></div></div>
                   </aside>
                 </div>
               </div>
@@ -716,34 +682,14 @@
             <div class="browser-dots"><span></span><span></span><span></span></div>
             <div class="browser-url">notebooklm.google.com/notebook/… · Sources</div>
           </div>
-          <div class="nlm-app nlm-app-focus-sources">
-            <header class="nlm-topbar">
-                  <div class="nlm-top-left">
-                <span class="nlm-logo-dot" aria-hidden="true"></span>
-                <span class="nlm-notebook-title">Q3 planning</span>
-              </div>
-                  <div class="nlm-top-right">
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Create notebook</span>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 23q-.8 0-1.4-.6T4 21V10q0-.8.6-1.4T6 8h3v2H6v11h12V10h-3V8h3q.8 0 1.4.6T20 10v11q0 .8-.6 1.4T18 23zm5-7V4.8L9.4 6.4 8 5l4-4 4 4-1.4 1.4L13 4.8V16z"/></svg>Share</span>
-                    <span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.25 22-.4-3.2q-.33-.13-.61-.3t-.56-.37L4.7 19.4l-2.75-4.75 2.58-1.95q-.03-.18-.03-.34v-.68q0-.16.03-.34L1.95 9.4 4.7 4.65l2.98 1.25q.28-.2.58-.37t.6-.3L9.25 2h5.5l.4 3.2q.33.13.61.3t.56.37l2.98-1.25 2.75 4.75-2.58 1.95q.03.18.03.34v.68q0 .16-.05.34l2.58 1.95-2.75 4.75-2.95-1.25q-.28.2-.58.38t-.6.29l-.4 3.2zm2.8-6.5q1.45 0 2.48-1.02T15.55 12t-1.02-2.47-2.48-1.03q-1.48 0-2.49 1.03T8.55 12t1.01 2.48 2.49 1.02m0-2q-.63 0-1.06-.44T10.55 12t.44-1.06 1.06-.44 1.06.44.44 1.06-.44 1.06-1.06.44"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 20q-.8 0-1.4-.6T4 18t.6-1.4T6 16t1.4.6T8 18t-.6 1.4T6 20m6 0q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 18t.6-1.4T18 16t1.4.6T20 18t-.6 1.4-1.4.6M6 14q-.8 0-1.4-.6T4 12t.6-1.4T6 10t1.4.6T8 12t-.6 1.4T6 14m6 0q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 12t.6-1.4T18 10t1.4.6T20 12t-.6 1.4-1.4.6M6 8q-.8 0-1.4-.6T4 6t.6-1.4T6 4t1.4.6T8 6t-.6 1.4T6 8m6 0q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8m6 0q-.8 0-1.4-.6T16 6t.6-1.4T18 4t1.4.6T20 6t-.6 1.4T18 8"/></svg></span>
-                    <span class="nlm-avatar" aria-hidden="true">R</span>
-                  </div>
+          <div class="nlm-app nlm-app-focus-sources" data-mobile-tab="sources">
+            <header class="nlm-topbar" data-nlm="topbar">
+                  <span class="nlm-notebook-title">Q3 planning</span>
                 </header>
             <div class="nlm-body single-rail">
               <aside class="nlm-sources wide">
-                <div class="nlm-panel-head"><h4>Sources</h4><button type="button" class="button button-sm button-ghost" id="drive-refresh-all" data-action="drive-refresh">Refresh updates</button></div>
-                    <div class="nlm-src-tools" aria-hidden="true">
-                      <span class="nlm-soft-btn"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Add sources</span>
-                      <div class="nlm-src-search">
-                        <span class="nlm-src-search-ph">Search the web for new sources</span>
-                        <div class="nlm-src-search-row">
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M12 22q-2.05 0-3.87-.79t-3.18-2.16-2.16-3.18T2 12t.79-3.89 2.16-3.17 3.18-2.15T12 2t3.89.79 3.17 2.15 2.15 3.17T22 12t-.79 3.87-2.15 3.18-3.17 2.16T12 22m0-2.05q.65-.9 1.13-1.87T13.9 16h-3.8q.3 1.1.78 2.08T12 19.95m-2.6-.4q-.45-.83-.79-1.71T8.05 16H5.1q.73 1.25 1.82 2.18T9.4 19.55m5.2 0q1.38-.45 2.48-1.38T18.9 16h-2.95q-.23.95-.56 1.84t-.79 1.71M4.25 14h3.4q-.08-.5-.11-.99T7.5 12t.04-1.01.11-.99h-3.4q-.13.5-.19.99T4 12t.06 1.01.19.99m5.4 0h4.7q.08-.5.11-.99T14.5 12t-.04-1.01-.11-.99h-4.7q-.08.5-.11.99T9.5 12t.04 1.01.11.99m6.7 0h3.4q.13-.5.19-.99T20 12t-.06-1.01-.19-.99h-3.4q.08.5.11.99t.04 1.01-.04 1.01-.11.99m-.4-6h2.95q-.73-1.25-1.82-2.17T14.6 4.45q.45.83.79 1.71T15.95 8M10.1 8h3.8q-.3-1.1-.78-2.07T12 4.05q-.65.9-1.12 1.88T10.1 8m-5 0h2.95q.23-.95.56-1.84t.79-1.71Q8.02 4.9 6.92 5.83T5.1 8"/></svg>Web<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25z"/></svg>Fast research<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-src-go"><svg viewBox="0 0 24 24"><path d="M16.2 13H4v-2h12.2l-5.6-5.6L12 4l8 8-8 8-1.4-1.4z"/></svg></span>
-                        </div>
-                      </div>
-                      <div class="nlm-select-all"><svg viewBox="0 0 24 24"><path d="M10 18v-2h4v2zm-4-5v-2h12v2zM3 8V6h18v2z"/></svg><span>Select all</span><i class="nlm-check"></i></div>
-                    </div>
+                <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"><button type="button" class="button button-sm button-ghost" id="drive-refresh-all" data-action="drive-refresh">Refresh updates</button></div>
+                    <div data-nlm="source-tools"></div>
                 <ul class="nlm-source-list" id="drive-list">
                   <li class="nlm-source drive-row" data-stale="1">
                     <span class="nlm-src-icon nlm-src-gdoc">G</span>
@@ -781,17 +727,12 @@
               </aside>
               <section class="nlm-chat">
                     <div class="nlm-chat-scroll">
-                      <div class="nlm-nb-head">
-                        <span class="nlm-nb-emoji" aria-hidden="true">📒</span>
-                        <h5>Q3 planning</h5>
-                        <p>4 sources · 5 Sept 2026</p>
-                      </div>
+                      <div data-nlm="nb-head" data-title="Q3 planning" data-meta="4 sources · 5 Sept 2026"></div>
                       <p class="nlm-summary">The Q3 roadmap sets three priorities: <strong>self-serve onboarding</strong>, <strong>enterprise SSO</strong> and a <strong>mobile beta</strong>. The launch deck and budget sheet tie each milestone to owners and spend, and the vendor PDF covers the <strong>support contract</strong>.</p>
-                      <div class="nlm-msg-actions" aria-hidden="true"><span class="nlm-save"><svg viewBox="0 0 24 24"><path d="m16 12 2 2v2h-5v6l-1 1-1-1v-6H6v-2l2-2V5H7V3h10v2h-1zm-7.15 2h6.3L14 12.85V5h-4v7.85z"/></svg>Save to note</span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18q-.8 0-1.4-.6T7 16V4q0-.8.6-1.4T9 2h9q.8 0 1.4.6T20 4v12q0 .8-.6 1.4T18 18zm0-2h9V4H9zm-4 6q-.8 0-1.4-.6T3 20V6h2v14h11v2z"/></svg></span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 21H7V8l7-7 1.25 1.25q.18.18.29.48t.11.57v.35L14.55 8H21q.8 0 1.4.6T23 10v2q0 .18-.04.38t-.11.37l-3 7.05q-.23.5-.75.85T18 21m-9-2h9l3-7v-2h-9l1.35-5.5L9 8.85zM9 8.85V19zM7 8v2H4v9h3v2H2V8z"/></svg></span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h11v13l-7 7-1.25-1.25q-.18-.18-.29-.48t-.11-.57v-.35L9.45 16H3q-.8 0-1.4-.6T1 14v-2q0-.18.04-.38t.11-.37l3-7.05q.23-.5.75-.85T6 3m9 2H6l-3 7v2h9l-1.35 5.5L15 15.15zm0 10.15V5zM17 16v-2h3V5h-3V3h5v13z"/></svg></span></div>
-                      <div class="nlm-suggest" aria-hidden="true"><div class="nlm-suggest-card">What are the top three Q3 priorities?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div><div class="nlm-suggest-card">Where is the budget most at risk?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div><div class="nlm-suggest-card">Summarize the launch timeline<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div></div>
+                      <div data-nlm="msg-actions"></div>
+                      <div data-nlm="suggest"><div class="nlm-suggest-card">What are the top three Q3 priorities?</div><div class="nlm-suggest-card">Where is the budget most at risk?</div><div class="nlm-suggest-card">Summarize the launch timeline</div></div>
                     </div>
-                    <div class="nlm-composer" aria-hidden="true"><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 21v-6h2v2h8v2h-8v2zm-8-2v-2h6v2zm4-4v-2H3v-2h4V9h2v6zm4-2v-2h10v2zm4-4V3h2v2h4v2h-4v2zM3 7V5h10v2z"/></svg></span><span class="nlm-composer-ph">Ask a question or create something</span><span class="nlm-composer-count">4 sources</span><span class="nlm-send"><svg viewBox="0 0 24 24"><path d="M11 20V7.8l-5.6 5.6L4 12l8-8 8 8-1.4 1.4L13 7.8V20z"/></svg></span></div>
-                    <p class="nlm-disclaimer">NotebookLM can make mistakes, so double-check it.</p>
+                    <div data-nlm="composer" data-sources="4"></div>
                   </section>
             </div>
           </div>
@@ -819,34 +760,14 @@
             <div class="browser-dots"><span></span><span></span><span></span></div>
             <div class="browser-url">notebooklm.google.com/notebook/…</div>
           </div>
-          <div class="nlm-app">
-            <header class="nlm-topbar">
-                  <div class="nlm-top-left">
-                <span class="nlm-logo-dot" aria-hidden="true"></span>
-                <span class="nlm-notebook-title">History seminar</span>
-              </div>
-                  <div class="nlm-top-right">
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Create notebook</span>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 23q-.8 0-1.4-.6T4 21V10q0-.8.6-1.4T6 8h3v2H6v11h12V10h-3V8h3q.8 0 1.4.6T20 10v11q0 .8-.6 1.4T18 23zm5-7V4.8L9.4 6.4 8 5l4-4 4 4-1.4 1.4L13 4.8V16z"/></svg>Share</span>
-                    <span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.25 22-.4-3.2q-.33-.13-.61-.3t-.56-.37L4.7 19.4l-2.75-4.75 2.58-1.95q-.03-.18-.03-.34v-.68q0-.16.03-.34L1.95 9.4 4.7 4.65l2.98 1.25q.28-.2.58-.37t.6-.3L9.25 2h5.5l.4 3.2q.33.13.61.3t.56.37l2.98-1.25 2.75 4.75-2.58 1.95q.03.18.03.34v.68q0 .16-.05.34l2.58 1.95-2.75 4.75-2.95-1.25q-.28.2-.58.38t-.6.29l-.4 3.2zm2.8-6.5q1.45 0 2.48-1.02T15.55 12t-1.02-2.47-2.48-1.03q-1.48 0-2.49 1.03T8.55 12t1.01 2.48 2.49 1.02m0-2q-.63 0-1.06-.44T10.55 12t.44-1.06 1.06-.44 1.06.44.44 1.06-.44 1.06-1.06.44"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 20q-.8 0-1.4-.6T4 18t.6-1.4T6 16t1.4.6T8 18t-.6 1.4T6 20m6 0q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 18t.6-1.4T18 16t1.4.6T20 18t-.6 1.4-1.4.6M6 14q-.8 0-1.4-.6T4 12t.6-1.4T6 10t1.4.6T8 12t-.6 1.4T6 14m6 0q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 12t.6-1.4T18 10t1.4.6T20 12t-.6 1.4-1.4.6M6 8q-.8 0-1.4-.6T4 6t.6-1.4T6 4t1.4.6T8 6t-.6 1.4T6 8m6 0q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8m6 0q-.8 0-1.4-.6T16 6t.6-1.4T18 4t1.4.6T20 6t-.6 1.4T18 8"/></svg></span>
-                    <span class="nlm-avatar" aria-hidden="true">R</span>
-                  </div>
+          <div class="nlm-app" data-mobile-tab="studio">
+            <header class="nlm-topbar" data-nlm="topbar">
+                  <span class="nlm-notebook-title">History seminar</span>
                 </header>
             <div class="nlm-body">
               <aside class="nlm-sources">
-                <div class="nlm-panel-head"><h4>Sources</h4><span class="nlm-panel-toggle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h14q.8 0 1.4.6T21 5v14q0 .8-.6 1.4T19 21zm3-2V5H5v14zm2 0h9V5h-9z"/></svg></span></div>
-                    <div class="nlm-src-tools" aria-hidden="true">
-                      <span class="nlm-soft-btn"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Add sources</span>
-                      <div class="nlm-src-search">
-                        <span class="nlm-src-search-ph">Search the web for new sources</span>
-                        <div class="nlm-src-search-row">
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M12 22q-2.05 0-3.87-.79t-3.18-2.16-2.16-3.18T2 12t.79-3.89 2.16-3.17 3.18-2.15T12 2t3.89.79 3.17 2.15 2.15 3.17T22 12t-.79 3.87-2.15 3.18-3.17 2.16T12 22m0-2.05q.65-.9 1.13-1.87T13.9 16h-3.8q.3 1.1.78 2.08T12 19.95m-2.6-.4q-.45-.83-.79-1.71T8.05 16H5.1q.73 1.25 1.82 2.18T9.4 19.55m5.2 0q1.38-.45 2.48-1.38T18.9 16h-2.95q-.23.95-.56 1.84t-.79 1.71M4.25 14h3.4q-.08-.5-.11-.99T7.5 12t.04-1.01.11-.99h-3.4q-.13.5-.19.99T4 12t.06 1.01.19.99m5.4 0h4.7q.08-.5.11-.99T14.5 12t-.04-1.01-.11-.99h-4.7q-.08.5-.11.99T9.5 12t.04 1.01.11.99m6.7 0h3.4q.13-.5.19-.99T20 12t-.06-1.01-.19-.99h-3.4q.08.5.11.99t.04 1.01-.04 1.01-.11.99m-.4-6h2.95q-.73-1.25-1.82-2.17T14.6 4.45q.45.83.79 1.71T15.95 8M10.1 8h3.8q-.3-1.1-.78-2.07T12 4.05q-.65.9-1.12 1.88T10.1 8m-5 0h2.95q.23-.95.56-1.84t.79-1.71Q8.02 4.9 6.92 5.83T5.1 8"/></svg>Web<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25z"/></svg>Fast research<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-src-go"><svg viewBox="0 0 24 24"><path d="M16.2 13H4v-2h12.2l-5.6-5.6L12 4l8 8-8 8-1.4-1.4z"/></svg></span>
-                        </div>
-                      </div>
-                      <div class="nlm-select-all"><svg viewBox="0 0 24 24"><path d="M10 18v-2h4v2zm-4-5v-2h12v2zM3 8V6h18v2z"/></svg><span>Select all</span><i class="nlm-check"></i></div>
-                    </div>
+                <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+                    <div data-nlm="source-tools"></div>
                 <ul class="nlm-source-list">
                   <li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf">P</span><span class="nlm-src-name">Lecture 3.pdf</span></li>
                   <li class="nlm-source"><span class="nlm-src-icon nlm-src-web">W</span><span class="nlm-src-name">smithsonian…</span></li>
@@ -855,32 +776,17 @@
               </aside>
               <section class="nlm-chat">
                     <div class="nlm-chat-scroll">
-                      <div class="nlm-nb-head">
-                        <span class="nlm-nb-emoji" aria-hidden="true">📒</span>
-                        <h5>History seminar</h5>
-                        <p>3 sources · 5 Sept 2026</p>
-                      </div>
+                      <div data-nlm="nb-head" data-title="History seminar" data-meta="3 sources · 5 Sept 2026"></div>
                       <p class="nlm-summary">Lecture 3 traces the <strong>causes of the Industrial Revolution</strong>, from coal and canals to new textile machinery. The Smithsonian article adds <strong>primary-source context</strong>, and the documentary clip shows how <strong>factory life</strong> reshaped cities and families.</p>
-                      <div class="nlm-msg-actions" aria-hidden="true"><span class="nlm-save"><svg viewBox="0 0 24 24"><path d="m16 12 2 2v2h-5v6l-1 1-1-1v-6H6v-2l2-2V5H7V3h10v2h-1zm-7.15 2h6.3L14 12.85V5h-4v7.85z"/></svg>Save to note</span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18q-.8 0-1.4-.6T7 16V4q0-.8.6-1.4T9 2h9q.8 0 1.4.6T20 4v12q0 .8-.6 1.4T18 18zm0-2h9V4H9zm-4 6q-.8 0-1.4-.6T3 20V6h2v14h11v2z"/></svg></span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 21H7V8l7-7 1.25 1.25q.18.18.29.48t.11.57v.35L14.55 8H21q.8 0 1.4.6T23 10v2q0 .18-.04.38t-.11.37l-3 7.05q-.23.5-.75.85T18 21m-9-2h9l3-7v-2h-9l1.35-5.5L9 8.85zM9 8.85V19zM7 8v2H4v9h3v2H2V8z"/></svg></span><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h11v13l-7 7-1.25-1.25q-.18-.18-.29-.48t-.11-.57v-.35L9.45 16H3q-.8 0-1.4-.6T1 14v-2q0-.18.04-.38t.11-.37l3-7.05q.23-.5.75-.85T6 3m9 2H6l-3 7v2h9l-1.35 5.5L15 15.15zm0 10.15V5zM17 16v-2h3V5h-3V3h5v13z"/></svg></span></div>
-                      <div class="nlm-suggest" aria-hidden="true"><div class="nlm-suggest-card">What were the main causes of the Industrial Revolution?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div><div class="nlm-suggest-card">How did factory work change daily life?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div><div class="nlm-suggest-card">Which inventions mattered most and why?<span class="nlm-ico"><svg viewBox="0 0 24 24"><path d="m14 21-1.4-1.43L15.2 17H7q-.8 0-1.4-.6T5 15V4h2v11h8.2l-2.6-2.6L14 11l5 5z"/></svg></span></div></div>
+                      <div data-nlm="msg-actions"></div>
+                      <div data-nlm="suggest"><div class="nlm-suggest-card">What were the main causes of the Industrial Revolution?</div><div class="nlm-suggest-card">How did factory work change daily life?</div><div class="nlm-suggest-card">Which inventions mattered most and why?</div></div>
                     </div>
-                    <div class="nlm-composer" aria-hidden="true"><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 21v-6h2v2h8v2h-8v2zm-8-2v-2h6v2zm4-4v-2H3v-2h4V9h2v6zm4-2v-2h10v2zm4-4V3h2v2h4v2h-4v2zM3 7V5h10v2z"/></svg></span><span class="nlm-composer-ph">Ask a question or create something</span><span class="nlm-composer-count">3 sources</span><span class="nlm-send"><svg viewBox="0 0 24 24"><path d="M11 20V7.8l-5.6 5.6L4 12l8-8 8 8-1.4 1.4L13 7.8V20z"/></svg></span></div>
-                    <p class="nlm-disclaimer">NotebookLM can make mistakes, so double-check it.</p>
+                    <div data-nlm="composer" data-sources="3"></div>
                   </section>
               <aside class="nlm-studio highlight">
-                <div class="nlm-panel-head"><h4>Studio</h4><span class="nlm-panel-toggle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h14q.8 0 1.4.6T21 5v14q0 .8-.6 1.4T19 21zm3-2V5H5v14zm2 0h9V5h-9z"/></svg></span></div>
-                <div class="nlm-studio-banner" aria-hidden="true">Create an Audio Overview in: <span>हिन्दी, বাংলা, ગુજરાતી, ಕನ್ನಡ, മലയാളം, मराठी, ਪੰਜਾਬੀ, தமிழ், తెలుగు</span></div>
-                  <div class="nlm-studio-grid">
-                    <button type="button" class="nlm-tile t-audio actionable" id="studio-gen" data-action="studio-gen"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M3 15V9h2v6zm4 3V6h2v12zm4 4V2h2v20zm4-4V6h2v12z"/><path d="M19.5 3l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4L17.5 5l1.4-.6z"/></svg></span>Audio Overview<em class="studio-cta">Generate</em></button>
-                    <div class="nlm-tile t-slides" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M4 20q-.8 0-1.4-.6T2 18V6q0-.8.6-1.4T4 4h16q.8 0 1.4.6T22 6v12q0 .8-.6 1.4T20 20zm0-2h16V6H4zm2-2h12V8H6zm2-2v-4h8v4z"/></svg></span>Slide deck</div>
-                    <div class="nlm-tile t-video" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M4 20q-.8 0-1.4-.6T2 18V6q0-.8.6-1.4T4 4h12q.8 0 1.4.6T18 6v4.5l4-4v11l-4-4V18q0 .8-.6 1.4T16 20zm0-2h12V6H4zm0 0V6z"/></svg></span>Video Overview</div>
-                    <div class="nlm-tile t-mind" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M15 21v-3h-4V8H9v3H2V4h7v3h6V4h7v7h-7V8h-2v8h2v-3h7v7h-7zm2-12h3V6h-3zm0 9h3v-3h-3zM4 9h3V6H4z"/></svg></span>Mind Map</div>
-                    <div class="nlm-tile t-reports" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h9v2H5v14h14v-9h2v9q0 .8-.6 1.4T19 21zm2-4v-2h10v2zm0-3v-2h10v2zm0-3V9h6v2zM17 9V7h-2V5h2V3h2v2h2v2h-2v2z"/></svg></span>Reports<em class="nlm-new">New!</em></div>
-                    <div class="nlm-tile t-flash" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M9 22q-.8 0-1.4-.6T7 20V8q0-.8.6-1.4T9 6h10q.8 0 1.4.6T21 8v12q0 .8-.6 1.4T19 22zm0-2h10V8H9zm-4-2V4q0-.8.6-1.4T7 2h10v2H7v14z"/></svg></span>Flashcards</div>
-                    <div class="nlm-tile t-quiz" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M14 15q.43 0 .73-.3t.3-.73-.3-.72-.73-.3-.72.3-.3.72.3.73.72.3m-.75-3.2h1.5q0-.73.15-1.06t.7-.89q.75-.75 1-1.21t.25-1.09q0-1.13-.79-1.84T14 5q-1.03 0-1.8.58T11.13 7.1l1.37.57q.23-.63.63-.95T14 6.4q.6 0 .98.34t.37.86q0 .38-.21.71t-.74.86q-.88.75-1.01 1.18t-.14 1.45M8 18q-.8 0-1.4-.6T6 16V4q0-.8.6-1.4T8 2h12q.8 0 1.4.6T22 4v12q0 .8-.6 1.4T20 18zm0-2h12V4H8zm-4 6q-.8 0-1.4-.6T2 20V6h2v14h14v2z"/></svg></span>Quiz</div>
-                    <div class="nlm-tile t-info" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M4 21V9h3v12zm6.5 0V3h3v18zM17 21v-7h3v7z"/></svg></span>Infographic</div>
-                    <div class="nlm-tile t-table" aria-hidden="true"><span class="nlm-tile-ico"><svg viewBox="0 0 24 24"><path d="M3 19v-2h2v2zm0-6v-2h2v2zm0-6V5h2v2zm4 12v-2h14v2zm0-6v-2h14v2zm0-6V5h14v2z"/></svg></span>Data table</div>
-                  </div>
+                <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+                <div data-nlm="studio" data-actionable="audio" data-action-id="studio-gen" data-action="studio-gen"></div>
+                  <div class="nlm-artifacts"><div data-nlm="artifact" data-type="slides" data-title="Industrial Revolution deck" data-meta="3 sources · 12d ago"></div></div>
                 <div class="studio-progress" id="studio-progress" hidden>
                   <div class="waveform" aria-hidden="true">
                     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
@@ -919,33 +825,13 @@
           </div>
         <div class="demo-shell" data-demo="prompts">
           <div class="nlm-app nlm-app-prompts">
-            <header class="nlm-topbar">
-                  <div class="nlm-top-left">
-                <span class="nlm-logo-dot" aria-hidden="true"></span>
-                <span class="nlm-notebook-title">Research — AI tools</span>
-              </div>
-                  <div class="nlm-top-right">
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Create notebook</span>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 23q-.8 0-1.4-.6T4 21V10q0-.8.6-1.4T6 8h3v2H6v11h12V10h-3V8h3q.8 0 1.4.6T20 10v11q0 .8-.6 1.4T18 23zm5-7V4.8L9.4 6.4 8 5l4-4 4 4-1.4 1.4L13 4.8V16z"/></svg>Share</span>
-                    <span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.25 22-.4-3.2q-.33-.13-.61-.3t-.56-.37L4.7 19.4l-2.75-4.75 2.58-1.95q-.03-.18-.03-.34v-.68q0-.16.03-.34L1.95 9.4 4.7 4.65l2.98 1.25q.28-.2.58-.37t.6-.3L9.25 2h5.5l.4 3.2q.33.13.61.3t.56.37l2.98-1.25 2.75 4.75-2.58 1.95q.03.18.03.34v.68q0 .16-.05.34l2.58 1.95-2.75 4.75-2.95-1.25q-.28.2-.58.38t-.6.29l-.4 3.2zm2.8-6.5q1.45 0 2.48-1.02T15.55 12t-1.02-2.47-2.48-1.03q-1.48 0-2.49 1.03T8.55 12t1.01 2.48 2.49 1.02m0-2q-.63 0-1.06-.44T10.55 12t.44-1.06 1.06-.44 1.06.44.44 1.06-.44 1.06-1.06.44"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 20q-.8 0-1.4-.6T4 18t.6-1.4T6 16t1.4.6T8 18t-.6 1.4T6 20m6 0q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 18t.6-1.4T18 16t1.4.6T20 18t-.6 1.4-1.4.6M6 14q-.8 0-1.4-.6T4 12t.6-1.4T6 10t1.4.6T8 12t-.6 1.4T6 14m6 0q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 12t.6-1.4T18 10t1.4.6T20 12t-.6 1.4-1.4.6M6 8q-.8 0-1.4-.6T4 6t.6-1.4T6 4t1.4.6T8 6t-.6 1.4T6 8m6 0q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8m6 0q-.8 0-1.4-.6T16 6t.6-1.4T18 4t1.4.6T20 6t-.6 1.4T18 8"/></svg></span>
-                    <span class="nlm-avatar" aria-hidden="true">R</span>
-                  </div>
+            <header class="nlm-topbar" data-nlm="topbar">
+                  <span class="nlm-notebook-title">Research — AI tools</span>
                 </header>
             <div class="nlm-body">
               <aside class="nlm-sources">
-                <div class="nlm-panel-head"><h4>Sources</h4><span class="nlm-panel-toggle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21q-.8 0-1.4-.6T3 19V5q0-.8.6-1.4T5 3h14q.8 0 1.4.6T21 5v14q0 .8-.6 1.4T19 21zm3-2V5H5v14zm2 0h9V5h-9z"/></svg></span></div>
-                    <div class="nlm-src-tools" aria-hidden="true">
-                      <span class="nlm-soft-btn"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Add sources</span>
-                      <div class="nlm-src-search">
-                        <span class="nlm-src-search-ph">Search the web for new sources</span>
-                        <div class="nlm-src-search-row">
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M12 22q-2.05 0-3.87-.79t-3.18-2.16-2.16-3.18T2 12t.79-3.89 2.16-3.17 3.18-2.15T12 2t3.89.79 3.17 2.15 2.15 3.17T22 12t-.79 3.87-2.15 3.18-3.17 2.16T12 22m0-2.05q.65-.9 1.13-1.87T13.9 16h-3.8q.3 1.1.78 2.08T12 19.95m-2.6-.4q-.45-.83-.79-1.71T8.05 16H5.1q.73 1.25 1.82 2.18T9.4 19.55m5.2 0q1.38-.45 2.48-1.38T18.9 16h-2.95q-.23.95-.56 1.84t-.79 1.71M4.25 14h3.4q-.08-.5-.11-.99T7.5 12t.04-1.01.11-.99h-3.4q-.13.5-.19.99T4 12t.06 1.01.19.99m5.4 0h4.7q.08-.5.11-.99T14.5 12t-.04-1.01-.11-.99h-4.7q-.08.5-.11.99T9.5 12t.04 1.01.11.99m6.7 0h3.4q.13-.5.19-.99T20 12t-.06-1.01-.19-.99h-3.4q.08.5.11.99t.04 1.01-.04 1.01-.11.99m-.4-6h2.95q-.73-1.25-1.82-2.17T14.6 4.45q.45.83.79 1.71T15.95 8M10.1 8h3.8q-.3-1.1-.78-2.07T12 4.05q-.65.9-1.12 1.88T10.1 8m-5 0h2.95q.23-.95.56-1.84t.79-1.71Q8.02 4.9 6.92 5.83T5.1 8"/></svg>Web<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-chip-btn"><svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25z"/></svg>Fast research<svg viewBox="0 0 24 24"><path d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4z"/></svg></span>
-                          <span class="nlm-src-go"><svg viewBox="0 0 24 24"><path d="M16.2 13H4v-2h12.2l-5.6-5.6L12 4l8 8-8 8-1.4-1.4z"/></svg></span>
-                        </div>
-                      </div>
-                      <div class="nlm-select-all"><svg viewBox="0 0 24 24"><path d="M10 18v-2h4v2zm-4-5v-2h12v2zM3 8V6h18v2z"/></svg><span>Select all</span><i class="nlm-check"></i></div>
-                    </div>
+                <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+                    <div data-nlm="source-tools"></div>
                 <ul class="nlm-source-list">
                   <li class="nlm-source"><span class="nlm-src-icon nlm-src-web">W</span><span class="nlm-src-name">openai.com/…</span></li>
                   <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt">▶</span><span class="nlm-src-name">Demo talk</span></li>
@@ -960,7 +846,7 @@
                   <button type="button" class="prompt-slash-item" data-action="insert-prompt" data-text="List contradictions or tensions between the sources.">/tensions — Contradictions between sources</button>
                   <button type="button" class="prompt-slash-item" data-action="insert-prompt" data-text="Draft study questions a student could use to quiz themselves.">/quiz — Study questions</button>
                 </div>
-                <div class="nlm-composer interactive"><span class="nlm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 21v-6h2v2h8v2h-8v2zm-8-2v-2h6v2zm4-4v-2H3v-2h4V9h2v6zm4-2v-2h10v2zm4-4V3h2v2h4v2h-4v2zM3 7V5h10v2z"/></svg></span>
+                <div class="nlm-composer interactive" data-nlm="composer" data-sources="2">
                   <input type="text" id="prompt-input" class="prompt-input" placeholder="Type / for prompts…" autocomplete="off" aria-label="Chat input demo">
                   <button type="button" class="nlm-send" data-action="prompt-send" aria-label="Send">↑</button>
                 </div>
@@ -1101,24 +987,32 @@
         <div class="demo-shell" data-demo="chatexport">
           <div class="mock-demo mock-chat-export">
             <div class="nlm-app nlm-app-export">
-              <header class="nlm-topbar">
-                  <div class="nlm-top-left"><span class="nlm-logo-dot" aria-hidden="true"></span><span class="nlm-notebook-title">Research — AI tools</span></div>
-                  <div class="nlm-top-right">
-                    <button type="button" class="mock-export-btn" id="ce-btn" data-action="ce-open">Export chat</button>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Create notebook</span>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 23q-.8 0-1.4-.6T4 21V10q0-.8.6-1.4T6 8h3v2H6v11h12V10h-3V8h3q.8 0 1.4.6T20 10v11q0 .8-.6 1.4T18 23zm5-7V4.8L9.4 6.4 8 5l4-4 4 4-1.4 1.4L13 4.8V16z"/></svg>Share</span>
-                    <span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.25 22-.4-3.2q-.33-.13-.61-.3t-.56-.37L4.7 19.4l-2.75-4.75 2.58-1.95q-.03-.18-.03-.34v-.68q0-.16.03-.34L1.95 9.4 4.7 4.65l2.98 1.25q.28-.2.58-.37t.6-.3L9.25 2h5.5l.4 3.2q.33.13.61.3t.56.37l2.98-1.25 2.75 4.75-2.58 1.95q.03.18.03.34v.68q0 .16-.05.34l2.58 1.95-2.75 4.75-2.95-1.25q-.28.2-.58.38t-.6.29l-.4 3.2zm2.8-6.5q1.45 0 2.48-1.02T15.55 12t-1.02-2.47-2.48-1.03q-1.48 0-2.49 1.03T8.55 12t1.01 2.48 2.49 1.02m0-2q-.63 0-1.06-.44T10.55 12t.44-1.06 1.06-.44 1.06.44.44 1.06-.44 1.06-1.06.44"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 20q-.8 0-1.4-.6T4 18t.6-1.4T6 16t1.4.6T8 18t-.6 1.4T6 20m6 0q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 18t.6-1.4T18 16t1.4.6T20 18t-.6 1.4-1.4.6M6 14q-.8 0-1.4-.6T4 12t.6-1.4T6 10t1.4.6T8 12t-.6 1.4T6 14m6 0q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 12t.6-1.4T18 10t1.4.6T20 12t-.6 1.4-1.4.6M6 8q-.8 0-1.4-.6T4 6t.6-1.4T6 4t1.4.6T8 6t-.6 1.4T6 8m6 0q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8m6 0q-.8 0-1.4-.6T16 6t.6-1.4T18 4t1.4.6T20 6t-.6 1.4T18 8"/></svg></span>
-                    <span class="nlm-avatar" aria-hidden="true">R</span>
-                  </div>
+              <header class="nlm-topbar" data-nlm="topbar">
+                  <span class="nlm-notebook-title">Research — AI tools</span>
+                  <button type="button" class="mock-export-btn" id="ce-btn" data-action="ce-open">Export chat</button>
                 </header>
               <div class="nlm-body ce-body">
+                <aside class="nlm-sources">
+                  <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+                  <div data-nlm="source-tools"></div>
+                  <ul class="nlm-source-list">
+                    <li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf">P</span><span class="nlm-src-name">RAG survey 2026.pdf</span></li>
+                    <li class="nlm-source"><span class="nlm-src-icon nlm-src-web">W</span><span class="nlm-src-name">Evaluating retrieval systems</span></li>
+                    <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt">▶</span><span class="nlm-src-name">Long-context vs RAG talk</span></li>
+                  </ul>
+                </aside>
                 <section class="nlm-chat">
-                  <div class="nlm-messages">
-                    <div class="nlm-msg bot">Here are the five themes across your sources…</div>
+                  <div class="nlm-messages"><div data-nlm="timestamp"></div>
+                    <div class="nlm-msg bot">Here are the five themes across your sources: <strong>retrieval quality</strong> <span class="nlm-cite">1</span>, <strong>evaluation</strong> <span class="nlm-cite">2</span>, cost, latency and safety <span class="nlm-cite">3</span>.</div><div data-nlm="msg-actions"></div>
                     <div class="nlm-msg user">Turn that into a one-page brief.</div>
-                    <div class="nlm-msg bot">Brief draft ready — citations included.</div>
+                    <div class="nlm-msg bot">Here is a one-page brief. It opens with the problem, compares the three approaches <span class="nlm-cite">1</span> <span class="nlm-cite">4</span>, and closes with a recommendation backed by the benchmark results <span class="nlm-cite">2</span>.</div><div data-nlm="msg-actions"></div>
                   </div>
+                  <div data-nlm="composer" data-sources="3"></div>
                 </section>
+                <aside class="nlm-studio">
+                  <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+                  <div data-nlm="studio"></div>
+                </aside>
                 <div class="mock-export-menu" id="ce-menu" hidden>
                   <button type="button" class="mock-format" data-action="ce-format" data-fmt="md" id="ce-md">Markdown</button>
                   <button type="button" class="mock-format" data-action="ce-format" data-fmt="txt">Plain text</button>
@@ -1151,18 +1045,9 @@
             <!-- Start: Studio / PPT-like slide deck -->
             <div class="sb-view" id="sb-view-deck" data-sb-view="deck">
               <div class="nlm-app">
-                <header class="nlm-topbar">
-                  <div class="nlm-top-left">
-                    <span class="nlm-logo-dot" aria-hidden="true"></span>
-                    <span class="nlm-notebook-title">Launch deck notebook</span>
-                  </div>
-                  <div class="nlm-top-right">
-                    <button type="button" class="mock-blog-btn" id="sb-convert" data-action="sb-convert">Convert to blog</button>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Create notebook</span>
-                    <span class="nlm-top-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 23q-.8 0-1.4-.6T4 21V10q0-.8.6-1.4T6 8h3v2H6v11h12V10h-3V8h3q.8 0 1.4.6T20 10v11q0 .8-.6 1.4T18 23zm5-7V4.8L9.4 6.4 8 5l4-4 4 4-1.4 1.4L13 4.8V16z"/></svg>Share</span>
-                    <span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m0-6q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.25 22-.4-3.2q-.33-.13-.61-.3t-.56-.37L4.7 19.4l-2.75-4.75 2.58-1.95q-.03-.18-.03-.34v-.68q0-.16.03-.34L1.95 9.4 4.7 4.65l2.98 1.25q.28-.2.58-.37t.6-.3L9.25 2h5.5l.4 3.2q.33.13.61.3t.56.37l2.98-1.25 2.75 4.75-2.58 1.95q.03.18.03.34v.68q0 .16-.05.34l2.58 1.95-2.75 4.75-2.95-1.25q-.28.2-.58.38t-.6.29l-.4 3.2zm2.8-6.5q1.45 0 2.48-1.02T15.55 12t-1.02-2.47-2.48-1.03q-1.48 0-2.49 1.03T8.55 12t1.01 2.48 2.49 1.02m0-2q-.63 0-1.06-.44T10.55 12t.44-1.06 1.06-.44 1.06.44.44 1.06-.44 1.06-1.06.44"/></svg></span><span class="nlm-top-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 20q-.8 0-1.4-.6T4 18t.6-1.4T6 16t1.4.6T8 18t-.6 1.4T6 20m6 0q-.8 0-1.4-.6T10 18t.6-1.4T12 16t1.4.6T14 18t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 18t.6-1.4T18 16t1.4.6T20 18t-.6 1.4-1.4.6M6 14q-.8 0-1.4-.6T4 12t.6-1.4T6 10t1.4.6T8 12t-.6 1.4T6 14m6 0q-.8 0-1.4-.6T10 12t.6-1.4T12 10t1.4.6T14 12t-.6 1.4-1.4.6m6 0q-.8 0-1.4-.6T16 12t.6-1.4T18 10t1.4.6T20 12t-.6 1.4-1.4.6M6 8q-.8 0-1.4-.6T4 6t.6-1.4T6 4t1.4.6T8 6t-.6 1.4T6 8m6 0q-.8 0-1.4-.6T10 6t.6-1.4T12 4t1.4.6T14 6t-.6 1.4T12 8m6 0q-.8 0-1.4-.6T16 6t.6-1.4T18 4t1.4.6T20 6t-.6 1.4T18 8"/></svg></span>
-                    <span class="nlm-avatar" aria-hidden="true">R</span>
-                  </div>
+                <header class="nlm-topbar" data-nlm="topbar">
+                  <span class="nlm-notebook-title">Launch deck notebook</span>
+                  <button type="button" class="mock-blog-btn" id="sb-convert" data-action="sb-convert">Convert to blog</button>
                 </header>
                 <div class="sb-deck-stage">
                   <div class="sb-filmstrip" aria-hidden="true">
@@ -1371,6 +1256,8 @@
         </div>
       </div>
     </footer>
+    <script src="/features/nlm/nlm-config.js"></script>
+    <script src="/features/nlm/nlm-shell.js"></script>
     <script src="/features/demo.js"></script>
     <script src="/site.js" defer></script>
   </body>
