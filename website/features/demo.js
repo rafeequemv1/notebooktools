@@ -794,7 +794,7 @@
           }
           if (playBtn) {
             playBtn.classList.add("is-playing");
-            playBtn.textContent = "âšâš";
+            playBtn.textContent = "❚❚";
           }
         },
       ]);
@@ -833,7 +833,7 @@
       } else if (action === "podcast-toggle") {
         if (!playBtn) return;
         var playing = playBtn.classList.toggle("is-playing");
-        playBtn.textContent = playing ? "âšâš" : "▶";
+        playBtn.textContent = playing ? "❚❚" : "▶";
         playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
       } else if (action === "studio-reset") {
         reset();

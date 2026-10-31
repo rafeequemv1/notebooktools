@@ -1,0 +1,879 @@
+/* ==========================================================================
+   NotebookLM UI replica for feature demos
+   Colours, radii and type sampled from the current NotebookLM web app.
+   Loaded after features.css. Applies only inside .nlm-app.
+   ========================================================================== */
+
+.nlm-app {
+  --nlm-bg: #faf9f9;
+  --nlm-panel: #ffffff;
+  --nlm-soft: #f2f0f0;
+  --nlm-line: #ebebeb;
+  --nlm-ink: #1b1b1c;
+  --nlm-text: #303030;
+  --nlm-muted: #737373;
+  --nlm-hover: #f5f4f4;
+  --nlm-blue: #0b57d0;
+  --nlm-zoom: 1;
+
+  background: var(--nlm-bg);
+  color: var(--nlm-ink);
+  display: flex;
+  flex-direction: column;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 1.43;
+  min-height: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Render at NotebookLM's real proportions, then scale to the demo stage. */
+.feature-master .demo-shell {
+  container-type: inline-size;
+}
+
+@container (max-width: 1240px) { .nlm-app { zoom: 0.86; } }
+@container (max-width: 1080px) { .nlm-app { zoom: 0.76; } }
+@container (max-width: 960px)  { .nlm-app { zoom: 0.7; } }
+@container (max-width: 860px)  { .nlm-app { zoom: 0.62; } }
+@container (max-width: 720px)  { .nlm-app { zoom: 0.52; } }
+@container (max-width: 520px)  { .nlm-app { zoom: 0.4; } }
+
+.nlm-app svg {
+  display: block;
+  fill: currentColor;
+  height: 100%;
+  width: 100%;
+}
+
+.nlm-app h4,
+.nlm-app h5,
+.nlm-app p {
+  margin: 0;
+}
+
+/* Top bar ------------------------------------------------------------------ */
+
+.nlm-app .nlm-topbar {
+  align-items: center;
+  background: var(--nlm-bg);
+  border: 0;
+  display: flex;
+  flex: none;
+  gap: 16px;
+  height: 64px;
+  justify-content: space-between;
+  padding: 0 16px 0 20px;
+}
+
+.nlm-app .nlm-top-left {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  min-width: 0;
+}
+
+.nlm-app .nlm-logo-dot {
+  background:
+    radial-gradient(circle at 50% 100%, transparent 5px, #fff 5.5px, #fff 7px, transparent 7.5px),
+    radial-gradient(circle at 50% 100%, transparent 9px, #fff 9.5px, #fff 11px, transparent 11.5px),
+    radial-gradient(circle at 50% 100%, transparent 13px, #fff 13.5px, #fff 15px, transparent 15.5px),
+    linear-gradient(135deg, #4285f4, #7b5cf0 55%, #34a8ff);
+  background-position: 50% 74%, 50% 74%, 50% 74%, 0 0;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #fff, 0 1px 3px rgba(0, 0, 0, 0.12);
+  flex: none;
+  height: 36px;
+  width: 36px;
+}
+
+.nlm-app .nlm-notebook-title {
+  color: var(--nlm-ink);
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nlm-app .nlm-top-right {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.nlm-app .nlm-top-btn {
+  align-items: center;
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  display: inline-flex;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.nlm-app .nlm-top-btn svg {
+  height: 20px;
+  width: 20px;
+}
+
+.nlm-app .nlm-top-icon {
+  color: #444746;
+  display: inline-flex;
+  height: 40px;
+  padding: 10px;
+  width: 40px;
+}
+
+.nlm-app .nlm-avatar {
+  align-items: center;
+  background: linear-gradient(135deg, #f6b26b, #e06666);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--nlm-line);
+  color: #fff;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 500;
+  height: 34px;
+  justify-content: center;
+  margin-left: 6px;
+  width: 34px;
+}
+
+/* Extension-injected button (chat export) sits in the bar like a native one. */
+.nlm-app .nlm-top-right .mock-export-btn {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--nlm-line);
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  display: inline-flex;
+  font: 500 14px "Google Sans", Roboto, Arial, sans-serif;
+  height: 36px;
+  margin-right: 6px;
+  padding: 0 16px;
+}
+
+/* Three-column body -------------------------------------------------------- */
+
+.nlm-app .nlm-body {
+  background: var(--nlm-bg);
+  display: grid;
+  flex: 1 1 auto;
+  gap: 16px;
+  grid-template-columns: minmax(0, 25fr) minmax(0, 46fr) minmax(0, 25fr);
+  min-height: 0;
+  padding: 4px 16px 16px;
+}
+
+.nlm-app .nlm-body.single-rail {
+  grid-template-columns: minmax(0, 32fr) minmax(0, 64fr);
+}
+
+.nlm-app .nlm-sources,
+.nlm-app .nlm-studio {
+  background: var(--nlm-panel);
+  border: 0;
+  border-radius: 20px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nlm-app .nlm-panel-head {
+  align-items: center;
+  border: 0;
+  display: flex;
+  flex: none;
+  justify-content: space-between;
+  padding: 16px 16px 10px 20px;
+}
+
+.nlm-app .nlm-panel-head h4 {
+  color: var(--nlm-ink);
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.nlm-app .nlm-panel-toggle {
+  color: #444746;
+  display: inline-flex;
+  height: 22px;
+  width: 22px;
+}
+
+/* Sources panel ------------------------------------------------------------ */
+
+.nlm-app .nlm-src-tools {
+  display: grid;
+  flex: none;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.nlm-app .nlm-soft-btn {
+  align-items: center;
+  background: var(--nlm-soft);
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  display: flex;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  gap: 8px;
+  height: 38px;
+  justify-content: center;
+}
+
+.nlm-app .nlm-soft-btn svg {
+  height: 20px;
+  width: 20px;
+}
+
+.nlm-app .nlm-src-search {
+  background: var(--nlm-soft);
+  border-radius: 20px;
+  padding: 14px 10px 10px 14px;
+}
+
+.nlm-app .nlm-src-search-ph {
+  color: var(--nlm-muted);
+  display: block;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.nlm-app .nlm-src-search-row {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.nlm-app .nlm-chip-btn {
+  align-items: center;
+  background: #fff;
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  display: inline-flex;
+  font-size: 13.5px;
+  gap: 6px;
+  height: 34px;
+  padding: 0 8px 0 10px;
+  white-space: nowrap;
+}
+
+.nlm-app .nlm-chip-btn svg {
+  height: 16px;
+  width: 16px;
+}
+
+.nlm-app .nlm-src-go {
+  color: var(--nlm-muted);
+  height: 20px;
+  margin-left: auto;
+  width: 20px;
+}
+
+.nlm-app .nlm-select-all {
+  align-items: center;
+  color: var(--nlm-ink);
+  display: flex;
+  font-size: 14px;
+  gap: 10px;
+  padding: 6px 12px 2px 12px;
+}
+
+.nlm-app .nlm-select-all svg {
+  color: #444746;
+  height: 18px;
+  width: 18px;
+}
+
+.nlm-app .nlm-select-all span {
+  margin-left: auto;
+}
+
+/* Checkbox (checked) as drawn by NotebookLM. */
+.nlm-app .nlm-check,
+.nlm-app .nlm-source:not(.drive-row)::after {
+  background: center / 14px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231b1b1c' d='m9.55 18-5.7-5.7 1.43-1.43 4.27 4.28 9.17-9.18 1.43 1.43z'/%3E%3C/svg%3E");
+  border: 1.6px solid var(--nlm-ink);
+  border-radius: 4px;
+  content: "";
+  display: block;
+  flex: none;
+  height: 16px;
+  width: 16px;
+}
+
+.nlm-app .nlm-source-list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 2px 10px 10px;
+}
+
+.nlm-app .nlm-source {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--nlm-ink);
+  display: flex;
+  font-size: 14px;
+  gap: 12px;
+  min-height: 42px;
+  padding: 6px 12px 6px 10px;
+}
+
+.nlm-app .nlm-source:hover {
+  background: var(--nlm-hover);
+}
+
+.nlm-app .nlm-src-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* File-type icons (replace the letter avatars). */
+.nlm-app .nlm-src-icon {
+  background: center / contain no-repeat;
+  border-radius: 0;
+  color: transparent;
+  flex: none;
+  font-size: 0;
+  height: 20px;
+  width: 20px;
+}
+
+.nlm-app .nlm-src-pdf,
+.nlm-app .nlm-src-doc {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3' y='3' width='18' height='18' rx='3' fill='none' stroke='%23e37526' stroke-width='1.8'/%3E%3Ctext x='12' y='15.2' font-family='Arial' font-weight='700' font-size='6.6' text-anchor='middle' fill='%23e37526'%3EPDF%3C/text%3E%3C/svg%3E");
+}
+
+.nlm-app .nlm-src-web {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%231a73e8' stroke-width='1.8'/%3E%3Cpath d='M3 12h18M12 3c2.6 2.6 3.6 5.6 3.6 9s-1 6.4-3.6 9c-2.6-2.6-3.6-5.6-3.6-9s1-6.4 3.6-9z' fill='none' stroke='%231a73e8' stroke-width='1.6'/%3E%3C/svg%3E");
+}
+
+.nlm-app .nlm-src-yt {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='1.5' y='5' width='21' height='14' rx='4' fill='%23ff0033'/%3E%3Cpath d='M10 9v6l5.2-3z' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+.nlm-app .nlm-src-gdoc {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z' fill='%234285f4'/%3E%3Cpath d='M8 12h8M8 15h8M8 18h5' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+.nlm-app .nlm-src-gslides {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z' fill='%23f4b400'/%3E%3Crect x='7.5' y='11' width='9' height='6' rx='1' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+.nlm-app .nlm-src-gsheet {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z' fill='%230f9d58'/%3E%3Cpath d='M7.5 11h9v7h-9zM7.5 14.5h9M12 11v7' fill='none' stroke='%23fff' stroke-width='1.4'/%3E%3C/svg%3E");
+}
+
+.nlm-app .nlm-src-badge {
+  background: #e6f4ea;
+  border-radius: 999px;
+  color: #137333;
+  flex: none;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+}
+
+.nlm-app .nlm-src-badge.warn {
+  background: #fef7e0;
+  color: #b06000;
+}
+
+.nlm-app .nlm-source-new {
+  background: #eef3fe;
+}
+
+.nlm-app .nlm-sources-foot {
+  display: none;
+  border: 0;
+  color: var(--nlm-muted);
+  font-size: 12px;
+  padding: 8px 20px 14px;
+}
+
+/* Drive rows keep their refresh controls. */
+.nlm-app .drive-row {
+  min-height: 56px;
+}
+
+.nlm-app .drive-meta {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nlm-app .drive-time {
+  color: var(--nlm-muted);
+  font-size: 12px;
+}
+
+.nlm-app .nlm-refresh-btn {
+  background: #fff;
+  border: 1px solid var(--nlm-line);
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  height: 30px;
+  width: 30px;
+}
+
+.nlm-app .nlm-panel-head .button {
+  background: var(--nlm-soft);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--nlm-ink);
+  font: 500 13.5px "Google Sans", Roboto, Arial, sans-serif;
+  padding: 8px 14px;
+}
+
+/* Centre: notebook view ---------------------------------------------------- */
+
+.nlm-app .nlm-chat {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+}
+
+.nlm-app .nlm-chat-scroll {
+  flex: 1 1 auto;
+  margin: 0 auto;
+  max-width: 760px;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 4px;
+  width: 100%;
+}
+
+.nlm-app .nlm-nb-head {
+  background: var(--nlm-soft);
+  border-radius: 28px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  padding: 22px 28px 26px;
+  position: relative;
+}
+
+.nlm-app .nlm-nb-head::after {
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M8 92 C 20 40, 30 40, 40 70 S 60 10, 70 10 S 90 60, 96 92' fill='none' stroke='%23e3e0df' stroke-width='9' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='34' r='9' fill='none' stroke='%23e3e0df' stroke-width='8'/%3E%3C/svg%3E");
+  bottom: 0;
+  content: "";
+  height: 72%;
+  position: absolute;
+  right: 18px;
+  width: 26%;
+}
+
+.nlm-app .nlm-nb-emoji {
+  display: block;
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 56px;
+}
+
+.nlm-app .nlm-nb-head h5 {
+  color: var(--nlm-ink);
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 0 0 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.nlm-app .nlm-nb-head p {
+  color: var(--nlm-ink);
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.nlm-app .nlm-summary {
+  color: var(--nlm-text);
+  font-size: 16px;
+  line-height: 1.55;
+  padding: 0 4px;
+}
+
+.nlm-app .nlm-summary strong {
+  color: var(--nlm-ink);
+  font-weight: 700;
+}
+
+.nlm-app .nlm-msg-actions {
+  align-items: center;
+  color: #444746;
+  display: flex;
+  gap: 16px;
+  margin: 18px 0 26px;
+  padding: 0 4px;
+}
+
+.nlm-app .nlm-msg-actions .nlm-ico {
+  height: 20px;
+  width: 20px;
+}
+
+.nlm-app .nlm-save {
+  align-items: center;
+  border: 1px solid var(--nlm-line);
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  display: inline-flex;
+  font-size: 14px;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+}
+
+.nlm-app .nlm-save svg {
+  height: 18px;
+  width: 18px;
+}
+
+.nlm-app .nlm-suggest {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.nlm-app .nlm-suggest-card {
+  background: var(--nlm-soft);
+  border-radius: 20px;
+  color: var(--nlm-ink);
+  display: flex;
+  flex-direction: column;
+  font-size: 14.5px;
+  gap: 14px;
+  justify-content: space-between;
+  line-height: 1.6;
+  min-height: 128px;
+  padding: 16px 20px 14px;
+}
+
+.nlm-app .nlm-suggest-card .nlm-ico {
+  height: 18px;
+  width: 18px;
+}
+
+.nlm-app .nlm-composer {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #eeecec;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex: none;
+  gap: 14px;
+  height: 64px;
+  margin: 4px auto 0;
+  max-width: 628px;
+  padding: 0 10px 0 20px;
+  width: 100%;
+}
+
+.nlm-app .nlm-composer .nlm-ico {
+  color: #444746;
+  flex: none;
+  height: 22px;
+  width: 22px;
+}
+
+.nlm-app .nlm-composer-ph {
+  color: #757575;
+  flex: 1 1 auto;
+  font-size: 16px;
+}
+
+.nlm-app .nlm-composer-count {
+  color: var(--nlm-muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.nlm-app .nlm-send {
+  background: #e9e8e8;
+  border-radius: 50%;
+  color: #9e9e9e;
+  flex: none;
+  height: 40px;
+  padding: 10px;
+  width: 40px;
+}
+
+.nlm-app .nlm-disclaimer {
+  color: #717070;
+  flex: none;
+  font-size: 12.5px;
+  padding: 10px 0 0;
+  text-align: center;
+}
+
+/* Conversations (prompts, chat export): user turns are grey bubbles on the
+   right, answers are plain text on the page. */
+.nlm-app .nlm-messages {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 22px;
+  margin: 0 auto;
+  max-width: 760px;
+  overflow: auto;
+  padding: 12px 4px;
+  width: 100%;
+}
+
+.nlm-app .nlm-msg {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: var(--nlm-text);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 100%;
+  padding: 0;
+}
+
+.nlm-app .nlm-msg.user {
+  align-self: flex-end;
+  background: var(--nlm-soft);
+  border-radius: 22px 22px 6px 22px;
+  color: var(--nlm-ink);
+  max-width: 78%;
+  padding: 12px 18px;
+}
+
+.nlm-app .nlm-composer.interactive .prompt-input {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: var(--nlm-ink);
+  flex: 1 1 auto;
+  font: 16px "Google Sans Text", Roboto, Arial, sans-serif;
+  height: 100%;
+  outline: none;
+  padding: 0;
+}
+
+.nlm-app .nlm-composer.interactive .prompt-send,
+.nlm-app .nlm-composer.interactive button {
+  background: #e9e8e8;
+  border: 0;
+  border-radius: 50%;
+  color: #5f5f5f;
+  flex: none;
+  height: 40px;
+  width: 40px;
+}
+
+/* Studio panel ------------------------------------------------------------- */
+
+.nlm-app .nlm-studio-banner {
+  background: #eef1ff;
+  border-radius: 16px;
+  color: var(--nlm-ink);
+  flex: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  margin: 0 10px 10px;
+  padding: 10px 12px;
+}
+
+.nlm-app .nlm-studio-banner span {
+  color: #4b5bff;
+  font-weight: 400;
+}
+
+.nlm-app .nlm-studio-grid {
+  display: grid;
+  flex: none;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0 10px;
+}
+
+.nlm-app .nlm-tile {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--nlm-line);
+  border-radius: 18px;
+  color: var(--nlm-ink);
+  display: flex;
+  font: 400 13.5px "Google Sans Text", Roboto, Arial, sans-serif;
+  gap: 8px;
+  height: 48px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0 8px 0 12px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+}
+
+button.nlm-tile {
+  cursor: pointer;
+}
+
+.nlm-app .nlm-tile-ico {
+  display: inline-flex;
+  flex: none;
+  height: 20px;
+  width: 20px;
+}
+
+.nlm-app .t-audio .nlm-tile-ico { color: #3b7bea; }
+.nlm-app .t-slides .nlm-tile-ico { color: #c13c93; }
+.nlm-app .t-video .nlm-tile-ico { color: #1ea362; }
+.nlm-app .t-mind .nlm-tile-ico { color: #6993e2; }
+.nlm-app .t-reports .nlm-tile-ico { color: #c13c93; }
+.nlm-app .t-flash .nlm-tile-ico { color: #f99e00; }
+.nlm-app .t-quiz .nlm-tile-ico { color: #36aedc; }
+.nlm-app .t-info .nlm-tile-ico { color: #faa000; }
+.nlm-app .t-table .nlm-tile-ico { color: #3b88ec; }
+
+.nlm-app .nlm-new {
+  background: #ebebeb;
+  border-radius: 999px;
+  color: var(--nlm-ink);
+  font-size: 12px;
+  font-style: normal;
+  margin-left: auto;
+  padding: 3px 9px;
+}
+
+.nlm-app .nlm-tile .studio-cta {
+  background: #0b57d0;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 500;
+  margin-left: auto;
+  padding: 3px 9px;
+}
+
+.nlm-app .nlm-studio.highlight {
+  box-shadow: none;
+  outline: 0;
+}
+
+/* Generated artifacts list (progress + podcast row). */
+.nlm-app .studio-progress,
+.nlm-app .podcast-player {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  display: flex;
+  gap: 14px;
+  margin: 14px 10px 0;
+  padding: 10px 12px;
+}
+
+.nlm-app .studio-progress p,
+.nlm-app .podcast-info span {
+  color: var(--nlm-muted);
+  font-size: 12.5px;
+}
+
+.nlm-app .podcast-art {
+  align-items: center;
+  background: none;
+  color: #3b7bea;
+  display: flex;
+  font-size: 0;
+  height: 22px;
+  width: 22px;
+}
+
+.nlm-app .podcast-art::before {
+  background: currentColor;
+  content: "";
+  height: 22px;
+  -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 15V9h2v6zm4 3V6h2v12zm4 4V2h2v20zm4-4V6h2v12zm4-3V9h2v6z'/%3E%3C/svg%3E");
+  mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 15V9h2v6zm4 3V6h2v12zm4 4V2h2v20zm4-4V6h2v12zm4-3V9h2v6z'/%3E%3C/svg%3E");
+  width: 22px;
+}
+
+.nlm-app .podcast-info {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nlm-app .podcast-info strong {
+  color: var(--nlm-ink);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.nlm-app .podcast-play {
+  background: #0b57d0;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  flex: none;
+  font-size: 13px;
+  height: 36px;
+  width: 36px;
+}
+
+/* Prompt library rail keeps NotebookLM panel styling. */
+.nlm-app .prompts-side .prompt-chips {
+  padding: 0 10px;
+}
+
+.nlm-app .prompt-chip {
+  background: #fff;
+  border: 1px solid var(--nlm-line);
+  border-radius: 18px;
+  color: var(--nlm-ink);
+  font: 400 14px "Google Sans Text", Roboto, Arial, sans-serif;
+  height: 44px;
+  padding: 0 16px;
+  text-align: left;
+}
+
+.nlm-app .drive-row {
+  flex-wrap: nowrap;
+}
+
+.nlm-app .drive-row .nlm-src-badge {
+  white-space: nowrap;
+}
