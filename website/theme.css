@@ -293,7 +293,7 @@ html.nav-open {
 
 /* 3. Mobile menu ----------------------------------------------------------- */
 
-@media (max-width: 960px) {
+@media (max-width: 860px) {
   .site-header-inner {
     display: flex;
     justify-content: space-between;
@@ -599,4 +599,458 @@ main > :last-child {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* 7. Header alignment --------------------------------------------------------
+   The header's content edge matches each page's content edge. */
+
+.feature-page .site-header-inner {
+  max-width: 1280px;
+  padding: 0 20px;
+}
+
+@media (max-width: 1080px) and (min-width: 861px) {
+  .header-chrome:not(.footer-chrome) {
+    display: none;
+  }
+
+  .site-nav > a {
+    padding: 7px 10px;
+  }
+}
+
+/* 8. Homepage ---------------------------------------------------------------- */
+
+.hero-inner {
+  align-items: center;
+  gap: 64px;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  max-width: calc(var(--max) + 64px);
+  padding-bottom: 104px;
+  padding-top: 84px;
+}
+
+.hero-copy .lead {
+  font-size: 18px;
+  line-height: 1.65;
+  margin-bottom: 30px;
+  max-width: 34em;
+}
+
+.hero-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 22px;
+}
+
+.button-lg .chrome-icon {
+  height: 18px;
+  width: 18px;
+}
+
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0;
+}
+
+.hero-works {
+  align-items: center;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 30px;
+  padding-top: 22px;
+}
+
+.hero-works-label {
+  color: var(--subtle);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hero-works ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-works li {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 7px;
+  padding: 5px 12px 5px 9px;
+}
+
+.works-ico {
+  display: inline-flex;
+  height: 16px;
+  width: 16px;
+}
+
+.works-ico svg {
+  height: 100%;
+  width: 100%;
+}
+
+.hero-shot {
+  margin: 0;
+  position: relative;
+}
+
+.hero-shot img {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(21, 20, 15, 0.05), 0 40px 80px -28px rgba(21, 20, 15, 0.3);
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.hero-shot figcaption {
+  font-size: 13px;
+  margin-top: 14px;
+  text-align: right;
+}
+
+.hero-shot figcaption a {
+  color: var(--muted);
+}
+
+.hero-shot figcaption a:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 960px) {
+  .hero-inner {
+    gap: 44px;
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 56px;
+  }
+
+  .hero-shot figcaption {
+    text-align: left;
+  }
+}
+
+/* Quieter cards: no coloured top strips. */
+.flow-node-blue,
+.flow-node-green,
+.flow-node-yellow,
+.flow-node-red {
+  border-top: 1px solid var(--line);
+}
+
+.hub-card-panel::before,
+.hub-card-app::before,
+.pricing-card::before,
+.install-panel::before {
+  display: none;
+}
+
+/* Pricing: comparison on the left, the licence card on the right. */
+.pricing-grid {
+  align-items: start;
+  display: grid;
+  gap: 64px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.pricing-intro .section-head {
+  margin-bottom: 28px;
+  max-width: none;
+  text-align: left;
+}
+
+.price-compare {
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+.price-compare > div {
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 170px minmax(0, 1fr);
+  padding: 18px 0;
+}
+
+.price-compare dt {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.price-compare dd {
+  margin: 0;
+}
+
+.price-compare b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.price-compare b small {
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 13px;
+  margin-left: 2px;
+}
+
+.price-compare span {
+  color: var(--muted);
+  display: block;
+  font-size: 14px;
+  line-height: 1.55;
+  margin-top: 4px;
+}
+
+.price-compare .is-us dt {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.price-compare .is-us b {
+  color: var(--accent);
+}
+
+.pricing-grid .pricing-card {
+  margin: 0;
+  max-width: none;
+  padding: 36px;
+}
+
+.pricing-grid .pricing-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.pricing-grid .pricing-actions .button {
+  width: 100%;
+}
+
+.pricing-fine {
+  color: var(--subtle);
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+
+@media (max-width: 960px) {
+  .pricing-grid {
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .price-compare > div {
+    gap: 4px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-grid .pricing-card {
+    padding: 26px 20px;
+  }
+}
+
+/* Closing call to action: a dark band. */
+.install {
+  padding-bottom: 104px;
+}
+
+.cta-band {
+  align-items: center;
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 0%, rgba(47, 91, 220, 0.35), transparent 60%),
+    radial-gradient(ellipse 50% 70% at 0% 100%, rgba(52, 168, 83, 0.18), transparent 60%),
+    #15140f;
+  border-radius: 28px;
+  color: #f5f3ee;
+  display: grid;
+  gap: 48px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  overflow: hidden;
+  padding: 60px 56px;
+}
+
+.cta-band .eyebrow {
+  color: rgba(245, 243, 238, 0.6);
+}
+
+.cta-band h2 {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.6vw, 54px);
+  font-weight: 400;
+  line-height: 1.04;
+  margin: 10px 0 16px;
+}
+
+.cta-copy p:not(.eyebrow) {
+  color: rgba(245, 243, 238, 0.74);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 36em;
+}
+
+.cta-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.cta-actions .button {
+  width: 100%;
+}
+
+.button-light {
+  background: #fff;
+  border: 1px solid #fff;
+  color: var(--ink);
+}
+
+.button-light:hover {
+  background: #f1efe9;
+}
+
+.button-outline-light {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.button-outline-light:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cta-note {
+  color: rgba(245, 243, 238, 0.6);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.cta-note a {
+  color: rgba(245, 243, 238, 0.85);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 860px) {
+  .cta-band {
+    gap: 32px;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 40px 28px;
+  }
+}
+
+/* 9. Blog hub and category pages: category pills + a card grid. ------------- */
+
+.blog-hub-head {
+  margin-bottom: 28px;
+  max-width: 720px;
+}
+
+.blog-layout {
+  gap: 26px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.blog-sidebar {
+  position: static;
+}
+
+.blog-sidebar-label {
+  display: none;
+}
+
+.blog-categories {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.blog-category-link {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13.5px;
+  padding: 7px 15px;
+}
+
+.blog-category-link:hover {
+  border-color: #cfc9bd;
+  color: var(--ink);
+}
+
+.blog-category-link.is-active,
+.blog-category-link[aria-current="page"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.blog-sidebar-note {
+  margin-top: 12px;
+}
+
+.blog-cards {
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.blog-card-item-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px 26px 22px;
+}
+
+.blog-card-item-meta {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.blog-card-item:hover {
+  border-color: #d8d3c8;
+}
+
+.blog-cluster {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 760px) {
+  .blog-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.blog-card-item-link .blog-card-tag {
+  align-self: flex-start;
+}
+
+/* Blog hub shares the header's content edge. */
+.blog-hub {
+  max-width: calc(var(--max) + 64px);
 }
