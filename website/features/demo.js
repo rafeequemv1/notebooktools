@@ -1268,6 +1268,18 @@
     demoControllers[key] = api;
   }
 
+  /* Shared helpers for the scene-based demos in demo-scenes.js. */
+  window.NTDemo = {
+    $: $,
+    $all: $all,
+    wait: wait,
+    sequence: sequence,
+    moveCursorTo: moveCursorTo,
+    hideDemoCursor: hideDemoCursor,
+    registerDemo: registerDemo,
+    reducedMotion: prefersReducedMotion
+  };
+
 
 
   /* ---- Webpage demo ---- */
