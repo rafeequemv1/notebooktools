@@ -55,12 +55,12 @@
           <a href="/support">Support</a>
           <div class="site-nav-actions">
             <a class="button button-ghost" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome</a>
-            <a class="button button-primary" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+            <a class="button button-primary" href="https://dodo.pe/notebooktools-pro" target="_blank" rel="noopener noreferrer">Get Pro — $49</a>
           </div>
         </nav>
         <div class="header-actions">
           <a class="header-chrome" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg><span>Add to Chrome</span></a>
-          <a class="button button-primary button-sm header-buy" href="https://dodo.pe/notebooktools" target="_blank" rel="noopener noreferrer">Buy lifetime</a>
+          <a class="button button-primary button-sm header-buy" href="https://dodo.pe/notebooktools-pro" target="_blank" rel="noopener noreferrer">Get Pro</a>
           <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
             <span></span><span></span>
           </button>
@@ -70,7 +70,7 @@
 
     <main class="page-main">
       <h1>Privacy Policy</h1>
-      <p class="lead">Last updated: June 2026 · NotebookTools extension version 0.2.8</p>
+      <p class="lead">Last updated: October 2026 · NotebookTools extension version 0.6.0</p>
 
       <p>
         NotebookTools is an independent Chrome extension that helps you import content into
@@ -81,19 +81,39 @@
 
       <h2>Summary</h2>
       <ul>
-        <li>No NotebookTools backend server.</li>
+        <li>Your NotebookLM content never passes through NotebookTools servers.</li>
+        <li>An account is optional. If you create one, we store only your email, your plan (Free or Pro) and your purchase record.</li>
         <li>No sale of your personal data.</li>
         <li>Imports happen only when <strong>you</strong> click import or use the right-click menu.</li>
         <li>Data is sent from your browser to NotebookLM using your existing Google sign-in.</li>
       </ul>
 
       <h2>What we collect</h2>
-      <p>NotebookTools does not operate a backend server and does not collect analytics on our own infrastructure.</p>
+      <p>NotebookTools does not collect analytics. Imports go straight from your browser to NotebookLM; our servers never see the content you import.</p>
       <ul>
         <li>The extension reads page content <strong>only when you choose to import</strong> (for example, a YouTube URL, X post text, webpage URL, or text you highlighted).</li>
         <li>The extension stores lightweight preferences locally in Chrome on your device (for example, whether the welcome page was shown and your last-selected notebook).</li>
         <li>Your notebook list is fetched from NotebookLM using your existing signed-in Google session in the browser.</li>
       </ul>
+
+      <h2>Accounts and payments</h2>
+      <p>
+        Signing in is optional; every Free feature works without an account. If you create an account
+        in the side panel, we store:
+      </p>
+      <ul>
+        <li>Your email address and a securely hashed password (handled by our authentication provider, Supabase).</li>
+        <li>Your plan (Free or Pro) and when Pro started.</li>
+        <li>For Pro purchases: the payment ID, amount, currency and the email used at checkout, so Pro can be matched to your account.</li>
+      </ul>
+      <p>
+        This data is stored with <a href="https://supabase.com/privacy" target="_blank" rel="noreferrer">Supabase</a>
+        in the EU (Ireland). Payments are processed by
+        <a href="https://dodopayments.com/privacy-policy" target="_blank" rel="noreferrer">Dodo Payments</a>,
+        our merchant of record; we never see or store your card details. The extension keeps your sign-in session
+        locally in Chrome on your device. To delete your account and its data, contact us via the
+        <a href="/support">support page</a>.
+      </p>
 
       <h2>What we send</h2>
       <p>
@@ -113,7 +133,7 @@
 
       <h2>What we do not do</h2>
       <ul>
-        <li>We do not sell or transfer your data to third parties.</li>
+        <li>We do not sell your data, and we share it only with the providers that run accounts and payments (Supabase and Dodo Payments).</li>
         <li>We do not use your data for advertising or unrelated purposes.</li>
         <li>We do not receive your Google password.</li>
         <li>We do not upload content unless you explicitly trigger an import.</li>
@@ -126,13 +146,16 @@
       <p>
         For transparency on the Chrome Web Store, NotebookTools may process <strong>website content</strong>
         only when you initiate an import (URLs, selected text, or visible post/article text on X).
-        We do not collect personally identifiable information, health, financial, authentication,
-        communication, location, web history, or general user-activity data on NotebookTools servers.
+        If you create an optional account, we store your email address (personally identifiable information)
+        and sign-in credentials (authentication information) to provide your plan; purchases are handled by
+        Dodo Payments. We do not collect health, financial, communication, location, web history, or general
+        user-activity data on NotebookTools servers.
       </p>
 
       <h2>Third-party services</h2>
       <p>
-        YouTube, X (Twitter), and NotebookLM are operated by their respective providers.
+        YouTube, X (Twitter), and NotebookLM are operated by their respective providers. Accounts are hosted by
+        Supabase and payments are processed by Dodo Payments.
         Your use of those services is subject to their terms and privacy policies.
         NotebookTools is not affiliated with, endorsed by, or sponsored by Google, YouTube, X, or NotebookLM.
       </p>
@@ -165,7 +188,7 @@
               <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
               <span class="logo-text">NotebookTools</span>
             </a>
-            <p>The lifetime Chrome extension for NotebookLM. Import faster, organize every notebook, and get more from your research.</p>
+            <p>The Chrome extension for NotebookLM. Import faster, organize every notebook, and get more from your research. Free to start, Pro for life.</p>
             <a class="header-chrome footer-chrome" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg><span>Add to Chrome</span></a>
           </div>
           <nav class="footer-col" aria-label="Product">

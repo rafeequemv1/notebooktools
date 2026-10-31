@@ -628,6 +628,7 @@ async function initSidePanel() {
   await NotebookToolsI18n.init(appSettings.language);
   NotebookToolsI18n.apply(document);
   NotebookToolsSettingsUI.init();
+  NotebookToolsAccountUI.init();
   NotebookToolsPromptLibraryUI.setAppSettings(appSettings);
 
   NotebookToolsSettings.onChange(async (next) => {

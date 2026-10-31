@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.5.54",
+  "version": "0.6.0",
   "description": "Import YouTube videos, webpages, and screenshots into NotebookLM. Bulk import, snapshots, prompt library, and blog/guide export.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"

@@ -21,7 +21,7 @@ CHROME_STORE = (
     "https://chromewebstore.google.com/detail/"
     "notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj"
 )
-BUY = "https://dodo.pe/notebooktools"
+BUY = "https://dodo.pe/notebooktools-pro"
 
 FONTS = (
     '<link href="https://fonts.googleapis.com/css2?'
@@ -79,12 +79,12 @@ def header_html(rel: str) -> str:
 {nav}
           <div class="site-nav-actions">
             <a class="button button-ghost" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}Add to Chrome</a>
-            <a class="button button-primary" href="{BUY}" target="_blank" rel="noopener noreferrer">Buy lifetime — $49</a>
+            <a class="button button-primary" href="{BUY}" target="_blank" rel="noopener noreferrer">Get Pro — $49</a>
           </div>
         </nav>
         <div class="header-actions">
           <a class="header-chrome" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}<span>Add to Chrome</span></a>
-          <a class="button button-primary button-sm header-buy" href="{BUY}" target="_blank" rel="noopener noreferrer">Buy lifetime</a>
+          <a class="button button-primary button-sm header-buy" href="{BUY}" target="_blank" rel="noopener noreferrer">Get Pro</a>
           <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
             <span></span><span></span>
           </button>
@@ -101,7 +101,7 @@ FOOTER = f"""<footer class="site-footer">
               <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
               <span class="logo-text">NotebookTools</span>
             </a>
-            <p>The lifetime Chrome extension for NotebookLM. Import faster, organize every notebook, and get more from your research.</p>
+            <p>The Chrome extension for NotebookLM. Import faster, organize every notebook, and get more from your research. Free to start, Pro for life.</p>
             <a class="header-chrome footer-chrome" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}<span>Add to Chrome</span></a>
           </div>
           <nav class="footer-col" aria-label="Product">

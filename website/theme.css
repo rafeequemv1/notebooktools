@@ -1054,3 +1054,127 @@ main > :last-child {
 .blog-hub {
   max-width: calc(var(--max) + 64px);
 }
+
+/* 10. Pricing plans (Free / Pro) ------------------------------------------ */
+
+.plans {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 920px;
+}
+
+.plan {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 32px;
+  position: relative;
+}
+
+.plan.is-pro {
+  background:
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(47, 91, 220, 0.08), transparent 60%),
+    var(--surface);
+  border-color: rgba(47, 91, 220, 0.35);
+  box-shadow: var(--shadow-lg);
+}
+
+.plan-badge {
+  background: var(--accent-soft);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  position: absolute;
+  right: 24px;
+  text-transform: uppercase;
+  top: 24px;
+}
+
+.plan-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.plan-price {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 1;
+  margin: 6px 0 0;
+}
+
+.plan-price span {
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.plan-inr {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.plan-desc {
+  color: var(--muted);
+  font-size: 14.5px;
+  margin: 6px 0 18px;
+}
+
+.plan > .button {
+  width: 100%;
+}
+
+.plan-features {
+  border-top: 1px solid var(--line-soft);
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 20px 0 0;
+}
+
+.plan-features li {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.45;
+  padding-left: 24px;
+  position: relative;
+}
+
+.plan-features li::before {
+  color: #1e8e3e;
+  content: "✓";
+  font-weight: 700;
+  left: 2px;
+  position: absolute;
+}
+
+.plans-note {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin: 22px auto 0;
+  max-width: 620px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plan {
+    padding: 26px 22px;
+  }
+}

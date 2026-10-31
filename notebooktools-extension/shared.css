@@ -1149,3 +1149,134 @@ select:focus {
   height: 16px;
   width: 16px;
 }
+
+/* Account card (account-ui.js) */
+.acct {
+  background: var(--nt-surface);
+  border: 1px solid var(--nt-line);
+  border-radius: 10px;
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 2px;
+  padding: 9px 10px;
+}
+
+.acct-row {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.acct-text {
+  color: var(--nt-muted);
+  flex: 1 1 auto;
+  font-size: 12px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acct-badge {
+  border-radius: 999px;
+  flex: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+}
+
+.acct-badge.is-free {
+  background: var(--nt-line-soft);
+  color: var(--nt-muted);
+}
+
+.acct-badge.is-pro {
+  background: linear-gradient(135deg, #fde68a, #f59e0b);
+  color: #451a03;
+}
+
+.acct-link {
+  background: none;
+  border: 0;
+  color: var(--nt-ink);
+  cursor: pointer;
+  flex: none;
+  font: inherit;
+  font-size: 12px;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.acct-strong {
+  font-weight: 600;
+}
+
+.acct-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.acct .button.acct-upgrade,
+.acct .button.acct-submit {
+  margin-top: 0;
+  min-height: 34px;
+}
+
+.acct-form {
+  display: grid;
+  gap: 7px;
+}
+
+.acct-form-head {
+  align-items: center;
+  display: flex;
+  font-size: 12.5px;
+  justify-content: space-between;
+}
+
+.acct-form input {
+  font-size: 12.5px;
+  padding: 8px 10px;
+}
+
+.acct-form-links {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+.acct-note {
+  color: var(--nt-muted);
+  font-size: 12px;
+  margin: 0;
+}
+
+.acct-msg {
+  border-radius: var(--nt-radius);
+  font-size: 11.5px;
+  line-height: 1.45;
+  margin: 0;
+  padding: 7px 9px;
+}
+
+.acct-msg.is-error {
+  background: var(--nt-error-bg);
+  border: 1px solid var(--nt-error-line);
+  color: var(--nt-danger);
+}
+
+.acct-msg.is-success {
+  background: var(--nt-success-bg);
+  border: 1px solid var(--nt-success-line);
+  color: var(--nt-success);
+}
+
+.acct-msg.is-info {
+  background: var(--nt-loading-bg);
+  border: 1px solid var(--nt-loading-line);
+  color: var(--nt-loading-text);
+}
