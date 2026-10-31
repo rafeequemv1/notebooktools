@@ -281,7 +281,7 @@
   text-align: center;
 }
 
-/* Hub grid â€” 2-col rich cards */
+/* Hub grid — 2-col rich cards */
 .feat-hub-grid {
   display: grid;
   gap: 24px;
@@ -2965,7 +2965,7 @@
   padding: 0;
 }
 
-/* Equal-size demo stage for every feature â€” no jump when switching */
+/* Equal-size demo stage for every feature — no jump when switching */
 .feature-master .demo-shell {
   --md-demo-h: calc(100vh - 10.25rem);
   max-width: none;

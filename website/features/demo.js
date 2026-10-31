@@ -197,7 +197,7 @@
           newSrc.classList.add("is-appearing");
           if (countEl) countEl.textContent = "3 sources";
           if (toast) {
-            toast.textContent = "Added to " + selectedName + " âœ“";
+            toast.textContent = "Added to " + selectedName + " ✓";
             toast.removeAttribute("hidden");
             setTimeout(function () {
               toast.setAttribute("hidden", "");
@@ -305,7 +305,7 @@
     function reset() {
       running = false;
       if (fill) fill.style.width = "0%";
-      if (text) text.textContent = "5 selected Â· ready";
+      if (text) text.textContent = "5 selected · ready";
       if (startBtn) startBtn.disabled = false;
       if (resetBtn) resetBtn.setAttribute("hidden", "");
       $all(".bulk-item", root).forEach(function (item) {
@@ -339,7 +339,7 @@
       return new Promise(function (resolve) {
         function step() {
           if (i >= items.length) {
-            if (text) text.textContent = items.length + " imported Â· done";
+            if (text) text.textContent = items.length + " imported · done";
             if (fill) fill.style.width = "100%";
             if (resetBtn) resetBtn.removeAttribute("hidden");
             if (startBtn) startBtn.classList.remove("is-clicked");
@@ -350,19 +350,19 @@
           var item = items[i];
           item.classList.add("is-running");
           var st = $(".bulk-status", item);
-          if (st) st.textContent = "Importingâ€¦";
-          if (text) text.textContent = "Importing " + (i + 1) + " of " + items.length + "â€¦";
+          if (st) st.textContent = "Importing…";
+          if (text) text.textContent = "Importing " + (i + 1) + " of " + items.length + "…";
           if (fill) fill.style.width = Math.round(((i + 0.5) / total) * 100) + "%";
 
           setTimeout(function () {
             item.classList.remove("is-running");
             item.classList.add("is-done");
-            if (st) st.textContent = "Added âœ“";
+            if (st) st.textContent = "Added ✓";
             if (nlm) {
               var label = item.querySelector("label");
               var name = label ? label.textContent.replace(/^\s*/, "").trim() : "Source";
               name = name.replace(/\s+/g, " ");
-              if (name.length > 36) name = name.slice(0, 34) + "â€¦";
+              if (name.length > 36) name = name.slice(0, 34) + "…";
               var li = document.createElement("li");
               li.className = "nlm-source nlm-source-new bulk-added is-appearing";
               li.innerHTML =
@@ -452,8 +452,8 @@
       if (hint) {
         hint.textContent =
           visible === 0
-            ? "No notebooks match â€” try clearing search"
-            : visible + " notebook" + (visible === 1 ? "" : "s") + " Â· demo only";
+            ? "No notebooks match — try clearing search"
+            : visible + " notebook" + (visible === 1 ? "" : "s") + " · demo only";
       }
     }
 
@@ -605,8 +605,8 @@
           var time = $(".drive-time", row);
           if (time) {
             time.classList.remove("stale");
-            var label = time.textContent.split("Â·")[0].trim();
-            time.textContent = label + " Â· Synced Â· just now";
+            var label = time.textContent.split("·")[0].trim();
+            time.textContent = label + " · Synced · just now";
           }
           resolve();
         }, prefersReducedMotion() ? 80 : 900);
@@ -627,11 +627,11 @@
         var time = $(".drive-time", row);
         if (time && idx === 0) {
           time.classList.add("stale");
-          time.textContent = "Google Doc Â· Updated on Drive Â· 2h ago";
+          time.textContent = "Google Doc · Updated on Drive · 2h ago";
         }
         if (time && idx === 1) {
           time.classList.add("stale");
-          time.textContent = "Google Slides Â· Updated on Drive Â· yesterday";
+          time.textContent = "Google Slides · Updated on Drive · yesterday";
         }
         if (!$(".nlm-src-badge", row)) {
           var badge = document.createElement("span");
@@ -655,7 +655,7 @@
         if (status) status.textContent = "All Drive sources are up to date";
         return Promise.resolve();
       }
-      if (status) status.textContent = "Refreshing " + stale.length + " sourcesâ€¦";
+      if (status) status.textContent = "Refreshing " + stale.length + " sources…";
       var chain = Promise.resolve();
       stale.forEach(function (row) {
         chain = chain.then(function () {
@@ -663,7 +663,7 @@
         });
       });
       return chain.then(function () {
-        if (status) status.textContent = "All Drive sources refreshed âœ“";
+        if (status) status.textContent = "All Drive sources refreshed ✓";
       });
     }
 
@@ -705,9 +705,9 @@
         runAutoplay();
       } else if (action === "drive-one") {
         var row = t.closest(".drive-row");
-        if (status) status.textContent = "Refreshing sourceâ€¦";
+        if (status) status.textContent = "Refreshing source…";
         refreshRow(row).then(function () {
-          if (status) status.textContent = "Source updated from Google Drive âœ“";
+          if (status) status.textContent = "Source updated from Google Drive ✓";
         });
       } else if (action === "drive-refresh") {
         t.disabled = true;
@@ -755,7 +755,7 @@
       }
       if (playBtn) {
         playBtn.classList.remove("is-playing");
-        playBtn.textContent = "â–¶";
+        playBtn.textContent = "▶";
       }
       if (progress) progress.classList.remove("is-active");
     }
@@ -770,11 +770,11 @@
         progress.classList.add("is-active");
       }
       if (player) player.setAttribute("hidden", "");
-      if (progressText) progressText.textContent = "Generating Audio Overviewâ€¦";
+      if (progressText) progressText.textContent = "Generating Audio Overview…";
       return sequence([
         900,
         function () {
-          if (progressText) progressText.textContent = "Mixing host dialogueâ€¦";
+          if (progressText) progressText.textContent = "Mixing host dialogue…";
         },
         1100,
         function () {
@@ -833,7 +833,7 @@
       } else if (action === "podcast-toggle") {
         if (!playBtn) return;
         var playing = playBtn.classList.toggle("is-playing");
-        playBtn.textContent = playing ? "âšâš" : "â–¶";
+        playBtn.textContent = playing ? "âšâš" : "▶";
         playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
       } else if (action === "studio-reset") {
         reset();
@@ -889,7 +889,7 @@
         var bot = document.createElement("div");
         bot.className = "nlm-msg bot is-appearing";
         bot.textContent =
-          "Demo reply â€” in NotebookLM, this prompt would run against your sources with citations.";
+          "Demo reply — in NotebookLM, this prompt would run against your sources with citations.";
         messages.appendChild(bot);
         messages.scrollTop = messages.scrollHeight;
       }, prefersReducedMotion() ? 40 : 450);
@@ -1013,49 +1013,49 @@
   /* ---- Master-detail Features router ---- */
   var FEATURE_META = {
     overview: {
-      title: "Features â€“ NotebookTools for NotebookLM",
+      title: "Features – NotebookTools for NotebookLM",
       description: "Explore NotebookTools features with interactive demos: YouTube, bulk import, notebooks hub, Drive refresh, Studio, manage sources, prompts, webpage, X, highlights, chat export, slides-to-blog, and snapshots.",
       name: "Features",
       path: "/features",
       demo: null
     },
     "add-youtube": {
-      title: "Add YouTube to NotebookLM â€“ NotebookTools",
+      title: "Add YouTube to NotebookLM – NotebookTools",
       description: "Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.",
       name: "Add YouTube",
       path: "/features/add-youtube",
       demo: "youtube"
     },
     "bulk-import": {
-      title: "Bulk import queue â€“ NotebookTools",
+      title: "Bulk import queue – NotebookTools",
       description: "Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.",
       name: "Bulk import",
       path: "/features/bulk-import",
       demo: "bulk"
     },
     "notebooks-hub": {
-      title: "Notebooks hub â€“ NotebookTools",
-      description: "NotebookTools notebooks hub â€” a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.",
+      title: "Notebooks hub – NotebookTools",
+      description: "NotebookTools notebooks hub — a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.",
       name: "Notebooks hub",
       path: "/features/notebooks-hub",
       demo: "hub"
     },
     "drive-refresh": {
-      title: "Google Drive source refresh â€“ NotebookTools",
+      title: "Google Drive source refresh – NotebookTools",
       description: "Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.",
       name: "Drive refresh",
       path: "/features/drive-refresh",
       demo: "drive"
     },
     "studio-podcasts": {
-      title: "Studio & podcasts â€“ NotebookTools",
-      description: "NotebookLM Studio tools in NotebookTools â€” generate audio overviews, open artifacts, and play podcasts across notebooks in one player.",
+      title: "Studio & podcasts – NotebookTools",
+      description: "NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.",
       name: "Studio & podcasts",
       path: "/features/studio-podcasts",
       demo: "studio"
     },
     prompts: {
-      title: "Prompt library â€“ NotebookTools",
+      title: "Prompt library – NotebookTools",
       description: "NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.",
       name: "Prompt library",
       path: "/features/prompts",

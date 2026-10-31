@@ -1,0 +1,602 @@
+/* ==========================================================================
+   NotebookTools — site theme
+   Loaded after styles.css (and features.css) on every page.
+   1. Base & typography   2. Header   3. Mobile menu   4. Buttons
+   5. Footer              6. Page polish (home, blog, features, support)
+   Header/footer markup is shared via scripts/sync-site-chrome.py.
+   ========================================================================== */
+
+/* 1. Base & typography ---------------------------------------------------- */
+
+body {
+  font-feature-settings: "cv11", "ss01", "ss03";
+  letter-spacing: -0.006em;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(47, 91, 220, 0.16);
+}
+
+:focus-visible {
+  border-radius: 6px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+html.nav-open {
+  overflow: hidden;
+}
+
+/* Display serif for page and section titles (never inside product demos). */
+.hero h1,
+.section-head h2,
+.install-copy h2,
+.page-main h1,
+.blog-hub-head h1,
+.blog-index-head h1,
+.blog-article-header h1,
+.blog-article-body h2,
+.md-panel-intro h1,
+.feature-hero h1,
+.feature-cta-inner h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+}
+
+.hero h1 {
+  font-size: clamp(44px, 5.8vw, 72px);
+  line-height: 1;
+  margin-bottom: 24px;
+  max-width: none;
+}
+
+.hero h1 > span {
+  display: block;
+}
+
+.hero h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.section-head h2,
+.install-copy h2 {
+  font-size: clamp(34px, 4.4vw, 50px);
+  line-height: 1.04;
+  margin-bottom: 14px;
+}
+
+.page-main h1,
+.blog-hub-head h1,
+.blog-index-head h1,
+.md-panel-intro h1,
+.feature-hero h1 {
+  font-size: clamp(40px, 5vw, 58px);
+  line-height: 1.02;
+}
+
+.blog-article-header h1 {
+  font-size: clamp(38px, 4.6vw, 56px);
+  line-height: 1.04;
+}
+
+.blog-article-body h2 {
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.12;
+}
+
+.feature-cta-inner h2 {
+  font-size: clamp(30px, 3.6vw, 42px);
+  line-height: 1.06;
+}
+
+/* Small titles stay in the sans for legibility. */
+.blog-card-item h2,
+.blog-card h2,
+.blog-prompt-hub-card h2,
+.blog-cluster-main strong,
+.blog-cta-card h2 {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.blog-prompt-text {
+  font-family: var(--font);
+}
+
+.lead,
+.section-lead {
+  color: var(--muted);
+}
+
+/* One eyebrow style everywhere. */
+.eyebrow,
+.blog-sidebar-label,
+.blog-toc-label,
+.blog-cluster-kicker,
+.support-label {
+  color: var(--subtle);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.feature-hero .eyebrow {
+  color: var(--subtle);
+  letter-spacing: 0.12em;
+}
+
+/* 2. Header ---------------------------------------------------------------- */
+
+.site-header {
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  background: rgba(251, 250, 248, 0.82);
+  border-bottom: 1px solid transparent;
+  display: block;
+  gap: 0;
+  height: 64px;
+  padding: 0;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.site-header.is-scrolled,
+.site-header.is-open {
+  border-bottom-color: var(--line-soft);
+  box-shadow: 0 1px 0 rgba(21, 20, 15, 0.02), 0 8px 24px -12px rgba(21, 20, 15, 0.08);
+}
+
+.site-header-inner {
+  align-items: center;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr auto 1fr;
+  height: 100%;
+  margin: 0 auto;
+  max-width: calc(var(--max) + 64px);
+  padding: 0 32px;
+}
+
+.site-header .logo,
+.site-footer .logo {
+  align-items: center;
+  display: inline-flex;
+  gap: 10px;
+  justify-self: start;
+}
+
+.site-header .logo-mark-header,
+.site-footer .logo-mark-header {
+  height: 28px;
+  width: 28px;
+}
+
+.logo-text {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.site-nav {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: 2px;
+  justify-content: center;
+}
+
+.site-nav > a {
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 7px 14px;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.site-nav > a:hover {
+  background: rgba(21, 20, 15, 0.045);
+  color: var(--ink);
+}
+
+.site-nav > a[aria-current="page"] {
+  background: rgba(21, 20, 15, 0.06);
+  color: var(--ink);
+}
+
+.site-nav-actions {
+  display: none;
+}
+
+.site-nav .site-nav-actions .button-primary {
+  color: #fff;
+}
+
+.site-nav .site-nav-actions .button-ghost {
+  color: var(--ink);
+}
+
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-self: end;
+}
+
+.header-chrome {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 8px;
+  padding: 7px 14px 7px 10px;
+  transition: border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.header-chrome:hover {
+  background: var(--surface);
+  border-color: #d3cec3;
+}
+
+.chrome-icon {
+  display: block;
+  flex: none;
+}
+
+.site-header .header-buy {
+  display: inline-flex;
+  padding: 8px 16px;
+}
+
+.nav-toggle {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  height: 38px;
+  justify-content: center;
+  padding: 0;
+  width: 38px;
+}
+
+.nav-toggle span {
+  background: var(--ink);
+  border-radius: 2px;
+  display: block;
+  height: 1.5px;
+  transition: transform 0.2s;
+  width: 16px;
+}
+
+.site-header.is-open .nav-toggle span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.site-header.is-open .nav-toggle span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* 3. Mobile menu ----------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  .site-header-inner {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .header-chrome:not(.footer-chrome) {
+    display: none;
+  }
+
+  .site-nav {
+    align-items: stretch;
+    background: var(--bg);
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: calc(100dvh - 64px);
+    justify-content: flex-start;
+    left: 0;
+    opacity: 0;
+    overflow-y: auto;
+    padding: 16px 20px 32px;
+    pointer-events: none;
+    position: fixed;
+    right: 0;
+    top: 64px;
+    transform: translateY(-6px);
+    transition: opacity 0.18s, transform 0.18s, visibility 0s 0.18s;
+    visibility: hidden;
+  }
+
+  .site-header.is-open .site-nav {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition: opacity 0.18s, transform 0.18s;
+    visibility: visible;
+  }
+
+  .site-nav > a {
+    border-bottom: 1px solid var(--line-soft);
+    border-radius: 0;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    padding: 14px 4px;
+  }
+
+  .site-nav > a:hover,
+  .site-nav > a[aria-current="page"] {
+    background: none;
+  }
+
+  .site-nav > a[aria-current="page"] {
+    color: var(--accent);
+  }
+
+  .site-nav-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .site-nav-actions .button {
+    font-size: 15px;
+    gap: 8px;
+    padding: 14px 20px;
+  }
+}
+
+@media (max-width: 359px) {
+  .site-header .header-buy {
+    display: none;
+  }
+}
+
+/* 4. Buttons --------------------------------------------------------------- */
+
+.button {
+  font-weight: 600;
+  gap: 8px;
+  letter-spacing: -0.012em;
+}
+
+.button-primary {
+  background: linear-gradient(180deg, #2a2924 0%, var(--ink) 100%);
+  border-color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 1px 2px rgba(21, 20, 15, 0.12),
+    0 6px 16px -6px rgba(21, 20, 15, 0.35);
+}
+
+.button-primary:hover {
+  background: linear-gradient(180deg, #34332d 0%, #1f1e19 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 2px 4px rgba(21, 20, 15, 0.12),
+    0 10px 24px -8px rgba(21, 20, 15, 0.4);
+}
+
+.button-ghost {
+  background: var(--surface);
+  border-color: var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 5. Footer ---------------------------------------------------------------- */
+
+.site-footer {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--line-soft);
+  display: block;
+  margin-top: 0;
+  max-width: none;
+  padding: 0;
+}
+
+.site-footer-inner {
+  margin: 0 auto;
+  max-width: calc(var(--max) + 64px);
+  padding: 64px 32px 32px;
+}
+
+.footer-top {
+  display: grid;
+  gap: 48px;
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+}
+
+.footer-brand p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 16px 0 20px;
+  max-width: 34ch;
+}
+
+.footer-chrome {
+  background: var(--surface);
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col h2 {
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin: 4px 0 6px;
+}
+
+.footer-col a {
+  color: var(--muted);
+  font-size: 14px;
+  transition: color 0.15s;
+  width: fit-content;
+}
+
+.footer-col a:hover {
+  color: var(--ink);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--line);
+  color: var(--subtle);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  gap: 8px 24px;
+  justify-content: space-between;
+  margin-top: 56px;
+  padding-top: 24px;
+}
+
+@media (max-width: 860px) {
+  .footer-top {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* The section right before the footer doesn't need its own divider. */
+main > :last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .site-footer-inner {
+    padding: 48px 20px 28px;
+  }
+
+  .footer-top {
+    gap: 36px 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    margin-top: 40px;
+  }
+}
+
+/* 6. Page polish ------------------------------------------------------------ */
+
+/* Cards: one border, radius and hover language. */
+.feature-card,
+.guide-card,
+.hub-card,
+.step-card,
+.pricing-card,
+.support-card,
+.blog-card-item,
+.blog-prompt-hub-card,
+.blog-cta-card {
+  border-color: var(--line);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.feature-card:hover,
+.guide-card:hover,
+.hub-card:hover,
+.support-card:hover,
+.blog-card-item:hover,
+.blog-prompt-hub-card:hover {
+  border-color: #d8d3c8;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.pricing-card {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Home */
+.hero-inner {
+  padding-bottom: 112px;
+  padding-top: 96px;
+}
+
+/* Inner pages (support, privacy) */
+.page-main {
+  padding-top: 80px;
+}
+
+.page-main h1 {
+  margin-bottom: 16px;
+}
+
+.page-main h2 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.support-card {
+  background: var(--surface);
+  padding: 24px;
+}
+
+/* Blog */
+.blog-article-body {
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.blog-article-body a {
+  text-decoration-color: rgba(47, 91, 220, 0.35);
+  text-underline-offset: 3px;
+}
+
+.blog-card-tag {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Hide the old image badges in headers if any page still carries them. */
+.site-header .chrome-store-badge {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

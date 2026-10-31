@@ -1,25 +1,26 @@
 :root {
-  --bg: #faf9f7;
-  --bg-soft: #f3f1ec;
+  --bg: #fbfaf8;
+  --bg-soft: #f4f2ed;
   --surface: #ffffff;
-  --ink: #141413;
-  --muted: #5c5c57;
-  --subtle: #8a8a84;
-  --line: #e6e3db;
-  --line-soft: #efede7;
-  --accent: #2563eb;
-  --accent-soft: #eff4ff;
+  --ink: #15140f;
+  --muted: #5d5b54;
+  --subtle: #8b887f;
+  --line: #e6e2d9;
+  --line-soft: #efece5;
+  --accent: #2f5bdc;
+  --accent-soft: #eef2fd;
   --google-blue: #4285f4;
   --google-red: #ea4335;
   --google-yellow: #fbbc04;
   --google-green: #34a853;
-  --radius: 8px;
-  --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px rgba(20, 20, 19, 0.04);
-  --shadow-md: 0 10px 36px rgba(20, 20, 19, 0.06);
-  --shadow-lg: 0 28px 72px rgba(20, 20, 19, 0.08);
+  --radius: 10px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 2px rgba(21, 20, 15, 0.04);
+  --shadow-md: 0 1px 2px rgba(21, 20, 15, 0.04), 0 12px 32px -8px rgba(21, 20, 15, 0.08);
+  --shadow-lg: 0 2px 4px rgba(21, 20, 15, 0.04), 0 32px 64px -16px rgba(21, 20, 15, 0.14);
   --max: 1120px;
-  --font: "Plus Jakarta Sans", Roboto, system-ui, -apple-system, sans-serif;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
 }
 
 *,
@@ -1543,7 +1544,7 @@ h1, h2, h3, p {
 /* Blog — Medium-inspired */
 
 .blog-page {
-  --blog-serif: Lora, Georgia, "Times New Roman", serif;
+  --blog-serif: var(--font-display);
 }
 
 /* Blog hub — sidebar + cards */
@@ -1561,7 +1562,7 @@ h1, h2, h3, p {
 }
 
 .blog-hub-head h1 {
-  font-family: Lora, Georgia, serif;
+  font-family: var(--blog-serif);
   font-size: clamp(28px, 5vw, 38px);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -1666,7 +1667,7 @@ h1, h2, h3, p {
 }
 
 .blog-card-item h2 {
-  font-family: Lora, Georgia, serif;
+  font-family: var(--blog-serif);
   font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -1942,7 +1943,7 @@ h1, h2, h3, p {
   border-radius: 999px;
   color: var(--muted);
   cursor: pointer;
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font);
   font-size: 13px;
   padding: 7px 12px;
   transition: background 0.15s, color 0.15s;
@@ -1995,7 +1996,7 @@ h1, h2, h3, p {
   color: var(--muted);
   cursor: pointer;
   flex-shrink: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font);
   font-size: 12px;
   padding: 6px 12px;
   transition: border-color 0.15s, color 0.15s;
@@ -2059,7 +2060,7 @@ h1, h2, h3, p {
 .blog-prompt-card .blog-prompt-text {
   background: var(--bg-soft);
   border-radius: var(--radius);
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font);
   font-size: 14px;
   font-style: normal;
   line-height: 1.65;
@@ -2142,7 +2143,7 @@ h1, h2, h3, p {
   border-radius: var(--radius);
   color: var(--muted);
   cursor: pointer;
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font);
   font-size: 13px;
   margin-top: 14px;
   padding: 7px 14px;
