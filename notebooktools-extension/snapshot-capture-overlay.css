@@ -1,0 +1,75 @@
+#notebooktools-snapshot-overlay {
+  all: initial;
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  cursor: crosshair;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+#notebooktools-snapshot-overlay * {
+  box-sizing: border-box;
+}
+
+#notebooktools-snapshot-overlay .nt-snapshot-shade {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.42);
+  pointer-events: none;
+}
+
+#notebooktools-snapshot-overlay .nt-snapshot-selection {
+  position: fixed;
+  border: 2px solid #2563eb;
+  background: rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.42);
+  display: none;
+  pointer-events: none;
+}
+
+#notebooktools-snapshot-overlay .nt-snapshot-toolbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.92);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 14px;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+#notebooktools-snapshot-overlay .nt-snapshot-toolbar span {
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+#notebooktools-snapshot-overlay button {
+  all: unset;
+  background: #2563eb;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+}
+
+#notebooktools-snapshot-overlay button.secondary {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+#notebooktools-snapshot-overlay button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+#notebooktools-snapshot-overlay.is-busy {
+  cursor: wait;
+}

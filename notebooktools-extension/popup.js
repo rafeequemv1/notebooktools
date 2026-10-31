@@ -8,6 +8,10 @@ const statusBox = document.querySelector("#status");
 const modeButtons = [...document.querySelectorAll(".import-mode")];
 const modeTextButton = document.querySelector("#modeText");
 const openNotebookLink = document.querySelector("#openNotebookLink");
+const studioSection = document.querySelector("#studioSection");
+const studioArtifactType = document.querySelector("#studioArtifactType");
+const studioOpenTabToggle = document.querySelector("#studioOpenTabToggle");
+const studioButton = document.querySelector("#studioButton");
 
 let activeMode = initialMode;
 let activeTab = null;
@@ -43,13 +47,65 @@ function setStatus(message, options = {}) {
   });
 }
 
-function showOpenNotebook(notebookId) {
+function showOpenNotebook(notebookId, artifactId = "", artifactLabel = "") {
   if (!openNotebookLink || !notebookId) {
     return;
   }
 
   openNotebookLink.hidden = false;
+
+  if (artifactId && NotebookToolsStore.notebookArtifactUrl) {
+    openNotebookLink.textContent = `Open ${(artifactLabel || "output").toLowerCase()}`;
+    openNotebookLink.href = NotebookToolsStore.notebookArtifactUrl(notebookId, artifactId);
+    return;
+  }
+
+  openNotebookLink.textContent = "Open notebook";
   openNotebookLink.href = `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}`;
+}
+
+function isStudioAvailable() {
+  if (activeMode === "text") {
+    return false;
+  }
+
+  if (activeMode === "youtube") {
+    return Boolean(NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || ""));
+  }
+
+  if (activeMode === "webpage") {
+    return Boolean(NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || ""));
+  }
+
+  return false;
+}
+
+function shouldShowStudioSection() {
+  return activeMode === "webpage" || activeMode === "youtube";
+}
+
+function updateStudioSectionVisibility() {
+  if (!studioSection) {
+    return;
+  }
+
+  const visible = shouldShowStudioSection();
+  const available = isStudioAvailable();
+
+  studioSection.hidden = !visible;
+  studioSection.classList.toggle("is-unavailable", visible && !available);
+
+  if (studioButton) {
+    studioButton.disabled = !available;
+  }
+
+  if (studioArtifactType) {
+    studioArtifactType.disabled = !available;
+  }
+
+  if (studioOpenTabToggle) {
+    studioOpenTabToggle.disabled = !available;
+  }
 }
 
 function getActiveTab() {
@@ -92,6 +148,7 @@ function updateModeUi() {
 
   if (activeMode === "text" && pendingText?.text) {
     sourcePreview.textContent = pendingText.text.slice(0, 140) + (pendingText.text.length > 140 ? "..." : "");
+    updateStudioSectionVisibility();
     return;
   }
 
@@ -102,12 +159,15 @@ function updateModeUi() {
     sourcePreview.textContent = youtubeUrl
       ? (activeTab?.title || youtubeUrl)
       : "Open a YouTube video to import it.";
+    updateStudioSectionVisibility();
     return;
   }
 
   sourcePreview.textContent = webpageUrl
     ? (activeTab?.title || webpageUrl)
     : "Open any webpage to import it as a NotebookLM source.";
+
+  updateStudioSectionVisibility();
 }
 
 function setActiveMode(mode) {
@@ -128,6 +188,61 @@ function setActiveMode(mode) {
   activeMode = mode;
   updateModeUi();
   setStatus("");
+}
+
+async function runStudioImport() {
+  const artifactType = NotebookToolsStudioImport.getSelectedArtifactType(studioArtifactType);
+  const artifactLabel = NotebookToolsStudioImport.getArtifactLabel(artifactType);
+  const idleLabel = `Create ${artifactLabel.toLowerCase()}`;
+
+  NotebookToolsUI.setImportButtonState(studioButton, true, idleLabel);
+  picker.setBusy(true);
+  setStatus(`Preparing ${artifactLabel.toLowerCase()}...`, { loading: true });
+
+  try {
+    if (!isStudioAvailable()) {
+      throw new Error("Studio is not available for this page.");
+    }
+
+    const targetNotebook = await picker.resolveTarget();
+    const kind = activeMode === "youtube" ? "youtube" : "webpage";
+    const sourceUrl =
+      kind === "youtube"
+        ? NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || "")
+        : NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || "");
+
+    if (!sourceUrl) {
+      throw new Error(kind === "youtube" ? "Open a YouTube video first." : "This page cannot be imported.");
+    }
+
+    showOpenNotebook(targetNotebook.id);
+    await NotebookToolsSettings.openYoutubeStudioTabIfEnabled(targetNotebook.id);
+
+    const result = await NotebookToolsStudioImport.runPipeline({
+      notebookId: targetNotebook.id,
+      kind,
+      url: sourceUrl,
+      artifactType,
+      onStatus: ({ message, loading, done, type }) => {
+        setStatus(message, { loading, done, type });
+      }
+    });
+
+    document.querySelector("#newNotebookLmName").value = "";
+    await picker.refresh({ silent: true });
+    document.querySelector("#notebookLmSelect").value = targetNotebook.id;
+    showOpenNotebook(targetNotebook.id, result.artifact.id, result.artifactLabel);
+    await NotebookToolsSettings.openYoutubeStudioArtifactIfEnabled(
+      targetNotebook.id,
+      result.artifact.id
+    );
+    setStatus(`${result.artifactLabel} ready.`, { done: true });
+  } catch (error) {
+    setStatus(error.message || "Studio import failed.", { type: "error" });
+  } finally {
+    NotebookToolsUI.setImportButtonState(studioButton, false, idleLabel);
+    picker.setBusy(false);
+  }
 }
 
 async function runImport() {
@@ -172,6 +287,7 @@ async function runImport() {
     await picker.refresh({ silent: true });
     document.querySelector("#notebookLmSelect").value = targetNotebook.id;
     showOpenNotebook(targetNotebook.id);
+    await NotebookToolsSettings.openNotebookIfEnabled(targetNotebook.id);
     setStatus(`Added to "${targetNotebook.title}"`, { done: true });
   } catch (error) {
     setStatus(error.message || "Import failed.", { type: "error" });
@@ -208,6 +324,13 @@ async function initPopup() {
   });
 
   importButton.addEventListener("click", runImport);
+  studioButton?.addEventListener("click", runStudioImport);
+  await NotebookToolsStudioImport.initControls({
+    typeSelect: studioArtifactType,
+    openTabToggle: studioOpenTabToggle,
+    studioButton
+  });
+
   picker.bind();
   updateModeUi();
   picker.refresh({ silent: true });

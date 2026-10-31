@@ -1,0 +1,67 @@
+#notebooktools-auto-capture-bar {
+  all: initial;
+  box-sizing: border-box;
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483645;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(185, 28, 28, 0.95);
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 14px;
+  pointer-events: auto;
+}
+
+#notebooktools-auto-capture-bar * {
+  box-sizing: border-box;
+}
+
+#notebooktools-auto-capture-bar .nt-auto-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  animation: nt-auto-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes nt-auto-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+#notebooktools-auto-capture-bar .nt-auto-hint {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+#notebooktools-auto-capture-bar button {
+  all: unset;
+  background: #fff;
+  border-radius: 999px;
+  color: #b91c1c;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+}
+
+#notebooktools-auto-capture-bar button:hover {
+  background: #fef2f2;
+}

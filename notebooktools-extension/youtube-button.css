@@ -86,6 +86,34 @@ html[dark] .notebooktools-youtube-action.is-open button {
   color: var(--yt-spec-text-primary, #ffffff);
 }
 
+.notebooktools-youtube-action.is-studio button {
+  background: #f3e8ff;
+  border-color: rgba(109, 40, 217, 0.18);
+  color: #5b21b6;
+}
+
+.notebooktools-youtube-action.is-studio button:hover,
+.notebooktools-youtube-action.is-studio.is-open button {
+  background: #ede9fe;
+  border-color: rgba(109, 40, 217, 0.28);
+}
+
+.notebooktools-youtube-panel.is-studio {
+  height: 360px;
+}
+
+html[dark] .notebooktools-youtube-action.is-studio button {
+  background: rgba(91, 33, 182, 0.22);
+  border-color: rgba(167, 139, 250, 0.24);
+  color: #ddd6fe;
+}
+
+html[dark] .notebooktools-youtube-action.is-studio button:hover,
+html[dark] .notebooktools-youtube-action.is-studio.is-open button {
+  background: rgba(91, 33, 182, 0.34);
+  color: #ffffff;
+}
+
 html[dark] .notebooktools-youtube-panel {
   background: #212121;
   border-color: rgba(255, 255, 255, 0.12);
@@ -104,5 +132,9 @@ html[dark] .notebooktools-youtube-panel {
   .notebooktools-youtube-panel {
     height: 290px;
     width: min(272px, calc(100vw - 24px));
+  }
+
+  .notebooktools-youtube-panel.is-studio {
+    height: 380px;
   }
 }

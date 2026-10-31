@@ -1,12 +1,21 @@
 const LAST_NOTEBOOK_KEY = "lastNotebookId";
 
+function formatNotebookLabel(notebook) {
+  if (typeof notebook.sourceCount === "number") {
+    return `${notebook.title} (${notebook.sourceCount})`;
+  }
+
+  return notebook.title;
+}
+
 function createNotebookPicker(config) {
   const {
     searchInput = null,
     selectEl,
     newNameInput,
     refreshButton = null,
-    onStatus = () => {}
+    onStatus = () => {},
+    onNotebookChange = () => {}
   } = config;
 
   let notebooks = [];
@@ -78,6 +87,18 @@ function createNotebookPicker(config) {
     return notebooks.find((notebook) => notebook.id === notebookId) || null;
   }
 
+  function notifyNotebookChange() {
+    const newName = selectedNotebookName();
+    const notebookId = selectedNotebookId();
+    const notebook = notebookId ? getNotebookById(notebookId) : null;
+
+    onNotebookChange({
+      notebookId: newName ? "" : notebookId,
+      isNewNotebook: Boolean(newName),
+      cachedSourceCount: typeof notebook?.sourceCount === "number" ? notebook.sourceCount : null
+    });
+  }
+
   async function refresh({ silent = false } = {}) {
     setBusy(true);
 
@@ -98,13 +119,14 @@ function createNotebookPicker(config) {
         for (const notebook of notebooks) {
           const option = document.createElement("option");
           option.value = notebook.id;
-          option.textContent = notebook.title;
+          option.textContent = formatNotebookLabel(notebook);
           selectEl.append(option);
         }
       }
 
       await applyLastNotebook();
       filterOptions(searchInput?.value || "");
+      notifyNotebookChange();
 
       if (!silent) {
         onStatus(`${notebooks.length} notebook${notebooks.length === 1 ? "" : "s"} ready.`);
@@ -144,6 +166,20 @@ function createNotebookPicker(config) {
     return target;
   }
 
+  function setNewNotebookName(name) {
+    if (!newNameInput) {
+      return;
+    }
+
+    newNameInput.value = NotebookToolsStore.cleanNotebookName(name);
+
+    if (selectEl) {
+      selectEl.value = "";
+    }
+
+    notifyNotebookChange();
+  }
+
   function bind() {
     if (searchInput) {
       searchInput.addEventListener("input", () => {
@@ -156,6 +192,7 @@ function createNotebookPicker(config) {
         if (selectEl.value && newNameInput) {
           newNameInput.value = "";
         }
+        notifyNotebookChange();
       });
     }
 
@@ -164,6 +201,7 @@ function createNotebookPicker(config) {
         if (newNameInput.value.trim() && selectEl) {
           selectEl.value = "";
         }
+        notifyNotebookChange();
       });
     }
 
@@ -181,6 +219,7 @@ function createNotebookPicker(config) {
     selectedNotebookId,
     selectedNotebookName,
     setBusy,
+    setNewNotebookName,
     get notebooks() {
       return notebooks;
     }

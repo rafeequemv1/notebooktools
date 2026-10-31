@@ -7,6 +7,8 @@
 
   let watchButton = null;
   let renderRaf = 0;
+  let renderBackupTimer = 0;
+  let navigationRetryTimers = [];
   let lastHref = location.href;
   let dropdownListenersBound = false;
   let actionsObserver = null;
@@ -37,40 +39,122 @@
     ).replace(/\s+/g, " ").trim();
   }
 
-  function getWatchInsertPoint() {
-    const topButtons = document.querySelector(
-      "ytd-watch-metadata #top-level-buttons-computed, #actions #top-level-buttons-computed, #top-level-buttons-computed"
-    );
-
-    if (topButtons) {
-      return { node: topButtons, mode: "prepend" };
+  function isElementVisible(element) {
+    if (!(element instanceof Element) || !element.isConnected) {
+      return false;
     }
 
-    const menuRenderer = document.querySelector(
-      "ytd-watch-metadata ytd-menu-renderer, #actions ytd-menu-renderer, [role='main'] ytd-menu-renderer"
-    );
+    const rect = element.getBoundingClientRect();
 
-    if (menuRenderer) {
-      const inner = menuRenderer.querySelector("#top-level-buttons-computed");
+    if (rect.width < 1 || rect.height < 1) {
+      return false;
+    }
 
-      if (inner) {
-        return { node: inner, mode: "prepend" };
+    const style = window.getComputedStyle(element);
+
+    return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0;
+  }
+
+  function queryShadowDeep(selector, root = document) {
+    const direct = root.querySelector(selector);
+
+    if (direct) {
+      return direct;
+    }
+
+    const hosts = root.querySelectorAll ? root.querySelectorAll("*") : [];
+
+    for (const host of hosts) {
+      if (!host.shadowRoot) {
+        continue;
       }
 
-      return { node: menuRenderer, mode: "prepend" };
+      const found = queryShadowDeep(selector, host.shadowRoot);
+
+      if (found) {
+        return found;
+      }
     }
 
-    const firstAction = document.querySelector(
-      "[role='main'] yt-button-view-model.ytd-menu-renderer, #actions yt-button-view-model.ytd-menu-renderer"
+    return null;
+  }
+
+  function getWatchMetadataRoot() {
+    const candidates = [
+      ...document.querySelectorAll("ytd-watch-metadata"),
+      ...document.querySelectorAll("ytd-watch-flexy #primary-inner"),
+      ...document.querySelectorAll("#columns #primary #primary-inner")
+    ];
+
+    return candidates.find(isElementVisible) || candidates[0] || null;
+  }
+
+  function queryAllFromRoot(selector, root = document) {
+    const matches = [];
+
+    if (root.querySelectorAll) {
+      matches.push(...root.querySelectorAll(selector));
+    }
+
+    const descendants = root.querySelectorAll ? root.querySelectorAll("*") : [];
+
+    for (const element of descendants) {
+      if (!element.shadowRoot) {
+        continue;
+      }
+
+      matches.push(...queryAllFromRoot(selector, element.shadowRoot));
+    }
+
+    return matches;
+  }
+
+  function getWatchInsertPoint() {
+    const metadataRoot = getWatchMetadataRoot();
+    const searchRoots = metadataRoot ? [metadataRoot, document] : [document];
+    const buttonSelectors = [
+      "#top-level-buttons-computed",
+      "#button-bar"
+    ];
+
+    for (const root of searchRoots) {
+      for (const selector of buttonSelectors) {
+        for (const node of queryAllFromRoot(selector, root)) {
+          if (isElementVisible(node)) {
+            return { node, mode: "prepend" };
+          }
+        }
+      }
+
+      for (const menuRenderer of queryAllFromRoot("ytd-menu-renderer", root)) {
+        if (!isElementVisible(menuRenderer)) {
+          continue;
+        }
+
+        const inner =
+          menuRenderer.querySelector("#top-level-buttons-computed, #button-bar") ||
+          queryShadowDeep("#top-level-buttons-computed, #button-bar", menuRenderer);
+
+        if (inner && isElementVisible(inner)) {
+          return { node: inner, mode: "prepend" };
+        }
+
+        return { node: menuRenderer, mode: "prepend" };
+      }
+    }
+
+    const firstAction = queryShadowDeep(
+      "ytd-watch-metadata yt-button-view-model, #actions yt-button-view-model, [role='main'] yt-button-view-model"
     );
 
-    if (firstAction?.parentElement) {
+    if (firstAction?.parentElement && isElementVisible(firstAction.parentElement)) {
       return { node: firstAction.parentElement, mode: "prepend" };
     }
 
-    const actions = document.querySelector("ytd-watch-metadata #actions, #actions");
+    const actions = metadataRoot?.querySelector("#actions") ||
+      queryShadowDeep("ytd-watch-metadata #actions, #actions");
 
-    if (actions) {
+    if (actions && isElementVisible(actions)) {
       return { node: actions, mode: "prepend" };
     }
 
@@ -78,7 +162,7 @@
   }
 
   function isButtonInPlace(button, insertPoint) {
-    if (!button?.isConnected || !insertPoint?.node) {
+    if (!button?.isConnected || !insertPoint?.node || !isElementVisible(button)) {
       return false;
     }
 
@@ -325,15 +409,46 @@
     );
   }
 
-  function scheduleRender() {
-    if (renderRaf) {
-      return;
+  function clearNavigationRetries() {
+    for (const timerId of navigationRetryTimers) {
+      window.clearTimeout(timerId);
     }
 
-    renderRaf = requestAnimationFrame(() => {
+    navigationRetryTimers = [];
+  }
+
+  function scheduleNavigationRetries() {
+    clearNavigationRetries();
+
+    for (const delay of [0, 60, 150, 300, 600, 1200, 2400]) {
+      navigationRetryTimers.push(
+        window.setTimeout(() => {
+          if (isWatchPage()) {
+            renderWatchButton();
+          }
+        }, delay)
+      );
+    }
+  }
+
+  function scheduleRender() {
+    if (renderRaf) {
+      window.cancelAnimationFrame(renderRaf);
+    }
+
+    renderRaf = window.requestAnimationFrame(() => {
       renderRaf = 0;
       renderWatchButton();
     });
+
+    window.clearTimeout(renderBackupTimer);
+    renderBackupTimer = window.setTimeout(() => {
+      renderBackupTimer = 0;
+
+      if (isWatchPage()) {
+        renderWatchButton();
+      }
+    }, 120);
   }
 
   function onYouTubeNavigation() {
@@ -346,24 +461,42 @@
 
     closePanel();
     detachActionsObserver();
+    clearNavigationRetries();
 
     if (hrefChanged && watchButton?.parentElement) {
       watchButton.remove();
     }
 
     scheduleRender();
+
+    if (isWatchPage()) {
+      scheduleNavigationRetries();
+    }
+  }
+
+  function bindYouTubeEvents() {
+    const roots = [document, document.querySelector("ytd-app")].filter(Boolean);
+
+    for (const root of roots) {
+      root.addEventListener("yt-navigate-finish", onYouTubeNavigation);
+      root.addEventListener("yt-page-data-updated", scheduleRender);
+      root.addEventListener("yt-page-type-changed", onYouTubeNavigation);
+    }
   }
 
   bindDropdownListeners();
+  bindYouTubeEvents();
   scheduleRender();
+
+  if (isWatchPage()) {
+    scheduleNavigationRetries();
+  }
 
   new MutationObserver(scheduleRender).observe(document.documentElement, {
     childList: true,
     subtree: true
   });
 
-  document.addEventListener("yt-navigate-finish", onYouTubeNavigation);
-  document.addEventListener("yt-page-data-updated", scheduleRender);
   window.addEventListener("popstate", onYouTubeNavigation);
 
   window.setInterval(() => {
@@ -379,8 +512,8 @@
     const insertPoint = getWatchInsertPoint();
     const button = document.getElementById(WATCH_BTN_ID);
 
-    if (insertPoint && !isButtonInPlace(button, insertPoint)) {
+    if (!button || !isElementVisible(button) || (insertPoint && !isButtonInPlace(button, insertPoint))) {
       scheduleRender();
     }
-  }, 200);
+  }, 250);
 })();

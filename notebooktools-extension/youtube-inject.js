@@ -2,11 +2,16 @@
   "use strict";
 
   const WATCH_BTN_ID = "notebooktools-youtube-action";
+  const STUDIO_BTN_ID = "notebooktools-youtube-studio";
   const DROPDOWN_ID = "notebooktools-youtube-dropdown";
   const WATCH_PANEL_ID = "notebooktools-youtube-panel";
 
   let watchButton = null;
+  let studioButton = null;
+  let activePanelMode = "import";
   let renderRaf = 0;
+  let renderBackupTimer = 0;
+  let navigationRetryTimers = [];
   let lastHref = location.href;
   let dropdownListenersBound = false;
   let actionsObserver = null;
@@ -37,40 +42,122 @@
     ).replace(/\s+/g, " ").trim();
   }
 
-  function getWatchInsertPoint() {
-    const topButtons = document.querySelector(
-      "ytd-watch-metadata #top-level-buttons-computed, #actions #top-level-buttons-computed, #top-level-buttons-computed"
-    );
-
-    if (topButtons) {
-      return { node: topButtons, mode: "prepend" };
+  function isElementVisible(element) {
+    if (!(element instanceof Element) || !element.isConnected) {
+      return false;
     }
 
-    const menuRenderer = document.querySelector(
-      "ytd-watch-metadata ytd-menu-renderer, #actions ytd-menu-renderer, [role='main'] ytd-menu-renderer"
-    );
+    const rect = element.getBoundingClientRect();
 
-    if (menuRenderer) {
-      const inner = menuRenderer.querySelector("#top-level-buttons-computed");
+    if (rect.width < 1 || rect.height < 1) {
+      return false;
+    }
 
-      if (inner) {
-        return { node: inner, mode: "prepend" };
+    const style = window.getComputedStyle(element);
+
+    return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0;
+  }
+
+  function queryShadowDeep(selector, root = document) {
+    const direct = root.querySelector(selector);
+
+    if (direct) {
+      return direct;
+    }
+
+    const hosts = root.querySelectorAll ? root.querySelectorAll("*") : [];
+
+    for (const host of hosts) {
+      if (!host.shadowRoot) {
+        continue;
       }
 
-      return { node: menuRenderer, mode: "prepend" };
+      const found = queryShadowDeep(selector, host.shadowRoot);
+
+      if (found) {
+        return found;
+      }
     }
 
-    const firstAction = document.querySelector(
-      "[role='main'] yt-button-view-model.ytd-menu-renderer, #actions yt-button-view-model.ytd-menu-renderer"
+    return null;
+  }
+
+  function getWatchMetadataRoot() {
+    const candidates = [
+      ...document.querySelectorAll("ytd-watch-metadata"),
+      ...document.querySelectorAll("ytd-watch-flexy #primary-inner"),
+      ...document.querySelectorAll("#columns #primary #primary-inner")
+    ];
+
+    return candidates.find(isElementVisible) || candidates[0] || null;
+  }
+
+  function queryAllFromRoot(selector, root = document) {
+    const matches = [];
+
+    if (root.querySelectorAll) {
+      matches.push(...root.querySelectorAll(selector));
+    }
+
+    const descendants = root.querySelectorAll ? root.querySelectorAll("*") : [];
+
+    for (const element of descendants) {
+      if (!element.shadowRoot) {
+        continue;
+      }
+
+      matches.push(...queryAllFromRoot(selector, element.shadowRoot));
+    }
+
+    return matches;
+  }
+
+  function getWatchInsertPoint() {
+    const metadataRoot = getWatchMetadataRoot();
+    const searchRoots = metadataRoot ? [metadataRoot, document] : [document];
+    const buttonSelectors = [
+      "#top-level-buttons-computed",
+      "#button-bar"
+    ];
+
+    for (const root of searchRoots) {
+      for (const selector of buttonSelectors) {
+        for (const node of queryAllFromRoot(selector, root)) {
+          if (isElementVisible(node)) {
+            return { node, mode: "prepend" };
+          }
+        }
+      }
+
+      for (const menuRenderer of queryAllFromRoot("ytd-menu-renderer", root)) {
+        if (!isElementVisible(menuRenderer)) {
+          continue;
+        }
+
+        const inner =
+          menuRenderer.querySelector("#top-level-buttons-computed, #button-bar") ||
+          queryShadowDeep("#top-level-buttons-computed, #button-bar", menuRenderer);
+
+        if (inner && isElementVisible(inner)) {
+          return { node: inner, mode: "prepend" };
+        }
+
+        return { node: menuRenderer, mode: "prepend" };
+      }
+    }
+
+    const firstAction = queryShadowDeep(
+      "ytd-watch-metadata yt-button-view-model, #actions yt-button-view-model, [role='main'] yt-button-view-model"
     );
 
-    if (firstAction?.parentElement) {
+    if (firstAction?.parentElement && isElementVisible(firstAction.parentElement)) {
       return { node: firstAction.parentElement, mode: "prepend" };
     }
 
-    const actions = document.querySelector("ytd-watch-metadata #actions, #actions");
+    const actions = metadataRoot?.querySelector("#actions") ||
+      queryShadowDeep("ytd-watch-metadata #actions, #actions");
 
-    if (actions) {
+    if (actions && isElementVisible(actions)) {
       return { node: actions, mode: "prepend" };
     }
 
@@ -78,11 +165,18 @@
   }
 
   function isButtonInPlace(button, insertPoint) {
-    if (!button?.isConnected || !insertPoint?.node) {
+    if (!button?.isConnected || !insertPoint?.node || !isElementVisible(button)) {
       return false;
     }
 
     return insertPoint.node === button.parentElement || insertPoint.node.contains(button);
+  }
+
+  function areButtonsInPlace(insertPoint) {
+    return (
+      isButtonInPlace(watchButton, insertPoint) &&
+      isButtonInPlace(studioButton, insertPoint)
+    );
   }
 
   function getDropdown() {
@@ -99,11 +193,14 @@
   }
 
   function positionDropdown() {
-    const wrapper = document.getElementById(WATCH_BTN_ID);
+    const wrapper =
+      activePanelMode === "studio"
+        ? document.getElementById(STUDIO_BTN_ID)
+        : document.getElementById(WATCH_BTN_ID);
     const dropdown = document.getElementById(DROPDOWN_ID);
     const button = wrapper?.querySelector("button");
 
-    if (!wrapper || !dropdown || !button || !wrapper.classList.contains("is-open")) {
+    if (!wrapper || !dropdown || !button || !dropdown.classList.contains("is-open")) {
       return;
     }
 
@@ -151,14 +248,18 @@
       "mousedown",
       (event) => {
         const wrapper = document.getElementById(WATCH_BTN_ID);
+        const mapWrapper = document.getElementById(MINDMAP_BTN_ID);
         const dropdown = document.getElementById(DROPDOWN_ID);
         const target = event.target;
 
-        if (!wrapper?.classList.contains("is-open")) {
+        if (!wrapper?.classList.contains("is-open") && !mapWrapper?.classList.contains("is-open")) {
           return;
         }
 
-        if (target instanceof Node && (wrapper.contains(target) || dropdown?.contains(target))) {
+        if (
+          target instanceof Node &&
+          (wrapper?.contains(target) || mapWrapper?.contains(target) || dropdown?.contains(target))
+        ) {
           return;
         }
 
@@ -170,15 +271,28 @@
 
   function closePanel() {
     const dropdown = document.getElementById(DROPDOWN_ID);
-    const wrapper = document.getElementById(WATCH_BTN_ID);
+    const wrappers = [watchButton, studioButton];
 
     dropdown?.classList.remove("is-open");
     dropdown?.replaceChildren();
-    wrapper?.classList.remove("is-open");
-    wrapper?.querySelector("button")?.setAttribute("aria-expanded", "false");
+
+    for (const wrapper of wrappers) {
+      wrapper?.classList.remove("is-open");
+      wrapper?.querySelector("button")?.setAttribute("aria-expanded", "false");
+    }
+
+    activePanelMode = "import";
   }
 
-  function openWatchPanel(wrapper) {
+  function setOpenWrapper(mode) {
+    const importOpen = mode === "import";
+    watchButton?.classList.toggle("is-open", importOpen);
+    studioButton?.classList.toggle("is-open", !importOpen);
+    watchButton?.querySelector("button")?.setAttribute("aria-expanded", importOpen ? "true" : "false");
+    studioButton?.querySelector("button")?.setAttribute("aria-expanded", importOpen ? "false" : "true");
+  }
+
+  function openWatchPanel(wrapper, mode = "import") {
     const youtubeUrl = normalizeWatchUrl(location.href);
 
     if (!youtubeUrl) {
@@ -186,6 +300,13 @@
     }
 
     const dropdown = getDropdown();
+    const isSameMode = wrapper.classList.contains("is-open") && activePanelMode === mode;
+
+    if (isSameMode) {
+      closePanel();
+      return;
+    }
+
     dropdown.replaceChildren();
 
     const panel = document.createElement("iframe");
@@ -193,14 +314,18 @@
     frameUrl.searchParams.set("url", youtubeUrl);
     frameUrl.searchParams.set("title", getVideoTitle());
 
+    if (mode === "studio") {
+      frameUrl.searchParams.set("mode", "studio");
+    }
+
     panel.id = WATCH_PANEL_ID;
-    panel.className = "notebooktools-youtube-panel";
-    panel.title = "Import to NotebookLM";
+    panel.className = `notebooktools-youtube-panel${mode === "studio" ? " is-studio" : ""}`;
+    panel.title = mode === "studio" ? "Create from video" : "Import to NotebookLM";
     panel.src = frameUrl.toString();
     dropdown.append(panel);
     dropdown.classList.add("is-open");
-    wrapper.classList.add("is-open");
-    wrapper.querySelector("button")?.setAttribute("aria-expanded", "true");
+    activePanelMode = mode;
+    setOpenWrapper(mode);
 
     bindDropdownListeners();
     requestAnimationFrame(() => {
@@ -209,17 +334,17 @@
     });
   }
 
-  function createWatchButton() {
+  function createActionButton({ id, label, title, mode, variant = "" }) {
     const wrapper = document.createElement("span");
     const button = document.createElement("button");
     const text = document.createElement("span");
     const mark = document.createElement("span");
     const markImg = document.createElement("img");
 
-    wrapper.id = WATCH_BTN_ID;
-    wrapper.className = "notebooktools-youtube-action";
+    wrapper.id = id;
+    wrapper.className = `notebooktools-youtube-action${variant ? ` ${variant}` : ""}`;
     text.className = "notebooktools-youtube-text";
-    text.textContent = "NotebookLM";
+    text.textContent = label;
     mark.className = "notebooktools-youtube-mark";
     mark.setAttribute("aria-hidden", "true");
     markImg.src = chrome.runtime.getURL("icons/icon16.png");
@@ -229,7 +354,7 @@
     mark.append(markImg);
 
     button.type = "button";
-    button.title = "Import this video to NotebookLM";
+    button.title = title;
     button.setAttribute("aria-expanded", "false");
     button.append(mark, text);
     wrapper.append(button);
@@ -237,16 +362,29 @@
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-
-      if (wrapper.classList.contains("is-open")) {
-        closePanel();
-        return;
-      }
-
-      openWatchPanel(wrapper);
+      openWatchPanel(wrapper, mode);
     });
 
     return wrapper;
+  }
+
+  function createWatchButton() {
+    return createActionButton({
+      id: WATCH_BTN_ID,
+      label: "NotebookLM",
+      title: "Import this video to NotebookLM",
+      mode: "import"
+    });
+  }
+
+  function createStudioButton() {
+    return createActionButton({
+      id: STUDIO_BTN_ID,
+      label: "Studio",
+      title: "Import video and create slides, podcast, flashcards, and more",
+      mode: "studio",
+      variant: "is-studio"
+    });
   }
 
   function ensureWatchButton() {
@@ -257,21 +395,34 @@
     return watchButton;
   }
 
-  function placeWatchButton(insertPoint) {
-    const button = ensureWatchButton();
-
-    if (button.parentElement && button.parentElement !== insertPoint.node) {
-      button.remove();
+  function ensureStudioButton() {
+    if (!studioButton) {
+      studioButton = createStudioButton();
     }
 
-    if (isButtonInPlace(button, insertPoint)) {
+    return studioButton;
+  }
+
+  function placeWatchButton(insertPoint) {
+    const importButton = ensureWatchButton();
+    const mapButton = ensureStudioButton();
+
+    for (const button of [importButton, mapButton]) {
+      if (button.parentElement && button.parentElement !== insertPoint.node) {
+        button.remove();
+      }
+    }
+
+    if (areButtonsInPlace(insertPoint)) {
       return;
     }
 
     if (insertPoint.mode === "prepend") {
-      insertPoint.node.prepend(button);
+      insertPoint.node.prepend(mapButton);
+      insertPoint.node.prepend(importButton);
     } else {
-      insertPoint.node.before(button);
+      insertPoint.node.before(mapButton);
+      insertPoint.node.before(importButton);
     }
   }
 
@@ -299,15 +450,16 @@
   function renderWatchButton() {
     if (!isWatchPage()) {
       watchButton?.remove();
+      studioButton?.remove();
       closePanel();
       detachActionsObserver();
       return;
     }
 
     const insertPoint = getWatchInsertPoint();
-    const button = ensureWatchButton();
+    const importButton = ensureWatchButton();
 
-    if (insertPoint && isButtonInPlace(button, insertPoint)) {
+    if (insertPoint && areButtonsInPlace(insertPoint)) {
       attachActionsObserver(
         insertPoint.node.closest("ytd-menu-renderer, #actions, ytd-watch-metadata") || insertPoint.node
       );
@@ -325,15 +477,46 @@
     );
   }
 
-  function scheduleRender() {
-    if (renderRaf) {
-      return;
+  function clearNavigationRetries() {
+    for (const timerId of navigationRetryTimers) {
+      window.clearTimeout(timerId);
     }
 
-    renderRaf = requestAnimationFrame(() => {
+    navigationRetryTimers = [];
+  }
+
+  function scheduleNavigationRetries() {
+    clearNavigationRetries();
+
+    for (const delay of [0, 60, 150, 300, 600, 1200, 2400]) {
+      navigationRetryTimers.push(
+        window.setTimeout(() => {
+          if (isWatchPage()) {
+            renderWatchButton();
+          }
+        }, delay)
+      );
+    }
+  }
+
+  function scheduleRender() {
+    if (renderRaf) {
+      window.cancelAnimationFrame(renderRaf);
+    }
+
+    renderRaf = window.requestAnimationFrame(() => {
       renderRaf = 0;
       renderWatchButton();
     });
+
+    window.clearTimeout(renderBackupTimer);
+    renderBackupTimer = window.setTimeout(() => {
+      renderBackupTimer = 0;
+
+      if (isWatchPage()) {
+        renderWatchButton();
+      }
+    }, 120);
   }
 
   function onYouTubeNavigation() {
@@ -346,24 +529,43 @@
 
     closePanel();
     detachActionsObserver();
+    clearNavigationRetries();
 
     if (hrefChanged && watchButton?.parentElement) {
       watchButton.remove();
+      studioButton?.remove();
     }
 
     scheduleRender();
+
+    if (isWatchPage()) {
+      scheduleNavigationRetries();
+    }
+  }
+
+  function bindYouTubeEvents() {
+    const roots = [document, document.querySelector("ytd-app")].filter(Boolean);
+
+    for (const root of roots) {
+      root.addEventListener("yt-navigate-finish", onYouTubeNavigation);
+      root.addEventListener("yt-page-data-updated", scheduleRender);
+      root.addEventListener("yt-page-type-changed", onYouTubeNavigation);
+    }
   }
 
   bindDropdownListeners();
+  bindYouTubeEvents();
   scheduleRender();
+
+  if (isWatchPage()) {
+    scheduleNavigationRetries();
+  }
 
   new MutationObserver(scheduleRender).observe(document.documentElement, {
     childList: true,
     subtree: true
   });
 
-  document.addEventListener("yt-navigate-finish", onYouTubeNavigation);
-  document.addEventListener("yt-page-data-updated", scheduleRender);
   window.addEventListener("popstate", onYouTubeNavigation);
 
   window.setInterval(() => {
@@ -377,10 +579,17 @@
     }
 
     const insertPoint = getWatchInsertPoint();
-    const button = document.getElementById(WATCH_BTN_ID);
+    const importButton = document.getElementById(WATCH_BTN_ID);
+    const mapButton = document.getElementById(MINDMAP_BTN_ID);
 
-    if (insertPoint && !isButtonInPlace(button, insertPoint)) {
+    if (
+      !importButton ||
+      !mapButton ||
+      !isElementVisible(importButton) ||
+      !isElementVisible(mapButton) ||
+      (insertPoint && !areButtonsInPlace(insertPoint))
+    ) {
       scheduleRender();
     }
-  }, 200);
+  }, 250);
 })();

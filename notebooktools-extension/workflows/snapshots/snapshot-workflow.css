@@ -1,0 +1,281 @@
+.notebooktools-snapshot-workflow-bar {
+  display: inline-flex;
+  margin-right: 8px;
+  position: relative;
+  vertical-align: middle;
+}
+
+.notebooktools-snapshot-workflow-wrap {
+  position: relative;
+}
+
+.notebooktools-snapshot-workflow-btn {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  border-radius: 999px;
+  color: #1d4ed8;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+}
+
+.notebooktools-snapshot-workflow-btn:hover,
+.notebooktools-snapshot-workflow-wrap.is-open .notebooktools-snapshot-workflow-btn {
+  background: #dbeafe;
+  border-color: rgba(37, 99, 235, 0.28);
+}
+
+.notebooktools-snapshot-workflow-btn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.notebooktools-snapshot-workflow-btn.is-working {
+  background: #fff7ed;
+  border-color: rgba(234, 88, 12, 0.28);
+  color: #c2410c;
+}
+
+.notebooktools-snapshot-workflow-btn.is-watching {
+  background: #fefce8;
+  border-color: rgba(202, 138, 4, 0.28);
+  color: #a16207;
+}
+
+.notebooktools-snapshot-workflow-btn.is-doc-ready {
+  animation: notebooktools-snapshot-ready-pulse 1.8s ease-in-out infinite;
+  background: #dcfce7;
+  border-color: rgba(22, 163, 74, 0.35);
+  color: #15803d;
+}
+
+@keyframes notebooktools-snapshot-ready-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.28);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);
+  }
+}
+
+.notebooktools-snapshot-workflow-menu {
+  background: #ffffff;
+  border: 1px solid rgba(15, 15, 15, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  display: none;
+  gap: 8px;
+  grid-template-columns: 1fr;
+  left: 0;
+  min-width: 280px;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 12px;
+  position: fixed;
+  top: 0;
+  z-index: 2147483647;
+}
+
+.notebooktools-snapshot-workflow-menu.is-open {
+  display: grid;
+  max-height: min(90vh, 720px);
+  overflow-y: auto;
+}
+
+.notebooktools-snapshot-workflow-menu.is-busy {
+  min-width: 300px;
+}
+
+.notebooktools-snapshot-workflow-menu.is-complete {
+  border-color: rgba(22, 163, 74, 0.35);
+  box-shadow: 0 10px 28px rgba(22, 163, 74, 0.16);
+}
+
+.notebooktools-snapshot-workflow-menu.is-doc-ready .notebooktools-snapshot-workflow-status {
+  color: #15803d;
+}
+
+.notebooktools-snapshot-workflow-ready-banner {
+  background: #dcfce7;
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  border-radius: 10px;
+  color: #166534;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.notebooktools-snapshot-workflow-steps {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.notebooktools-snapshot-workflow-steps li.is-done {
+  color: #15803d;
+}
+
+.notebooktools-snapshot-workflow-steps li.is-active {
+  color: #c2410c;
+  font-weight: 600;
+}
+
+.notebooktools-snapshot-workflow-steps li.is-error {
+  color: #b91c1c;
+}
+
+.notebooktools-snapshot-workflow-complete-note {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+  text-align: center;
+}
+
+.notebooktools-snapshot-workflow-form,
+.notebooktools-snapshot-workflow-progress {
+  display: grid;
+  gap: 8px;
+}
+
+.notebooktools-snapshot-workflow-summary,
+.notebooktools-snapshot-workflow-status,
+.notebooktools-snapshot-workflow-detail {
+  color: #202124;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.notebooktools-snapshot-workflow-detail {
+  color: #5f6368;
+}
+
+.notebooktools-snapshot-workflow-option {
+  background: #f8fafc;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  border-radius: 10px;
+  color: #202124;
+  cursor: pointer;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.notebooktools-snapshot-workflow-option.secondary {
+  background: #ffffff;
+  color: #5f6368;
+}
+
+.notebooktools-snapshot-workflow-option.is-primary {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.notebooktools-snapshot-workflow-option.is-primary:hover:not(:disabled) {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+.notebooktools-snapshot-workflow-option:hover:not(:disabled) {
+  background: #eff6ff;
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+.notebooktools-snapshot-workflow-option:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.notebooktools-snapshot-workflow-downloads {
+  display: grid;
+  gap: 8px;
+}
+
+.notebooktools-snapshot-workflow-downloads-label {
+  color: #5f6368;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.notebooktools-snapshot-workflow-download-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.notebooktools-snapshot-workflow-download-btn {
+  background: #e8f0fe;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 999px;
+  color: #1d4ed8;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+}
+
+.notebooktools-snapshot-workflow-download-btn.is-primary {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.notebooktools-snapshot-workflow-download-btn.is-primary.is-pulse {
+  animation: notebooktools-snapshot-doc-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes notebooktools-snapshot-doc-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+.notebooktools-snapshot-workflow-download-btn:disabled {
+  opacity: 0.7;
+}
+
+.notebooktools-snapshot-workflow-toast {
+  background: #202124;
+  border-radius: 8px;
+  bottom: 24px;
+  color: #ffffff;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 13px;
+  left: 50%;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 10px 14px;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+}
+
+.notebooktools-snapshot-workflow-toast.is-error {
+  background: #b91c1c;
+}

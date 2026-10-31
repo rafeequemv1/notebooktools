@@ -1,0 +1,430 @@
+.notebooktools-blog-workflow-bar {
+  display: inline-flex;
+  margin-right: 8px;
+  position: relative;
+  vertical-align: middle;
+}
+
+.notebooktools-blog-workflow-wrap {
+  position: relative;
+}
+
+.notebooktools-blog-workflow-btn {
+  align-items: center;
+  background: #fff7ed;
+  border: 1px solid rgba(234, 88, 12, 0.18);
+  border-radius: 999px;
+  color: #9a3412;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+}
+
+.notebooktools-blog-workflow-btn:hover,
+.notebooktools-blog-workflow-wrap.is-open .notebooktools-blog-workflow-btn {
+  background: #ffedd5;
+  border-color: rgba(234, 88, 12, 0.28);
+}
+
+.notebooktools-blog-workflow-btn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.notebooktools-blog-workflow-menu {
+  background: #ffffff;
+  border: 1px solid rgba(15, 15, 15, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  display: none;
+  gap: 8px;
+  grid-template-columns: 1fr;
+  left: 0;
+  min-width: 280px;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 12px;
+  position: fixed;
+  top: 0;
+  z-index: 2147483647;
+}
+
+.notebooktools-blog-workflow-menu.is-open {
+  display: grid;
+  max-height: min(90vh, 720px);
+  overflow-y: auto;
+}
+
+.notebooktools-blog-workflow-menu.is-busy {
+  min-width: 300px;
+  max-width: min(360px, calc(100vw - 16px));
+}
+
+.notebooktools-blog-workflow-form {
+  display: grid;
+  gap: 8px;
+}
+
+.notebooktools-blog-workflow-progress {
+  display: grid;
+  gap: 8px;
+}
+
+.notebooktools-blog-workflow-status {
+  color: #202124;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-menu.is-complete .notebooktools-blog-workflow-status {
+  color: #15803d;
+}
+
+.notebooktools-blog-workflow-progress-bar {
+  background: #f1f3f4;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.notebooktools-blog-workflow-progress-fill {
+  background: linear-gradient(90deg, #fb923c, #ea580c);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  transition: width 0.22s ease;
+  width: 0;
+}
+
+.notebooktools-blog-workflow-progress-count {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-thumbs {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 220px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.notebooktools-blog-workflow-thumb {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notebooktools-blog-workflow-thumb.is-new {
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.18);
+  transform: scale(1.02);
+}
+
+.notebooktools-blog-workflow-thumb img {
+  display: block;
+  height: 72px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.notebooktools-blog-workflow-thumb-label {
+  color: #5f6368;
+  display: block;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 10px;
+  padding: 4px 6px 6px;
+}
+
+.notebooktools-blog-workflow-menu.is-images {
+  min-width: 320px;
+  max-width: min(400px, calc(100vw - 16px));
+}
+
+.notebooktools-blog-workflow-menu.is-images .notebooktools-blog-workflow-thumbs {
+  max-height: 280px;
+}
+
+.notebooktools-blog-workflow-downloads {
+  display: grid;
+  gap: 8px;
+}
+
+.notebooktools-blog-workflow-downloads-label {
+  color: #202124;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.notebooktools-blog-workflow-download-buttons {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.notebooktools-blog-workflow-download-buttons-btn {
+  background: #15803d;
+  border: 1px solid #15803d;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 8px 6px;
+}
+
+.notebooktools-blog-workflow-download-buttons-btn:hover {
+  background: #166534;
+  border-color: #166534;
+}
+
+.notebooktools-blog-workflow-download-buttons-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.notebooktools-blog-workflow-complete-note {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0;
+  text-align: center;
+}
+
+.notebooktools-blog-workflow-history {
+  border-top: 1px solid #e5e7eb;
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+}
+
+.notebooktools-blog-workflow-history-title {
+  color: #202124;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-history-list {
+  display: grid;
+  gap: 6px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.notebooktools-blog-workflow-steps {
+  color: #3c4043;
+  display: grid;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  gap: 4px;
+  line-height: 1.35;
+  list-style: none;
+  margin: 0;
+  max-height: 140px;
+  overflow: auto;
+  padding: 0;
+}
+
+.notebooktools-blog-workflow-step {
+  background: #f8f9fa;
+  border-left: 3px solid #dadce0;
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.notebooktools-blog-workflow-step.is-active {
+  background: #ecfdf5;
+  border-left-color: #15803d;
+}
+
+.notebooktools-blog-workflow-step.is-done {
+  border-left-color: #86efac;
+  opacity: 0.92;
+}
+
+.notebooktools-blog-workflow-step.is-error {
+  background: #fef2f2;
+  border-left-color: #dc2626;
+  color: #991b1b;
+}
+
+.notebooktools-blog-workflow-menu.is-error .notebooktools-blog-workflow-progress-fill {
+  background: #dc2626;
+}
+
+.notebooktools-blog-workflow-history-empty {
+  color: #80868b;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-history-item {
+  align-items: start;
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr;
+  padding: 8px;
+}
+
+.notebooktools-blog-workflow-history-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.notebooktools-blog-workflow-history-copy strong {
+  color: #202124;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notebooktools-blog-workflow-history-copy span {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 10px;
+}
+
+.notebooktools-blog-workflow-history-item.is-latest {
+  border-color: rgba(21, 128, 61, 0.35);
+  box-shadow: 0 0 0 1px rgba(21, 128, 61, 0.12);
+}
+
+.notebooktools-blog-workflow-history-formats {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.notebooktools-blog-workflow-history-format {
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  color: #202124;
+  cursor: pointer;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 5px 4px;
+}
+
+.notebooktools-blog-workflow-history-format:hover {
+  background: #f1f3f4;
+}
+
+.notebooktools-blog-workflow-history-format:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.notebooktools-blog-workflow-progress-note {
+  color: #80868b;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-intro {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-label {
+  color: #5f6368;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.notebooktools-blog-workflow-select {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  padding: 7px 8px;
+  width: 100%;
+}
+
+.notebooktools-blog-workflow-option {
+  background: #f8f9fa;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  color: #202124;
+  cursor: pointer;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.notebooktools-blog-workflow-option:hover {
+  background: #f1f3f4;
+}
+
+.notebooktools-blog-workflow-option.is-primary {
+  background: #ea580c;
+  border-color: #ea580c;
+  color: #ffffff;
+}
+
+.notebooktools-blog-workflow-option.is-primary:hover {
+  background: #c2410c;
+}
+
+.notebooktools-blog-workflow-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.notebooktools-blog-workflow-toast {
+  background: #111827;
+  border-radius: 999px;
+  bottom: 24px;
+  color: #ffffff;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 13px;
+  left: 50%;
+  max-width: min(92vw, 420px);
+  padding: 10px 16px;
+  position: fixed;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+}
+
+.notebooktools-blog-workflow-toast.is-error {
+  background: #b91c1c;
+}

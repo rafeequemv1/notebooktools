@@ -14,3 +14,13 @@ Thumbs.db
 
 # Store upload zips (run package-extension.ps1 to generate)
 version 0.1/notebooktools-v*.zip
+
+# Local npm installs (vendored copies live in notebooktools-extension/vendor)
+node_modules/
+
+# Third-party reference extension
+nlmtools/
+
+# Backups
+*.bak
+*.bak2

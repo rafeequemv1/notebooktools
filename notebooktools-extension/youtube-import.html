@@ -25,6 +25,16 @@
 
         <input id="newNotebookLmName" type="text" placeholder="Or create new notebook" aria-label="New notebook name">
 
+        <div id="studioOptions" class="studio-options" hidden>
+          <label for="studioArtifactType">Create</label>
+          <select id="studioArtifactType" aria-label="Studio output type"></select>
+          <label class="embedded-toggle" for="studioOpenTabToggle">
+            <input type="checkbox" id="studioOpenTabToggle" checked>
+            <span class="embedded-toggle-ui" aria-hidden="true"></span>
+            <span class="embedded-toggle-text">Open notebook in new tab</span>
+          </label>
+        </div>
+
         <button class="button" id="importButton" type="button">Import</button>
 
         <div class="footer-row">
@@ -38,6 +48,8 @@
 
     <script src="utils.js"></script>
     <script src="notebooklm-client.js"></script>
+    <script src="settings.js"></script>
+    <script src="studio-import.js"></script>
     <script src="notebook-picker.js"></script>
     <script src="youtube-import.js"></script>
   </body>

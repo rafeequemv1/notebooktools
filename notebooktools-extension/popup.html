@@ -34,6 +34,18 @@
 
         <input id="newNotebookLmName" type="text" placeholder="Notebook name" aria-label="New notebook name">
 
+        <section class="studio-panel" id="studioSection" hidden>
+          <p class="field-divider">Studio</p>
+          <label for="studioArtifactType">Create</label>
+          <select id="studioArtifactType" aria-label="Studio output type"></select>
+          <label class="embedded-toggle studio-toggle" for="studioOpenTabToggle">
+            <input type="checkbox" id="studioOpenTabToggle" checked>
+            <span class="embedded-toggle-ui" aria-hidden="true"></span>
+            <span class="embedded-toggle-text">Open notebook in new tab</span>
+          </label>
+          <button class="button" id="studioButton" type="button">Create mind map</button>
+        </section>
+
         <button class="button" id="importButton" type="button">Add current tab to NotebookLM</button>
 
         <div class="footer-row">
@@ -47,6 +59,8 @@
 
     <script src="utils.js"></script>
     <script src="notebooklm-client.js"></script>
+    <script src="settings.js"></script>
+    <script src="studio-import.js"></script>
     <script src="notebook-picker.js"></script>
     <script src="popup.js"></script>
   </body>

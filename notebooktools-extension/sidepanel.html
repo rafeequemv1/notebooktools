@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotebookTools</title>
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="prompt-library.css">
+    <link rel="stylesheet" href="bulk-import.css">
+    <link rel="stylesheet" href="snapshots.css">
+  </head>
+  <body class="sidepanel-body">
+    <main class="sidepanel-app">
+      <header class="sidepanel-header">
+        <div class="sidepanel-header-row">
+          <img class="sidepanel-logo" src="logo.png" alt="NotebookTools" width="132" height="16">
+          <div class="sidepanel-header-actions">
+            <button type="button" class="header-icon-btn settings-btn" data-open-settings title="Settings" aria-label="Settings">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Dark mode" title="Dark mode">
+              <svg class="theme-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="theme-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </button>
+            <label class="sidepanel-toggle" title="Open notebook after import">
+              <input type="checkbox" id="autoOpenNotebookToggle">
+              <span class="sidepanel-toggle-ui" aria-hidden="true"></span>
+              <span class="sidepanel-toggle-text" data-i18n="autoOpen">Auto-open</span>
+            </label>
+          </div>
+        </div>
+        <p class="sidepanel-tagline" id="pageContext">Import to NotebookLM</p>
+        <button type="button" class="button secondary compact sp-notebooks-btn" id="openNotebooksButton" data-i18n="openNotebooks">Open notebooks</button>
+      </header>
+
+      <nav class="sidepanel-tabs" role="tablist" aria-label="NotebookTools panels">
+        <button class="sidepanel-tab is-active" id="tabImport" type="button" role="tab" aria-selected="true" aria-controls="panelImport" data-panel="import" data-i18n="tabImport">Import</button>
+        <button class="sidepanel-tab" id="tabBulk" type="button" role="tab" aria-selected="false" aria-controls="panelBulk" data-panel="bulk" data-i18n="tabBulk">Bulk</button>
+        <button class="sidepanel-tab" id="tabSnapshots" type="button" role="tab" aria-selected="false" aria-controls="panelSnapshots" data-panel="snapshots">Snapshots</button>
+        <button class="sidepanel-tab" id="tabPrompts" type="button" role="tab" aria-selected="false" aria-controls="panelPrompts" data-panel="prompts" data-i18n="tabPrompts">Prompts</button>
+      </nav>
+
+      <section class="sidepanel-panel is-active" id="panelImport" role="tabpanel" aria-labelledby="tabImport">
+        <div class="sp-stack">
+          <section class="sp-card sp-source">
+            <div class="import-modes" role="tablist" aria-label="Import type">
+              <button class="import-mode is-active" id="modeWebpage" type="button" data-mode="webpage">Web</button>
+              <button class="import-mode" id="modeYouTube" type="button" data-mode="youtube">YouTube</button>
+              <button class="import-mode" id="modeText" type="button" data-mode="text" hidden>Text</button>
+            </div>
+            <p class="source-preview" id="sourcePreview">Current tab</p>
+          </section>
+
+          <details class="youtube-batch-panel" id="youtubeBatchPanel" hidden>
+            <summary class="youtube-batch-summary">
+              <span class="youtube-batch-summary-title" id="youtubeBatchTitle">Playlist</span>
+              <span class="youtube-batch-summary-meta" id="youtubeBatchMeta"></span>
+            </summary>
+            <div class="youtube-batch-tools">
+              <button type="button" class="youtube-batch-tool" id="youtubeBatchSelectAll">All</button>
+              <button type="button" class="youtube-batch-tool" id="youtubeBatchSelectNone">None</button>
+              <button type="button" class="youtube-batch-tool" id="youtubeBatchReload">Reload</button>
+            </div>
+            <div class="youtube-batch-list" id="youtubeBatchList"></div>
+            <p class="youtube-batch-selected" id="youtubeBatchSelected"></p>
+          </details>
+
+          <section class="sp-card sp-destination">
+            <h2 class="sp-label">Notebook</h2>
+            <div class="sp-fields">
+              <input id="notebookSearch" type="search" placeholder="Search notebooks" autocomplete="off" aria-label="Search notebooks">
+              <select id="notebookLmSelect" aria-label="Notebook">
+                <option value="">Loading notebooks...</option>
+              </select>
+              <input id="newNotebookLmName" type="text" placeholder="Or create new notebook" aria-label="New notebook name">
+            </div>
+          </section>
+
+          <p class="source-limit-note" id="importLimitNote" hidden></p>
+
+          <section class="sp-card sp-studio" id="studioSection" hidden>
+            <h2 class="sp-label">Studio</h2>
+            <p class="sp-studio-hint">Import this page and create a NotebookLM studio output.</p>
+            <label class="sp-field-label" for="studioArtifactType">Create</label>
+            <select id="studioArtifactType" aria-label="Studio output type"></select>
+            <label class="embedded-toggle sp-studio-toggle" for="studioOpenTabToggle">
+              <input type="checkbox" id="studioOpenTabToggle" checked>
+              <span class="embedded-toggle-ui" aria-hidden="true"></span>
+              <span class="embedded-toggle-text">Open notebook in new tab</span>
+            </label>
+            <button class="button sp-primary sp-studio-btn" id="studioButton" type="button">Create mind map</button>
+          </section>
+
+          <button class="button sp-primary" id="importButton" type="button">Add to NotebookLM</button>
+
+          <div class="sp-actions">
+            <button class="text-button" id="refreshNotebookLmButton" type="button">Refresh</button>
+            <a class="text-button" id="openNotebookLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open notebook</a>
+          </div>
+
+          <div class="status" id="status" role="status"></div>
+        </div>
+      </section>
+
+      <section class="sidepanel-panel" id="panelBulk" role="tabpanel" aria-labelledby="tabBulk" hidden>
+        <div id="bulkImportRoot"></div>
+      </section>
+
+      <section class="sidepanel-panel" id="panelSnapshots" role="tabpanel" aria-labelledby="tabSnapshots" hidden>
+        <div id="snapshotsPanelRoot"></div>
+      </section>
+
+      <section class="sidepanel-panel" id="panelPrompts" role="tabpanel" aria-labelledby="tabPrompts" hidden>
+        <div id="promptLibraryRoot"></div>
+      </section>
+    </main>
+
+    <script src="utils.js"></script>
+    <script src="notebooklm-client.js"></script>
+    <script src="settings.js"></script>
+    <script src="studio-import.js"></script>
+    <script src="i18n.js"></script>
+    <script src="settings-ui.js"></script>
+    <script src="source-limits.js"></script>
+    <script src="notebook-picker.js"></script>
+    <script src="youtube-collector.js"></script>
+    <script src="bulk-queue-store.js"></script>
+    <script src="bulk-import-runner.js"></script>
+    <script src="link-extract.js"></script>
+    <script src="youtube-batch-preview.js"></script>
+    <script src="prompt-library-data.js"></script>
+    <script src="custom-prompts.js"></script>
+    <script src="prompt-library.js"></script>
+    <script src="bulk-import.js"></script>
+    <script src="snapshot-store.js"></script>
+    <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
+    <script src="workflows/snapshots/snapshot-upload.js"></script>
+    <script src="workflows/snapshots/snapshot-pdf.js"></script>
+    <script src="snapshots-panel.js"></script>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

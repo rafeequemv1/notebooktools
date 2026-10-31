@@ -1,0 +1,112 @@
+#notebooktools-snapshot-annotate {
+  all: initial;
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: rgba(15, 23, 42, 0.94);
+  display: flex;
+  flex-direction: column;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+#notebooktools-snapshot-annotate * {
+  box-sizing: border-box;
+}
+
+#notebooktools-snapshot-annotate .nt-annotate-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.98);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+#notebooktools-snapshot-annotate .nt-annotate-toolbar span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+#notebooktools-snapshot-annotate .nt-annotate-tools {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+#notebooktools-snapshot-annotate button {
+  all: unset;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 11px;
+  line-height: 1;
+}
+
+#notebooktools-snapshot-annotate button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#notebooktools-snapshot-annotate button.is-active {
+  background: #2563eb;
+}
+
+#notebooktools-snapshot-annotate button.primary {
+  background: #2563eb;
+}
+
+#notebooktools-snapshot-annotate button.primary:hover {
+  background: #1d4ed8;
+}
+
+#notebooktools-snapshot-annotate button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+#notebooktools-snapshot-annotate .nt-annotate-sep {
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.16);
+  margin: 0 4px;
+}
+
+#notebooktools-snapshot-annotate .nt-annotate-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 16px;
+  min-height: 0;
+}
+
+#notebooktools-snapshot-annotate canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#notebooktools-snapshot-annotate[data-tool="select"] canvas {
+  cursor: default;
+}
+
+#notebooktools-snapshot-annotate[data-tool="pencil"] canvas {
+  cursor: crosshair;
+}
+
+#notebooktools-snapshot-annotate.is-busy {
+  pointer-events: none;
+  opacity: 0.85;
+}

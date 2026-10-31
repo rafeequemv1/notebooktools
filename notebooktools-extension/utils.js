@@ -36,6 +36,71 @@ function isYouTubeUrl(value) {
   return Boolean(normalizeYouTubeVideoUrl(value));
 }
 
+function classifyYouTubeBatchUrl(value) {
+  let url;
+
+  try {
+    url = new URL(String(value || ""));
+  } catch (_error) {
+    return null;
+  }
+
+  const host = url.hostname.replace(/^www\./, "").toLowerCase();
+
+  if (!["youtube.com", "m.youtube.com", "www.youtube.com"].includes(host)) {
+    return null;
+  }
+
+  const listId = url.searchParams.get("list");
+
+  if (url.pathname === "/playlist" && listId) {
+    return { type: "playlist", url: url.href, listId };
+  }
+
+  if (/\/videos\/?$/.test(url.pathname)) {
+    return { type: "channel", url: url.href };
+  }
+
+  if (/^\/@[^/]+\/?$/.test(url.pathname)) {
+    return { type: "channel", url: url.href };
+  }
+
+  if (url.pathname.startsWith("/channel/") && !url.pathname.includes("/watch")) {
+    return { type: "channel", url: url.href };
+  }
+
+  if (listId && url.pathname === "/watch") {
+    return { type: "playlist", url: url.href, listId };
+  }
+
+  return null;
+}
+
+function isYouTubeBatchUrl(value) {
+  return Boolean(classifyYouTubeBatchUrl(value));
+}
+
+function suggestBatchNotebookName(collection) {
+  const collectionType = collection?.type || "playlist";
+  const title = cleanNotebookName(collection?.notebookName || collection?.title || "");
+
+  if (title) {
+    return title.slice(0, 80);
+  }
+
+  return collectionType === "channel" ? "YouTube channel videos" : "YouTube playlist";
+}
+
+function chunkItems(items, size) {
+  const chunks = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
 function normalizeWebpageUrl(value) {
   let url;
 
@@ -64,7 +129,60 @@ function normalizeWebpageUrl(value) {
     return "";
   }
 
+  url.hash = "";
   return url.href;
+}
+
+function classifyImportUrl(value) {
+  const youtubeUrl = normalizeYouTubeVideoUrl(value);
+
+  if (youtubeUrl) {
+    return { type: "youtube", url: youtubeUrl };
+  }
+
+  const webpageUrl = normalizeWebpageUrl(value);
+
+  if (webpageUrl) {
+    return { type: "webpage", url: webpageUrl };
+  }
+
+  return null;
+}
+
+function parseLinkList(text) {
+  const raw = String(text || "");
+  const parts = raw.split(/[\n,]+/);
+  const results = [];
+  const seen = new Set();
+
+  for (const part of parts) {
+    const candidate = part.trim();
+
+    if (!candidate) {
+      continue;
+    }
+
+    let value = candidate;
+
+    if (!/^https?:\/\//i.test(value)) {
+      value = `https://${value}`;
+    }
+
+    const classified = classifyImportUrl(value);
+
+    if (!classified || seen.has(classified.url)) {
+      continue;
+    }
+
+    seen.add(classified.url);
+    results.push(classified);
+  }
+
+  return results;
+}
+
+function queueItemKey(item) {
+  return `${item.type}:${item.url}`;
 }
 
 function escapeHtml(value) {
@@ -120,6 +238,25 @@ function setImportStatus(element, options = {}) {
   element.className = classes.join(" ");
 }
 
+function notebookArtifactUrl(notebookId, artifactId, authUser) {
+  const url = new URL(
+    `https://notebooklm.google.com/notebook/${encodeURIComponent(String(notebookId || "").trim())}`
+  );
+  const targetArtifactId = String(artifactId || "").trim();
+
+  if (targetArtifactId) {
+    url.searchParams.set("artifactId", targetArtifactId);
+  }
+
+  const parsedAuthUser = Number(authUser);
+
+  if (Number.isInteger(parsedAuthUser) && parsedAuthUser >= 0 && String(authUser) !== "default") {
+    url.searchParams.set("authuser", String(parsedAuthUser));
+  }
+
+  return url.toString();
+}
+
 function setImportButtonState(button, isLoading, idleLabel = "Import") {
   if (!button) {
     return;
@@ -135,7 +272,16 @@ if (typeof window !== "undefined") {
     cleanNotebookName,
     normalizeYouTubeVideoUrl,
     normalizeWebpageUrl,
-    isYouTubeUrl
+    isYouTubeUrl,
+    classifyYouTubeBatchUrl,
+    isYouTubeBatchUrl,
+    suggestBatchNotebookName,
+    chunkItems,
+    classifyImportUrl,
+    parseLinkList,
+    queueItemKey,
+    escapeHtml,
+    notebookArtifactUrl
   };
 
   window.NotebookToolsUI = {

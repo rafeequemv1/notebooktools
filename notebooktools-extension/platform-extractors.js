@@ -95,7 +95,9 @@ function extractChatGptConversation() {
     url: canonicalUrl,
     plainText,
     markdown: buildConversationMarkdown(sourceTitle, messages, canonicalUrl),
-    messageCount: messages.length
+    messages,
+    messageCount: messages.length,
+    exportedAt: new Date().toISOString()
   };
 }
 
@@ -210,7 +212,9 @@ function extractGeminiConversation() {
     url: canonicalUrl,
     plainText,
     markdown: buildConversationMarkdown(sourceTitle, messages, canonicalUrl),
-    messageCount: messages.length
+    messages,
+    messageCount: messages.length,
+    exportedAt: new Date().toISOString()
   };
 }
 
@@ -297,7 +301,9 @@ function extractXContent() {
     url: url.href.split("?")[0],
     plainText,
     markdown: buildConversationMarkdown(sourceTitle, messages, url.href.split("?")[0]),
-    messageCount: messages.length
+    messages,
+    messageCount: messages.length,
+    exportedAt: new Date().toISOString()
   };
 }
 
