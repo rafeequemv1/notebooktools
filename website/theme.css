@@ -2330,3 +2330,54 @@ a {
     padding-top: 8px;
   }
 }
+
+/* 9c. Blog cards, minimal: hairline border, small radius, no shadow or lift */
+.blog-cards .blog-card-item {
+  border: 1px solid #e6e8eb;
+  border-radius: 10px;
+  box-shadow: none;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.blog-cards .blog-card-item:hover {
+  border-color: #c4c7c5;
+  box-shadow: none;
+  transform: none;
+}
+
+.blog-cards .blog-card-thumb {
+  border-radius: 0;
+  transition: opacity 0.15s;
+}
+
+.blog-cards .blog-card-item:hover .blog-card-thumb {
+  opacity: 0.92;
+}
+
+.blog-cards .blog-card-item .blog-card-tag {
+  background: none;
+  border-radius: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.blog-cards .blog-card-item:hover h2 {
+  color: var(--accent);
+}
+
+.blog-cards .blog-prompt-hub-card {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.blog-cards .blog-prompt-hub-card:hover {
+  transform: none;
+}
+
+.blog-cards .blog-card-item-meta {
+  font-size: 12px;
+  gap: 5px;
+}
