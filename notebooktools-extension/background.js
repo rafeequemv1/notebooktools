@@ -105,7 +105,89 @@ if (chrome.sidePanel?.setPanelBehavior) {
     });
 }
 
+/* ---------- Dev auto-reload (unpacked installs only) ----------
+   scripts/dev-sync.ps1 / dev-sync.sh keep a local clone in sync with GitHub
+   and write the current commit to dev-stamp.txt. When it changes, the
+   extension reloads itself and refreshes the tabs it was running in.
+   Store installs never have dev-stamp.txt and never poll. */
+const DEV_STAMP_URL = chrome.runtime.getURL("dev-stamp.txt");
+let devInstall = null;
+
+function isDevInstall() {
+  if (devInstall !== null) {
+    return Promise.resolve(devInstall);
+  }
+
+  return new Promise((resolve) => {
+    try {
+      chrome.management.getSelf((info) => {
+        devInstall = info?.installType === "development";
+        resolve(devInstall);
+      });
+    } catch (_error) {
+      devInstall = false;
+      resolve(false);
+    }
+  });
+}
+
+async function devCheck(tabId) {
+  if (!(await isDevInstall())) {
+    return;
+  }
+
+  let stamp = "";
+
+  try {
+    const response = await fetch(DEV_STAMP_URL, { cache: "no-store" });
+    stamp = response.ok ? (await response.text()).trim() : "";
+  } catch (_error) {
+    return;
+  }
+
+  if (!stamp) {
+    return;
+  }
+
+  const { devStamp, devTabs = [] } = await chrome.storage.session.get(["devStamp", "devTabs"]);
+  const tabs = tabId && !devTabs.includes(tabId) ? [...devTabs, tabId].slice(-20) : devTabs;
+
+  if (devStamp && devStamp !== stamp) {
+    await chrome.storage.local.set({ notebooktoolsDevReloadTabs: tabs });
+    chrome.runtime.reload();
+    return;
+  }
+
+  if (!devStamp || tabs !== devTabs) {
+    await chrome.storage.session.set({ devStamp: stamp, devTabs: tabs });
+  }
+}
+
+// After a dev reload, refresh the pages whose content scripts were cut off.
+chrome.storage.local.get("notebooktoolsDevReloadTabs", ({ notebooktoolsDevReloadTabs: tabs }) => {
+  if (!Array.isArray(tabs) || !tabs.length) {
+    return;
+  }
+
+  chrome.storage.local.remove("notebooktoolsDevReloadTabs");
+  tabs.forEach((id) => chrome.tabs.reload(id).catch(() => {}));
+});
+
+void devCheck();
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === "notebooktools-dev-check") {
+    isDevInstall().then((dev) => {
+      sendResponse({ dev });
+
+      if (dev) {
+        void devCheck(sender?.tab?.id);
+      }
+    });
+
+    return true;
+  }
+
   // --- Ribbon inside Gemini Notebook ---
   if (message?.type === "notebooktools-ribbon-open-panel") {
     const tabId = sender?.tab?.id;

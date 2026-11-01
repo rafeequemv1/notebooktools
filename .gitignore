@@ -27,3 +27,6 @@ nlmtools/
 
 # Built extension zips (scripts/build-extension-zip.sh)
 dist/
+
+# Dev auto-reload stamp (scripts/dev-sync.*)
+notebooktools-extension/dev-stamp.txt

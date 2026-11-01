@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Import ChatGPT, Claude, YouTube, X, Reddit, webpages and more into NotebookLM, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
@@ -60,7 +60,8 @@
         "youtube-button.css"
       ],
       "js": [
-        "youtube-inject.js"
+        "youtube-inject.js",
+        "dev-reload.js"
       ],
       "run_at": "document_start",
       "all_frames": false
@@ -102,7 +103,8 @@
         "notebooklm-chat-export-inject.js",
         "prompt-library-data.js",
         "notebooklm-prompt-slash.js",
-        "notebooklm-ribbon.js"
+        "notebooklm-ribbon.js",
+        "dev-reload.js"
       ],
       "run_at": "document_idle",
       "all_frames": false
@@ -133,7 +135,8 @@
       ],
       "js": [
         "platform-extractors.js",
-        "platform-button.js"
+        "platform-button.js",
+        "dev-reload.js"
       ],
       "run_at": "document_idle"
     }
