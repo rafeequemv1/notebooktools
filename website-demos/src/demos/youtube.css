@@ -377,3 +377,14 @@
   left: 316px;
   top: 300px;
 }
+
+.nt-yt .nt-yt__sources-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.nt-yt .nt-yt__gn {
+  align-self: flex-start;
+  display: block;
+  flex: none;
+}

@@ -1418,10 +1418,24 @@ a {
 }
 
 .hero-kicker {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
   color: var(--muted);
+  display: inline-flex;
   font-family: var(--font-display);
   font-size: 14.5px;
-  margin: 0 0 14px;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 6px 14px 6px 8px;
+}
+
+.hero-kicker img {
+  display: block;
+  flex: none;
+  height: 20px;
+  width: 20px;
 }
 
 .hero h1 {

@@ -36,15 +36,10 @@
 }
 
 .nt-rb .nt-rb__nb-icon {
-  align-items: center;
-  background: #e3ebfb;
-  border-radius: 50%;
-  display: inline-flex;
+  display: block;
   flex: none;
-  font-size: 15px;
-  height: 32px;
-  justify-content: center;
-  width: 32px;
+  height: 30px;
+  width: 30px;
 }
 
 .nt-rb .nt-rb__title {

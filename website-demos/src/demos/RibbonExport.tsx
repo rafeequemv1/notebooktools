@@ -67,7 +67,7 @@ export default function RibbonExport() {
             <Window url="notebook.google.com/notebook/308bd2c1" nav urlShape="pill" className="nt-rb__win">
               <div className="nt-rb__page">
                 <div className="nt-rb__head">
-                  <span className="nt-rb__nb-icon" aria-hidden>⚛️</span>
+                  <img className="nt-rb__nb-icon" src="/assets/gemini-notebook-mark.png" alt="Gemini Notebook" width={32} height={32} />
                   <span className="nt-rb__title">{TITLE}</span>
                   {wide && <span className="nt-rb__head-tools"><Bar w={70} h={28} r={14} tone={1} /><Bar w={28} h={28} r={14} tone={1} /></span>}
                 </div>

@@ -138,12 +138,13 @@ export default function YouTubeImport() {
           {layout === 'wide' && <div className="nt-yt__sources">
             <div className="nt-yt__sources-head">
               <span className="nt-yt__sources-emoji" aria-hidden>🤖</span>
-              <div>
+              <div className="nt-yt__sources-name">
                 <div className="nt-yt__sources-title">{NOTEBOOK}</div>
                 <div className="nt-yt__sources-sub">
                   <Count value={s.count} className="nt-yt__count" /> sources
                 </div>
               </div>
+              <img className="nt-yt__gn" src="/assets/gemini-notebook-mark.png" alt="Gemini Notebook" width={22} height={22} />
             </div>
             <div className="nt-yt__list">
               <Collapse open={s.added} reveal="drop">
