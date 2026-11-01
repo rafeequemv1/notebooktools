@@ -456,7 +456,7 @@ function buildAddSourcesRpcPayload(sourceSpecs, notebookId) {
 }
 
 function buildCreateNotebookAttempts(title, discoveryParent) {
-  const safeTitle = String(title || "").trim() || "NotebookTools";
+  const safeTitle = String(title || "").trim() || "Atlas";
   const attempts = [
     {
       rpcId: NOTEBOOKLM_RPC_IDS.createNotebook,
@@ -1100,7 +1100,7 @@ async function deleteNotebookLmNotebook(notebookId, options = {}) {
 
 async function createNotebookLmNotebook(title, options = {}) {
   const tokens = await getNotebookLmTokens(options);
-  const safeTitle = String(title || "").trim() || "NotebookTools";
+  const safeTitle = String(title || "").trim() || "Atlas";
   const listOptions = { ...options, authUser: tokens.authUser };
   const beforeNotebooks = await listNotebookLmNotebooks(listOptions);
   const beforeIds = new Set(beforeNotebooks.map((notebook) => notebook.id));

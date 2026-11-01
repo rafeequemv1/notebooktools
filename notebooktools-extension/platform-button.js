@@ -12,11 +12,44 @@ let pendingImportPayload = null;
 const PLATFORM_HOSTS = {
   chatgpt: ["chatgpt.com", "chat.openai.com"],
   gemini: ["gemini.google.com"],
-  x: ["x.com", "twitter.com"]
+  x: ["x.com", "twitter.com"],
+  claude: ["claude.ai"],
+  perplexity: ["perplexity.ai"],
+  grok: ["grok.com"],
+  kimi: ["kimi.com", "kimi.moonshot.cn"],
+  reddit: ["reddit.com", "old.reddit.com"],
+  linkedin: ["linkedin.com"],
+  googledocs: ["docs.google.com"]
 };
+
+// Paths that always count as an importable page. Chat apps also show the button
+// whenever their conversation selectors find messages (see CONTENT_DETECT_PLATFORMS).
+const PLATFORM_PATHS = {
+  chatgpt: /\/(c|g|share)\//,
+  gemini: /\/(app|gem|share)(\/|$)/,
+  x: /\/status\/|\/article\/|\/i\/article\//,
+  claude: /^\/(chat|share)\//,
+  perplexity: /^\/(search|page)\//,
+  grok: /^\/(c|chat|share)\/|^\/i\/grok/,
+  kimi: /^\/(chat|share)\//,
+  reddit: /\/comments\//,
+  linkedin: /^\/(posts|pulse)\/|^\/feed\/update\//,
+  googledocs: /^\/document\/(u\/\d+\/)?d\//
+};
+
+const CONTENT_DETECT_PLATFORMS = new Set(["chatgpt", "gemini", "x", "claude", "perplexity", "grok", "kimi"]);
+const CONVERSATION_PLATFORMS = new Set(["chatgpt", "gemini", "claude", "perplexity", "grok", "kimi"]);
+// Platforms that keep the original full-width top bar when no header anchor exists.
+const BAR_FALLBACK_PLATFORMS = new Set(["x"]);
+// Floating pill position per platform (default: top-right, below the site header).
+const FLOAT_BOTTOM_PLATFORMS = new Set(["googledocs"]);
 
 function detectPlatform() {
   const host = window.location.hostname.replace(/^www\./, "").toLowerCase();
+
+  if ((host === "x.com" || host === "twitter.com") && /^\/i\/grok/.test(window.location.pathname)) {
+    return "grok";
+  }
 
   for (const [platform, hosts] of Object.entries(PLATFORM_HOSTS)) {
     if (hosts.includes(host)) {
@@ -27,19 +60,43 @@ function detectPlatform() {
   return "";
 }
 
+function backgroundBrightness(element) {
+  if (!element) {
+    return null;
+  }
+
+  const match = window.getComputedStyle(element).backgroundColor.match(/rgba?\(([^)]+)\)/);
+
+  if (!match) {
+    return null;
+  }
+
+  const parts = match[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+
+  if (parts.length < 3 || (parts.length >= 4 && parts[3] === 0)) {
+    return null;
+  }
+
+  return (parts[0] * 299 + parts[1] * 587 + parts[2] * 114) / 1000;
+}
+
 function isDarkTheme() {
-  if (document.documentElement.classList.contains("dark") ||
-      document.body?.classList?.contains("dark") ||
-      document.documentElement.getAttribute("data-theme") === "dark") {
+  const root = document.documentElement;
+  const body = document.body;
+  const darkClasses = ["dark", "theme-dark", "theme--dark", "dark-theme", "dark-mode"];
+
+  if (darkClasses.some((name) => root.classList.contains(name) || body?.classList?.contains(name)) ||
+      root.getAttribute("data-theme") === "dark" ||
+      root.getAttribute("data-mode") === "dark" ||
+      root.getAttribute("data-color-mode") === "dark" ||
+      root.style.colorScheme === "dark") {
     return true;
   }
 
-  if (currentPlatform === "gemini") {
-    const bg = window.getComputedStyle(document.body).backgroundColor;
-    const match = bg.match(/\d+/g);
+  for (const element of [body, root, document.querySelector("main")]) {
+    const brightness = backgroundBrightness(element);
 
-    if (match && match.length >= 3) {
-      const brightness = (Number(match[0]) * 299 + Number(match[1]) * 587 + Number(match[2]) * 114) / 1000;
+    if (brightness !== null) {
       return brightness < 128;
     }
   }
@@ -48,22 +105,18 @@ function isDarkTheme() {
 }
 
 function isSupportedPage(platform) {
-  const path = window.location.pathname;
+  const pattern = PLATFORM_PATHS[platform];
 
-  if (platform === "chatgpt") {
-    return /\/c\//.test(path) || /\/g\//.test(path) || NotebookToolsExtractors.pageHasContent("chatgpt");
+  if (!pattern) {
+    return false;
   }
 
-  if (platform === "gemini") {
-    return /\/app/.test(path) || NotebookToolsExtractors.pageHasContent("gemini");
+  if (pattern.test(window.location.pathname)) {
+    return true;
   }
 
-  if (platform === "x") {
-    return /\/status\//.test(path) || /\/article\//.test(path) || /\/i\/article\//.test(path) ||
-      NotebookToolsExtractors.pageHasContent("x");
-  }
-
-  return false;
+  return CONTENT_DETECT_PLATFORMS.has(platform) &&
+    NotebookToolsExtractors.pageHasContent(platform, { specificOnly: true });
 }
 
 function getWrapper() {
@@ -155,13 +208,29 @@ function sendPayloadToPanel(panel) {
   }, "*");
 }
 
-function openPanel(wrapper) {
+async function openPanel(wrapper) {
+  const button = wrapper.querySelector("button");
+  const platform = currentPlatform;
   let extracted;
 
+  if (wrapper.classList.contains("is-loading")) {
+    return;
+  }
+
+  wrapper.classList.add("is-loading");
+  button?.setAttribute("aria-busy", "true");
+
   try {
-    extracted = NotebookToolsExtractors.extractForPlatform(currentPlatform);
+    extracted = await NotebookToolsExtractors.extractForPlatform(platform);
   } catch (error) {
     window.alert(error.message || "Nothing to import on this page yet.");
+    return;
+  } finally {
+    wrapper.classList.remove("is-loading");
+    button?.removeAttribute("aria-busy");
+  }
+
+  if (!wrapper.isConnected || platform !== currentPlatform) {
     return;
   }
 
@@ -169,10 +238,11 @@ function openPanel(wrapper) {
 
   const dropdown = getDropdown();
   dropdown.replaceChildren();
+  dropdown.classList.toggle("notebooktools-platform-theme-dark", isDarkTheme());
 
   const panel = document.createElement("iframe");
   const frameUrl = new URL(chrome.runtime.getURL("platform-import.html"));
-  frameUrl.searchParams.set("platform", currentPlatform);
+  frameUrl.searchParams.set("platform", platform);
 
   panel.id = PLATFORM_PANEL_ID;
   panel.className = "notebooktools-platform-panel";
@@ -228,7 +298,9 @@ function createButton() {
   text.textContent = "NotebookLM";
 
   button.type = "button";
-  button.title = "Import this conversation to NotebookLM";
+  button.title = CONVERSATION_PLATFORMS.has(currentPlatform)
+    ? "Import this conversation to NotebookLM"
+    : "Import this page to NotebookLM";
   button.setAttribute("aria-expanded", "false");
   button.append(mark, text);
   wrapper.append(button);
@@ -292,6 +364,12 @@ function mountFloatingBar(button) {
   document.body.classList.add("notebooktools-platform-bar-active");
 }
 
+function mountFloatingButton(button) {
+  button.classList.add("notebooktools-platform-floating");
+  button.classList.toggle("notebooktools-platform-float-bottom", FLOAT_BOTTOM_PLATFORMS.has(currentPlatform));
+  document.body.append(button);
+}
+
 function renderButton() {
   currentPlatform = detectPlatform();
 
@@ -323,7 +401,12 @@ function renderButton() {
     return;
   }
 
-  mountFloatingBar(button);
+  if (BAR_FALLBACK_PLATFORMS.has(currentPlatform)) {
+    mountFloatingBar(button);
+    return;
+  }
+
+  mountFloatingButton(button);
 }
 
 function scheduleRender() {

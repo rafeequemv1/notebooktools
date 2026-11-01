@@ -1,26 +1,31 @@
 const THEME_KEY = "notebooktoolsTheme";
+// light = white, dark = premium black, midnight = deep blue (dark family).
+const THEMES = ["light", "dark", "midnight"];
+const THEME_LABELS = { light: "White", dark: "Dark", midnight: "Midnight blue" };
 
 const NotebookToolsTheme = {
   async get() {
     const stored = await chrome.storage.local.get(THEME_KEY);
-    return stored[THEME_KEY] === "dark" ? "dark" : "light";
+    return THEMES.includes(stored[THEME_KEY]) ? stored[THEME_KEY] : "light";
   },
 
   async set(theme) {
-    const value = theme === "dark" ? "dark" : "light";
+    const value = THEMES.includes(theme) ? theme : "light";
     await chrome.storage.local.set({ [THEME_KEY]: value });
     this.apply(value);
   },
 
   apply(theme) {
-    const value = theme === "dark" ? "dark" : "light";
-    document.documentElement.dataset.theme = value;
+    const value = THEMES.includes(theme) ? theme : "light";
+    document.documentElement.dataset.theme = value === "light" ? "light" : "dark";
+    document.documentElement.dataset.tone = value;
     this.updateToggles(value);
   },
 
   updateToggles(theme) {
-    const isDark = theme === "dark";
-    const label = isDark ? "Light mode" : "Dark mode";
+    const isDark = theme !== "light";
+    const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+    const label = `Theme: ${THEME_LABELS[theme] || "White"} (switch to ${THEME_LABELS[next]})`;
     const button = document.querySelector("#themeToggle");
 
     if (!button) {
@@ -33,7 +38,8 @@ const NotebookToolsTheme = {
   },
 
   async toggle() {
-    const next = (await this.get()) === "dark" ? "light" : "dark";
+    const current = await this.get();
+    const next = THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
     await this.set(next);
     return next;
   },
@@ -63,8 +69,9 @@ if (typeof window !== "undefined") {
 
   if (chrome?.storage?.local) {
     chrome.storage.local.get(THEME_KEY, (stored) => {
-      if (stored[THEME_KEY] === "dark") {
+      if (stored[THEME_KEY] === "dark" || stored[THEME_KEY] === "midnight") {
         document.documentElement.dataset.theme = "dark";
+        document.documentElement.dataset.tone = stored[THEME_KEY];
       }
     });
   }

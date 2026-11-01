@@ -118,8 +118,9 @@ const NotebookToolsSettingsUI = (() => {
             <label class="settings-field">
               <span class="settings-field-label" data-i18n="theme">Theme</span>
               <select id="settingsTheme" class="settings-select">
-                <option value="light" data-i18n="themeLight">Light</option>
-                <option value="dark" data-i18n="themeDark">Dark</option>
+                <option value="light">White</option>
+                <option value="dark">Dark</option>
+                <option value="midnight">Midnight blue</option>
               </select>
             </label>
             <label class="settings-field">

@@ -27,30 +27,47 @@
 }
 
 :root[data-theme="dark"] {
+  /* Premium dark: near-black surfaces, quiet hairlines, Gemini blue accent. */
   color-scheme: dark;
-  --nt-bg: #131314;
-  --nt-surface: #1e1f20;
-  --nt-ink: #e3e3e3;
-  --nt-muted: #9aa0a6;
-  --nt-subtle: #80868b;
-  --nt-line: #3c4043;
-  --nt-line-soft: #2d2e30;
-  --nt-line-strong: #5f6368;
-  --nt-accent: #a8c7fa;
-  --nt-accent-soft: #0b3a82;
+  --nt-bg: #0a0b0d;
+  --nt-surface: #131418;
+  --nt-ink: #ececef;
+  --nt-muted: #a3a6ad;
+  --nt-subtle: #767a83;
+  --nt-line: #24262c;
+  --nt-line-soft: #1a1c21;
+  --nt-line-strong: #383b43;
+  --nt-accent: #7cacf8;
+  --nt-accent-soft: #14233d;
   --nt-danger: #f28b82;
   --nt-success: #81c995;
-  --nt-warning-bg: #3c3200;
-  --nt-warning-line: #5c4d00;
+  --nt-warning-bg: #2e2700;
+  --nt-warning-line: #4d4100;
   --nt-warning-text: #fdd663;
-  --nt-error-bg: #3c1f1e;
+  --nt-error-bg: #2e1715;
   --nt-error-line: #5c2b29;
-  --nt-loading-bg: #1a2a42;
-  --nt-loading-line: #2b4268;
+  --nt-loading-bg: #121e33;
+  --nt-loading-line: #22385e;
   --nt-loading-text: #8ab4f8;
-  --nt-success-bg: #1e3a29;
-  --nt-success-line: #2d5a40;
-  --nt-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --nt-success-bg: #12291c;
+  --nt-success-line: #24503a;
+  --nt-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-tone="midnight"] {
+  /* Midnight blue: deep navy surfaces with a brighter blue accent. */
+  --nt-bg: #070d1c;
+  --nt-surface: #0e1830;
+  --nt-ink: #e8eefc;
+  --nt-muted: #a5b3d1;
+  --nt-subtle: #7183a8;
+  --nt-line: #1c2b4b;
+  --nt-line-soft: #13203b;
+  --nt-line-strong: #2d416b;
+  --nt-accent: #8ab4ff;
+  --nt-accent-soft: #1a3263;
+  --nt-loading-bg: #12234a;
+  --nt-loading-line: #24407a;
 }
 
 .theme-toggle,
@@ -1315,4 +1332,38 @@ input,
 select,
 textarea {
   border-radius: 10px;
+}
+
+
+/* Atlas wordmark (shared by every extension page). */
+:root .atlas-logo {
+  align-items: center;
+  color: var(--nt-ink);
+  display: inline-flex;
+  font-family: "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+  gap: 7px;
+  height: auto !important;
+  line-height: 1;
+  opacity: 1;
+  white-space: nowrap;
+  width: auto;
+}
+
+:root .atlas-logo img {
+  border-radius: 6px;
+  display: block;
+  height: 22px;
+  width: 22px;
+}
+
+:root .atlas-logo b {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+:root .atlas-logo span {
+  color: var(--nt-subtle);
+  font-size: 12.5px;
+  font-weight: 500;
 }

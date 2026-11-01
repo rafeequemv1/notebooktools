@@ -11,6 +11,45 @@ const statusBox = document.querySelector("#status");
 let notebookLmNotebooks = [];
 let importPayload = null;
 
+// Only Google Docs plain-text exports may be fetched on the page's behalf.
+const DEFERRED_FETCH_URL_PATTERN = /^https:\/\/docs\.google\.com\/document\/(?:u\/\d+\/)?d\/[\w-]+\/export\?format=txt$/;
+
+function hasImportableContent(payload) {
+  return Boolean(payload?.plainText || DEFERRED_FETCH_URL_PATTERN.test(String(payload?.fetchTextUrl || "")));
+}
+
+async function resolveDeferredText(payload) {
+  if (payload.plainText || !DEFERRED_FETCH_URL_PATTERN.test(String(payload.fetchTextUrl || ""))) {
+    return payload;
+  }
+
+  const response = await fetch(payload.fetchTextUrl, { credentials: "include", redirect: "follow" });
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!response.ok || /text\/html/i.test(contentType)) {
+    throw new Error("Could not read this document. Make sure you are signed in and allowed to download it.");
+  }
+
+  const text = String(await response.text())
+    .replace(/^\ufeff/, "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+  if (!text) {
+    throw new Error("This document is empty.");
+  }
+
+  return {
+    ...payload,
+    plainText: `Document\n\n${text}`,
+    markdown: [`# ${payload.title}`, "", `Source: ${payload.url}`, "", "## Document", "", text].join("\n"),
+    messages: [{ role: "Document", body: text }],
+    messageCount: 1
+  };
+}
+
 function setStatus(message, options = {}) {
   NotebookToolsUI.setImportStatus(statusBox, {
     message,
@@ -111,7 +150,7 @@ function waitForImportPayload() {
     };
 
     const onMessage = (event) => {
-      if (event.data?.type === "notebooktools-import-payload" && event.data.payload?.plainText) {
+      if (event.data?.type === "notebooktools-import-payload" && hasImportableContent(event.data.payload)) {
         finish(event.data.payload);
       }
     };
@@ -120,7 +159,7 @@ function waitForImportPayload() {
     window.parent.postMessage({ type: "notebooktools-request-import" }, "*");
 
     loadPayloadFromBackground().then((payload) => {
-      if (payload?.plainText) {
+      if (hasImportableContent(payload)) {
         finish(payload);
       }
     });
@@ -133,6 +172,13 @@ function waitForImportPayload() {
 
 async function loadImportPayload() {
   importPayload = await waitForImportPayload();
+
+  if (!importPayload.plainText) {
+    sourceTitle.textContent = importPayload.title || "Document";
+    sourcePreview.textContent = "Reading document...";
+    importPayload = await resolveDeferredText(importPayload);
+  }
+
   sourceTitle.textContent = importPayload.title || "Conversation";
   sourcePreview.textContent = `${importPayload.messageCount || 1} segment${importPayload.messageCount === 1 ? "" : "s"} · ${importPayload.url || ""}`;
 }

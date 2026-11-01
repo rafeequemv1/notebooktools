@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="atlasBg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1a1c22"/>
+      <stop offset="1" stop-color="#050608"/>
+    </linearGradient>
+    <linearGradient id="atlasBlue" x1="28" y1="24" x2="100" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a8c7fa"/>
+      <stop offset="0.55" stop-color="#4c8df6"/>
+      <stop offset="1" stop-color="#1a5ff0"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#atlasBg)"/>
+  <rect x="4.75" y="4.75" width="118.5" height="118.5" rx="29.25" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1.5"/>
+  <circle cx="64" cy="64" r="34" stroke="url(#atlasBlue)" stroke-width="7"/>
+  <ellipse cx="64" cy="64" rx="14" ry="34" stroke="url(#atlasBlue)" stroke-width="5"/>
+  <path d="M31 64h66" stroke="url(#atlasBlue)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M37 47h54M37 81h54" stroke="#4c8df6" stroke-opacity="0.45" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

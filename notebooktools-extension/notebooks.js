@@ -51,6 +51,9 @@ let appSettings = null;
 let listScreen = "notebooks";
 let notebookSelectMode = false;
 let selectedNotebookIds = new Set();
+let smartView = "all";
+let sortDir = 1;
+let renderLimit = 200;
 
 async function loadAppSettings() {
   appSettings = await NotebookToolsSettings.getAppSettings();
@@ -118,26 +121,40 @@ function isFavoriteNotebook(notebookId) {
   return store.isFavorite(folderState, notebookId);
 }
 
+function sortName(notebook) {
+  return String(notebook.title || "").replace(/^[^\p{L}\p{N}]+/u, "").toLocaleLowerCase();
+}
+
 function compareNotebooks(a, b) {
   if (sortMode === "sources") {
     const aCount = typeof a.sourceCount === "number" ? a.sourceCount : -1;
     const bCount = typeof b.sourceCount === "number" ? b.sourceCount : -1;
-    return bCount - aCount || a.title.localeCompare(b.title);
+    return bCount - aCount || sortName(a).localeCompare(sortName(b), undefined, { numeric: true });
   }
 
   if (sortMode === "tags") {
     const aTags = tagsForNotebook(a.id).join(", ");
     const bTags = tagsForNotebook(b.id).join(", ");
-    return aTags.localeCompare(bTags) || a.title.localeCompare(b.title);
+    return aTags.localeCompare(bTags) || sortName(a).localeCompare(sortName(b), undefined, { numeric: true });
+  }
+
+  if (sortMode === "folder") {
+    const aFolder = folderForNotebook(a.id) || "\uffff";
+    const bFolder = folderForNotebook(b.id) || "\uffff";
+    return aFolder.localeCompare(bFolder) || sortName(a).localeCompare(sortName(b), undefined, { numeric: true });
+  }
+
+  if (sortMode === "studio") {
+    return (b.studioCounts?.total || 0) - (a.studioCounts?.total || 0) || sortName(a).localeCompare(sortName(b), undefined, { numeric: true });
   }
 
   if (sortMode === "favorites") {
     const aFavorite = isFavoriteNotebook(a.id) ? 0 : 1;
     const bFavorite = isFavoriteNotebook(b.id) ? 0 : 1;
-    return aFavorite - bFavorite || a.title.localeCompare(b.title);
+    return aFavorite - bFavorite || sortName(a).localeCompare(sortName(b), undefined, { numeric: true });
   }
 
-  return a.title.localeCompare(b.title);
+  return sortName(a).localeCompare(sortName(b), undefined, { numeric: true });
 }
 
 function sortNotebooks(items) {
@@ -147,7 +164,7 @@ function sortNotebooks(items) {
     .map((id) => items.find((notebook) => notebook.id === id))
     .filter(Boolean);
   const rest = [...items].filter((notebook) => !pinnedSet.has(notebook.id));
-  rest.sort(compareNotebooks);
+  rest.sort((a, b) => compareNotebooks(a, b) * sortDir);
   return [...pinned, ...rest];
 }
 
@@ -282,32 +299,28 @@ function getFilteredNotebooks() {
   const filtered = notebooks.filter((notebook) => {
     const folder = folderForNotebook(notebook.id);
 
-    if (browseMode === "folders" && openFolder) {
-      if (openFolder === "unfiled" && folder) {
-        return false;
-      }
-
-      if (openFolder !== "unfiled" && folder !== openFolder) {
-        return false;
-      }
-    } else if (browseMode === "all") {
-      if (activeFolder === "unfiled" && folder) {
-        return false;
-      }
-
-      if (activeFolder !== "all" && activeFolder !== "unfiled" && folder !== activeFolder) {
-        return false;
-      }
-    }
-
-    if (query && !notebook.title.toLowerCase().includes(query)) {
+    if (activeFolder === "unfiled" && folder) {
       return false;
     }
 
-    if (activeTag !== "all") {
-      const tags = tagsForNotebook(notebook.id);
+    if (activeFolder !== "all" && activeFolder !== "unfiled" && folder !== activeFolder) {
+      return false;
+    }
 
-      if (!tags.includes(activeTag)) {
+    if (!matchesSmartView(notebook, smartView)) {
+      return false;
+    }
+
+    const tags = tagsForNotebook(notebook.id);
+
+    if (activeTag !== "all" && !tags.includes(activeTag)) {
+      return false;
+    }
+
+    if (query) {
+      const haystack = `${notebook.title} ${tags.join(" ")} ${folder}`.toLowerCase();
+
+      if (!query.split(/\s+/).every((word) => haystack.includes(word))) {
         return false;
       }
     }
@@ -469,7 +482,7 @@ function openNotebookMenu(anchor, notebookId) {
     event.stopPropagation();
     closeMenus();
     folderState = await store.togglePin(notebookId);
-    renderMain();
+    renderAll();
   });
 
   menu.querySelector('[data-action="favorite"]')?.addEventListener("click", async (event) => {
@@ -477,7 +490,7 @@ function openNotebookMenu(anchor, notebookId) {
     event.stopPropagation();
     closeMenus();
     folderState = await store.toggleFavorite(notebookId);
-    renderMain();
+    renderAll();
   });
 
   menu.querySelector('[data-action="rename"]')?.addEventListener("click", (event) => {
@@ -581,17 +594,22 @@ function renderSelectCheckbox(notebookId) {
 }
 
 function updateNotebookBulkUi() {
-  if (notebooksSelectToggleEl) {
-    notebooksSelectToggleEl.textContent = notebookSelectMode ? "Done" : "Select";
-    notebooksSelectToggleEl.classList.toggle("is-active", notebookSelectMode);
+  const bar = document.querySelector("#nbBulkBar");
+  const count = selectedNotebookIds.size;
+  const show = count > 0 && listScreen === "notebooks";
+
+  if (bar) {
+    bar.hidden = !show;
   }
 
-  const showBulk = notebookSelectMode && selectedNotebookIds.size > 0 && listScreen === "notebooks";
+  const label = document.querySelector("#nbBulkCount");
+
+  if (label) {
+    label.textContent = `${count} selected`;
+  }
 
   if (notebooksBulkDeleteEl) {
-    notebooksBulkDeleteEl.hidden = !showBulk;
-    notebooksBulkDeleteEl.textContent =
-      selectedNotebookIds.size > 0 ? `Delete (${selectedNotebookIds.size})` : "Delete";
+    notebooksBulkDeleteEl.textContent = count > 1 ? `Delete ${count}` : "Delete";
   }
 }
 
@@ -618,20 +636,16 @@ function bindNotebookSelection() {
     });
   });
 
-  mainEl.querySelectorAll(".nb-card.is-selectable, .nb-table tbody tr.is-selectable").forEach((row) => {
+  mainEl.querySelectorAll(".nbx-card, .nbx-row").forEach((row) => {
     row.addEventListener("click", (event) => {
       if (
-        !notebookSelectMode ||
-        event.target.closest(".src-select-wrap") ||
-        event.target.closest("[data-pin-id]") ||
-        event.target.closest("[data-star-id]") ||
-        event.target.closest("[data-sources-id]")
+        selectedNotebookIds.size === 0 ||
+        event.target.closest("button, a, input, label")
       ) {
         return;
       }
 
-      const notebookId = row.dataset.notebookId;
-      toggleNotebookSelected(notebookId);
+      toggleNotebookSelected(row.dataset.notebookId);
     });
   });
 }
@@ -700,51 +714,13 @@ function bindNotebookMenus() {
   });
 }
 
-function renderGrid(items) {
-  if (!items.length) {
-    mainEl.innerHTML = `<p class="notebooks-empty">${notebooks.length ? "No notebooks match your filters." : "No notebooks found."}</p>`;
-    return;
-  }
-
-  mainEl.innerHTML = items
-    .map((notebook) => {
-      const full =
-        typeof notebook.sourceCount === "number" &&
-        notebook.sourceCount >= NotebookToolsNotebookLM.NOTEBOOK_SOURCE_LIMIT;
-
-      return `
-        <article class="nb-card${notebookSelectMode ? " is-selectable" : ""}${selectedNotebookIds.has(notebook.id) ? " is-selected" : ""}${full ? " is-full" : ""}${isPinnedNotebook(notebook.id) ? " is-pinned" : ""}${isFavoriteNotebook(notebook.id) ? " is-favorite" : ""}" data-notebook-id="${notebook.id}">
-          ${renderSelectCheckbox(notebook.id)}
-          ${renderMarkerButtons(notebook.id)}
-          ${renderMenuButton(notebook.id)}
-          <button type="button" class="nb-card-link" data-open-notebook="${notebook.id}">
-            <span class="nb-card-title">${NotebookToolsStore.escapeHtml(notebook.title)}</span>
-            ${renderTagPills(notebook.id)}
-            <div class="nb-card-meta-row">
-              ${renderSourcesTag(notebook)}
-              ${renderStudioTag(notebook)}
-            </div>
-          </button>
-        </article>
-      `;
-    })
-    .join("");
-
-  bindNotebookMenus();
-  bindSourcesTags();
-  bindCardOpens();
-  bindMarkerButtons();
-  bindNotebookSelection();
-  updateNotebookBulkUi();
-}
-
 function bindMarkerButtons() {
   mainEl.querySelectorAll("[data-star-id]").forEach((btn) => {
     btn.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
       folderState = await store.toggleFavorite(btn.dataset.starId);
-      renderMain();
+      renderAll();
     });
   });
 
@@ -753,7 +729,7 @@ function bindMarkerButtons() {
       event.preventDefault();
       event.stopPropagation();
       folderState = await store.togglePin(btn.dataset.pinId);
-      renderMain();
+      renderAll();
     });
   });
 }
@@ -764,7 +740,7 @@ function bindCardOpens() {
       event.preventDefault();
       event.stopPropagation();
 
-      if (notebookSelectMode) {
+      if (viewMode === "grid" && selectedNotebookIds.size > 0) {
         toggleNotebookSelected(btn.dataset.openNotebook);
         return;
       }
@@ -778,229 +754,617 @@ function bindCardOpens() {
   });
 }
 
-function renderList(items) {
-  if (!items.length) {
-    mainEl.innerHTML = `<p class="notebooks-empty">${notebooks.length ? "No notebooks match your filters." : "No notebooks found."}</p>`;
+/* ---------- Workspace: table + cards + sidebar (CRM-style) ---------- */
+const esc = (value) => NotebookToolsStore.escapeHtml(value);
+const PAGE_SIZE = 200;
+const DOT_COLORS = ["#4c8df6", "#1e8e3e", "#e8a200", "#d93025", "#9334e6", "#12a4b6", "#d01884", "#80868b"];
+
+const ICON = {
+  star: (on) => `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.55 5.17 5.7.83-4.12 4.02.97 5.67L12 16.9l-5.1 2.69.97-5.67-4.12-4.02 5.7-.83L12 3.5Z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  pin: (on) => `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3.5h6l-1 5.5 3.5 3.5v1.5h-11V12.5L10 9 9 3.5Z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 14v6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  folder: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  inbox: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13l2.5-7.5h11L20 13v5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18v-5Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M4 13h4.5l1 2h5l1-2H20" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>`,
+  all: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4.5h11a3 3 0 0 1 3 3v12H8a3 3 0 0 1-3-3v-12Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>`,
+  full: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.9"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>`,
+  untagged: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7-8.3-8.3Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.4" fill="currentColor"/></svg>`,
+  podcast: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><rect x="3.5" y="14" width="4" height="6" rx="1.5" stroke="currentColor" stroke-width="1.9"/><rect x="16.5" y="14" width="4" height="6" rx="1.5" stroke="currentColor" stroke-width="1.9"/></svg>`,
+  open: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4.5h5.5V10M19.5 4.5 11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 14v4.5a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  more: `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor"/></svg>`,
+  plus: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+  x: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>`
+};
+
+/* Platforms the extension can import from (content-script Import button). */
+const IMPORT_PLATFORMS = [
+  { label: "ChatGPT", url: "https://chatgpt.com/", color: "#10a37f" },
+  { label: "Claude", url: "https://claude.ai/", color: "#d97757" },
+  { label: "Gemini", url: "https://gemini.google.com/", color: "#4c8df6" },
+  { label: "Perplexity", url: "https://www.perplexity.ai/", color: "#20808d" },
+  { label: "Grok", url: "https://grok.com/", color: "var(--nt-ink)" },
+  { label: "Kimi", url: "https://www.kimi.com/", color: "#3b6fe0" },
+  { label: "YouTube", url: "https://www.youtube.com/", color: "#ff0033" },
+  { label: "X", url: "https://x.com/", color: "var(--nt-ink)" },
+  { label: "Reddit", url: "https://www.reddit.com/", color: "#ff4500" },
+  { label: "LinkedIn", url: "https://www.linkedin.com/", color: "#0a66c2" },
+  { label: "Google Docs", url: "https://docs.google.com/document/", color: "#1a73e8" }
+];
+
+const SMART_VIEWS = [
+  { id: "all", label: "All notebooks", icon: ICON.all },
+  { id: "favorites", label: "Favorites", icon: ICON.star(false) },
+  { id: "pinned", label: "Pinned", icon: ICON.pin(false) },
+  { id: "full", label: "Full (source limit)", icon: ICON.full },
+  { id: "untagged", label: "Untagged", icon: ICON.untagged }
+];
+
+function isFullNotebook(notebook) {
+  return typeof notebook.sourceCount === "number" && notebook.sourceCount >= NotebookToolsNotebookLM.NOTEBOOK_SOURCE_LIMIT;
+}
+
+function matchesSmartView(notebook, view) {
+  if (view === "favorites") return isFavoriteNotebook(notebook.id);
+  if (view === "pinned") return isPinnedNotebook(notebook.id);
+  if (view === "full") return isFullNotebook(notebook);
+  if (view === "untagged") return tagsForNotebook(notebook.id).length === 0;
+  return true;
+}
+
+function tagColorIndex(tag) {
+  let hash = 0;
+  for (const ch of String(tag)) hash = (hash * 31 + ch.codePointAt(0)) >>> 0;
+  return hash % 8;
+}
+
+function tagPill(tag) {
+  return `<span class="nbx-tag nbx-c${tagColorIndex(tag)}">${esc(tag)}</span>`;
+}
+
+function splitTitle(title) {
+  const text = String(title || "Untitled notebook");
+  const match = text.match(/^\s*((?:\p{Extended_Pictographic}|\p{Regional_Indicator})(?:️|\p{Emoji_Modifier}|‍\p{Extended_Pictographic}|\p{Regional_Indicator})*)\s*/u);
+  if (match && text.length > match[0].length) {
+    return { emoji: match[1], name: text.slice(match[0].length) };
+  }
+  return { emoji: "", name: text };
+}
+
+function notebookIcon(notebook) {
+  const { emoji, name } = splitTitle(notebook.title);
+  if (emoji) return `<span class="nbx-ico" aria-hidden="true">${emoji}</span>`;
+  const letter = (name.trim()[0] || "N").toUpperCase();
+  return `<span class="nbx-ico is-letter nbx-c${tagColorIndex(name)}" aria-hidden="true">${esc(letter)}</span>`;
+}
+
+function sourcesCell(notebook) {
+  if (typeof notebook.sourceCount !== "number") {
+    return `<button type="button" class="nbx-src is-unknown" data-sources-id="${notebook.id}" title="Open sources"><span class="nbx-muted">—</span></button>`;
+  }
+  const limit = NotebookToolsNotebookLM.NOTEBOOK_SOURCE_LIMIT;
+  const pct = Math.min(100, Math.round((notebook.sourceCount / limit) * 100));
+  const full = notebook.sourceCount >= limit;
+  return `<button type="button" class="nbx-src${full ? " is-full" : ""}" data-sources-id="${notebook.id}" title="${notebook.sourceCount} of ${limit} sources · open sources">
+    <span class="nbx-src-num">${notebook.sourceCount}</span>
+    <span class="nbx-meter" aria-hidden="true"><i style="width:${pct}%"></i></span>
+    ${full ? '<span class="nbx-full">Full</span>' : ""}
+  </button>`;
+}
+
+function studioCell(notebook, compact = false) {
+  const counts = notebook.studioCounts;
+  if (!counts?.total) return compact ? "" : `<span class="nbx-muted">—</span>`;
+  const label = Object.entries(counts.byType || {}).map(([type, count]) => `${count} ${type}`).join(" · ");
+  return `<span class="nbx-studio" title="Studio outputs: ${esc(label)}">${counts.total} output${counts.total === 1 ? "" : "s"}</span>`;
+}
+
+function markerIcons(notebookId) {
+  const fav = isFavoriteNotebook(notebookId);
+  const pin = isPinnedNotebook(notebookId);
+  return `<span class="nbx-marks">
+    <button type="button" class="nbx-mark is-star${fav ? " is-on" : ""}" data-star-id="${notebookId}" title="${fav ? "Remove favorite" : "Favorite"}" aria-label="${fav ? "Remove favorite" : "Favorite"}">${ICON.star(fav)}</button>
+    <button type="button" class="nbx-mark is-pin${pin ? " is-on" : ""}" data-pin-id="${notebookId}" title="${pin ? "Unpin" : "Pin to top"}" aria-label="${pin ? "Unpin" : "Pin to top"}">${ICON.pin(pin)}</button>
+  </span>`;
+}
+
+function checkBox(attrs, checked, label) {
+  return `<label class="nbx-check"><input type="checkbox" ${attrs}${checked ? " checked" : ""} aria-label="${label}"><span aria-hidden="true"></span></label>`;
+}
+
+function tagsCell(notebookId) {
+  const tags = tagsForNotebook(notebookId);
+  return `<div class="nbx-tags">${tags.map(tagPill).join("")}<button type="button" class="nbx-add" data-tag-edit="${notebookId}" title="Edit tags" aria-label="Edit tags">${ICON.plus}${tags.length ? "" : "<span>Tag</span>"}</button></div>`;
+}
+
+function folderCell(notebookId) {
+  const folder = folderForNotebook(notebookId);
+  return folder
+    ? `<button type="button" class="nbx-folder" data-folder-edit="${notebookId}" title="Move to folder">${ICON.folder}<span>${esc(folder)}</span></button>`
+    : `<button type="button" class="nbx-folder is-empty" data-folder-edit="${notebookId}" title="Move to folder">${ICON.plus}<span>Folder</span></button>`;
+}
+
+function emptyState() {
+  if (!notebooks.length) {
+    return `<div class="nbx-empty"><strong>No notebooks yet</strong><p>Sign in to Gemini Notebook in this browser, then refresh. Or create your first notebook.</p></div>`;
+  }
+  return `<div class="nbx-empty"><strong>No notebooks match</strong><p>Try another search, or clear the filters.</p><button type="button" class="nbx-ghost" data-clear-filters>Clear filters</button></div>`;
+}
+
+function moreButton(total) {
+  if (total <= renderLimit) return "";
+  return `<div class="nbx-more"><button type="button" class="nbx-ghost" data-show-more>Show ${Math.min(PAGE_SIZE, total - renderLimit)} more · ${total - renderLimit} hidden</button></div>`;
+}
+
+function sortHeader(key, label, cls = "") {
+  const active = sortMode === key;
+  const arrow = active ? `<span class="nbx-caret${sortDir === -1 ? " is-up" : ""}" aria-hidden="true">▾</span>` : "";
+  return `<th class="${cls}" ${active ? `aria-sort="${sortDir === 1 ? "descending" : "ascending"}"` : ""}><button type="button" class="nbx-th${active ? " is-sorted" : ""}" data-sort="${key}">${label}${arrow}</button></th>`;
+}
+
+function renderList(allItems) {
+  if (!allItems.length) {
+    mainEl.innerHTML = emptyState();
+    bindWorkspace();
     return;
   }
 
-  const showFolderCol =
-    browseMode === "all" && NotebookToolsSettings.isCardTagEnabled(appSettings, "notebookFolder");
+  const items = allItems.slice(0, renderLimit);
+  const allChecked = allItems.every((notebook) => selectedNotebookIds.has(notebook.id));
+  const someChecked = !allChecked && allItems.some((notebook) => selectedNotebookIds.has(notebook.id));
 
   mainEl.innerHTML = `
-    <table class="nb-table">
-      <thead>
-        <tr>
-          ${notebookSelectMode ? '<th class="nb-table-select-col"></th>' : ""}
-          <th class="nb-table-markers-col"></th>
-          <th>Notebook</th>
-          <th>Tags</th>
-          <th>Sources</th>
-          ${showFolderCol ? "<th>Folder</th>" : ""}
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        ${items
-          .map((notebook) => {
-            const folder = folderForNotebook(notebook.id) || "—";
-            const tags = tagsForNotebook(notebook.id).join(", ") || "—";
-            return `
-              <tr class="${notebookSelectMode ? "is-selectable" : ""}${selectedNotebookIds.has(notebook.id) ? " is-selected" : ""}${isPinnedNotebook(notebook.id) ? " is-pinned" : ""}${isFavoriteNotebook(notebook.id) ? " is-favorite" : ""}" data-notebook-id="${notebook.id}">
-                ${notebookSelectMode ? `<td class="nb-table-select">${renderSelectCheckbox(notebook.id)}</td>` : ""}
-                <td class="nb-table-markers">${renderMarkerButtons(notebook.id)}</td>
-                <td>
-                  <button type="button" class="nb-table-title" data-open-notebook="${notebook.id}">${NotebookToolsStore.escapeHtml(notebook.title)}</button>
-                </td>
-                <td class="nb-table-tags">${NotebookToolsStore.escapeHtml(tags)}</td>
-                <td class="nb-table-meta">${renderSourcesTag(notebook)} ${renderStudioTag(notebook)}</td>
-                ${showFolderCol ? `<td class="nb-table-folder">${NotebookToolsStore.escapeHtml(folder)}</td>` : ""}
-                <td class="nb-table-actions">${renderMenuButton(notebook.id)}</td>
-              </tr>
-            `;
-          })
-          .join("")}
-      </tbody>
-    </table>
+    <div class="nbx-table-wrap">
+      <table class="nbx-table">
+        <thead>
+          <tr>
+            <th class="nbx-col-check">${checkBox(`data-select-all${someChecked ? ' data-indeterminate="1"' : ""}`, allChecked, "Select all")}</th>
+            ${sortHeader("title", "Name", "nbx-col-name")}
+            ${sortHeader("sources", "Sources", "nbx-col-src")}
+            ${sortHeader("tags", "Tags", "nbx-col-tags")}
+            ${sortHeader("folder", "Folder", "nbx-col-folder")}
+            ${sortHeader("studio", "Studio", "nbx-col-studio")}
+            <th class="nbx-col-act"><span class="nbx-sr">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items
+            .map((notebook) => {
+              const selected = selectedNotebookIds.has(notebook.id);
+              const { name } = splitTitle(notebook.title);
+              return `
+                <tr class="nbx-row${selected ? " is-selected" : ""}${isPinnedNotebook(notebook.id) ? " is-pinned" : ""}" data-notebook-id="${notebook.id}">
+                  <td class="nbx-col-check">${checkBox(`data-nb-select-id="${notebook.id}"`, selected, "Select notebook")}</td>
+                  <td class="nbx-col-name">
+                    <div class="nbx-name">
+                      ${notebookIcon(notebook)}
+                      <button type="button" class="nbx-title" data-open-notebook="${notebook.id}" title="${esc(notebook.title)}">${esc(name)}</button>
+                      ${markerIcons(notebook.id)}
+                    </div>
+                  </td>
+                  <td class="nbx-col-src">${sourcesCell(notebook)}</td>
+                  <td class="nbx-col-tags">${tagsCell(notebook.id)}</td>
+                  <td class="nbx-col-folder">${folderCell(notebook.id)}</td>
+                  <td class="nbx-col-studio">${studioCell(notebook)}</td>
+                  <td class="nbx-col-act">
+                    <a class="nbx-iconbtn" href="${notebookUrl(notebook.id)}" target="_blank" rel="noopener noreferrer" title="Open in Gemini Notebook" aria-label="Open in Gemini Notebook">${ICON.open}</a>
+                    <button type="button" class="nbx-iconbtn nb-menu-btn" data-menu-id="${notebook.id}" title="More actions" aria-label="More actions">${ICON.more}</button>
+                  </td>
+                </tr>`;
+            })
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+    ${moreButton(allItems.length)}
   `;
 
+  const selectAll = mainEl.querySelector("[data-select-all]");
+  if (selectAll?.dataset.indeterminate) selectAll.indeterminate = true;
+  bindWorkspace();
+}
+
+function renderGrid(allItems) {
+  if (!allItems.length) {
+    mainEl.innerHTML = emptyState();
+    bindWorkspace();
+    return;
+  }
+
+  const items = allItems.slice(0, renderLimit);
+  const selecting = selectedNotebookIds.size > 0;
+
+  mainEl.innerHTML = `
+    <div class="nbx-cards${selecting ? " is-selecting" : ""}">
+      ${items
+        .map((notebook) => {
+          const selected = selectedNotebookIds.has(notebook.id);
+          const { name } = splitTitle(notebook.title);
+          return `
+            <article class="nbx-card${selected ? " is-selected" : ""}${isPinnedNotebook(notebook.id) ? " is-pinned" : ""}" data-notebook-id="${notebook.id}">
+              <div class="nbx-card-top">
+                ${notebookIcon(notebook)}
+                ${checkBox(`data-nb-select-id="${notebook.id}"`, selected, "Select notebook")}
+                <span class="nbx-card-spacer"></span>
+                ${markerIcons(notebook.id)}
+                <button type="button" class="nbx-iconbtn nb-menu-btn" data-menu-id="${notebook.id}" title="More actions" aria-label="More actions">${ICON.more}</button>
+              </div>
+              <button type="button" class="nbx-card-title" data-open-notebook="${notebook.id}" title="${esc(notebook.title)}">${esc(name)}</button>
+              ${tagsCell(notebook.id)}
+              <div class="nbx-card-foot">
+                ${sourcesCell(notebook)}
+                ${folderCell(notebook.id)}
+                ${studioCell(notebook, true)}
+              </div>
+            </article>`;
+        })
+        .join("")}
+    </div>
+    ${moreButton(allItems.length)}
+  `;
+
+  bindWorkspace();
+}
+
+function bindWorkspace() {
   bindNotebookMenus();
   bindSourcesTags();
   bindCardOpens();
   bindMarkerButtons();
   bindNotebookSelection();
+
+  mainEl.querySelectorAll("[data-tag-edit]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      renderTagMenu(btn, btn.dataset.tagEdit);
+    });
+  });
+
+  mainEl.querySelectorAll("[data-folder-edit]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      renderMoveMenu(btn, btn.dataset.folderEdit);
+    });
+  });
+
+  mainEl.querySelectorAll("[data-sort]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const key = btn.dataset.sort;
+      if (sortMode === key) {
+        sortDir = -sortDir;
+      } else {
+        sortMode = key;
+        sortDir = 1;
+        await store.setSortMode(sortMode);
+      }
+      if (sortSelect) sortSelect.value = sortMode;
+      renderMain();
+    });
+  });
+
+  mainEl.querySelector("[data-select-all]")?.addEventListener("change", (event) => {
+    const items = getFilteredNotebooks();
+    if (event.target.checked) {
+      items.forEach((notebook) => selectedNotebookIds.add(notebook.id));
+    } else {
+      items.forEach((notebook) => selectedNotebookIds.delete(notebook.id));
+    }
+    renderMain();
+  });
+
+  mainEl.querySelector("[data-show-more]")?.addEventListener("click", () => {
+    renderLimit += PAGE_SIZE;
+    renderMain();
+  });
+
+  mainEl.querySelector("[data-clear-filters]")?.addEventListener("click", () => clearFilters());
+
   updateNotebookBulkUi();
 }
 
-function renderFolderGrid() {
-  const folders = [
-    { id: "unfiled", label: "Unfiled" },
-    ...folderState.folders.map((folder) => ({ id: folder, label: folder }))
-  ];
+async function clearFilters() {
+  smartView = "all";
+  activeFolder = "all";
+  activeTag = "all";
+  if (searchInput) searchInput.value = "";
+  await store.setActiveTag("all");
+  renderLimit = PAGE_SIZE;
+  renderAll();
+}
 
-  if (!folders.length) {
-    mainEl.innerHTML = `<p class="notebooks-empty">Create a folder to organize notebooks.</p>`;
-    return;
+function renderFolderGrid() {
+  renderNotebooks();
+}
+
+function renderNotebooks() {
+  const items = getFilteredNotebooks();
+  mainEl.classList.toggle("is-cards", viewMode === "grid");
+  mainEl.classList.toggle("is-table", viewMode !== "grid");
+
+  if (viewMode === "grid") {
+    renderGrid(items);
+  } else {
+    renderList(items);
   }
 
-  mainEl.innerHTML = folders
-    .map((folder) => {
-      const count = countInFolder(folder.id);
+  renderHeading(items.length);
+}
 
-      return `
-        <button type="button" class="nb-folder-card" data-open-folder="${NotebookToolsStore.escapeHtml(folder.id)}">
-          <span class="nb-folder-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="nb-folder-name">${NotebookToolsStore.escapeHtml(folder.label)}</span>
-          <span class="nb-folder-count">${count} notebook${count === 1 ? "" : "s"}</span>
-        </button>
-      `;
-    })
-    .join("");
+function renderMain() {
+  renderNotebooks();
+}
 
-  mainEl.querySelectorAll("[data-open-folder]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      openFolder = btn.dataset.openFolder;
+function currentViewTitle() {
+  if (activeFolder !== "all") return activeFolder === "unfiled" ? "Unfiled" : activeFolder;
+  if (activeTag !== "all") return `#${activeTag}`;
+  return SMART_VIEWS.find((view) => view.id === smartView)?.label || "All notebooks";
+}
+
+function renderHeading(count) {
+  const title = document.querySelector("#nbViewTitle");
+  const counter = document.querySelector("#nbViewCount");
+  if (title) title.textContent = currentViewTitle();
+  if (counter) {
+    counter.textContent = count === notebooks.length ? `${count}` : `${count} of ${notebooks.length}`;
+  }
+  renderFilterChips();
+}
+
+function renderFilterChips() {
+  const host = document.querySelector("#nbActiveFilters");
+  if (!host) return;
+
+  const chips = [];
+  if (smartView !== "all") chips.push({ key: "view", label: SMART_VIEWS.find((v) => v.id === smartView)?.label || smartView });
+  if (activeFolder !== "all") chips.push({ key: "folder", label: `Folder: ${activeFolder === "unfiled" ? "Unfiled" : activeFolder}` });
+  if (activeTag !== "all") chips.push({ key: "tag", label: `Tag: ${activeTag}` });
+  const query = searchInput?.value?.trim();
+  if (query) chips.push({ key: "search", label: `“${query}”` });
+
+  host.innerHTML = chips.length
+    ? chips.map((chip) => `<button type="button" class="nbx-chip" data-chip="${chip.key}" title="Remove filter">${esc(chip.label)}${ICON.x}</button>`).join("") +
+      (chips.length > 1 ? `<button type="button" class="nbx-chip-clear" data-chip="all">Clear all</button>` : "")
+    : `<span class="nbx-hint">Tip: select rows to move, tag or delete in bulk. Press <kbd>/</kbd> to search.</span>`;
+
+  host.querySelectorAll("[data-chip]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const key = btn.dataset.chip;
+      if (key === "all") return clearFilters();
+      if (key === "view") smartView = "all";
+      if (key === "folder") activeFolder = "all";
+      if (key === "tag") {
+        activeTag = "all";
+        await store.setActiveTag("all");
+      }
+      if (key === "search" && searchInput) searchInput.value = "";
       renderAll();
     });
   });
 }
 
-function renderNotebooks() {
-  const items = getFilteredNotebooks();
-  mainEl.classList.toggle("notebooks-grid", viewMode === "grid");
-  mainEl.classList.toggle("notebooks-list", viewMode === "list");
-  mainEl.classList.remove("notebooks-folders");
-
-  if (viewMode === "list") {
-    renderList(items);
-  } else {
-    renderGrid(items);
-  }
+function sideItem(kind, id, icon, label, count, active, extra = "") {
+  return `<button type="button" class="nbx-side-item${active ? " is-active" : ""}" data-side-${kind}="${esc(id)}" ${extra}>
+    <span class="nbx-side-ico">${icon}</span>
+    <span class="nbx-side-text">${esc(label)}</span>
+    ${count === null ? "" : `<span class="nbx-side-count">${count}</span>`}
+  </button>`;
 }
 
-function renderMain() {
-  if (browseMode === "folders" && !openFolder) {
-    mainEl.classList.remove("notebooks-grid", "notebooks-list");
-    mainEl.classList.add("notebooks-folders");
-    renderFolderGrid();
-    return;
-  }
+function renderSidebar() {
+  const side = document.querySelector("#nbSidebar");
+  if (!side) return;
 
-  renderNotebooks();
-}
+  const noFilters = activeFolder === "all" && activeTag === "all";
+  const views = SMART_VIEWS.map((view) =>
+    sideItem(
+      "view",
+      view.id,
+      view.icon,
+      view.label,
+      notebooks.filter((notebook) => matchesSmartView(notebook, view.id)).length,
+      smartView === view.id && (view.id !== "all" || noFilters)
+    )
+  ).join("");
 
-function renderBreadcrumb() {
-  const show = browseMode === "folders" && openFolder;
+  const folders = [
+    sideItem("folder", "unfiled", ICON.inbox, "Unfiled", countInFolder("unfiled"), activeFolder === "unfiled"),
+    ...folderState.folders.map((folder) =>
+      sideItem("folder", folder, ICON.folder, folder, countInFolder(folder), activeFolder === folder)
+    )
+  ].join("");
 
-  if (!folderBreadcrumb) {
-    return;
-  }
+  const tagCounts = {};
+  notebooks.forEach((notebook) => tagsForNotebook(notebook.id).forEach((tag) => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  }));
+  const tags = folderState.tags.length
+    ? folderState.tags
+        .map((tag) =>
+          sideItem("tag", tag, `<i class="nbx-dot" style="background:${DOT_COLORS[tagColorIndex(tag)]}"></i>`, tag, tagCounts[tag] || 0, activeTag === tag)
+        )
+        .join("")
+    : `<p class="nbx-side-empty">No tags yet</p>`;
 
-  folderBreadcrumb.hidden = !show;
+  side.innerHTML = `
+    <div class="nbx-side-sec">
+      <p class="nbx-side-label">Views</p>
+      ${views}
+      <button type="button" class="nbx-side-item" data-side-podcast>
+        <span class="nbx-side-ico">${ICON.podcast}</span><span class="nbx-side-text">Podcasts</span>
+      </button>
+    </div>
+    <div class="nbx-side-sec">
+      <div class="nbx-side-label-row"><p class="nbx-side-label">Folders</p><button type="button" class="nbx-side-add" data-side-new="folder" title="New folder" aria-label="New folder">${ICON.plus}</button></div>
+      ${folders}
+    </div>
+    <div class="nbx-side-sec">
+      <div class="nbx-side-label-row"><p class="nbx-side-label">Tags</p><button type="button" class="nbx-side-add" data-side-new="tag" title="New tag" aria-label="New tag">${ICON.plus}</button></div>
+      ${tags}
+    </div>
+    <div class="nbx-side-sec nbx-side-import">
+      <p class="nbx-side-label">Import from</p>
+      <div class="nbx-plats">
+        ${IMPORT_PLATFORMS.map((platform) => `<a class="nbx-plat" href="${platform.url}" target="_blank" rel="noopener noreferrer"><i style="background:${platform.color}"></i>${esc(platform.label)}</a>`).join("")}
+      </div>
+      <p class="nbx-side-hint">Open a chat, post, video or doc and click <b>Import</b> to send it to a notebook.</p>
+    </div>
+  `;
 
-  if (show && folderCurrentName) {
-    folderCurrentName.textContent = folderLabel(openFolder);
-  }
-}
-
-function renderFolderBar() {
-  if (!folderBar) {
-    return;
-  }
-
-  if (browseMode === "folders") {
-    folderBar.hidden = true;
-    return;
-  }
-
-  folderBar.hidden = false;
-
-  const pills = [
-    { id: "all", label: "All" },
-    ...folderState.folders.map((folder) => ({ id: folder, label: folder })),
-    { id: "unfiled", label: "Unfiled" }
-  ];
-
-  folderBar.innerHTML =
-    pills
-      .map((pill) => {
-        const active = activeFolder === pill.id ? " is-active" : "";
-        return `<button type="button" class="folder-pill${active}" data-folder="${pill.id}">${NotebookToolsStore.escapeHtml(pill.label)}</button>`;
-      })
-      .join("") + `<button type="button" class="folder-pill folder-pill-add" id="newFolderButton">+ Folder</button>`;
-
-  folderBar.querySelectorAll("[data-folder]").forEach((pill) => {
-    pill.addEventListener("click", () => {
-      activeFolder = pill.dataset.folder;
-      renderFolderBar();
-      renderMain();
+  side.querySelectorAll("[data-side-view]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.sideView;
+      if (id === "all") {
+        return clearFilters();
+      }
+      smartView = smartView === id ? "all" : id;
+      renderLimit = PAGE_SIZE;
+      renderAll();
     });
   });
 
-  folderBar.querySelector("#newFolderButton")?.addEventListener("click", async () => {
-    const name = window.prompt("Folder name");
-
-    if (!name?.trim()) {
-      return;
-    }
-
-    await store.addFolder(name.trim());
-    folderState = await store.getState();
-    activeFolder = name.trim();
-    renderAll();
+  side.querySelectorAll("[data-side-folder]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.sideFolder;
+      activeFolder = activeFolder === id ? "all" : id;
+      renderLimit = PAGE_SIZE;
+      renderAll();
+    });
   });
-}
 
-function renderTagBar() {
-  if (!tagBar) {
-    return;
-  }
-
-  if (browseMode === "folders") {
-    tagBar.hidden = true;
-    return;
-  }
-
-  tagBar.hidden = false;
-
-  const pills = [
-    { id: "all", label: "All tags" },
-    ...folderState.tags.map((tag) => ({ id: tag, label: tag }))
-  ];
-
-  tagBar.innerHTML =
-    pills
-      .map((pill) => {
-        const active = activeTag === pill.id ? " is-active" : "";
-        return `<button type="button" class="tag-pill${active}" data-tag="${NotebookToolsStore.escapeHtml(pill.id)}">${NotebookToolsStore.escapeHtml(pill.label)}</button>`;
-      })
-      .join("") + `<button type="button" class="tag-pill tag-pill-add" id="newTagButton">+ Tag</button>`;
-
-  tagBar.querySelectorAll("[data-tag]").forEach((pill) => {
-    pill.addEventListener("click", async () => {
-      activeTag = pill.dataset.tag;
+  side.querySelectorAll("[data-side-tag]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.sideTag;
+      activeTag = activeTag === id ? "all" : id;
       await store.setActiveTag(activeTag);
-      renderTagBar();
-      renderMain();
+      renderLimit = PAGE_SIZE;
+      renderAll();
     });
   });
 
-  tagBar.querySelector("#newTagButton")?.addEventListener("click", async () => {
-    const name = window.prompt("Tag name");
+  side.querySelector("[data-side-podcast]")?.addEventListener("click", () => {
+    document.querySelector('[data-app-tab="podcast"]')?.click();
+  });
 
-    if (!name?.trim()) {
-      return;
-    }
-
-    await store.addTag(name.trim());
-    folderState = await store.getState();
-    activeTag = name.trim();
-    await store.setActiveTag(activeTag);
-    renderAll();
+  side.querySelectorAll("[data-side-new]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const kind = btn.dataset.sideNew;
+      const name = window.prompt(kind === "folder" ? "New folder name" : "New tag name")?.trim();
+      if (!name) return;
+      if (kind === "folder") {
+        await store.addFolder(name);
+        folderState = await store.getState();
+        activeFolder = name;
+      } else {
+        await store.addTag(name);
+        folderState = await store.getState();
+      }
+      renderAll();
+    });
   });
 }
+
+/* Generic picker used by the bulk bar (folder / tag). */
+function openPickerMenu(anchor, { items, active = [], placeholder, onPick, onCreate }) {
+  closeMenus();
+  const menu = document.createElement("div");
+  menu.className = "nb-move-menu nbx-picker";
+  menu.innerHTML =
+    (items.length
+      ? items.map((item) => `<button type="button" class="nb-move-item${active.includes(item.value) ? " is-active" : ""}" data-pick="${esc(item.value)}">${esc(item.label)}</button>`).join("")
+      : `<p class="nb-tag-menu-empty">Nothing here yet. Create one below.</p>`) +
+    `<div class="nb-move-new"><input type="text" class="nb-move-input" placeholder="${esc(placeholder)}" maxlength="40"><button type="button" class="nb-move-create">Add</button></div>`;
+
+  menu.querySelectorAll("[data-pick]").forEach((btn) => {
+    btn.addEventListener("click", async (event) => {
+      event.stopPropagation();
+      closeMenus();
+      await onPick(btn.dataset.pick);
+    });
+  });
+
+  const input = menu.querySelector("input");
+  const create = async (event) => {
+    event?.stopPropagation();
+    const name = input.value.trim();
+    if (!name) return input.focus();
+    closeMenus();
+    await onCreate(name);
+  };
+  menu.querySelector(".nb-move-create").addEventListener("click", create);
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") create(event);
+  });
+
+  document.body.appendChild(menu);
+  const rect = anchor.getBoundingClientRect();
+  menu.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - 200))}px`;
+  menu.style.top = `${rect.bottom + 4}px`;
+}
+
+async function runBulk(action, anchor) {
+  const ids = [...selectedNotebookIds];
+  if (action === "clear") {
+    selectedNotebookIds.clear();
+    renderMain();
+    return;
+  }
+  if (!ids.length) return;
+
+  if (action === "move") {
+    const moveAll = async (folder) => {
+      for (const id of ids) await store.setNotebookFolder(id, folder);
+      folderState = await store.getState();
+      setPageStatus(`Moved ${ids.length} notebook${ids.length === 1 ? "" : "s"} to ${folder || "Unfiled"}.`, "");
+      renderAll();
+    };
+    openPickerMenu(anchor, {
+      items: [{ value: "", label: "Unfiled" }, ...folderState.folders.map((folder) => ({ value: folder, label: folder }))],
+      placeholder: "New folder",
+      onPick: moveAll,
+      onCreate: async (name) => {
+        await store.addFolder(name);
+        await moveAll(name);
+      }
+    });
+    return;
+  }
+
+  if (action === "tag") {
+    const tagAll = async (tag) => {
+      for (const id of ids) {
+        if (!tagsForNotebook(id).includes(tag)) folderState = await store.toggleNotebookTag(id, tag);
+      }
+      folderState = await store.getState();
+      setPageStatus(`Tagged ${ids.length} notebook${ids.length === 1 ? "" : "s"} “${tag}”.`, "");
+      renderAll();
+    };
+    openPickerMenu(anchor, {
+      items: folderState.tags.map((tag) => ({ value: tag, label: tag })),
+      placeholder: "New tag",
+      onPick: tagAll,
+      onCreate: async (name) => {
+        await store.addTag(name);
+        folderState = await store.getState();
+        await tagAll(name);
+      }
+    });
+    return;
+  }
+
+  if (action === "favorite" || action === "pin") {
+    const isOn = action === "favorite" ? isFavoriteNotebook : isPinnedNotebook;
+    const toggle = action === "favorite" ? store.toggleFavorite.bind(store) : store.togglePin.bind(store);
+    const turnOff = ids.every((id) => isOn(id));
+    for (const id of ids) {
+      if (isOn(id) === turnOff) folderState = await toggle(id);
+    }
+    folderState = await store.getState();
+    renderAll();
+  }
+}
+
+function renderFolderBar() {}
+function renderTagBar() {}
+function renderBreadcrumb() {}
 
 function renderProfileDropdown() {
   profileDropdown.innerHTML = accounts
@@ -1022,6 +1386,7 @@ function renderProfileDropdown() {
       await store.setAuthUser(authUser === "default" ? null : authUser);
       profileInitial.textContent = activeAccount.initial;
       closeMenus();
+      selectedNotebookIds.clear();
       notebooks = await cache.get(activeAccount?.authUser);
       renderAll();
       await loadNotebooks();
@@ -1030,15 +1395,14 @@ function renderProfileDropdown() {
 }
 
 function renderViewToggle() {
-  viewFoldersButton?.classList.toggle("is-active", browseMode === "folders");
-  viewGridButton?.classList.toggle("is-active", browseMode !== "folders" && viewMode === "grid");
-  viewListButton?.classList.toggle("is-active", browseMode !== "folders" && viewMode === "list");
+  viewGridButton?.classList.toggle("is-active", viewMode === "grid");
+  viewListButton?.classList.toggle("is-active", viewMode !== "grid");
+  viewGridButton?.setAttribute("aria-pressed", String(viewMode === "grid"));
+  viewListButton?.setAttribute("aria-pressed", String(viewMode !== "grid"));
 }
 
 function renderAll() {
-  renderBreadcrumb();
-  renderFolderBar();
-  renderTagBar();
+  renderSidebar();
   renderMain();
   renderViewToggle();
 }
@@ -1317,7 +1681,21 @@ profileButton?.addEventListener("click", (event) => {
   }
 });
 
-searchInput?.addEventListener("input", () => renderMain());
+searchInput?.addEventListener("input", () => {
+  renderLimit = 200;
+  renderMain();
+});
+
+document.querySelector("#nbBulkBar")?.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-bulk]");
+
+  if (!btn) {
+    return;
+  }
+
+  event.stopPropagation();
+  runBulk(btn.dataset.bulk, btn);
+});
 refreshButton?.addEventListener("click", () => loadNotebooks({ force: true }));
 createButton?.addEventListener("click", createNotebook);
 deleteModalCancel?.addEventListener("click", closeDeleteModal);
@@ -1335,6 +1713,26 @@ renameModalInput?.addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  const typing = event.target.closest?.("input, textarea, select, [contenteditable]");
+
+  if (event.key === "/" && !typing && listScreen === "notebooks" && !notebooksListView?.hidden) {
+    event.preventDefault();
+    searchInput?.focus();
+    return;
+  }
+
+  if (event.key === "Escape" && event.target === searchInput && searchInput.value) {
+    searchInput.value = "";
+    renderMain();
+    return;
+  }
+
+  if (event.key === "Escape" && !typing && selectedNotebookIds.size && deleteModal?.hidden && renameModal?.hidden && !document.querySelector(".nb-move-menu, .nb-dropdown-menu")) {
+    selectedNotebookIds.clear();
+    renderMain();
+    return;
+  }
+
   if (event.key === "Escape") {
     if (!deleteModal?.hidden) {
       closeDeleteModal();
@@ -1399,7 +1797,7 @@ async function init() {
   NotebookToolsNotebookDetail.setOnListTabChange(setListScreen);
   folderState = await store.getState();
   viewMode = await store.getViewMode();
-  browseMode = await store.getBrowseMode();
+  browseMode = "all";
   sortMode = await store.getSortMode();
   activeTag = await store.getActiveTag();
 

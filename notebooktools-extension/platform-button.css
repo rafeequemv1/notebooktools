@@ -115,7 +115,8 @@ html[data-theme="dark"] .notebooktools-platform-action.is-open button,
 
 html.dark .notebooktools-platform-panel,
 html[data-theme="dark"] .notebooktools-platform-panel,
-.notebooktools-platform-theme-dark .notebooktools-platform-panel {
+.notebooktools-platform-theme-dark .notebooktools-platform-panel,
+.notebooktools-platform-dropdown.notebooktools-platform-theme-dark .notebooktools-platform-panel {
   background: #212121;
   border-color: rgba(255, 255, 255, 0.12);
 }
@@ -127,6 +128,69 @@ html[data-theme="dark"] .notebooktools-platform-bar,
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
+.notebooktools-platform-action.notebooktools-platform-theme-dark button {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+  color: #f1f1f1;
+}
+
+.notebooktools-platform-action.notebooktools-platform-theme-dark button:hover,
+.notebooktools-platform-action.notebooktools-platform-theme-dark.is-open button {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+/* Floating pill used on sites without a stable header anchor. */
+.notebooktools-platform-action.notebooktools-platform-floating {
+  margin: 0;
+  position: fixed;
+  right: 20px;
+  top: 72px;
+  z-index: 2147483640;
+}
+
+.notebooktools-platform-action.notebooktools-platform-floating.notebooktools-platform-float-bottom {
+  bottom: 24px;
+  right: 72px;
+  top: auto;
+}
+
+.notebooktools-platform-action.notebooktools-platform-floating button {
+  background: #ffffff;
+  border-color: rgba(15, 15, 15, 0.12);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  color: #0f0f0f;
+  height: 34px;
+  opacity: 0.92;
+}
+
+.notebooktools-platform-action.notebooktools-platform-floating button:hover,
+.notebooktools-platform-action.notebooktools-platform-floating.is-open button {
+  background: #ffffff;
+  border-color: rgba(15, 15, 15, 0.22);
+  opacity: 1;
+}
+
+.notebooktools-platform-action.notebooktools-platform-floating.notebooktools-platform-theme-dark button {
+  background: #2f2f2f;
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  color: #f1f1f1;
+}
+
+.notebooktools-platform-action.notebooktools-platform-floating.notebooktools-platform-theme-dark button:hover,
+.notebooktools-platform-action.notebooktools-platform-floating.notebooktools-platform-theme-dark.is-open button {
+  background: #3a3a3a;
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.notebooktools-platform-action.is-loading button {
+  cursor: progress;
+  opacity: 0.6;
+}
+
 body.notebooktools-platform-bar-active {
   padding-top: 52px;
 }
@@ -134,6 +198,10 @@ body.notebooktools-platform-bar-active {
 @media (max-width: 720px) {
   .notebooktools-platform-text {
     display: none;
+  }
+
+  .notebooktools-platform-action.notebooktools-platform-floating {
+    right: 12px;
   }
 
   .notebooktools-platform-action button,

@@ -191,12 +191,11 @@ const NotebookToolsNotebookFolders = {
   async getSortMode() {
     const stored = await chrome.storage.local.get("notebooktoolsSortMode");
     const mode = stored.notebooktoolsSortMode;
-    return mode === "sources" || mode === "tags" || mode === "favorites" ? mode : "title";
+    return ["sources", "tags", "favorites", "folder", "studio"].includes(mode) ? mode : "title";
   },
 
   async setSortMode(mode) {
-    const value =
-      mode === "sources" || mode === "tags" || mode === "favorites" ? mode : "title";
+    const value = ["sources", "tags", "favorites", "folder", "studio"].includes(mode) ? mode : "title";
     await chrome.storage.local.set({ notebooktoolsSortMode: value });
   },
 
@@ -235,7 +234,7 @@ const NotebookToolsNotebookFolders = {
 
   async getViewMode() {
     const stored = await chrome.storage.local.get(VIEW_MODE_KEY);
-    return stored[VIEW_MODE_KEY] === "list" ? "list" : "grid";
+    return stored[VIEW_MODE_KEY] === "grid" ? "grid" : "list";
   },
 
   async setViewMode(mode) {

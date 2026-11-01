@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.6.1",
-  "description": "Import YouTube videos, webpages, and screenshots into NotebookLM. Bulk import, snapshots, prompt library, and blog/guide export.",
+  "name": "Atlas for Gemini Notebook",
+  "version": "0.7.0",
+  "description": "Atlas for Gemini Notebook (NotebookLM): import from ChatGPT, Claude, YouTube, X and more, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
   },
@@ -21,7 +21,7 @@
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "NotebookTools — Import to NotebookLM",
+    "default_title": "Atlas for Gemini Notebook",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -92,7 +92,23 @@
     {
       "matches": [
         "https://x.com/*",
-        "https://twitter.com/*"
+        "https://twitter.com/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://gemini.google.com/*",
+        "https://claude.ai/*",
+        "https://perplexity.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://grok.com/*",
+        "https://kimi.com/*",
+        "https://www.kimi.com/*",
+        "https://kimi.moonshot.cn/*",
+        "https://reddit.com/*",
+        "https://www.reddit.com/*",
+        "https://old.reddit.com/*",
+        "https://linkedin.com/*",
+        "https://www.linkedin.com/*",
+        "https://docs.google.com/document/*"
       ],
       "css": ["platform-button.css"],
       "js": ["platform-extractors.js", "platform-button.js"],

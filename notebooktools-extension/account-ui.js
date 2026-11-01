@@ -69,7 +69,7 @@ const NotebookToolsAccountUI = (() => {
         <button type="button" class="acct-link" data-acct="signout">Sign out</button>
       </div>
       ${isPro
-        ? `<p class="acct-note">NotebookTools Pro · lifetime. Thank you!</p>`
+        ? `<p class="acct-note">Atlas Pro · lifetime. Thank you!</p>`
         : `<div class="acct-actions">
              <button type="button" class="button acct-upgrade" data-acct="upgrade">Upgrade to Pro — ${escapeHtml(Account.CONFIG.priceLabel)}</button>
              <button type="button" class="acct-link" data-acct="refresh" title="Check your plan again">Refresh</button>
