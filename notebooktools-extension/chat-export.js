@@ -241,7 +241,7 @@ const NotebookToolsChatExport = (() => {
   </head>
   <body>
     <main class="page">
-      <div class="brand">Atlas export · ${platform}</div>
+      <div class="brand">NotebookTools export · ${platform}</div>
       <h1>${title}</h1>
       <div class="meta">
         <div>Source: <a href="${sourceUrl}">${sourceUrl}</a></div>

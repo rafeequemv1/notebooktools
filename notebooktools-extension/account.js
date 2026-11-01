@@ -82,7 +82,7 @@ const NotebookToolsAccount = (() => {
     if (/already registered|already exists/i.test(m)) return "An account with this email already exists. Sign in instead.";
     if (/password should be at least/i.test(m)) return "Use a password with at least 6 characters.";
     if (/rate limit|too many/i.test(m)) return "Too many attempts. Wait a minute and try again.";
-    if (/failed to fetch|networkerror/i.test(m)) return "Can't reach the Atlas server. Check your connection.";
+    if (/failed to fetch|networkerror/i.test(m)) return "Can't reach the NotebookTools server. Check your connection.";
     return m;
   }
 

@@ -242,13 +242,39 @@ async function getNotebookLmTokens(options = {}) {
     url.searchParams.set("pageId", "none");
   }
 
-  const response = await fetch(url.toString(), {
-    credentials: "include",
-    redirect: "error"
-  });
+  let response;
+
+  try {
+    // Follow redirects (sign-in, account switch) instead of failing with a bare
+    // "Failed to fetch", then explain where we ended up.
+    response = await fetch(url.toString(), {
+      credentials: "include",
+      redirect: "follow"
+    });
+  } catch (error) {
+    throw new Error(
+      "Can't reach NotebookLM. Check your internet connection, or allow notebooklm.google.com if an ad blocker or firewall is active."
+    );
+  }
+
+  const finalHost = (() => {
+    try {
+      return new URL(response.url || url.toString()).hostname;
+    } catch (_error) {
+      return "";
+    }
+  })();
+
+  if (/accounts\.google\.com$/.test(finalHost)) {
+    throw new Error(
+      authUser !== null
+        ? "This Google account isn't signed in to NotebookLM. Open notebooklm.google.com, sign in, then refresh."
+        : "Sign in to NotebookLM (notebooklm.google.com) in this browser, then refresh."
+    );
+  }
 
   if (!response.ok) {
-    throw new Error("Open NotebookLM and sign in before importing.");
+    throw new Error(`Open NotebookLM and sign in before importing (status ${response.status}).`);
   }
 
   const html = await response.text();
@@ -456,7 +482,7 @@ function buildAddSourcesRpcPayload(sourceSpecs, notebookId) {
 }
 
 function buildCreateNotebookAttempts(title, discoveryParent) {
-  const safeTitle = String(title || "").trim() || "Atlas";
+  const safeTitle = String(title || "").trim() || "NotebookTools";
   const attempts = [
     {
       rpcId: NOTEBOOKLM_RPC_IDS.createNotebook,
@@ -1100,7 +1126,7 @@ async function deleteNotebookLmNotebook(notebookId, options = {}) {
 
 async function createNotebookLmNotebook(title, options = {}) {
   const tokens = await getNotebookLmTokens(options);
-  const safeTitle = String(title || "").trim() || "Atlas";
+  const safeTitle = String(title || "").trim() || "NotebookTools";
   const listOptions = { ...options, authUser: tokens.authUser };
   const beforeNotebooks = await listNotebookLmNotebooks(listOptions);
   const beforeIds = new Set(beforeNotebooks.map((notebook) => notebook.id));

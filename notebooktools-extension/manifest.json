@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Atlas for Gemini Notebook",
-  "version": "0.7.0",
-  "description": "Atlas for Gemini Notebook (NotebookLM): import from ChatGPT, Claude, YouTube, X and more, and organize every notebook in one table.",
+  "name": "NotebookTools — Import to NotebookLM",
+  "version": "0.7.1",
+  "description": "Import ChatGPT, Claude, YouTube, X, Reddit, webpages and more into NotebookLM, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
   },
@@ -21,7 +21,7 @@
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "Atlas for Gemini Notebook",
+    "default_title": "NotebookTools — Import to NotebookLM",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",

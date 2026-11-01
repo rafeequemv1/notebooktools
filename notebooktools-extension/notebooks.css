@@ -2674,6 +2674,10 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
   margin-bottom: 14px;
 }
 
+.podcast-view[hidden] {
+  display: none !important;
+}
+
 .podcast-view,
 .detail-view {
   margin-left: auto;
@@ -3869,4 +3873,10 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
   .nbx-hint {
     display: none;
   }
+}
+
+.nbx-ghost-link {
+  align-items: center;
+  display: inline-flex;
+  text-decoration: none;
 }

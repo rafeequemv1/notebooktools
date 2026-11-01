@@ -1597,7 +1597,8 @@ async function loadNotebooks({ force = false } = {}) {
     setPageStatus("");
   } catch (error) {
     if (!notebooks.length) {
-      mainEl.innerHTML = "";
+      renderAll();
+      mainEl.innerHTML = `<div class="nbx-empty"><strong>Can't load your notebooks</strong><p>${esc(error.message || "Could not load notebooks.")}</p><a class="nbx-ghost nbx-ghost-link" href="https://notebooklm.google.com/" target="_blank" rel="noopener noreferrer">Open NotebookLM</a></div>`;
       setPageStatus(error.message || "Could not load notebooks.", "error");
     } else {
       setPageStatus("");
