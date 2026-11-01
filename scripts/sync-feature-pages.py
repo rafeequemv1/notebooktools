@@ -19,6 +19,8 @@ SCRIPTS_BEFORE_DEMO = [
 ]
 SCRIPTS_AFTER_DEMO = [
     '<script src="/features/demo-scenes.js"></script>',
+    # Stageshow demos (built from website-demos/ with `npm run build`)
+    '<script src="/features/stage/stage.js" defer></script>',
 ]
 
 
@@ -42,6 +44,7 @@ def head_links() -> list:
         + icon_names() + '&amp;display=block" rel="stylesheet">',
         '<link rel="stylesheet" href="/features/nlm/nlm-ui.css">',
         '<link rel="stylesheet" href="/features/surfaces/surfaces.css">',
+        '<link rel="stylesheet" href="/features/stage/stage.css">',
     ]
 
 
@@ -74,7 +77,7 @@ def main() -> None:
         new = MAIN_RE.sub(lambda _: activate(master, feature), text, count=1)
         # Drop older copies of the NotebookLM links, then add the current ones.
         new = re.sub(r'\n\s*<link href="https://fonts\.googleapis\.com/css2\?family=(Google\+Sans|Material\+Symbols)[^"]*" rel="stylesheet">', "", new)
-        new = re.sub(r'\n\s*<link rel="stylesheet" href="/features/((nlm/)?nlm-ui|surfaces/surfaces)\.css">', "", new)
+        new = re.sub(r'\n\s*<link rel="stylesheet" href="/features/((nlm/)?nlm-ui|surfaces/surfaces|stage/stage)\.css">', "", new)
         anchor = '<link rel="stylesheet" href="/features/features.css">'
         new = new.replace(anchor, anchor + "".join("\n    " + l for l in head_links()), 1)
         demo = '<script src="/features/demo.js"></script>'

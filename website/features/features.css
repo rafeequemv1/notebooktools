@@ -3891,3 +3891,15 @@
   flex: 1;
   min-height: 0;
 }
+
+/* Stageshow demos (website-demos/): the page is the ground, the stage fills the slot */
+.md-stage {
+  background: linear-gradient(180deg, #f3f6fc 0%, #eef2f9 100%);
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.md-stage .ss-fit {
+  margin: 0 auto;
+}
