@@ -24,3 +24,6 @@ nlmtools/
 # Backups
 *.bak
 *.bak2
+
+# Built extension zips (scripts/build-extension-zip.sh)
+dist/

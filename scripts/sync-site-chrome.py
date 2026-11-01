@@ -111,7 +111,6 @@ FOOTER = f"""<footer class="site-footer">
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/#install">Install</a>
-            <a href="/downloads/notebooktools-extension.zip" download>Download (.zip)</a>
           </nav>
           <nav class="footer-col" aria-label="Resources">
             <h2>Resources</h2>
