@@ -14,7 +14,10 @@ const NotebookToolsAccount = (() => {
     supabaseUrl: "https://vgqfjwwnezwhzwfhpmkz.supabase.co",
     // Publishable key: safe to ship in the extension (access is enforced by RLS).
     supabaseKey: "sb_publishable_B5AIRo0MVD0lbE4JP_GLpQ_pT5t6KKh",
-    proProductId: "pdt_0NqwhiU4r4xHT1O5izA99",
+    // Dodo product for NotebookTools Pro (Scidart business). Empty until it exists;
+    // Upgrade then opens the pricing page instead of checkout.
+    proProductId: "",
+    pricingUrl: "https://www.notebooktools.com/#pricing",
     checkoutBase: "https://checkout.dodopayments.com/buy/",
     checkoutReturnUrl: "https://www.notebooktools.com/?checkout=success#pricing",
     priceLabel: "$49",
@@ -194,7 +197,12 @@ const NotebookToolsAccount = (() => {
   }
 
   /** Dodo checkout link for the Pro product, tied to the signed-in account. */
+  function checkoutAvailable() {
+    return Boolean(CONFIG.proProductId);
+  }
+
   async function checkoutUrl() {
+    if (!checkoutAvailable()) return CONFIG.pricingUrl;
     const state = await getState();
     const params = new URLSearchParams({ quantity: "1", redirect_url: CONFIG.checkoutReturnUrl });
     if (state.email) params.set("email", state.email);
@@ -238,6 +246,7 @@ const NotebookToolsAccount = (() => {
     isPro,
     can,
     checkoutUrl,
+    checkoutAvailable,
     onChange,
   };
 })();

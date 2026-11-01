@@ -1,26 +1,29 @@
 :root {
-  --bg: #fbfaf8;
-  --bg-soft: #f4f2ed;
+  --bg: #ffffff;
+  --bg-soft: #f6f8fc;
   --surface: #ffffff;
-  --ink: #15140f;
-  --muted: #5d5b54;
-  --subtle: #8b887f;
-  --line: #e6e2d9;
-  --line-soft: #efece5;
-  --accent: #2f5bdc;
-  --accent-soft: #eef2fd;
+  --ink: #1f1f1f;
+  --muted: #444746;
+  --subtle: #747775;
+  --line: #e3e3e3;
+  --line-soft: #eef0f4;
+  --accent: #0b57d0;
+  --accent-soft: #e8f0fe;
+  --accent-bright: #4285f4;
+  --link: #1a73e8;
   --google-blue: #4285f4;
   --google-red: #ea4335;
   --google-yellow: #fbbc04;
   --google-green: #34a853;
-  --radius: 10px;
-  --radius-lg: 18px;
-  --shadow-sm: 0 1px 2px rgba(21, 20, 15, 0.04);
-  --shadow-md: 0 1px 2px rgba(21, 20, 15, 0.04), 0 12px 32px -8px rgba(21, 20, 15, 0.08);
-  --shadow-lg: 0 2px 4px rgba(21, 20, 15, 0.04), 0 32px 64px -16px rgba(21, 20, 15, 0.14);
-  --max: 1120px;
-  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(31, 31, 31, 0.04);
+  --shadow-md: 0 1px 3px rgba(60, 64, 67, 0.08), 0 8px 24px -6px rgba(60, 64, 67, 0.12);
+  --shadow-lg: 0 2px 6px rgba(60, 64, 67, 0.06), 0 28px 56px -18px rgba(26, 62, 140, 0.22);
+  --max: 1080px;
+  --font: "Google Sans Text", "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Google Sans", "Google Sans Text", Roboto, system-ui, sans-serif;
+  --grad-blue: linear-gradient(90deg, #4285f4 0%, #5b8def 45%, #8ab4f8 100%);
 }
 
 *,

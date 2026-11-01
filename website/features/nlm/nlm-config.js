@@ -11,8 +11,8 @@
    "svg:<key>" = a NotebookLM-specific icon drawn below in NLM_CONFIG.svg.
    ========================================================================== */
 window.NLM_CONFIG = {
-  product: "NotebookLM",
-  disclaimer: "NotebookLM can make mistakes, so double-check it.",
+  product: "Gemini Notebook",
+  disclaimer: "Gemini Notebook can make mistakes, so double-check it.",
   composerPlaceholder: "Ask a question or create something",
   timestamp: "Today • 7:52 pm",
 
@@ -83,7 +83,7 @@ window.NLM_CONFIG = {
     ],
     settings: [
       { label: "Connected apps", icon: "ms:extension" },
-      { label: "NotebookLM Help", icon: "ms:help" },
+      { label: "Gemini Notebook Help", icon: "ms:help" },
       { label: "Send feedback", icon: "ms:feedback" },
       { label: "Discord", icon: "ms:forum" },
       { label: "Output language", icon: "ms:language" },
@@ -92,7 +92,7 @@ window.NLM_CONFIG = {
       { label: "Dark mode", icon: "ms:dark_mode", trailing: "ms:chevron_right" },
       { label: "Usage", icon: "ms:data_usage" },
       { divider: true },
-      { label: "Upgrade NotebookLM", icon: "svg:logo" },
+      { label: "Upgrade Gemini Notebook", icon: "svg:logo" },
     ],
     "source-scope": [
       { label: "Web", icon: "ms:language", hint: "Best sources from the web" },

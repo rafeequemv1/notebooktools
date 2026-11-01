@@ -21,12 +21,14 @@ CHROME_STORE = (
     "https://chromewebstore.google.com/detail/"
     "notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj"
 )
-BUY = "https://dodo.pe/notebooktools-pro"
+# Pro checkout. Points to the pricing section until the Dodo product for
+# NotebookTools Pro exists in the Scidart business; then set the checkout URL.
+BUY = "/#pricing"
 
 FONTS = (
     '<link href="https://fonts.googleapis.com/css2?'
-    "family=Inter:wght@400;500;600;700"
-    "&amp;family=Instrument+Serif:ital@0;1"
+    "family=Google+Sans:wght@400;500;600;700"
+    "&amp;family=Google+Sans+Text:wght@400;500;700"
     "&amp;family=Roboto:wght@400;500"
     '&amp;display=swap" rel="stylesheet">'
 )
@@ -45,7 +47,6 @@ CHROME_ICON = (
 
 NAV = [
     ("/features", "Features", "features"),
-    ("/#how-it-works", "How it works", None),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
     ("/support", "Support", "support"),
@@ -78,13 +79,12 @@ def header_html(rel: str) -> str:
         <nav class="site-nav" id="site-nav" aria-label="Main">
 {nav}
           <div class="site-nav-actions">
-            <a class="button button-ghost" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}Add to Chrome</a>
-            <a class="button button-primary" href="{BUY}" target="_blank" rel="noopener noreferrer">Get Pro — $49</a>
+            <a class="button button-primary" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}Add to Chrome — free</a>
+            <a class="button button-ghost" href="{BUY}">Get Pro — $49</a>
           </div>
         </nav>
         <div class="header-actions">
-          <a class="header-chrome" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}<span>Add to Chrome</span></a>
-          <a class="button button-primary button-sm header-buy" href="{BUY}" target="_blank" rel="noopener noreferrer">Get Pro</a>
+          <a class="button button-primary button-sm header-cta" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}<span>Add to Chrome</span></a>
           <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
             <span></span><span></span>
           </button>
@@ -111,6 +111,7 @@ FOOTER = f"""<footer class="site-footer">
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/#install">Install</a>
+            <a href="/downloads/notebooktools-extension.zip" download>Download (.zip)</a>
           </nav>
           <nav class="footer-col" aria-label="Resources">
             <h2>Resources</h2>

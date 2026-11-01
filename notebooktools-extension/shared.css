@@ -1,14 +1,14 @@
 :root {
   color-scheme: light;
-  --nt-bg: #fdfbf7;
+  --nt-bg: #f8fafd;
   --nt-surface: #ffffff;
-  --nt-ink: #0c0c0c;
-  --nt-muted: #5f6368;
-  --nt-subtle: #80868b;
-  --nt-line: #e3e0d8;
-  --nt-line-soft: #f0ece4;
-  --nt-line-strong: #d0cdc6;
-  --nt-accent: #1a73e8;
+  --nt-ink: #1f1f1f;
+  --nt-muted: #444746;
+  --nt-subtle: #747775;
+  --nt-line: #e3e3e3;
+  --nt-line-soft: #eef0f4;
+  --nt-line-strong: #c4c7c5;
+  --nt-accent: #0b57d0;
   --nt-accent-soft: #e8f0fe;
   --nt-danger: #c5221f;
   --nt-success: #137333;
@@ -22,8 +22,8 @@
   --nt-loading-text: #174ea6;
   --nt-success-bg: #e6f4ea;
   --nt-success-line: #b7dfc9;
-  --nt-radius: 3px;
-  --nt-shadow: 0 1px 2px rgba(60, 64, 67, 0.08), 0 4px 16px rgba(60, 64, 67, 0.06);
+  --nt-radius: 10px;
+  --nt-shadow: 0 1px 2px rgba(60, 64, 67, 0.06), 0 4px 14px rgba(60, 64, 67, 0.06);
 }
 
 :root[data-theme="dark"] {
@@ -36,8 +36,8 @@
   --nt-line: #3c4043;
   --nt-line-soft: #2d2e30;
   --nt-line-strong: #5f6368;
-  --nt-accent: #8ab4f8;
-  --nt-accent-soft: #1a2a42;
+  --nt-accent: #a8c7fa;
+  --nt-accent-soft: #0b3a82;
   --nt-danger: #f28b82;
   --nt-success: #81c995;
   --nt-warning-bg: #3c3200;
@@ -100,7 +100,7 @@ body {
   margin: 0;
   background: var(--nt-bg);
   color: var(--nt-ink);
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -1279,4 +1279,40 @@ select:focus {
   background: var(--nt-loading-bg);
   border: 1px solid var(--nt-loading-line);
   color: var(--nt-loading-text);
+}
+
+
+/* Black & blue refinements (matches notebooktools.com) */
+.button,
+.button.secondary,
+.sp-notebooks-btn {
+  border-radius: 999px;
+  font-family: "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+}
+
+.button:not(.secondary) {
+  background: var(--nt-ink);
+  border-color: var(--nt-ink);
+}
+
+:root[data-theme="dark"] .button:not(.secondary) {
+  background: #e3e3e3;
+  border-color: #e3e3e3;
+  color: #131314;
+}
+
+.sidepanel-tab.is-active {
+  border-bottom-color: var(--nt-accent);
+  color: var(--nt-ink);
+}
+
+.card,
+.sp-card {
+  border-radius: 16px;
+}
+
+input,
+select,
+textarea {
+  border-radius: 10px;
 }

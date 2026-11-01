@@ -2462,3 +2462,55 @@
 .demo-shell[data-scene] [hidden] {
   display: none !important;
 }
+
+/* Match the extension's black & blue styling (notebooktools-extension/shared.css). */
+.br-window,
+.ntb {
+  --nt-bg: #f8fafd;
+  --nt-ink: #1f1f1f;
+  --nt-muted: #444746;
+  --nt-subtle: #747775;
+  --nt-line: #e3e3e3;
+  --nt-line-soft: #eef0f4;
+  --nt-accent: #0b57d0;
+  --nt-accent-soft: #e8f0fe;
+}
+
+.br-sidepanel,
+.ntb {
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+}
+
+.sp-btn,
+.sp-primary,
+.nt-drop .sp-primary,
+.ntb-btn,
+.ntb-search {
+  border-radius: 999px;
+}
+
+.sp-card,
+.ntb-card,
+.ntb-src,
+.st-bar,
+.st-out,
+.pc-item {
+  border-radius: 16px;
+}
+
+.sf-input,
+.sf-select,
+.sp-textarea {
+  border-radius: 10px;
+}
+
+.sp-tab.is-active {
+  border-bottom-color: var(--nt-accent);
+}
+
+.sp-primary,
+.sp-btn.is-primary,
+.ntb-btn.is-primary {
+  background: var(--nt-ink);
+  border-color: var(--nt-ink);
+}

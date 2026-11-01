@@ -173,6 +173,10 @@ const NotebookToolsAccountUI = (() => {
     if (action === "upgrade") {
       const url = await Account.checkoutUrl();
       chrome.tabs.create({ url });
+      if (!Account.checkoutAvailable()) {
+        setMessage("Pro checkout is opening soon. Everything works on the Free plan in the meantime.", "info");
+        return;
+      }
       setMessage("Complete checkout in the new tab. Your plan switches to Pro automatically.", "info");
       startPolling();
     }
