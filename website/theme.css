@@ -2051,3 +2051,34 @@ a {
     padding: 32px 24px;
   }
 }
+
+/* Blog thumbnails (scripts/blog-thumbs): flush to the card's top edge */
+.blog-card-thumb {
+  aspect-ratio: 1200 / 630;
+  border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0;
+  display: block;
+  height: auto;
+  margin: -24px -26px 18px;
+  max-width: none;
+  object-fit: cover;
+  width: calc(100% + 52px);
+}
+
+.blog-cluster-main .blog-card-thumb {
+  border-radius: 12px;
+  margin: 0 0 14px;
+  width: 100%;
+}
+
+.blog-article-hero {
+  margin: 8px 0 28px;
+}
+
+.blog-article-hero img {
+  aspect-ratio: 1200 / 630;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 32px -12px rgba(11, 30, 70, 0.25);
+  display: block;
+  height: auto;
+  width: 100%;
+}

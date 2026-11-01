@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Blog thumbnails</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* 1200 x 630: blog card thumbnail + og:image. One idea per image: a short
+     benefit headline on the left, the product UI that proves it on the right. */
+  :root {
+    --ink: #1f1f1f;
+    --muted: #5f6368;
+    --faint: #9aa0a6;
+    --line: #e3e6ea;
+    --bar: #e8ebef;
+    --bar2: #dfe3e8;
+    --blue: #0b57d0;
+    --blue-soft: #e8f0fe;
+    --sans: "Google Sans", "Google Sans Text", Inter, Arial, sans-serif;
+    --text: "Google Sans Text", "Google Sans", Inter, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #000; }
+  .frame {
+    background:
+      radial-gradient(900px 520px at 88% 8%, rgba(76, 141, 246, 0.42), transparent 62%),
+      radial-gradient(700px 480px at 72% 110%, rgba(26, 95, 240, 0.35), transparent 60%),
+      linear-gradient(160deg, #0b0d12 0%, #0c1426 55%, #0a1a3d 100%);
+    color: #fff;
+    font-family: var(--text);
+    height: 630px;
+    overflow: hidden;
+    position: relative;
+    width: 1200px;
+  }
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    left: 72px;
+    position: absolute;
+    top: 92px;
+    width: 470px;
+    z-index: 2;
+  }
+  .kicker {
+    align-self: flex-start;
+    background: rgba(138, 180, 248, 0.14);
+    border: 1px solid rgba(138, 180, 248, 0.32);
+    border-radius: 999px;
+    color: #a8c7fa;
+    font: 600 18px/1 var(--sans);
+    letter-spacing: 0.06em;
+    padding: 10px 16px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font: 700 66px/1.04 var(--sans);
+    letter-spacing: -0.035em;
+    margin: 0;
+  }
+  h1 em {
+    background: linear-gradient(92deg, #a8c7fa 0%, #4c8df6 60%, #7cacf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-style: normal;
+  }
+  .sub {
+    color: #c4cbd8;
+    font: 400 24px/1.38 var(--text);
+    margin: 0;
+    max-width: 440px;
+  }
+  .brand {
+    align-items: center;
+    bottom: 54px;
+    color: #e8eaed;
+    display: flex;
+    font: 600 22px/1 var(--sans);
+    gap: 12px;
+    left: 72px;
+    position: absolute;
+    z-index: 2;
+  }
+  .brand img { border-radius: 7px; display: block; height: 34px; width: 34px; }
+  .brand span { color: #8f9bb3; font-weight: 500; }
+
+  /* Product UI kit (light surfaces on the dark ground) */
+  .stage { inset: 0; position: absolute; }
+  .win {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 40px 80px -20px rgba(0,0,0,0.6), 0 20px 40px -24px rgba(0,0,0,0.5);
+    color: var(--ink);
+    overflow: hidden;
+    position: absolute;
+  }
+  .win-bar {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 8px;
+    height: 46px;
+    padding: 0 18px;
+  }
+  .win-bar i { border-radius: 50%; display: block; height: 11px; width: 11px; }
+  .win-bar i:nth-child(1) { background: #ff5f57; }
+  .win-bar i:nth-child(2) { background: #febc2e; }
+  .win-bar i:nth-child(3) { background: #28c840; }
+  .url {
+    background: #f1f3f4;
+    border-radius: 999px;
+    color: var(--muted);
+    font: 400 15px/1 var(--text);
+    margin-left: 14px;
+    padding: 8px 16px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 30px 60px -16px rgba(0,0,0,0.55);
+    color: var(--ink);
+    position: absolute;
+  }
+  .bar { background: var(--bar); border-radius: 6px; display: block; height: 10px; }
+  .bar.d { background: var(--bar2); }
+  .row { align-items: center; display: flex; gap: 14px; }
+  .t { color: var(--ink); font: 500 21px/1.3 var(--text); }
+  .t.b { font-weight: 600; }
+  .s { color: var(--muted); font: 400 17px/1.3 var(--text); }
+  .lbl { color: var(--faint); font: 600 14px/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pill { align-items: center; border-radius: 999px; display: inline-flex; font: 600 17px/1 var(--sans); gap: 8px; padding: 10px 16px; white-space: nowrap; }
+  .pill.dark { background: #1f1f1f; color: #fff; }
+  .pill.blue { background: var(--blue); color: #fff; }
+  .pill.soft { background: var(--blue-soft); color: var(--blue); }
+  .pill.grey { background: #f1f3f4; color: var(--ink); }
+  .tag { border-radius: 8px; font: 600 16px/1 var(--sans); padding: 8px 11px; white-space: nowrap; }
+  .ico { align-items: center; border-radius: 10px; display: inline-flex; flex: none; font-size: 22px; height: 40px; justify-content: center; width: 40px; }
+  .check { align-items: center; background: #1e8e3e; border-radius: 50%; color: #fff; display: inline-flex; flex: none; font: 700 15px/1 var(--sans); height: 26px; justify-content: center; width: 26px; }
+  .check.no { background: #f1f3f4; color: #9aa0a6; }
+  .meter { background: #edf0f3; border-radius: 4px; height: 8px; overflow: hidden; width: 120px; }
+  .meter i { background: var(--blue); display: block; height: 100%; }
+  svg.i { flex: none; }
+  .zoom { inset: 0; position: absolute; transform: scale(var(--z, 1.16)); transform-origin: 1150px 70px; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame"></div>
+<script>
+const LOGO = '../../website/assets/logo-mark-32.png';
+const YT = '<svg class="i" viewBox="0 0 24 24" width="30" height="30"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8z"/><path fill="#fff" d="M9.5 15.6V8.4l6.3 3.6z"/></svg>';
+const DOC = (c = '#5f6368') => `<svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>`;
+const GLOBE = '<svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>';
+const LOCK = '<svg class="i" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#0b57d0" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+const bar = (w, d) => `<span class="bar${d ? ' d' : ''}" style="width:${w}"></span>`;
+const win = (style, url, body) => `<div class="win" style="${style}"><div class="win-bar"><i></i><i></i><i></i>${url ? `<span class="url">${url}</span>` : ''}</div>${body}</div>`;
+
+/* One scene per post. Words only on the subject; bars for the rest. */
+const SCENES = {
+  _unused: (n = 13, extra = '') => `
+    <div class="card" style="left:640px;top:96px;width:470px;padding:26px">
+      <div class="row" style="margin-bottom:20px"><span class="ico" style="background:#eef2fb">🤖</span>
+        <div><div class="t b">Research — AI tools</div><div class="s">${n} sources</div></div></div>
+      ${extra}
+      <div class="row" style="height:52px;padding:0 12px">${DOC('#d93025')}<span class="t">RAG explained.pdf</span></div>
+      <div class="row" style="height:52px;padding:0 12px">${GLOBE}${bar('62%')}</div>
+      <div class="row" style="height:52px;padding:0 12px">${DOC()}${bar('48%')}</div>
+      <div class="row" style="height:52px;padding:0 12px">${DOC()}${bar('56%')}</div>
+    </div>`,
+};
+
+const POSTS = {
+  'summarize-youtube-videos-notebooklm': {
+    kicker: 'YouTube guide', title: 'Summarize any <em>YouTube video</em>', sub: 'Send a video to NotebookLM in one click, then ask it anything.',
+    scene: () => win('left:600px;top:70px;width:660px;height:600px', 'youtube.com/watch', `
+      <div style="padding:22px">
+        <div style="aspect-ratio:16/9;border-radius:16px;background:radial-gradient(120% 90% at 30% 20%,#3a4a6b,#1b2233 55%,#0e121b);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="74" height="74"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8z"/><path fill="#fff" d="M9.5 15.6V8.4l6.3 3.6z"/></svg></div>
+        <div class="row" style="margin-top:18px;gap:16px">
+          <span class="pill grey" style="box-shadow:0 0 0 2px #0b57d0;font-size:19px;padding:12px 18px"><img src="${LOGO}" width="24" height="24" style="border-radius:5px">NotebookLM</span>
+          <div style="display:flex;flex-direction:column;gap:10px">${bar('200px', 1)}${bar('130px')}</div>
+        </div>
+      </div>`) + `
+      <div class="card" style="left:880px;top:470px;width:300px;padding:18px 20px">
+        <div class="lbl" style="margin-bottom:12px">Summary</div>
+        <div class="t" style="font-size:19px;margin-bottom:12px">3 key ideas, with timestamps</div>
+        <div style="display:flex;flex-direction:column;gap:9px">${bar('92%')}${bar('80%')}</div>
+      </div>`,
+  },
+  'best-ways-import-content-notebooklm': {
+    kicker: 'Import guide', title: 'Import <em>anything</em> in one click', sub: 'Videos, web pages, chats and docs, straight into your notebook.',
+    scene: () => `
+      <div class="stage">
+        ${[['YouTube', YT, 120], ['Web page', GLOBE, 200], ['ChatGPT chat', DOC(), 280], ['PDF', DOC('#d93025'), 360]].map(([l, ic, y]) => `<div class="card" style="left:560px;top:${y}px;padding:12px 18px 12px 14px;border-radius:14px"><div class="row" style="gap:10px">${ic}<span class="t" style="font-size:19px">${l}</span></div></div>`).join('')}
+        <svg style="position:absolute;left:790px;top:150px" width="90" height="280" fill="none"><path d="M0 20 C50 20 40 140 88 140 M0 100 C50 100 40 140 88 140 M0 180 C50 180 40 140 88 140 M0 260 C50 260 40 140 88 140" stroke="#4c8df6" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card" style="left:880px;top:150px;width:300px;padding:22px">
+        <div class="row" style="margin-bottom:14px"><span class="ico" style="background:#eef2fb">🤖</span><div><div class="t b" style="font-size:19px">My notebook</div><div class="s">+4 sources</div></div></div>
+        ${['#ff0033', '#5f6368', '#5f6368', '#d93025'].map((c, i) => `<div class="row" style="height:44px;padding:0 4px">${i === 0 ? YT.replace('width="30" height="30"', 'width="22" height="22"') : DOC(c)}${bar(['70%', '58%', '64%', '50%'][i])}</div>`).join('')}
+      </div>`,
+  },
+  'notebooklm-source-limits': {
+    zoom: 1.16, kicker: 'Limits explained', title: 'Hit the <em>50&#8209;source</em> limit?', sub: 'What the limits are, and how to work past them without losing anything.',
+    scene: () => `
+      <div class="card" style="left:620px;top:110px;width:500px;padding:28px">
+        <div class="row" style="justify-content:space-between;margin-bottom:22px">
+          <div class="row"><span class="ico" style="background:#eef2fb">📚</span><div class="t b">Thesis literature map</div></div>
+        </div>
+        <div class="row" style="justify-content:space-between;margin-bottom:12px"><span class="lbl">Sources</span><span class="t b" style="color:#d93025">50 / 50 · Full</span></div>
+        <div class="meter" style="width:100%;height:12px;border-radius:6px"><i style="width:100%;background:#d93025"></i></div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin:26px 0">${bar('86%')}${bar('72%')}${bar('80%')}</div>
+        <span class="pill blue" style="font-size:18px;padding:13px 20px">＋ Continue in a new notebook</span>
+      </div>`,
+  },
+  'what-is-notebooklm': {
+    kicker: 'Beginner guide', title: 'NotebookLM, <em>explained</em>', sub: 'An AI that answers only from the sources you give it, with citations.',
+    scene: () => win('left:600px;top:84px;width:680px;height:560px', 'notebook.google.com', `
+      <div style="display:grid;grid-template-columns:150px 1fr 150px;gap:14px;padding:16px;background:#f4f7fc;height:100%">
+        ${['Sources', '', 'Studio'].map((h, i) => i === 1 ? `
+          <div style="background:#fff;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px">
+            <div style="align-self:flex-end;background:#e8f0fe;border-radius:16px 16px 4px 16px;padding:12px 14px;font:400 17px/1.35 var(--text)">What is the main finding?</div>
+            <div style="display:flex;flex-direction:column;gap:10px">${bar('95%', 1)}${bar('88%', 1)}${bar('70%', 1)}</div>
+            <div class="row" style="gap:8px"><span class="tag" style="background:#e8f0fe;color:#0b57d0">1</span><span class="tag" style="background:#e8f0fe;color:#0b57d0">2</span><span class="s" style="font-size:15px">cited from your sources</span></div>
+          </div>` : `
+          <div style="background:#fff;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px"><div class="t b" style="font-size:17px">${h}</div>${i === 0 ? [DOC('#d93025'), GLOBE, DOC()].map((ic) => `<div class="row" style="gap:8px">${ic}${bar('60%')}</div>`).join('') : [0, 1, 2].map(() => `<span class="bar" style="height:40px;border-radius:12px;width:100%"></span>`).join('')}</div>`).join('')}
+      </div>`),
+  },
+  'what-is-notebooktools': {
+    kicker: 'Chrome extension', title: '<em>100x output</em> for Gemini Notebook', sub: 'Import faster, organize every notebook, export anything.',
+    scene: () => win('left:600px;top:86px;width:700px;height:560px', '', `
+      <div style="padding:18px 22px">
+        <div class="row" style="justify-content:space-between;margin-bottom:14px"><span class="t b">All notebooks</span><span class="pill dark" style="font-size:15px;padding:9px 14px">New notebook</span></div>
+        ${[['🧬', 'CRISPR delivery review', 32, ['Biology', '#e6f4ea', '#137333']], ['📚', 'Thesis literature map', 47, ['Thesis', '#0b57d0', '#fff']], ['🧠', 'Memory consolidation', 18, ['Thesis', '#0b57d0', '#fff']]].map(([e, n, c, [tg, bg, fg]]) => `
+          <div class="row" style="height:62px;border-bottom:1px solid #eef0f3;padding:0 6px"><span class="ico" style="background:#f1f3f4;width:36px;height:36px;font-size:18px">${e}</span><span class="t" style="flex:1;font-size:19px">${n}</span><span class="s" style="width:34px;text-align:right">${c}</span><span class="meter" style="width:70px"><i style="width:${c * 2}%"></i></span><span class="tag" style="background:${bg};color:${fg};margin-left:10px">${tg}</span></div>`).join('')}
+        ${[0, 1].map(() => `<div class="row" style="height:62px;border-bottom:1px solid #eef0f3;padding:0 6px"><span class="bar" style="width:36px;height:36px;border-radius:10px"></span>${bar('40%')}</div>`).join('')}
+      </div>`),
+  },
+  'notebooklm-vs-chatgpt': {
+    kicker: 'Comparison', title: 'NotebookLM <em>vs</em> ChatGPT', sub: 'Grounded answers from your sources, or open-ended answers from the web.',
+    scene: () => vs('NotebookLM', 'ChatGPT'),
+  },
+  'notebooklm-vs-gemini': {
+    kicker: 'Comparison', title: 'NotebookLM <em>vs</em> Gemini', sub: 'When to research your own sources, and when to just ask.',
+    scene: () => vs('NotebookLM', 'Gemini'),
+  },
+  'is-notebooklm-free': {
+    zoom: 1.16, kicker: 'Pricing', title: 'Is NotebookLM <em>free?</em>', sub: 'Yes. Here is exactly what the free plan includes in 2026.',
+    scene: () => `
+      <div class="card" style="left:650px;top:96px;width:440px;padding:32px">
+        <div class="lbl" style="margin-bottom:14px">Free plan</div>
+        <div style="font:700 72px/1 var(--sans);letter-spacing:-0.03em;margin-bottom:24px">$0</div>
+        ${['Unlimited chat', '50 sources per notebook', 'Audio Overviews', 'Answers with citations'].map((x) => `<div class="row" style="height:46px"><span class="check">✓</span><span class="t" style="font-size:20px">${x}</span></div>`).join('')}
+      </div>`,
+  },
+  'notebooklm-pricing-plans': {
+    kicker: 'Pricing', title: 'Every plan, <em>compared</em>', sub: 'Free, Plus, and Workspace: limits and prices side by side.',
+    scene: () => `<div class="stage">${[['Free', '$0', 0], ['Plus', '', 1], ['Workspace', '', 0]].map(([n, p, hi], i) => `
+      <div class="card" style="left:${600 + i * 196}px;top:${hi ? 90 : 130}px;width:180px;padding:22px 18px;${hi ? 'box-shadow:0 0 0 3px #4c8df6,0 30px 60px -16px rgba(0,0,0,.55)' : ''}">
+        <div class="lbl" style="margin-bottom:12px;${hi ? 'color:#0b57d0' : ''}">${n}</div>
+        ${p ? `<div style="font:700 34px/1 var(--sans);margin-bottom:6px">${p}</div><div class="s" style="font-size:14px;margin-bottom:18px">forever</div>` : `<div style="margin:6px 0 22px">${bar('70%', 1)}<div style="height:10px"></div>${bar('44%')}</div>`}
+        ${[0, 1, 2, 3].map((k) => `<div class="row" style="height:36px;gap:10px"><span class="check${!hi && k > 1 && i === 0 ? ' no' : ''}" style="width:22px;height:22px;font-size:12px">✓</span>${bar(['70%', '60%', '66%', '52%'][k])}</div>`).join('')}
+      </div>`).join('')}</div>`,
+  },
+  'notebooklm-privacy': {
+    zoom: 1.16, kicker: 'Privacy', title: 'Is your data <em>private?</em>', sub: 'What Google does, and does not do, with your notebooks.',
+    scene: () => `
+      <div class="card" style="left:640px;top:110px;width:470px;padding:28px">
+        <div class="row" style="margin-bottom:22px"><span class="ico" style="background:#e8f0fe">${LOCK}</span><div class="t b">Your sources</div></div>
+        ${[['Used to train models', 'Off'], ['Visible to others', 'Off'], ['Workspace protections', 'On']].map(([l, v]) => `
+          <div class="row" style="height:58px;justify-content:space-between;border-top:1px solid #eef0f3"><span class="t" style="font-size:19px">${l}</span>
+          <span style="width:52px;height:30px;border-radius:999px;background:${v === 'On' ? '#0b57d0' : '#dadce0'};position:relative"><i style="position:absolute;top:3px;${v === 'On' ? 'right:3px' : 'left:3px'};width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3)"></i></span></div>`).join('')}
+      </div>`,
+  },
+  'notebooklm-review-2026': {
+    zoom: 1.16, kicker: 'Review 2026', title: 'An <em>honest</em> NotebookLM review', sub: 'What it does brilliantly, where it falls short, and who it is for.',
+    scene: () => `
+      <div class="card" style="left:640px;top:96px;width:460px;padding:28px">
+        <div class="row" style="justify-content:space-between;margin-bottom:22px"><span class="t b">NotebookLM</span><span class="tag" style="background:#e8f0fe;color:#0b57d0">Tested in 2026</span></div>
+        <div class="lbl" style="margin-bottom:10px;color:#137333">Pros</div>
+        ${['Answers cite your sources', 'Audio Overviews'].map((x) => `<div class="row" style="height:42px"><span class="check">✓</span><span class="t" style="font-size:19px">${x}</span></div>`).join('')}
+        <div class="lbl" style="margin:16px 0 10px;color:#b3261e">Cons</div>
+        ${['50 sources per notebook'].map((x) => `<div class="row" style="height:42px"><span class="check" style="background:#fce8e6;color:#b3261e">–</span><span class="t" style="font-size:19px">${x}</span></div>`).join('')}
+      </div>`,
+  },
+  'notebooklm-tutorial-beginners': {
+    zoom: 1.16, kicker: 'Step by step', title: 'Your first notebook in <em>5 minutes</em>', sub: 'Add sources, ask questions, and create your first Audio Overview.',
+    scene: () => `
+      <div class="card" style="left:650px;top:110px;width:440px;padding:28px">
+        <div class="lbl" style="margin-bottom:16px">Getting started</div>
+        ${[['Add your sources', 1], ['Ask your first question', 1], ['Create an Audio Overview', 0]].map(([x, d], i) => `
+          <div class="row" style="height:66px;border-top:${i ? '1px solid #eef0f3' : '0'}"><span class="check" style="${d ? '' : 'background:#e8f0fe;color:#0b57d0'};width:32px;height:32px;font-size:16px">${d ? '✓' : i + 1}</span><span class="t" style="font-size:20px;${d ? 'color:#5f6368;text-decoration:line-through' : 'font-weight:600'}">${x}</span></div>`).join('')}
+      </div>`,
+  },
+  'how-to-use-notebooklm-to-study': {
+    zoom: 1.16, kicker: 'Study guide', title: 'Study <em>smarter</em>, not longer', sub: 'Flashcards, quizzes and audio recaps made from your own notes.',
+    scene: () => `
+      <div class="card" style="left:690px;top:84px;width:380px;height:250px;padding:26px;transform:rotate(4deg);opacity:.92"><div class="lbl">Flashcard 8 / 20</div></div>
+      <div class="card" style="left:640px;top:120px;width:420px;padding:28px">
+        <div class="row" style="justify-content:space-between;margin-bottom:22px"><span class="lbl">Flashcard 7 / 20</span><span class="tag" style="background:#e8f0fe;color:#0b57d0">Biology</span></div>
+        <div style="font:600 30px/1.2 var(--sans);margin-bottom:24px">What does CRISPR-Cas9 cut?</div>
+        <div style="border-top:1px dashed #dadce0;padding-top:20px;display:flex;flex-direction:column;gap:10px">${bar('90%')}${bar('64%')}</div>
+        <div class="row" style="margin-top:26px;gap:10px"><span class="pill grey">Again</span><span class="pill blue">Got it</span></div>
+      </div>`,
+  },
+  '20-notebooklm-prompts': {
+    zoom: 1.16, kicker: 'Prompt library', title: '<em>20 prompts</em> to learn faster', sub: 'Copy, paste, and get sharper answers from your notebooks.',
+    scene: () => prompts(['Explain it like I am 12', 'Quiz me on chapter 3', 'Find the weak arguments', 'Make a study plan']),
+  },
+  'best-notebooklm-prompts': {
+    zoom: 1.16, kicker: 'Prompt library', title: '<em>12 prompts</em> for research', sub: 'Tested prompts for literature reviews, summaries and synthesis.',
+    scene: () => prompts(['Compare these 5 papers', 'List every key statistic', 'What do sources disagree on?', 'Draft a literature review']),
+  },
+  'notebooklm-slide-prompts': {
+    kicker: 'Slide prompts', title: '<em>12 deck styles</em> you can copy', sub: 'One prompt turns your notebook into a designed slide deck.',
+    scene: () => `<div class="stage">${[
+      ['left:600px;top:90px', '#ffd400', '#111', 'Bold<br>ideas'], ['left:880px;top:90px', '#111', '#fff', 'Q3<br>review'],
+      ['left:600px;top:270px', '#fff', '#111', '01. Intro'], ['left:880px;top:270px', '#ff5a1f', '#fff', 'Pitch'],
+      ['left:600px;top:450px', '#e8f0fe', '#0b57d0', 'Study'], ['left:880px;top:450px', '#f4efe6', '#3a2e1f', 'Story']].map(([pos, bg, fg, w]) => `
+      <div class="card" style="${pos};width:262px;height:160px;background:${bg};color:${fg};padding:20px;overflow:hidden"><div style="font:700 30px/1.02 var(--sans);letter-spacing:-0.03em">${w}</div><span class="bar" style="position:absolute;left:20px;bottom:20px;width:46%;height:8px;background:${fg};opacity:.25"></span></div>`).join('')}</div>`,
+  },
+  'best-notebooklm-alternatives': {
+    zoom: 1.16, kicker: 'Alternatives', title: '7 best NotebookLM <em>alternatives</em>', sub: 'Compared on sources, citations, audio and price.',
+    scene: () => `
+      <div class="card" style="left:620px;top:100px;width:520px;padding:26px 28px">
+        <div class="row" style="height:40px;color:#9aa0a6"><span class="lbl" style="flex:1">Tool</span><span class="lbl" style="width:90px;text-align:center">Citations</span><span class="lbl" style="width:80px;text-align:center">Audio</span></div>
+        ${[['NotebookLM', 1, 1], ['ChatGPT Projects', 1, 0], ['Perplexity', 1, 0], ['Claude Projects', 1, 0]].map(([n, a, b], i) => `
+          <div class="row" style="height:58px;border-top:1px solid #eef0f3"><span class="t" style="flex:1;font-size:19px;${i === 0 ? 'font-weight:600' : ''}">${n}</span><span style="width:90px;display:flex;justify-content:center"><span class="check${a ? '' : ' no'}">${a ? '✓' : '–'}</span></span><span style="width:80px;display:flex;justify-content:center"><span class="check${b ? '' : ' no'}">${b ? '✓' : '–'}</span></span></div>`).join('')}
+      </div>`,
+  },
+};
+
+function vs(a, b) {
+  const side = (x, left, top, grounded) => `
+    <div class="card" style="left:${left}px;top:${top}px;width:300px;padding:24px">
+      <div class="lbl" style="margin-bottom:14px;${grounded ? 'color:#0b57d0' : ''}">${x}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">${bar('94%', 1)}${bar('86%', 1)}${bar('72%', 1)}</div>
+      ${grounded ? '<div class="row" style="gap:8px"><span class="tag" style="background:#e8f0fe;color:#0b57d0">📄 Source 1</span><span class="tag" style="background:#e8f0fe;color:#0b57d0">📄 2</span></div>' : '<div class="row" style="gap:8px"><span class="tag" style="background:#f1f3f4;color:#5f6368">🌐 The web</span></div>'}
+    </div>`;
+  return side(a, 590, 120, true) + side(b, 910, 190, false) +
+    `<div style="position:absolute;left:868px;top:96px;width:64px;height:64px;border-radius:50%;background:#fff;color:#0b57d0;display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--sans);box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:3">VS</div>`;
+}
+
+function prompts(list) {
+  return `
+    <div class="card" style="left:640px;top:96px;width:470px;padding:12px">
+      <div class="lbl" style="padding:14px 14px 10px">Prompt library</div>
+      ${list.map((p, i) => `<div class="row" style="height:58px;padding:0 14px;border-radius:12px;${i === 0 ? 'background:#e8f0fe' : ''}"><span class="t" style="font-size:19px;flex:1;${i === 0 ? 'color:#0b57d0;font-weight:600' : ''}">${p}</span>${i === 0 ? '<span class="pill blue" style="font-size:14px;padding:8px 12px">Insert</span>' : ''}</div>`).join('')}
+    </div>
+    <div class="card" style="left:600px;top:420px;width:500px;padding:16px 20px;border-radius:999px"><div class="row"><span style="font:600 22px/1 var(--sans);color:#0b57d0">/</span><span class="s" style="font-size:18px">Ask a question or use a prompt</span></div></div>`;
+}
+
+const id = new URLSearchParams(location.search).get('id');
+const post = POSTS[id];
+document.getElementById('frame').innerHTML = post ? `
+  <div class="copy"><span class="kicker">${post.kicker}</span><h1>${post.title}</h1><p class="sub">${post.sub}</p></div>
+  ${post.zoom ? `<div class="zoom" style="--z:${post.zoom}">${post.scene()}</div>` : post.scene()}
+  <div class="brand"><img src="${LOGO}" alt="">NotebookTools <span>· notebooktools.com</span></div>` : 'unknown id';
+window.POST_IDS = Object.keys(POSTS);
+</script>
+</body>
+</html>
