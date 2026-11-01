@@ -34,7 +34,7 @@ const NotebookToolsBulkImportUI = (() => {
     }
 
     openNotebookLink.hidden = false;
-    openNotebookLink.href = `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}`;
+    openNotebookLink.href = `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}`;
   }
 
   function countMeta(items) {

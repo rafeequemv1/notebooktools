@@ -1,0 +1,408 @@
+/* NotebookTools ribbon inside Gemini Notebook. Scoped to .ntr / .ntr-*. */
+.ntr {
+  --ntr-bg: #ffffff;
+  --ntr-line: rgba(31, 31, 31, 0.1);
+  --ntr-ink: #1f1f1f;
+  --ntr-muted: #5f6368;
+  --ntr-hover: rgba(11, 87, 208, 0.07);
+  --ntr-accent: #0b57d0;
+  --ntr-pill: #1f1f1f;
+  --ntr-pill-ink: #ffffff;
+  align-items: center;
+  background: var(--ntr-bg);
+  border: 1px solid var(--ntr-line);
+  border-radius: 16px;
+  box-sizing: border-box;
+  color: var(--ntr-ink);
+  display: flex;
+  flex: 0 0 auto;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 2px;
+  height: 46px;
+  margin: 0 16px 10px;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 6px 0 8px;
+  position: relative;
+  scrollbar-width: none;
+  z-index: 3;
+}
+
+.ntr::-webkit-scrollbar {
+  display: none;
+}
+
+.ntr.is-dark {
+  --ntr-bg: #1b1c1e;
+  --ntr-line: rgba(255, 255, 255, 0.08);
+  --ntr-ink: #e8eaed;
+  --ntr-muted: #9aa0a6;
+  --ntr-hover: rgba(138, 180, 248, 0.1);
+  --ntr-accent: #8ab4f8;
+  --ntr-pill: #e8eaed;
+  --ntr-pill-ink: #1b1c1e;
+}
+
+.ntr *,
+.ntr-menu * {
+  box-sizing: border-box;
+}
+
+.ntr-brand {
+  align-items: center;
+  border-radius: 9px;
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 30px;
+  justify-content: center;
+  margin-right: 4px;
+  width: 30px;
+}
+
+.ntr-brand img {
+  border-radius: 5px;
+  display: block;
+}
+
+.ntr-group {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+  height: 100%;
+  padding: 0 8px;
+  position: relative;
+}
+
+.ntr-group + .ntr-group::before {
+  background: var(--ntr-line);
+  content: "";
+  height: 20px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+}
+
+.ntr-gname {
+  color: var(--ntr-muted);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 0 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ntr-items {
+  align-items: center;
+  display: flex;
+  gap: 1px;
+}
+
+.ntr-btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: var(--ntr-ink);
+  cursor: pointer;
+  display: inline-flex;
+  font: 500 13px/1 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 6px;
+  height: 32px;
+  padding: 0 9px;
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.ntr-btn svg {
+  color: var(--ntr-muted);
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+
+.ntr-btn:hover {
+  background: var(--ntr-hover);
+}
+
+.ntr-btn:hover svg {
+  color: var(--ntr-accent);
+}
+
+.ntr-btn:focus-visible {
+  outline: 2px solid var(--ntr-accent);
+  outline-offset: 1px;
+}
+
+.ntr-chip {
+  border: 1px dashed var(--ntr-line);
+  height: 28px;
+  max-width: 190px;
+  padding: 0 8px;
+}
+
+.ntr-chip .ntr-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ntr-icon {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr-icon.is-on svg {
+  color: #f2a600;
+  fill: #f2a600;
+}
+
+.ntr-spacer {
+  flex: 1 0 8px;
+}
+
+.ntr-end {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+.ntr-pill {
+  background: var(--ntr-pill);
+  border-radius: 999px;
+  color: var(--ntr-pill-ink);
+  margin-right: 4px;
+  padding: 0 14px 0 11px;
+}
+
+.ntr-pill svg,
+.ntr-pill:hover svg {
+  color: var(--ntr-pill-ink);
+}
+
+.ntr-pill:hover {
+  background: var(--ntr-accent);
+  color: #fff;
+}
+
+.ntr-pill:hover svg {
+  color: #fff;
+}
+
+.ntr-collapse svg {
+  transition: transform 0.2s;
+}
+
+/* Compact: icons only */
+.ntr.is-collapsed {
+  height: 38px;
+}
+
+.ntr.is-collapsed .ntr-label,
+.ntr.is-collapsed .ntr-gname,
+.ntr.is-collapsed .ntr-chip svg:last-child {
+  display: none;
+}
+
+.ntr.is-collapsed .ntr-btn {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr.is-collapsed .ntr-chip {
+  border: 0;
+}
+
+.ntr.is-collapsed .ntr-collapse svg {
+  transform: rotate(180deg);
+}
+
+/* Auto-fit levels (set by fitRibbon in JS) */
+.ntr[class*="fit-"] .ntr-gname {
+  display: none;
+}
+
+.ntr.fit-2 .is-secondary .ntr-label,
+.ntr.fit-3 .is-secondary .ntr-label,
+.ntr.fit-3 .is-tertiary .ntr-label,
+.ntr.fit-4 .ntr-btn:not(.ntr-pill) .ntr-label {
+  display: none;
+}
+
+.ntr.fit-2 .is-secondary,
+.ntr.fit-3 .is-secondary,
+.ntr.fit-3 .is-tertiary,
+.ntr.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr.fit-4 .ntr-chip {
+  padding: 0 6px;
+}
+
+.ntr.fit-4 .ntr-chip svg:last-child {
+  display: none;
+}
+
+/* Menus + toast (appended to body) */
+.ntr-menu {
+  --ntr-bg: #ffffff;
+  --ntr-line: rgba(31, 31, 31, 0.1);
+  --ntr-ink: #1f1f1f;
+  --ntr-muted: #5f6368;
+  --ntr-hover: rgba(11, 87, 208, 0.07);
+  --ntr-accent: #0b57d0;
+  background: var(--ntr-bg);
+  border: 1px solid var(--ntr-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  color: var(--ntr-ink);
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  max-height: 360px;
+  min-width: 210px;
+  overflow-y: auto;
+  padding: 6px;
+  position: fixed;
+  z-index: 2147483600;
+}
+
+.ntr-menu.is-dark {
+  --ntr-bg: #232427;
+  --ntr-line: rgba(255, 255, 255, 0.1);
+  --ntr-ink: #e8eaed;
+  --ntr-muted: #9aa0a6;
+  --ntr-hover: rgba(138, 180, 248, 0.12);
+  --ntr-accent: #8ab4f8;
+}
+
+.ntr-menu-title {
+  color: var(--ntr-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 4px 8px 6px;
+  text-transform: uppercase;
+}
+
+.ntr-menu-item {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ntr-ink);
+  cursor: pointer;
+  display: flex;
+  font: 400 13px/1.2 inherit;
+  font-family: inherit;
+  gap: 10px;
+  min-height: 32px;
+  padding: 0 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.ntr-menu-item svg {
+  color: var(--ntr-muted);
+  flex-shrink: 0;
+}
+
+.ntr-menu-item span {
+  flex: 1;
+}
+
+.ntr-menu-item:hover {
+  background: var(--ntr-hover);
+}
+
+.ntr-menu-item.is-active {
+  color: var(--ntr-accent);
+  font-weight: 500;
+}
+
+.ntr-menu-item.is-active svg {
+  color: var(--ntr-accent);
+}
+
+.ntr-check {
+  color: var(--ntr-accent);
+  font-size: 12px;
+}
+
+.ntr-menu-empty {
+  color: var(--ntr-muted);
+  font-size: 12.5px;
+  margin: 4px 10px 8px;
+}
+
+.ntr-menu-new {
+  border-top: 1px solid var(--ntr-line);
+  margin-top: 6px;
+  padding: 6px 2px 2px;
+}
+
+.ntr-menu-new input {
+  background: transparent;
+  border: 1px solid var(--ntr-line);
+  border-radius: 8px;
+  color: var(--ntr-ink);
+  font: inherit;
+  font-size: 13px;
+  height: 32px;
+  outline: none;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.ntr-menu-new input:focus {
+  border-color: var(--ntr-accent);
+}
+
+.ntr-toast {
+  background: #1f1f1f;
+  border-radius: 10px;
+  bottom: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font: 500 13px/1.3 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  left: 50%;
+  padding: 10px 16px;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 2147483600;
+}
+
+.ntr-toast.is-dark {
+  background: #e8eaed;
+  color: #1f1f1f;
+}
+
+.ntr-toast.is-error {
+  background: #b3261e;
+  color: #fff;
+}
+
+/* While the ribbon is on, the old chat-box bars are folded into it. */
+html.ntr-on #notebooktools-nlm-export-bar {
+  display: none !important;
+}
+
+html.ntr-on #notebooktools-blog-workflow-bar,
+html.ntr-on #notebooktools-snapshot-workflow-bar {
+  height: 1px !important;
+  left: var(--ntr-anchor-left, 50%) !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+  position: fixed !important;
+  top: var(--ntr-anchor-top, 0) !important;
+  width: 1px !important;
+}

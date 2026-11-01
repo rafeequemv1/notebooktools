@@ -134,7 +134,7 @@ const NotebookToolsSettings = {
     }
 
     await chrome.tabs.create({
-      url: `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}`
+      url: `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}`
     });
   },
 
@@ -166,7 +166,7 @@ const NotebookToolsSettings = {
     const url =
       typeof NotebookToolsStore !== "undefined" && NotebookToolsStore.notebookArtifactUrl
         ? NotebookToolsStore.notebookArtifactUrl(notebookId, artifactId, authUser)
-        : `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}?artifactId=${encodeURIComponent(artifactId)}`;
+        : `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}?artifactId=${encodeURIComponent(artifactId)}`;
 
     await chrome.tabs.create({ url });
   },
@@ -185,7 +185,7 @@ const NotebookToolsSettings = {
     const url =
       typeof NotebookToolsStore !== "undefined" && NotebookToolsStore.notebookArtifactUrl
         ? NotebookToolsStore.notebookArtifactUrl(notebookId, artifactId, authUser)
-        : `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}?artifactId=${encodeURIComponent(artifactId)}`;
+        : `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}?artifactId=${encodeURIComponent(artifactId)}`;
 
     await chrome.tabs.create({ url });
   }

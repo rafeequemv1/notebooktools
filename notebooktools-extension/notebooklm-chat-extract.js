@@ -39,7 +39,7 @@ function getNotebookLmTitle() {
 function getNotebookLmUrl() {
   const match = location.pathname.match(/\/notebook\/([^/?#]+)/i);
   return match?.[1]
-    ? `https://notebooklm.google.com/notebook/${encodeURIComponent(match[1])}`
+    ? `${location.origin}/notebook/${encodeURIComponent(match[1])}`
     : location.href.split("?")[0];
 }
 

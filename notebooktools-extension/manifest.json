@@ -1,12 +1,19 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Import ChatGPT, Claude, YouTube, X, Reddit, webpages and more into NotebookLM, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
   },
-  "permissions": ["activeTab", "storage", "contextMenus", "tabs", "sidePanel", "scripting"],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "tabs",
+    "sidePanel",
+    "scripting"
+  ],
   "host_permissions": [
     "https://*/*",
     "http://*/*",
@@ -49,7 +56,9 @@
         "https://youtu.be/*",
         "https://www.youtube-nocookie.com/*"
       ],
-      "css": ["youtube-button.css"],
+      "css": [
+        "youtube-button.css"
+      ],
       "js": [
         "youtube-inject.js"
       ],
@@ -58,11 +67,19 @@
     },
     {
       "matches": [
+        "https://notebook.google.com/*",
         "https://notebooklm.google.com/*"
       ],
-      "css": ["notebooklm-chat-export.css", "notebooklm-prompt-slash.css", "workflows/blog-creation/blog-with-deck-images/workflow.css", "workflows/snapshots/snapshot-workflow.css"],
+      "css": [
+        "notebooklm-chat-export.css",
+        "notebooklm-prompt-slash.css",
+        "workflows/blog-creation/blog-with-deck-images/workflow.css",
+        "workflows/snapshots/snapshot-workflow.css",
+        "notebooklm-ribbon.css"
+      ],
       "js": [
         "utils.js",
+        "notebooks-folders.js",
         "notebooklm-client.js",
         "snapshot-store.js",
         "chat-export.js",
@@ -84,7 +101,8 @@
         "workflows/snapshots/snapshot-workflow-ui.js",
         "notebooklm-chat-export-inject.js",
         "prompt-library-data.js",
-        "notebooklm-prompt-slash.js"
+        "notebooklm-prompt-slash.js",
+        "notebooklm-ribbon.js"
       ],
       "run_at": "document_idle",
       "all_frames": false
@@ -110,8 +128,13 @@
         "https://www.linkedin.com/*",
         "https://docs.google.com/document/*"
       ],
-      "css": ["platform-button.css"],
-      "js": ["platform-extractors.js", "platform-button.js"],
+      "css": [
+        "platform-button.css"
+      ],
+      "js": [
+        "platform-extractors.js",
+        "platform-button.js"
+      ],
       "run_at": "document_idle"
     }
   ],

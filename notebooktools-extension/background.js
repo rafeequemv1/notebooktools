@@ -105,7 +105,61 @@ if (chrome.sidePanel?.setPanelBehavior) {
     });
 }
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // --- Ribbon inside Gemini Notebook ---
+  if (message?.type === "notebooktools-ribbon-open-panel") {
+    const tabId = sender?.tab?.id;
+    const path = `sidepanel.html?${message.query || ""}`;
+
+    if (tabId && chrome.sidePanel?.open) {
+      // Call open() right away so Chrome still counts the click as a user gesture.
+      chrome.sidePanel.setOptions({ tabId, path }).catch(() => {});
+      chrome.sidePanel
+        .open({ tabId })
+        .then(() => sendResponse({ ok: true }))
+        .catch(() => {
+          chrome.windows.create({ url: chrome.runtime.getURL(path), type: "popup", width: 420, height: 760 });
+          sendResponse({ ok: true, popup: true });
+        });
+    } else {
+      chrome.windows.create({ url: chrome.runtime.getURL(path), type: "popup", width: 420, height: 760 });
+      sendResponse({ ok: true, popup: true });
+    }
+
+    return true;
+  }
+
+  if (message?.type === "notebooktools-ribbon-open-hub") {
+    const params = new URLSearchParams();
+
+    if (message.notebookId) {
+      params.set("notebook", message.notebookId);
+      params.set("tab", message.tab || "sources");
+
+      if (message.title) {
+        params.set("title", String(message.title).replace(/\s*[-–|]\s*(Gemini Notebook|NotebookLM).*$/i, ""));
+      }
+    }
+
+    const query = params.toString();
+    chrome.tabs.create({ url: chrome.runtime.getURL(`notebooks.html${query ? `?${query}` : ""}`) });
+    sendResponse({ ok: true });
+    return true;
+  }
+
+  if (message?.type === "notebooktools-ribbon-snapshot") {
+    void (async () => {
+      try {
+        await startSnapshotCapture(sender.tab, true);
+        sendResponse({ ok: true });
+      } catch (error) {
+        sendResponse({ ok: false, error: error.message || "Snapshot failed." });
+      }
+    })();
+
+    return true;
+  }
+
   if (message?.type === "notebooktools-store-platform-import") {
     platformImportCache = message.payload || null;
     sendResponse({ ok: true });
@@ -153,7 +207,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "notebooktools-save-snapshot") {
     void (async () => {
       try {
-        const senderTab = _sender?.tab;
+        const senderTab = sender?.tab;
 
         if (!senderTab?.id) {
           sendResponse({ ok: false, error: "Capture must run on a webpage tab." });
@@ -206,7 +260,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "notebooktools-auto-capture-shot") {
     void (async () => {
       try {
-        const senderTab = _sender?.tab;
+        const senderTab = sender?.tab;
         const stored = await chrome.storage.session.get("notebooktoolsAutoCapture");
         const tab = senderTab?.id
           ? senderTab
@@ -265,7 +319,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       await chrome.storage.session.set({
         notebooktoolsAutoCapture: {
           ...stored.notebooktoolsAutoCapture,
-          tabId: _sender?.tab?.id || stored.notebooktoolsAutoCapture?.tabId || null,
+          tabId: sender?.tab?.id || stored.notebooktoolsAutoCapture?.tabId || null,
           active: true,
           startedAt: stored.notebooktoolsAutoCapture?.startedAt || Date.now()
         }
@@ -285,7 +339,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "notebooktools-capture-region") {
     void (async () => {
       try {
-        const senderTab = _sender?.tab;
+        const senderTab = sender?.tab;
         const tab = senderTab?.id
           ? senderTab
           : await NotebookToolsSnapshotCapture.resolveTargetTab(message.tabId);

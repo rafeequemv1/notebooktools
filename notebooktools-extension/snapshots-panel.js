@@ -523,7 +523,7 @@ const NotebookToolsSnapshotsPanel = {
       await this.picker.refresh({ silent: true });
       this.root.querySelector("#snapshotsNotebookSelect").value = targetNotebook.id;
 
-      const notebookUrl = `https://notebooklm.google.com/notebook/${encodeURIComponent(targetNotebook.id)}`;
+      const notebookUrl = `https://notebook.google.com/notebook/${encodeURIComponent(targetNotebook.id)}`;
 
       if (openNotebook) {
         chrome.tabs.create({ url: notebookUrl });

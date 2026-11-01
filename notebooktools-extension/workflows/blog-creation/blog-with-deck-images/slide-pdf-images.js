@@ -51,7 +51,7 @@ const NotebookToolsSlidePdfImages = {
       const response = await fetch(targetUrl, {
         credentials: "include",
         mode: "cors",
-        referrer: "https://notebooklm.google.com/",
+        referrer: "https://notebook.google.com/",
         referrerPolicy: "strict-origin-when-cross-origin"
       });
 

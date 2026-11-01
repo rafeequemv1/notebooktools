@@ -61,7 +61,7 @@ function showOpenNotebook(notebookId, artifactId = "") {
   }
 
   openNotebookLink.textContent = "Open notebook";
-  openNotebookLink.href = `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}`;
+  openNotebookLink.href = `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}`;
 }
 
 function syncStudioUi() {

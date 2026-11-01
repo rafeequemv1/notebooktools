@@ -1,6 +1,57 @@
-const NOTEBOOKLM_HOME_URL = "https://notebooklm.google.com/";
-const NOTEBOOKLM_BATCH_EXECUTE_URL =
-  "https://notebooklm.google.com/_/LabsTailwindUi/data/batchexecute";
+/* Google serves the app on notebook.google.com ("Gemini Notebook") and the
+   older notebooklm.google.com. The client works on whichever one the browser
+   ends up on, and remembers it. */
+const NOTEBOOKLM_HOSTS = ["notebook.google.com", "notebooklm.google.com"];
+const NOTEBOOKLM_ORIGIN_KEY = "notebooktoolsNlmOrigin";
+const NOTEBOOKLM_DEFAULT_APP_PATH = "/_/LabsTailwindUi/";
+let notebookLmOrigin = "https://notebook.google.com";
+let notebookLmAppPath = NOTEBOOKLM_DEFAULT_APP_PATH;
+
+function isNotebookLmHost(hostname) {
+  return NOTEBOOKLM_HOSTS.includes(String(hostname || "").toLowerCase());
+}
+
+function notebookLmHomeUrl() {
+  return `${notebookLmOrigin}/`;
+}
+
+function notebookLmBatchExecuteUrl() {
+  return `${notebookLmOrigin}${notebookLmAppPath}data/batchexecute`;
+}
+
+function notebookLmUploadUrl() {
+  return `${notebookLmOrigin}/upload/_/`;
+}
+
+function rememberNotebookLmOrigin(origin) {
+  if (!origin || origin === notebookLmOrigin) {
+    return;
+  }
+
+  notebookLmOrigin = origin;
+
+  try {
+    chrome?.storage?.local?.set({ [NOTEBOOKLM_ORIGIN_KEY]: origin });
+  } catch (_error) {
+    // Storage is optional here.
+  }
+}
+
+if (typeof location !== "undefined" && isNotebookLmHost(location.hostname)) {
+  notebookLmOrigin = location.origin;
+}
+
+try {
+  chrome?.storage?.local?.get(NOTEBOOKLM_ORIGIN_KEY, (stored) => {
+    const saved = stored?.[NOTEBOOKLM_ORIGIN_KEY];
+
+    if (saved && !(typeof location !== "undefined" && isNotebookLmHost(location.hostname))) {
+      notebookLmOrigin = saved;
+    }
+  });
+} catch (_error) {
+  // Storage is optional here.
+}
 
 const NOTEBOOKLM_RPC_IDS = {
   listNotebooks: "wXbhsf",
@@ -28,7 +79,6 @@ const NOTEBOOKLM_RPC_IDS = {
   addSourceFile: "o4cbdc"
 };
 
-const NOTEBOOKLM_UPLOAD_URL = "https://notebooklm.google.com/upload/_/";
 const NOTEBOOKLM_RPC_TEMPLATE_BLOCK = [
   2,
   null,
@@ -170,8 +220,8 @@ async function detectNotebookLmAuthUser() {
     return null;
   }
 
-  const tabs = await chrome.tabs.query({ url: "https://notebooklm.google.com/*" });
-  const notebookTabs = tabs.filter((tab) => /^https:\/\/notebooklm\.google\.com\//i.test(tab.url || ""));
+  const tabs = await chrome.tabs.query({ url: NOTEBOOKLM_HOSTS.map((host) => `https://${host}/*`) });
+  const notebookTabs = tabs.filter((tab) => /^https:\/\/notebook(?:lm)?\.google\.com\//i.test(tab.url || ""));
   const activeTab = notebookTabs.find((tab) => tab.active) || null;
   const activeAuthUser = extractNotebookLmAuthUserFromUrl(activeTab?.url || "");
 
@@ -235,56 +285,89 @@ async function getNotebookLmTokens(options = {}) {
     return { ...cached, authUser };
   }
 
-  const url = new URL(NOTEBOOKLM_HOME_URL);
+  const buildHomeUrl = (origin) => {
+    const homeUrl = new URL(`${origin}/`);
 
-  if (authUser !== null) {
-    url.searchParams.set("authuser", authUser);
-    url.searchParams.set("pageId", "none");
-  }
-
-  let response;
-
-  try {
-    // Follow redirects (sign-in, account switch) instead of failing with a bare
-    // "Failed to fetch", then explain where we ended up.
-    response = await fetch(url.toString(), {
-      credentials: "include",
-      redirect: "follow"
-    });
-  } catch (error) {
-    throw new Error(
-      "Can't reach NotebookLM. Check your internet connection, or allow notebooklm.google.com if an ad blocker or firewall is active."
-    );
-  }
-
-  const finalHost = (() => {
-    try {
-      return new URL(response.url || url.toString()).hostname;
-    } catch (_error) {
-      return "";
+    if (authUser !== null) {
+      homeUrl.searchParams.set("authuser", authUser);
+      homeUrl.searchParams.set("pageId", "none");
     }
-  })();
 
-  if (/accounts\.google\.com$/.test(finalHost)) {
-    throw new Error(
-      authUser !== null
-        ? "This Google account isn't signed in to NotebookLM. Open notebooklm.google.com, sign in, then refresh."
-        : "Sign in to NotebookLM (notebooklm.google.com) in this browser, then refresh."
-    );
+    return homeUrl;
+  };
+
+  const origins = [notebookLmOrigin, ...NOTEBOOKLM_HOSTS.map((host) => `https://${host}`)]
+    .filter((origin, index, list) => list.indexOf(origin) === index);
+  let lastError = null;
+  let page = null;
+
+  // Follow redirects (sign-in, account switch, domain move) instead of failing
+  // with a bare "Failed to fetch". Try each known domain until one has a session.
+  for (const origin of origins) {
+    const url = buildHomeUrl(origin);
+    let response;
+
+    try {
+      response = await fetch(url.toString(), { credentials: "include", redirect: "follow" });
+    } catch (_error) {
+      lastError = lastError || new Error(
+        "Can't reach Gemini Notebook. Check your internet connection, or allow notebook.google.com if an ad blocker or firewall is active."
+      );
+      continue;
+    }
+
+    let finalHost = "";
+
+    try {
+      finalHost = new URL(response.url || url.toString()).hostname;
+    } catch (_error) {
+      finalHost = "";
+    }
+
+    if (/accounts\.google\.com$/.test(finalHost)) {
+      lastError = new Error(
+        authUser !== null
+          ? "This Google account isn't signed in to Gemini Notebook. Open notebook.google.com, sign in, then refresh."
+          : "Sign in to Gemini Notebook (notebook.google.com) in this browser, then refresh."
+      );
+      continue;
+    }
+
+    if (!response.ok) {
+      lastError = lastError || new Error(`Open Gemini Notebook and sign in before importing (status ${response.status}).`);
+      continue;
+    }
+
+    const html = await response.text();
+
+    if (!extractNotebookLmBootstrapValue("SNlM0e", html)) {
+      lastError = lastError || new Error("Could not read the Gemini Notebook session. Open notebook.google.com once, then try again.");
+      continue;
+    }
+
+    page = { html, origin: isNotebookLmHost(finalHost) ? `https://${finalHost}` : origin };
+    break;
   }
 
-  if (!response.ok) {
-    throw new Error(`Open NotebookLM and sign in before importing (status ${response.status}).`);
+  if (!page) {
+    throw lastError || new Error("Open Gemini Notebook and sign in before importing.");
   }
 
-  const html = await response.text();
+  rememberNotebookLmOrigin(page.origin);
+
+  const html = page.html;
   const atToken = extractNotebookLmBootstrapValue("SNlM0e", html);
   const blToken = extractNotebookLmBootstrapValue("cfb2h", html);
   const sessionId = extractNotebookLmBootstrapValue("FdrFJe", html);
   const discoveryParent = extractDiscoveryEngineParent(html);
+  const appPath = extractNotebookLmBootstrapValue("eptZe", html);
+
+  if (/^\/_\/[A-Za-z0-9]+\/$/.test(appPath)) {
+    notebookLmAppPath = appPath;
+  }
 
   if (!atToken || !blToken) {
-    throw new Error("Could not read NotebookLM session tokens. Refresh NotebookLM once, then try again.");
+    throw new Error("Could not read the Gemini Notebook session. Refresh notebook.google.com once, then try again.");
   }
 
   const tokens = {
@@ -300,7 +383,7 @@ async function getNotebookLmTokens(options = {}) {
 }
 
 async function callNotebookLmRpc(rpcId, args, tokens, options = {}) {
-  const endpoint = new URL(NOTEBOOKLM_BATCH_EXECUTE_URL);
+  const endpoint = new URL(notebookLmBatchExecuteUrl());
   const sourcePath = options.sourcePath || "/";
   const authUser = normalizeNotebookLmAuthUser(options.authUser ?? tokens.authUser);
   const requestId = String(Math.floor(Math.random() * 900000) + 100000);
@@ -331,8 +414,8 @@ async function callNotebookLmRpc(rpcId, args, tokens, options = {}) {
     credentials: "include",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      Origin: "https://notebooklm.google.com",
-      Referer: "https://notebooklm.google.com/",
+      Origin: notebookLmOrigin,
+      Referer: `${notebookLmOrigin}/`,
       "X-Same-Domain": "1"
     },
     body
@@ -466,12 +549,12 @@ function buildRpcError(code, rpcId, context = {}) {
 
   if (code === 3) {
     return new Error(
-      "NotebookLM rejected the request. Refresh notebooklm.google.com and try again."
+      "NotebookLM rejected the request. Refresh notebook.google.com and try again."
     );
   }
 
   if (code === 7 || code === 16) {
-    return new Error("NotebookLM session expired. Open notebooklm.google.com, sign in, then retry.");
+    return new Error("NotebookLM session expired. Open notebook.google.com, sign in, then retry.");
   }
 
   return new Error(`NotebookLM returned error code ${code} for ${rpcId || "RPC"}.`);
@@ -580,7 +663,7 @@ async function buildCreateNotebookFailureError(lastError, listOptions, tokens) {
 
       if (notebooks.length >= Math.max(notebookLimit - 1, 0)) {
         return new Error(
-          `NotebookLM notebook limit reached (${notebooks.length}/${notebookLimit}). Delete old notebooks at notebooklm.google.com, then try again.`
+          `NotebookLM notebook limit reached (${notebooks.length}/${notebookLimit}). Delete old notebooks at notebook.google.com, then try again.`
         );
       }
     } catch (_error) {
@@ -588,14 +671,14 @@ async function buildCreateNotebookFailureError(lastError, listOptions, tokens) {
     }
 
     return new Error(
-      "NotebookLM rejected the create request. Open notebooklm.google.com, sign in, refresh the page, then try again."
+      "NotebookLM rejected the create request. Open notebook.google.com, sign in, refresh the page, then try again."
     );
   }
 
   return (
     lastError ||
     new Error(
-      "NotebookLM did not return the new notebook ID. Open notebooklm.google.com, sign in, then try again."
+      "NotebookLM did not return the new notebook ID. Open notebook.google.com, sign in, then try again."
     )
   );
 }
@@ -1273,7 +1356,7 @@ function formatNotebookLmAuthUserHeader(authUser) {
 }
 
 function buildNotebookLmUploadUrl(authUser) {
-  const uploadUrl = new URL(NOTEBOOKLM_UPLOAD_URL);
+  const uploadUrl = new URL(notebookLmUploadUrl());
   const normalizedAuthUser = normalizeNotebookLmAuthUser(authUser);
 
   if (normalizedAuthUser !== null) {
@@ -1383,8 +1466,8 @@ async function startNotebookLmResumableUpload({
     headers: {
       Accept: "*/*",
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      Origin: "https://notebooklm.google.com",
-      Referer: "https://notebooklm.google.com/",
+      Origin: notebookLmOrigin,
+      Referer: `${notebookLmOrigin}/`,
       "x-goog-authuser": authUserHeader,
       "x-goog-upload-command": "start",
       "x-goog-upload-header-content-length": String(fileSize),
@@ -1417,8 +1500,8 @@ async function uploadNotebookLmFileBytes(uploadUrl, bytes, tokens) {
     headers: {
       Accept: "*/*",
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      Origin: "https://notebooklm.google.com",
-      Referer: "https://notebooklm.google.com/",
+      Origin: notebookLmOrigin,
+      Referer: `${notebookLmOrigin}/`,
       "x-goog-authuser": authUserHeader,
       "x-goog-upload-command": "upload, finalize",
       "x-goog-upload-offset": "0"
@@ -2412,6 +2495,8 @@ async function waitForNotebookLmArtifactReady(notebookId, artifactId, options = 
 
 if (typeof window !== "undefined") {
   window.NotebookToolsNotebookLM = {
+    getOrigin: () => notebookLmOrigin,
+    isNotebookLmHost,
     NOTEBOOK_SOURCE_LIMIT,
     REFRESHABLE_SOURCE_TYPE_CODES,
     addPdfBytesToNotebookLm,

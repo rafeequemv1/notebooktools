@@ -122,6 +122,7 @@ function normalizeWebpageUrl(value) {
     "chrome.google.com",
     "chromewebstore.google.com",
     "notebooklm.google.com",
+    "notebook.google.com",
     "newtab"
   ]);
 
@@ -240,7 +241,7 @@ function setImportStatus(element, options = {}) {
 
 function notebookArtifactUrl(notebookId, artifactId, authUser) {
   const url = new URL(
-    `https://notebooklm.google.com/notebook/${encodeURIComponent(String(notebookId || "").trim())}`
+    `https://notebook.google.com/notebook/${encodeURIComponent(String(notebookId || "").trim())}`
   );
   const targetArtifactId = String(artifactId || "").trim();
 

@@ -60,7 +60,7 @@ async function loadAppSettings() {
 }
 
 function notebookUrl(id) {
-  const url = new URL(`https://notebooklm.google.com/notebook/${encodeURIComponent(id)}`);
+  const url = new URL(`https://notebook.google.com/notebook/${encodeURIComponent(id)}`);
 
   if (activeAccount?.authUser && activeAccount.authUser !== "default") {
     url.searchParams.set("authuser", activeAccount.authUser);
@@ -255,15 +255,15 @@ async function discoverAccounts() {
 
   for (const candidate of candidates) {
     try {
-      const url = new URL("https://notebooklm.google.com/");
+      const url = new URL(`${NotebookToolsNotebookLM.getOrigin?.() || "https://notebook.google.com"}/`);
 
       if (candidate.index !== null) {
         url.searchParams.set("authuser", String(candidate.index));
       }
 
-      const response = await fetch(url.toString(), { credentials: "include", redirect: "error" });
+      const response = await fetch(url.toString(), { credentials: "include", redirect: "follow" });
 
-      if (!response.ok) {
+      if (!response.ok || /accounts\.google\.com/.test(new URL(response.url || url.toString()).hostname)) {
         continue;
       }
 
@@ -1598,7 +1598,7 @@ async function loadNotebooks({ force = false } = {}) {
   } catch (error) {
     if (!notebooks.length) {
       renderAll();
-      mainEl.innerHTML = `<div class="nbx-empty"><strong>Can't load your notebooks</strong><p>${esc(error.message || "Could not load notebooks.")}</p><a class="nbx-ghost nbx-ghost-link" href="https://notebooklm.google.com/" target="_blank" rel="noopener noreferrer">Open NotebookLM</a></div>`;
+      mainEl.innerHTML = `<div class="nbx-empty"><strong>Can't load your notebooks</strong><p>${esc(error.message || "Could not load notebooks.")}</p><a class="nbx-ghost nbx-ghost-link" href="https://notebook.google.com/" target="_blank" rel="noopener noreferrer">Open Gemini Notebook</a></div>`;
       setPageStatus(error.message || "Could not load notebooks.", "error");
     } else {
       setPageStatus("");
@@ -1833,6 +1833,18 @@ async function init() {
 
   if (notebooks.length) {
     renderAll();
+  }
+
+  // Deep link from the in-notebook ribbon: notebooks.html?notebook=<id>&tab=sources
+  const deepLink = new URLSearchParams(location.search);
+  const deepId = deepLink.get("notebook");
+
+  if (deepId) {
+    const deepTab = ["sources", "studio", "notes"].includes(deepLink.get("tab")) ? deepLink.get("tab") : "sources";
+    const deepNotebook =
+      notebooks.find((item) => item.id === deepId) ||
+      { id: deepId, title: deepLink.get("title") || "Notebook", sourceCount: null };
+    openNotebookInApp(deepNotebook, deepTab);
   }
 
   await loadNotebooks();

@@ -205,7 +205,7 @@ function showOpenNotebook(notebookId, artifactId = "", artifactLabel = "") {
   }
 
   openNotebookLink.textContent = "Open notebook";
-  openNotebookLink.href = `https://notebooklm.google.com/notebook/${encodeURIComponent(notebookId)}`;
+  openNotebookLink.href = `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}`;
 }
 
 function isStudioAvailable() {
@@ -315,6 +315,10 @@ function setActivePanel(panelName) {
       NotebookToolsBulkImportUI.mount(root).then(() => {
         if (initialExtract) {
           void NotebookToolsBulkImportUI.applyPendingLinkExtract?.();
+        }
+
+        if (params.get("tabs") === "1") {
+          root.querySelector("#bulkAddTabsButton")?.click();
         }
       });
       bulkMounted = true;
