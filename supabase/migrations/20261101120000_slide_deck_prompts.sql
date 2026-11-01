@@ -20,6 +20,28 @@ $$;
 revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to anon, authenticated;
 
+-- Only the server (SQL editor / service role) may grant or remove admin,
+-- even if a future policy lets users edit their own profile row.
+create or replace function public.guard_profile_admin()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  if coalesce(auth.role(), '') in ('anon', 'authenticated')
+     and (tg_op = 'INSERT' and new.is_admin
+          or tg_op = 'UPDATE' and new.is_admin is distinct from old.is_admin) then
+    raise exception 'is_admin can only be changed by an administrator';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists profiles_guard_admin on public.profiles;
+create trigger profiles_guard_admin
+  before insert or update on public.profiles
+  for each row execute function public.guard_profile_admin();
+
 -- Prompts
 create table if not exists public.slide_deck_prompts (
   id           text primary key check (id ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
