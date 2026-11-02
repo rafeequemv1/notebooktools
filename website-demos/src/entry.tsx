@@ -5,12 +5,16 @@ import './host.css'
 import YouTubeImport from './demos/YouTubeImport'
 import NotebooksTable from './demos/NotebooksTable'
 import RibbonExport from './demos/RibbonExport'
+import SlidesToBlog from './demos/SlidesToBlog'
+import SnapshotsGuide from './demos/SnapshotsGuide'
 
 // Every Stageshow demo the website can mount: <div data-stage="youtube"></div>
 const DEMOS: Record<string, ComponentType> = {
   youtube: YouTubeImport,
   hub: NotebooksTable,
   'chat-export': RibbonExport,
+  'slides-to-blog': SlidesToBlog,
+  snapshots: SnapshotsGuide,
 }
 
 function Host({ Demo, label }: { Demo: ComponentType; label: string }) {
