@@ -843,8 +843,8 @@ const NotebookToolsBulkImportUI = (() => {
             </select>
             <input id="bulkNewNotebookName" type="text" placeholder="Or create new notebook" aria-label="New notebook name">
           </div>
-          <p class="bulk-limit-note" id="bulkLimitNote" hidden></p>
         </section>
+        <p class="bulk-limit-note" id="bulkLimitNote" hidden></p>
 
         <div class="bulk-progress" id="bulkProgress">
           <div class="bulk-progress-bar"><div class="bulk-progress-fill" id="bulkProgressFill"></div></div>

@@ -21,9 +21,7 @@ const NotebookToolsSnapshotsPanel = {
               <button type="button" class="button sp-primary" id="snapshotsCaptureBtn">Drag to capture</button>
               <button type="button" class="button secondary" id="snapshotsAutoCaptureBtn">Auto</button>
               <button type="button" class="button secondary" id="snapshotsStopAutoBtn" hidden>Stop auto</button>
-            </div>
-            <div class="snapshots-capture-row">
-              <button type="button" class="button secondary" id="snapshotsClearBtn">Clear all</button>
+              <button type="button" class="text-button snapshots-clear" id="snapshotsClearBtn">Clear</button>
             </div>
           </div>
         </section>
@@ -45,7 +43,7 @@ const NotebookToolsSnapshotsPanel = {
         </section>
 
         <section class="sp-card snapshots-output-type">
-          <label for="snapshotsOutputType">After upload</label>
+          <label for="snapshotsOutputType">Then</label>
           <select id="snapshotsOutputType" aria-label="Output type">
             <option value="discuss">Discuss in chat</option>
             <option value="blog" selected>Create blog with images</option>

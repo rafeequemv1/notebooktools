@@ -6,6 +6,8 @@ const NotebookToolsAccountUI = (() => {
   const POLL_LIMIT_MS = 5 * 60 * 1000;
 
   let root = null;
+  let chip = null;
+  let cardOpen = false;
   let mode = "closed"; // closed | signin | signup | reset
   let message = null; // { text, kind: "error" | "success" | "info" }
   let busy = false;
@@ -40,9 +42,20 @@ const NotebookToolsAccountUI = (() => {
       </form>`;
   }
 
+  function setCardOpen(next) {
+    cardOpen = next;
+    if (root) root.hidden = !cardOpen;
+    chip?.setAttribute("aria-expanded", String(cardOpen));
+  }
+
   async function render() {
     if (!root) return;
     const state = await Account.getState();
+    if (chip) {
+      chip.dataset.plan = state.signedIn ? state.plan : "guest";
+      chip.textContent = state.signedIn ? (state.plan === "pro" ? "Pro" : "Free") : "Sign in";
+      chip.title = state.signedIn ? `${state.email} · ${state.plan === "pro" ? "Pro" : "Free"} plan` : "Sign in to NotebookTools";
+    }
     if (state.signedIn && mode !== "closed") {
       mode = "closed";
       message = null;
@@ -190,6 +203,34 @@ const NotebookToolsAccountUI = (() => {
     root.id = "accountCard";
     root.setAttribute("aria-label", "Account");
     header.insertAdjacentElement("afterend", root);
+
+    // Compact mode: a plan chip in the header opens the card as a dropdown
+    const slot = document.querySelector("#accountChipSlot");
+    if (slot) {
+      chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "sp-account-chip";
+      chip.setAttribute("aria-haspopup", "dialog");
+      chip.setAttribute("aria-controls", "accountCard");
+      slot.appendChild(chip);
+      root.classList.add("is-dropdown");
+      setCardOpen(false);
+      chip.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setCardOpen(!cardOpen);
+        if (cardOpen && mode === "closed") {
+          Account.getState().then((state) => {
+            if (!state.signedIn) {
+              mode = "signin";
+              render();
+            }
+          });
+        }
+      });
+      document.addEventListener("mousedown", (event) => {
+        if (cardOpen && !root.contains(event.target) && event.target !== chip) setCardOpen(false);
+      });
+    }
 
     root.addEventListener("click", (event) => {
       const button = event.target.closest("[data-acct]");

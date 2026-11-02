@@ -1340,3 +1340,131 @@ textarea {
 :root[data-theme="dark"] .brand-logo {
   filter: invert(1) hue-rotate(180deg) brightness(1.1);
 }
+
+/* ==========================================================================
+   Side panel, simplified (v0.9): one-row header, segmented tabs, one shared
+   "Add to" notebook, lighter cards. Per-tab pickers stay in the DOM for the
+   import code but are hidden; sidepanel-target.js drives them.
+   ========================================================================== */
+.sidepanel-app { padding: 12px 14px 20px; position: relative; }
+.sidepanel-header { margin-bottom: 10px; }
+.sidepanel-header-row { min-height: 32px; }
+.sidepanel-logo { height: 14px; }
+.sidepanel-header-actions { gap: 6px; }
+.sidepanel-header .header-icon-btn {
+  align-items: center; background: transparent; border: 0; border-radius: 999px; color: var(--nt-muted);
+  cursor: pointer; display: inline-flex; height: 30px; justify-content: center; width: 30px;
+}
+.sidepanel-header .header-icon-btn:hover { background: var(--nt-line-soft); color: var(--nt-ink); }
+
+/* Account: a plan chip that opens the card as a dropdown */
+.sp-account-chip {
+  background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-ink);
+  cursor: pointer; font: 500 12px/1 inherit; font-family: inherit; height: 26px; padding: 0 10px; white-space: nowrap;
+}
+.sp-account-chip:hover { border-color: var(--nt-line-strong); }
+.sp-account-chip[data-plan="pro"] { background: var(--nt-accent); border-color: var(--nt-accent); color: #fff; }
+.sp-account-chip[data-plan="free"] { background: var(--nt-accent-soft); border-color: transparent; color: var(--nt-accent); }
+.acct.is-dropdown {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16); left: 14px; margin: 0; position: absolute; right: 14px; top: 48px; z-index: 40;
+}
+.acct.is-dropdown[hidden] { display: none; }
+
+/* Tabs: a quiet segmented control */
+.sidepanel-tabs {
+  background: var(--nt-line-soft); border: 0; border-radius: 10px; gap: 2px; margin-bottom: 10px; padding: 3px;
+}
+.sidepanel-tab {
+  border: 0; border-radius: 8px; font-size: 12.5px; margin: 0; min-height: 30px; padding: 6px 4px;
+}
+.sidepanel-tab.is-active {
+  background: var(--nt-surface); border: 0; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); color: var(--nt-ink);
+}
+
+/* The shared "Add to" notebook */
+.sp-target { align-items: center; display: flex; gap: 8px; margin-bottom: 12px; position: relative; }
+.sp-target[hidden] { display: none; }
+.sp-target-label { color: var(--nt-subtle); flex: none; font-size: 12px; }
+.sp-target-btn {
+  align-items: center; background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 10px; color: var(--nt-ink);
+  cursor: pointer; display: flex; flex: 1; font-family: inherit; gap: 8px; height: 36px; min-width: 0; padding: 0 10px 0 12px; text-align: left;
+}
+.sp-target-btn:hover, .sp-target.is-open .sp-target-btn { border-color: var(--nt-accent); }
+.sp-target-name { flex: 1; font-size: 13px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-target-name.is-muted { color: var(--nt-subtle); font-weight: 400; }
+.sp-target-count, .sp-target-item-count {
+  background: var(--nt-line-soft); border-radius: 999px; color: var(--nt-muted); flex: none; font-size: 11px; font-variant-numeric: tabular-nums; padding: 2px 7px;
+}
+.sp-target-new { background: var(--nt-accent-soft); border-radius: 6px; color: var(--nt-accent); flex: none; font-size: 11px; font-weight: 600; padding: 2px 6px; }
+.sp-target-caret { color: var(--nt-subtle); flex: none; }
+.sp-target-menu {
+  background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  display: flex; flex-direction: column; gap: 4px; left: 0; padding: 8px; position: absolute; right: 0; top: 42px; z-index: 30;
+}
+.sp-target-search, .sp-target-create-input {
+  border: 1px solid var(--nt-line); border-radius: 8px; font: inherit; font-size: 13px; height: 34px; padding: 0 10px; width: 100%;
+}
+.sp-target-list { display: flex; flex-direction: column; max-height: 260px; overflow-y: auto; padding-top: 4px; }
+.sp-target-item {
+  align-items: center; background: transparent; border: 0; border-radius: 8px; color: var(--nt-ink); cursor: pointer;
+  display: flex; font: inherit; font-size: 13px; gap: 8px; min-height: 34px; padding: 6px 8px; text-align: left; width: 100%;
+}
+.sp-target-item:hover { background: var(--nt-line-soft); }
+.sp-target-item.is-active { background: var(--nt-accent-soft); color: var(--nt-accent); font-weight: 500; }
+.sp-target-item-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-target-item.is-new { border-top: 1px solid var(--nt-line-soft); border-radius: 0 0 8px 8px; color: var(--nt-accent); font-weight: 500; margin-top: 2px; }
+.sp-target-empty { color: var(--nt-subtle); font-size: 12.5px; margin: 6px 8px; }
+.sp-target-create { display: flex; gap: 6px; margin-top: 2px; }
+.sp-target-create-btn { background: var(--nt-ink); border: 0; border-radius: 8px; color: var(--nt-surface); cursor: pointer; font: inherit; font-size: 12.5px; padding: 0 12px; }
+.sp-target-foot { border-top: 1px solid var(--nt-line-soft); padding: 8px 4px 2px; }
+.sp-target-refresh { align-self: flex-start; background: none; border: 0; color: var(--nt-subtle); cursor: pointer; font: inherit; font-size: 12px; padding: 4px; }
+.sp-target-refresh:hover { color: var(--nt-ink); }
+
+/* Switch (open notebook after import) */
+.sp-switch { align-items: center; cursor: pointer; display: flex; font-size: 12.5px; gap: 8px; color: var(--nt-muted); }
+.sp-switch input { height: 0; opacity: 0; position: absolute; width: 0; }
+.sp-switch-ui { background: var(--nt-line-strong); border-radius: 999px; flex: none; height: 18px; position: relative; transition: background 0.15s; width: 30px; }
+.sp-switch-ui::after { background: #fff; border-radius: 50%; content: ""; height: 14px; left: 2px; position: absolute; top: 2px; transition: transform 0.15s; width: 14px; }
+.sp-switch input:checked + .sp-switch-ui { background: var(--nt-accent); }
+.sp-switch input:checked + .sp-switch-ui::after { transform: translateX(12px); }
+
+/* Per-tab pickers and refresh links are driven by the shared bar */
+#panelImport .sp-destination,
+#bulkImportRoot .bulk-destination,
+#snapshotsPanelRoot .sp-destination,
+#refreshNotebookLmButton,
+#bulkRefreshButton,
+#snapshotsRefreshNotebooksBtn { display: none !important; }
+
+/* Lighter cards */
+.sidepanel-app .sp-card { border-color: var(--nt-line-soft); border-radius: 12px; padding: 12px; }
+.sidepanel-app .sp-label { color: var(--nt-muted); font-size: 11.5px; font-weight: 600; margin-bottom: 8px; }
+.sidepanel-app .sp-primary { border-radius: 999px; min-height: 40px; }
+
+/* Import: Studio folds away */
+.sp-studio { padding: 0 !important; }
+.sp-more-summary { color: var(--nt-muted); cursor: pointer; font-size: 12.5px; font-weight: 500; list-style: none; padding: 11px 12px; }
+.sp-more-summary::-webkit-details-marker { display: none; }
+.sp-more-summary::before { content: "＋"; margin-right: 6px; }
+.sp-more[open] .sp-more-summary::before { content: "−"; }
+.sp-more[open] { padding: 0 12px 12px; }
+.sp-more[open] .sp-more-summary { margin: 0 -12px; }
+.sp-more .sp-studio-hint { color: var(--nt-subtle); font-size: 12px; margin: 0 0 8px; }
+
+/* Snapshots: one capture row */
+.snapshots-capture-row { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; }
+.snapshots-capture-row .button { flex: none; min-height: 34px; padding: 0 14px; width: auto; }
+.snapshots-capture-row .snapshots-clear { color: var(--nt-subtle); margin-left: auto; }
+
+/* hidden means hidden, whatever the component's display rule */
+.sidepanel-app .sp-card[hidden],
+.sidepanel-app .button[hidden],
+.sidepanel-app .text-button[hidden] { display: none !important; }
+
+.snapshots-capture-row .button { flex: 1 1 0; }
+.snapshots-capture-row .snapshots-clear { flex: none; }
+
+.sp-switch, .sp-switch span { font-size: 12.5px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.snapshots-capture-row { flex-wrap: nowrap; }
+.snapshots-capture-row .button { min-width: 0; }
+.sidepanel-app .snapshots-capture-row { display: flex !important; grid-template-columns: none; }

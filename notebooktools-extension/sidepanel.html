@@ -18,22 +18,23 @@
         <div class="sidepanel-header-row">
           <img class="sidepanel-logo" src="logo.png" alt="NotebookTools" width="132" height="16">
           <div class="sidepanel-header-actions">
+            <button type="button" class="header-icon-btn" id="openNotebooksButton" title="All notebooks" aria-label="All notebooks">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3.5 9.5h17M9.5 9.5v10" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+            <span class="sp-account-slot" id="accountChipSlot"></span>
             <button type="button" class="header-icon-btn settings-btn" data-open-settings title="Settings" aria-label="Settings">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Dark mode" title="Dark mode">
-              <svg class="theme-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              <svg class="theme-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-            </button>
-            <label class="sidepanel-toggle" title="Open notebook after import">
-              <input type="checkbox" id="autoOpenNotebookToggle">
-              <span class="sidepanel-toggle-ui" aria-hidden="true"></span>
-              <span class="sidepanel-toggle-text" data-i18n="autoOpen">Auto-open</span>
-            </label>
           </div>
         </div>
-        <p class="sidepanel-tagline" id="pageContext">Import to NotebookLM</p>
-        <button type="button" class="button secondary compact sp-notebooks-btn" id="openNotebooksButton" data-i18n="openNotebooks">Open notebooks</button>
+        <p class="sidepanel-tagline" id="pageContext" hidden>Import to NotebookLM</p>
+        <div hidden id="spAutoOpenHolder">
+          <label class="sp-switch" title="Open the notebook after importing">
+            <input type="checkbox" id="autoOpenNotebookToggle">
+            <span class="sp-switch-ui" aria-hidden="true"></span>
+            <span>Open notebook after import</span>
+          </label>
+        </div>
       </header>
 
       <nav class="sidepanel-tabs" role="tablist" aria-label="NotebookTools panels">
@@ -42,6 +43,8 @@
         <button class="sidepanel-tab" id="tabSnapshots" type="button" role="tab" aria-selected="false" aria-controls="panelSnapshots" data-panel="snapshots">Snapshots</button>
         <button class="sidepanel-tab" id="tabPrompts" type="button" role="tab" aria-selected="false" aria-controls="panelPrompts" data-panel="prompts" data-i18n="tabPrompts">Prompts</button>
       </nav>
+
+      <div class="sp-target" id="spTarget" aria-label="Destination notebook"></div>
 
       <section class="sidepanel-panel is-active" id="panelImport" role="tabpanel" aria-labelledby="tabImport">
         <div class="sp-stack">
@@ -82,8 +85,9 @@
           <p class="source-limit-note" id="importLimitNote" hidden></p>
 
           <section class="sp-card sp-studio" id="studioSection" hidden>
-            <h2 class="sp-label">Studio</h2>
-            <p class="sp-studio-hint">Import this page and create a NotebookLM studio output.</p>
+            <details class="sp-more">
+            <summary class="sp-more-summary">Also create in Studio</summary>
+            <p class="sp-studio-hint">Import this page and create a Studio output in one go.</p>
             <label class="sp-field-label" for="studioArtifactType">Create</label>
             <select id="studioArtifactType" aria-label="Studio output type"></select>
             <label class="embedded-toggle sp-studio-toggle" for="studioOpenTabToggle">
@@ -91,10 +95,11 @@
               <span class="embedded-toggle-ui" aria-hidden="true"></span>
               <span class="embedded-toggle-text">Open notebook in new tab</span>
             </label>
-            <button class="button sp-primary sp-studio-btn" id="studioButton" type="button">Create mind map</button>
+            <button class="button secondary sp-studio-btn" id="studioButton" type="button">Create mind map</button>
+            </details>
           </section>
 
-          <button class="button sp-primary" id="importButton" type="button">Add to NotebookLM</button>
+          <button class="button sp-primary" id="importButton" type="button">Add to notebook</button>
 
           <div class="sp-actions">
             <button class="text-button" id="refreshNotebookLmButton" type="button">Refresh</button>
@@ -143,6 +148,7 @@
     <script src="account.js"></script>
     <script src="account-ui.js"></script>
     <script src="sidepanel.js"></script>
+    <script src="sidepanel-target.js"></script>
       <script src="dev-reload.js"></script>
   </body>
 </html>

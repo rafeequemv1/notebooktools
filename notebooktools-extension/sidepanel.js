@@ -57,9 +57,9 @@ let youtubeBatchActive = false;
 let youtubeBatchLoading = false;
 
 const MODE_LABELS = {
-  webpage: "Add to NotebookLM",
-  youtube: "Import video",
-  text: "Import text"
+  webpage: "Add page to notebook",
+  youtube: "Add video to notebook",
+  text: "Add text to notebook"
 };
 
 const picker = NotebookToolsPicker.create({
