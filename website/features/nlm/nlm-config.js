@@ -118,7 +118,7 @@ window.NLM_CONFIG = {
 
   /* NotebookLM-specific icons (24×24 viewBox, drawn with currentColor). */
   svg: {
-    logo: '<svg viewBox="0 0 24 24"><g fill="none" stroke-width="2.1" stroke-linecap="round"><path stroke="#8ab4f8" d="M4.2 18.5V13a7.8 7.8 0 0 1 15.6 0v5.5"/><path stroke="#4c8df6" d="M7.6 18.5V13a4.4 4.4 0 0 1 8.8 0v5.5"/><path stroke="#1a5ff0" d="M11 18.5V13a1 1 0 0 1 2 0v5.5"/></g></svg>',
+    logo: '<img src="/assets/gemini-notebook-mark-64.png" alt="" width="24" height="24" style="display:block;width:100%;height:100%">',
     audio: '<svg viewBox="0 0 24 24"><path d="M4 10h1.8v5H4zm3.6-3h1.8v11H7.6zm3.6 3h1.8v8h-1.8zm3.6-2h1.8v7h-1.8z"/><path d="M19.5 2.5l.75 1.75L22 5l-1.75.75-.75 1.75-.75-1.75L17 5l1.75-.75z"/></svg>',
     slides: '<svg viewBox="0 0 24 24"><path d="M3 5.5h18v13H3zM4.8 7.3v9.4h2.1V7.3zm4 0v9.4h6.4V7.3zm8.3 0v9.4h2.1V7.3z" fill-rule="evenodd"/></svg>',
     reports: '<svg viewBox="0 0 24 24"><path d="M7 4h7v1.8H8.8V15H18V9.5h1.8v7.3H7zM3.5 8h1.8v10.7H16v1.8H3.5z"/><path d="M18.5 1.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>',

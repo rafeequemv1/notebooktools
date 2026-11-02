@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hero shot</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&display=block" rel="stylesheet">
+<link rel="stylesheet" href="/features/nlm/nlm-ui.css">
+<link rel="stylesheet" href="/features/surfaces/surfaces.css">
+<link rel="stylesheet" href="/__ribbon.css">
+<style>
+  /* The homepage hero: the real Gemini Notebook screen, with the
+     NotebookTools ribbon added between its header and its panels. */
+  html, body { margin: 0; background: transparent; }
+  #shot { width: 1440px; height: 900px; padding: 0; box-sizing: border-box; }
+  #shot .br-window { height: 100%; border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  #shot .br-page { height: 100%; }
+  #shot .nlm-app { height: 100%; display: flex; flex-direction: column; }
+  #shot .nlm-body { flex: 1; min-height: 0; }
+  /* ribbon in the page flow, lit so the eye finds it */
+  #shot .ntr { margin: 0 16px 12px; box-shadow: 0 0 0 3px rgba(11, 87, 208, 0.16), 0 6px 18px -6px rgba(11, 87, 208, 0.35); border-color: rgba(11, 87, 208, 0.35); }
+  #shot .ntr svg { width: 16px !important; height: 16px !important; fill: none !important; flex: none; }
+  #shot .ntr .ntr-brand img { width: 18px; height: 18px; }
+  #shot .ntr { height: 48px; overflow: visible; }
+  #shot .ntr-btn { font-size: 13.5px; }
+  #shot .ntr-tag { position: absolute; left: 50%; transform: translateX(-50%); top: -11px; background: #0b57d0; color: #fff; font: 600 11px/1 "Google Sans", sans-serif; letter-spacing: .04em; padding: 5px 9px; border-radius: 999px; }
+</style>
+</head>
+<body>
+<div id="shot">
+  <div class="br-window" data-surface="browser" data-tabs='[{"title": "Research — AI tools - Gemini Notebook", "url": "notebook.google.com/notebook/8f2c41d0", "icon": "nlm", "active": true}, {"title": "How RAG works - YouTube", "url": "youtube.com/watch?v=Qv3jF0sXc2Y", "icon": "yt"}]'>
+    <div class="br-page"><div class="nlm-app">
+      <header class="nlm-topbar" data-nlm="topbar"><span class="nlm-notebook-title">Research — AI tools</span></header>
+
+      <div class="ntr" role="toolbar" aria-label="NotebookTools" style="position:relative">
+        <span class="ntr-tag">NOTEBOOKTOOLS</span>
+        <div class="ntr-brand"><img src="/assets/logo-mark-32.png" alt="" width="18" height="18"></div>
+        <div class="ntr-group"><span class="ntr-gname">Organize</span><div class="ntr-items">
+          <span class="ntr-btn ntr-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg><span class="ntr-label">PhD</span></span>
+          <span class="ntr-btn ntr-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7-8.3-8.3Z"/><circle cx="8" cy="8" r="1.3" fill="currentColor" stroke="none"/></svg><span class="ntr-label">Thesis, AI</span></span>
+        </div></div>
+        <div class="ntr-group"><span class="ntr-gname">Chat</span><div class="ntr-items">
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ntr-label">Copy</span></span>
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg><span class="ntr-label">Export</span></span>
+        </div></div>
+        <div class="ntr-group"><span class="ntr-gname">Sources</span><div class="ntr-items">
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg><span class="ntr-label">Add links</span></span>
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M8 6V4h8v2"/></svg><span class="ntr-label">Open tabs</span></span>
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg><span class="ntr-label">Manage</span></span>
+        </div></div>
+        <div class="ntr-group"><span class="ntr-gname">Create</span><div class="ntr-items">
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4.5 4.5v12.5H7z"/><path d="M14 3.5V8h4.5M9.5 12.5h6M9.5 16h6"/></svg><span class="ntr-label">Blog</span></span>
+        </div></div>
+        <div class="ntr-spacer"></div>
+        <div class="ntr-end">
+          <span class="ntr-btn ntr-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M15 4 9 20"/></svg><span class="ntr-label">Prompts</span></span>
+          <span class="ntr-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M9.5 9.5v10"/></svg><span class="ntr-label">All notebooks</span></span>
+        </div>
+      </div>
+
+      <div class="nlm-body">
+        <aside class="nlm-sources">
+          <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+          <div data-nlm="source-tools"></div>
+          <ul class="nlm-source-list">
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf"></span><span class="nlm-src-name">RAG survey 2026.pdf</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt"></span><span class="nlm-src-name">How RAG works in 5 minutes</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-web"></span><span class="nlm-src-name">Evaluating retrieval systems</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt"></span><span class="nlm-src-name">Long context vs retrieval (talk)</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-gdoc"></span><span class="nlm-src-name">Thesis notes, chapter 2</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-web"></span><span class="nlm-src-name">Chunking strategies compared</span></li>
+          </ul>
+        </aside>
+        <section class="nlm-chat">
+          <div class="nlm-chat-scroll">
+            <div data-nlm="nb-head" data-title="Research — AI tools" data-meta="6 sources · 2 Nov 2026"></div>
+            <p class="nlm-summary">These sources compare <strong>retrieval-augmented generation</strong> with long-context models. The survey maps the main <strong>retrieval strategies</strong>, the evaluation guide covers <strong>faithfulness metrics</strong>, and the two talks argue when a long context window is enough.</p>
+            <div data-nlm="msg-actions"></div>
+            <div data-nlm="suggest"><div class="nlm-suggest-card">When does RAG beat a long context window?</div><div class="nlm-suggest-card">Which evaluation metrics matter most?</div><div class="nlm-suggest-card">Summarize the survey in five bullets</div></div>
+          </div>
+          <div data-nlm="composer" data-sources="6"></div>
+        </section>
+        <aside class="nlm-studio">
+          <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+          <div data-nlm="studio"></div>
+        </aside>
+      </div>
+    </div></div>
+  </div>
+</div>
+<script src="/features/nlm/nlm-config.js"></script>
+<script src="/features/nlm/nlm-shell.js"></script>
+<script src="/features/surfaces/surfaces.js"></script>
+</body>
+</html>
