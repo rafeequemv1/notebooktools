@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { CalendarDays, ChevronDown, Download, FileText, Share2 } from 'lucide-react'
-import { Bar, Check, Collapse, Count, Scroll, Spinner, Stage, States, Window, between, type Act, type Point, type Rect } from '../kit'
-import { ICON, LOGO, TOKENS } from './shared'
+import { Bar, Check, Collapse, Count, Popover, Scroll, Spinner, Stage, States, Window, between, type Act, type Point, type Rect } from '../kit'
+import { DownloadButton, DownloadRow, ICON, LOGO, TOKENS, type DlState } from './shared'
 import './snapshots.css'
 
 // Flow story: making a how-to guide for an app. Do a step in the app, press
@@ -17,11 +17,14 @@ type S = {
   flash: Rect | null
   shots: number
   gen: Gen
+  dl: DlState
+  bubble: boolean
   doc: boolean
 }
 
-const initial: S = { step: 0, capturing: false, sel: null, flash: null, shots: 0, gen: 'idle', doc: false }
-const POSTER: S = { ...initial, step: 4, shots: 3, gen: 'done', doc: true }
+const initial: S = { step: 0, capturing: false, sel: null, flash: null, shots: 0, gen: 'idle', dl: 'idle', bubble: false, doc: false }
+const POSTER: S = { ...initial, step: 4, shots: 3, gen: 'done', dl: 'done', doc: true }
+const DOC = 'How to export a revenue report.doc'
 
 type Crop = { x: number; y: number; w: number; h: number }
 /** What each snapshot captured, in app coordinates (the app is 560 x 400). */
@@ -146,11 +149,17 @@ async function script(a: Act<S>) {
   await a.set({ gen: 'embed' })
   await a.wait(700)
   await a.set({ gen: 'done' })
-  await a.wait(400)
-  await a.move('open-guide')
-  await a.wait(200)
+  // The DOC saves itself: Chrome's download button fills, the bubble opens
+  await a.wait(300)
+  await a.set({ dl: 'progress' })
+  await a.wait(1000)
+  await a.set({ dl: 'done', bubble: true })
+  await a.wait(500)
+  await a.move('dl-file')
+  await a.wait(250)
   await a.click()
-  await a.set({ doc: true })
+  // It opens in the word processor, zooming out of the file the way a window does
+  await a.set({ bubble: false, doc: true })
   await a.wait(1300)
   await a.scroll('guide', 'g-1', { offset: 40, duration: 1200 })
   await a.wait(1100)
@@ -176,6 +185,16 @@ function Row({ label, state, extra }: { label: string; state: 'wait' | 'busy' | 
   )
 }
 
+function guideStep(c: (typeof CAPTURES)[number], i: number, wide: boolean) {
+  return (
+    <section key={i} className="nt-sn__g" data-target={`g-${i}`}>
+      <div className="nt-sn__g-head"><span className="nt-sn__g-num">{i + 1}</span><span className="nt-sn__g-title">{c.title}</span></div>
+      <div className="nt-sn__para"><Bar w="90%" h={7} tone={2} /><Bar w="56%" h={7} tone={2} /></div>
+      <figure className="nt-sn__g-fig"><Shot crop={c.crop} step={c.step} width={Math.min(wide ? 440 : 250, (c.crop.w / 560) * (wide ? 860 : 460))} /></figure>
+    </section>
+  )
+}
+
 export default function SnapshotsGuide() {
   return (
     <Stage
@@ -196,9 +215,14 @@ export default function SnapshotsGuide() {
         const wide = layout === 'wide'
         const view = rect('app-view')
         const thumbW = wide ? 128 : 98
+        const dl = rect('dl-btn')
+        const bubbleW = wide ? 300 : 280
+        // The document window grows out of the file in the bubble
+        const docAt = wide ? { x: 120, y: 40 } : { x: 12, y: 30 }
+        const file = { x: dl.x + dl.width - bubbleW / 2, y: dl.y + dl.height + 50 }
         return (
           <>
-            <Window url="analytics.northwind.app/reports" nav urlShape="pill" className="nt-sn__win" receded={s.doc}>
+            <Window url="analytics.northwind.app/reports" nav urlShape="pill" className="nt-sn__win" toolbar={<DownloadButton state={s.dl} />}>
               <div className="nt-sn__app-wrap" data-target="app-view">
                 <AppScreen step={s.step} interactive />
               </div>
@@ -254,29 +278,44 @@ export default function SnapshotsGuide() {
                   <Row label="Embed screenshots" state={rowState(s.gen, 'embed')} />
                 </div>
               </Collapse>
-              <button type="button" className="nt-sn__go" data-target={s.gen === 'done' ? 'open-guide' : 'make-guide'} data-cursor="pointer" data-done={s.gen === 'done' || undefined}>
+              <button type="button" className="nt-sn__go" data-target="make-guide" data-cursor="pointer" data-done={s.gen === 'done' || undefined}>
                 <States
                   value={s.gen === 'done' ? 'open' : s.gen === 'idle' ? 'make' : 'busy'}
-                  states={{ make: <span>Create how-to guide</span>, busy: <span className="nt-sn__go-row"><Spinner size={14} /> Writing…</span>, open: <span>Open guide</span> }}
+                  states={{ make: <span>Create how-to guide</span>, busy: <span className="nt-sn__go-row"><Spinner size={14} /> Writing…</span>, open: <span className="nt-sn__go-row"><Check on size={15} /> Saved to Downloads</span> }}
                 />
               </button>
             </aside>
 
-            {/* The finished guide */}
-            <Window title="How to export a revenue report.docx" className="nt-sn__doc" data-show={s.doc || undefined}>
+            {/* Chrome's download bubble */}
+            <Popover show={s.bubble} origin="top right" className="nt-dlb" style={{ left: Math.max(8, Math.min((wide ? 960 : 358) - bubbleW - 8, dl.x + dl.width - bubbleW + 6)), top: dl.y + dl.height + 8, width: bubbleW }}>
+              <DownloadRow name={DOC} size="412 KB" kind="doc" target="dl-file" />
+            </Popover>
+
+            {/* The finished guide, open in a word processor: real pages on a grey desk */}
+            <Window
+              title={DOC}
+              className="nt-sn__doc"
+              data-show={s.doc || undefined}
+              style={{ transformOrigin: `${file.x - docAt.x}px ${file.y - docAt.y}px` }}
+            >
+              <div className="nt-sn__doc-tools">
+                <span className="nt-sn__doc-menu"><b>File</b><span>Edit</span><span>View</span><span>Insert</span><span>Format</span></span>
+                <span className="nt-sn__doc-fmt"><i style={{ width: 70 }} /><i style={{ width: 34 }} /><em>B</em><em><u>U</u></em><em><s>I</s></em><i style={{ width: 52 }} /></span>
+              </div>
               <Scroll name="guide" className="nt-sn__doc-scroll">
                 <article className="nt-sn__paper">
                   <div className="nt-sn__doc-kicker">Northwind Analytics · How-to guide</div>
                   <div className="nt-sn__doc-title">How to export a revenue report</div>
                   <div className="nt-sn__doc-meta">3 steps · written from 3 snapshots</div>
                   <div className="nt-sn__para"><Bar w="94%" h={7} tone={3} /><Bar w="70%" h={7} tone={3} /></div>
-                  {CAPTURES.map((c, i) => (
-                    <section key={i} className="nt-sn__g" data-target={`g-${i}`}>
-                      <div className="nt-sn__g-head"><span className="nt-sn__g-num">{i + 1}</span><span className="nt-sn__g-title">{c.title}</span></div>
-                      <div className="nt-sn__para"><Bar w="90%" h={7} tone={2} /><Bar w="56%" h={7} tone={2} /></div>
-                      <figure className="nt-sn__g-fig"><Shot crop={c.crop} step={c.step} width={Math.min(wide ? 470 : 270, (c.crop.w / 560) * (wide ? 900 : 480))} /></figure>
-                    </section>
-                  ))}
+                  {CAPTURES.slice(0, 2).map((c, i) => guideStep(c, i, wide))}
+                  <span className="nt-sn__page-no">1</span>
+                </article>
+                <article className="nt-sn__paper">
+                  {CAPTURES.slice(2).map((c, i) => guideStep(c, i + 2, wide))}
+                  <div className="nt-sn__g-done"><Check on size={16} /> That's it: the CSV is in your Downloads folder.</div>
+                  <div className="nt-sn__para"><Bar w="88%" h={7} tone={3} /><Bar w="64%" h={7} tone={3} /></div>
+                  <span className="nt-sn__page-no">2</span>
                 </article>
               </Scroll>
             </Window>

@@ -2,10 +2,10 @@
 
 /* The app being captured: inset left, off the bottom */
 .nt-sn .nt-sn__win { box-shadow: var(--ss-shadow-hero); height: 640px; left: 40px; position: absolute; top: 36px; width: 620px; }
-.nt-sn .ss-stage[data-layout="compact"] .nt-sn__win { height: 360px; left: 16px; top: 20px; width: 400px; }
+.nt-sn .ss-stage[data-layout="compact"] .nt-sn__win { height: 360px; left: 12px; top: 20px; width: 334px; }
 .nt-sn .nt-sn__app-wrap { background: #fff; height: 100%; overflow: hidden; padding: 20px 70px 0 22px; position: relative; }
-.nt-sn .ss-stage[data-layout="compact"] .nt-sn__app-wrap { padding: 14px 14px 0; }
-.nt-sn .ss-stage[data-layout="compact"] .nt-sn__app-wrap .nt-sn__app { transform: scale(.6); transform-origin: 0 0; }
+.nt-sn .ss-stage[data-layout="compact"] .nt-sn__app-wrap { padding: 14px 10px 0; }
+.nt-sn .ss-stage[data-layout="compact"] .nt-sn__app-wrap .nt-sn__app { transform: scale(.55); transform-origin: 0 0; }
 
 /* Flash: one quick white wash per capture */
 .nt-sn .nt-sn__flash { animation: nt-sn-flash .5s ease-out forwards; background: #fff; border-radius: 4px; pointer-events: none; position: absolute; z-index: 4; }
@@ -78,16 +78,30 @@
 .nt-sn .nt-sn__go[data-done] { background: #0b57d0; }
 .nt-sn .nt-sn__go-row { align-items: center; display: inline-flex; gap: 8px; }
 
-/* The generated guide, coming forward */
+/* The guide, opened from Downloads: the window zooms out of the file in the
+   bubble (origin set inline), the way an app window opens */
 .nt-sn .nt-sn__doc {
-  box-shadow: var(--ss-shadow-hero); height: 600px; left: 120px; opacity: 0; pointer-events: none; position: absolute; top: 48px;
-  transform: translateY(24px) scale(.97); transform-origin: 50% 0; transition: opacity .45s ease, transform .7s cubic-bezier(.25,.8,.25,1); width: 720px; z-index: 5;
+  box-shadow: var(--ss-shadow-hero); height: 620px; left: 120px; opacity: 0; pointer-events: none; position: absolute; top: 40px;
+  transform: scale(.08); transition: opacity .12s ease .02s, transform .38s cubic-bezier(.2,.9,.25,1); visibility: hidden; width: 720px; z-index: 5;
 }
-.nt-sn .nt-sn__doc[data-show] { opacity: 1; pointer-events: auto; transform: none; }
-.nt-sn .ss-stage[data-layout="compact"] .nt-sn__doc { height: 560px; left: 12px; top: 36px; width: 334px; }
-.nt-sn .nt-sn__doc-scroll { background: #f1f3f4; height: 100%; }
-.nt-sn .nt-sn__paper { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.1); margin: 22px auto 60px; max-width: 560px; padding: 36px 44px 50px; }
-.nt-sn .ss-stage[data-layout="compact"] .nt-sn__paper { margin: 12px; padding: 22px 18px 40px; }
+.nt-sn .nt-sn__doc[data-show] { opacity: 1; pointer-events: auto; transform: none; visibility: visible; }
+.nt-sn .nt-sn__doc:not([data-show]) { transition: opacity .2s ease, transform .3s ease, visibility 0s .3s; }
+.nt-sn .ss-stage[data-layout="compact"] .nt-sn__doc { height: 580px; left: 12px; top: 30px; width: 334px; }
+.nt-sn .nt-sn__doc .ss-window__body { display: flex; flex-direction: column; }
+.nt-sn .nt-sn__doc-tools { background: #fff; border-bottom: 1px solid #e3e6ea; display: flex; flex-direction: column; flex: none; gap: 6px; padding: 6px 12px 8px; }
+.nt-sn .nt-sn__doc-menu { color: #3c4043; display: flex; font-size: 12px; gap: 14px; }
+.nt-sn .nt-sn__doc-menu b { font-weight: 500; }
+.nt-sn .nt-sn__doc-fmt { align-items: center; background: #f1f3f4; border-radius: 999px; display: flex; gap: 10px; height: 26px; padding: 0 12px; }
+.nt-sn .nt-sn__doc-fmt i { background: #dadce0; border-radius: 3px; display: block; height: 8px; }
+.nt-sn .nt-sn__doc-fmt em { color: #5f6368; font: 600 12px/1 Georgia, serif; font-style: normal; }
+.nt-sn .ss-stage[data-layout="compact"] .nt-sn__doc-fmt i:last-child { display: none; }
+.nt-sn .nt-sn__doc-scroll { background: #e8eaed; flex: 1; min-height: 0; }
+/* Letter-shaped pages with a gap between, like a word processor's print layout */
+.nt-sn .nt-sn__paper { aspect-ratio: 8.5 / 11; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.04); margin: 18px auto 0; max-width: 560px; overflow: hidden; padding: 40px 48px 36px; position: relative; }
+.nt-sn .nt-sn__paper:last-child { margin-bottom: 40px; }
+.nt-sn .ss-stage[data-layout="compact"] .nt-sn__paper { aspect-ratio: auto; margin: 10px 10px 0; min-height: 400px; padding: 22px 18px 34px; }
+.nt-sn .nt-sn__page-no { bottom: 14px; color: #9aa0a6; font-size: 10.5px; left: 0; position: absolute; right: 0; text-align: center; }
+.nt-sn .nt-sn__g-done { align-items: center; color: #188038; display: flex; font-size: 13.5px; font-weight: 500; gap: 8px; margin: 18px 0 12px; }
 .nt-sn .nt-sn__doc-kicker { color: #0b57d0; font: 600 12px/1 "Google Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
 .nt-sn .nt-sn__doc-title { font: 700 28px/1.15 "Google Sans", sans-serif; letter-spacing: -.02em; margin: 10px 0 8px; }
 .nt-sn .ss-stage[data-layout="compact"] .nt-sn__doc-title { font-size: 21px; }
@@ -142,3 +156,4 @@
 .nt-sn .ss-stage[data-layout="compact"] .nt-sn__tray { transition: top .6s cubic-bezier(.45,0,.1,1); }
 .nt-sn .ss-stage[data-layout="compact"] .nt-sn__tray[data-phase="capture"] { top: 392px; }
 .nt-sn .ss-stage[data-layout="compact"] .nt-sn__tray[data-phase="guide"] { top: 200px; }
+.nt-sn .nt-sn__doc .ss-window__title { overflow: hidden; padding: 0 70px; text-overflow: ellipsis; white-space: nowrap; }

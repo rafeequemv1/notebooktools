@@ -1,18 +1,21 @@
 import type { ReactNode } from 'react'
 import { ChevronDown, FileText, Folder, NotebookPen, Presentation } from 'lucide-react'
 import { Bar, Check, Collapse, Count, Popover, Scroll, Spinner, Stage, States, Window, type Act } from '../kit'
-import { ICON, LOGO, TOKENS } from './shared'
+import { DownloadButton, DownloadRow, ICON, LOGO, TOKENS, type DlState } from './shared'
 import './slides.css'
 
 // Flow story: a slide deck in Studio becomes a full blog post. Blog in the
 // ribbon, pick the deck, Write blog: import the deck, write, embed every
-// slide. Open the post and scroll through it, slides in place as figures.
+// slide. The post downloads as HTML the way Chrome shows it (button, ring,
+// bubble); open the file and it loads in a new tab, slides in place as figures.
 
 type Step = 'idle' | 'import' | 'write' | 'images' | 'done'
-type S = { menu: boolean; step: Step; images: number; blog: boolean }
+/** load: 0 not opened, 1 tab open and loading, 2 painted, 3 images in */
+type S = { menu: boolean; step: Step; images: number; dl: DlState; bubble: boolean; load: 0 | 1 | 2 | 3 }
 
-const initial: S = { menu: false, step: 'idle', images: 0, blog: false }
-const POSTER: S = { menu: false, step: 'done', images: 6, blog: true }
+const initial: S = { menu: false, step: 'idle', images: 0, dl: 'idle', bubble: false, load: 0 }
+const POSTER: S = { menu: false, step: 'done', images: 6, dl: 'done', bubble: false, load: 3 }
+const FILE = 'launch-plan-2026.html'
 const GN_MARK = '/assets/gemini-notebook-mark.png'
 
 const SLIDES = [
@@ -64,12 +67,22 @@ async function script(a: Act<S>) {
   }
   await a.wait(350)
   await a.set({ step: 'done' })
-  await a.wait(450)
-  await a.move('open-blog')
-  await a.wait(200)
+  // Saved as HTML: Chrome's download button pops in and fills
+  await a.wait(500)
+  await a.set({ menu: false, dl: 'progress' })
+  await a.wait(1000)
+  await a.set({ dl: 'done', bubble: true })
+  await a.wait(500)
+  await a.move('dl-file')
+  await a.wait(250)
   await a.click()
-  await a.set({ menu: false, blog: true })
-  await a.wait(1300)
+  // Opens in a new tab: blank, loading, then text, then the slide images
+  await a.set({ bubble: false, load: 1 })
+  await a.wait(650)
+  await a.set({ load: 2 })
+  await a.wait(350)
+  await a.set({ load: 3 })
+  await a.wait(1200)
   await a.scroll('post', 'fig-1', { offset: 70, duration: 1300 })
   await a.wait(1100)
   await a.scroll('post', 'fig-2', { offset: 70, duration: 1100 })
@@ -111,49 +124,96 @@ export default function SlidesToBlog() {
       {(s, rect, layout) => {
         const wide = layout === 'wide'
         const btn = rect('blog-btn')
+        const dl = rect('dl-btn')
+        const tab = s.load > 0
+        const bubbleW = wide ? 300 : 280
         const busy = (step: Step) => (s.step === step ? 'busy' : reached(s.step, step) && s.step !== step ? 'done' : 'wait')
         return (
           <>
-            <Window url="notebook.google.com/notebook/5a17c0de" nav urlShape="pill" className="nt-sl__nb" receded={s.blog}>
-              <div className="nt-sl__page">
-                <div className="nt-sl__head">
-                  <img src={GN_MARK} alt="Gemini Notebook" width={30} height={30} />
-                  <span className="nt-sl__title">Product launch 2026</span>
-                </div>
-                <div className="nt-sl__ribbon">
-                  <img src={LOGO} alt="" width={18} height={18} />
-                  {wide && <span className="nt-sl__chip"><Folder {...ICON} size={14} />Marketing</span>}
-                  {wide && <span className="nt-sl__gname">Create</span>}
-                  <span className="nt-sl__rbtn" data-target="blog-btn" data-cursor="pointer" data-open={s.menu || undefined}>
-                    <NotebookPen {...ICON} size={15} />Blog<ChevronDown {...ICON} size={13} />
-                  </span>
-                  {wide && <span className="nt-sl__rbtn is-quiet"><FileText {...ICON} size={15} />Snapshot doc</span>}
-                </div>
-                <div className="nt-sl__panels">
-                  {wide && (
-                    <section className="nt-sl__panel">
-                      <div className="nt-sl__panel-title">Sources</div>
-                      {[62, 50, 70, 44].map((w, i) => <div key={i} className="nt-sl__src"><FileText {...ICON} size={15} /><Bar w={`${w}%`} h={6} tone={2} /></div>)}
+            <Window
+              url={tab ? <span className="nt-sl__addr"><span className="nt-sl__addr-chip">File</span>/Users/you/Downloads/{FILE}</span> : 'notebook.google.com/notebook/5a17c0de'}
+              nav
+              urlShape="pill"
+              className="nt-sl__win"
+              tabs={['Product launch 2026 - Gemini Notebook', 'Launch 2026: how we win mid-market teams']}
+              activeTab={tab ? 1 : 0}
+              tabIcons={[
+                <img key="nb" className="nt-sl__tab-ico" src={GN_MARK} alt="" width={14} height={14} />,
+                <span key="blog" className="nt-sl__tab-ico" data-loading={s.load === 1 || undefined}>{s.load === 1 ? <Spinner size={12} /> : <FileText {...ICON} size={13} />}</span>,
+              ]}
+              toolbar={<DownloadButton state={s.dl} />}
+              data-tab={tab || undefined}
+            >
+              <div className="nt-sl__view">
+                <div className="nt-sl__page">
+                  <div className="nt-sl__head">
+                    <img src={GN_MARK} alt="Gemini Notebook" width={30} height={30} />
+                    <span className="nt-sl__title">Product launch 2026</span>
+                  </div>
+                  <div className="nt-sl__ribbon">
+                    <img src={LOGO} alt="" width={18} height={18} />
+                    {wide && <span className="nt-sl__chip"><Folder {...ICON} size={14} />Marketing</span>}
+                    {wide && <span className="nt-sl__gname">Create</span>}
+                    <span className="nt-sl__rbtn" data-target="blog-btn" data-cursor="pointer" data-open={s.menu || undefined}>
+                      <NotebookPen {...ICON} size={15} />Blog<ChevronDown {...ICON} size={13} />
+                    </span>
+                    {wide && <span className="nt-sl__rbtn is-quiet"><FileText {...ICON} size={15} />Snapshot doc</span>}
+                  </div>
+                  <div className="nt-sl__panels">
+                    {wide && (
+                      <section className="nt-sl__panel">
+                        <div className="nt-sl__panel-title">Sources</div>
+                        {[62, 50, 70, 44].map((w, i) => <div key={i} className="nt-sl__src"><FileText {...ICON} size={15} /><Bar w={`${w}%`} h={6} tone={2} /></div>)}
+                      </section>
+                    )}
+                    <section className="nt-sl__panel nt-sl__chat">
+                      <Bar w="92%" h={6} tone={3} /><Bar w="86%" h={6} tone={3} /><Bar w="64%" h={6} tone={3} />
+                      <div style={{ height: 10 }} />
+                      <Bar w="90%" h={6} tone={2} /><Bar w="72%" h={6} tone={2} />
                     </section>
-                  )}
-                  <section className="nt-sl__panel nt-sl__chat">
-                    <Bar w="92%" h={6} tone={3} /><Bar w="86%" h={6} tone={3} /><Bar w="64%" h={6} tone={3} />
-                    <div style={{ height: 10 }} />
-                    <Bar w="90%" h={6} tone={2} /><Bar w="72%" h={6} tone={2} />
-                  </section>
-                  {wide && (
-                    <section className="nt-sl__panel">
-                      <div className="nt-sl__panel-title">Studio</div>
-                      <div className="nt-sl__artifact">
-                        <span className="nt-sl__artifact-ico"><Presentation {...ICON} size={16} /></span>
-                        <span className="nt-sl__artifact-text"><b>Launch deck</b><em>Slide deck · 6 slides</em></span>
-                      </div>
-                      <div className="nt-sl__thumbs">{SLIDES.slice(0, 4).map((_, i) => <Slide key={i} i={i} width={78} />)}</div>
-                    </section>
-                  )}
+                    {wide && (
+                      <section className="nt-sl__panel">
+                        <div className="nt-sl__panel-title">Studio</div>
+                        <div className="nt-sl__artifact">
+                          <span className="nt-sl__artifact-ico"><Presentation {...ICON} size={16} /></span>
+                          <span className="nt-sl__artifact-text"><b>Launch deck</b><em>Slide deck · 6 slides</em></span>
+                        </div>
+                        <div className="nt-sl__thumbs">{SLIDES.slice(0, 4).map((_, i) => <Slide key={i} i={i} width={78} />)}</div>
+                      </section>
+                    )}
+                  </div>
+                </div>
+
+                {/* The downloaded post, open in its own tab */}
+                <div className="nt-sl__blog" data-load={s.load}>
+                  <span className="nt-sl__progress" />
+                  <Scroll name="post" className="nt-sl__scroll" bar="overlay">
+                    <article className="nt-sl__post">
+                      <div className="nt-sl__post-kicker">Launch plan</div>
+                      <div className="nt-sl__post-title">Launch 2026: how we win mid-market teams</div>
+                      <div className="nt-sl__post-meta"><Bar w={90} h={6} tone={2} /><span>·</span><span>6 min read</span></div>
+                      <figure className="nt-sl__fig" data-target="fig-0"><Slide i={0} width={wide ? 560 : 270} /></figure>
+                      <div className="nt-sl__para"><Bar w="96%" h={7} tone={3} /><Bar w="92%" h={7} tone={3} /><Bar w="70%" h={7} tone={3} /></div>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <section key={i} className="nt-sl__sec">
+                          <div className="nt-sl__h2">{['', 'Who we are building for', 'Pricing that grows with usage', 'Partners before paid ads', 'The first 90 days', 'What success looks like'][i]}</div>
+                          <div className="nt-sl__para"><Bar w="94%" h={7} tone={3} /><Bar w="88%" h={7} tone={3} /><Bar w="60%" h={7} tone={3} /></div>
+                          <figure className="nt-sl__fig" data-target={`fig-${i}`}>
+                            <Slide i={i} width={wide ? 520 : 270} />
+                            <figcaption>Slide {i + 1} · {SLIDES[i].kicker}</figcaption>
+                          </figure>
+                        </section>
+                      ))}
+                    </article>
+                  </Scroll>
                 </div>
               </div>
             </Window>
+
+            {/* Chrome's download bubble */}
+            <Popover show={s.bubble} origin="top right" className="nt-dlb" style={{ left: Math.max(8, dl.x + dl.width - bubbleW + 6), top: dl.y + dl.height + 8, width: bubbleW }}>
+              <DownloadRow name={FILE} size="1.8 MB" kind="html" target="dl-file" />
+            </Popover>
 
             {/* The Blog workflow, opened from the ribbon */}
             <Popover show={s.menu} origin="top left" className="nt-sl__menu" style={{ left: wide ? btn.x : 24, top: btn.y + btn.height + 6 }}>
@@ -171,36 +231,14 @@ export default function SlidesToBlog() {
                   <div className="nt-sl__mini">{SLIDES.map((_, i) => <span key={i} className="nt-sl__mini-cell" data-on={i < s.images || undefined}><Slide i={i} width={wide ? 44 : 38} /></span>)}</div>
                 </div>
               </Collapse>
-              <button type="button" className="nt-sl__go" data-target={s.step === 'done' ? 'open-blog' : 'write'} data-cursor="pointer" data-done={s.step === 'done' || undefined}>
+              <button type="button" className="nt-sl__go" data-target="write" data-cursor="pointer" data-done={s.step === 'done' || undefined}>
                 <States
                   value={s.step === 'done' ? 'open' : s.step === 'idle' ? 'write' : 'busy'}
-                  states={{ write: <span>Write blog</span>, busy: <span className="nt-sl__go-row"><Spinner size={14} /> Writing…</span>, open: <span>Open blog post</span> }}
+                  states={{ write: <span>Write blog</span>, busy: <span className="nt-sl__go-row"><Spinner size={14} /> Writing…</span>, open: <span className="nt-sl__go-row"><Check on size={15} /> Saved to Downloads</span> }}
                 />
               </button>
             </Popover>
 
-            {/* The finished post, coming forward */}
-            <Window url="launch-plan-2026.html" nav urlShape="pill" className="nt-sl__blog" data-show={s.blog || undefined}>
-              <Scroll name="post" className="nt-sl__scroll" bar="overlay">
-                <article className="nt-sl__post">
-                  <div className="nt-sl__post-kicker">Launch plan</div>
-                  <div className="nt-sl__post-title">Launch 2026: how we win mid-market teams</div>
-                  <div className="nt-sl__post-meta"><Bar w={90} h={6} tone={2} /><span>·</span><span>6 min read</span></div>
-                  <figure className="nt-sl__fig" data-target="fig-0"><Slide i={0} width={wide ? 560 : 290} /></figure>
-                  <div className="nt-sl__para"><Bar w="96%" h={7} tone={3} /><Bar w="92%" h={7} tone={3} /><Bar w="70%" h={7} tone={3} /></div>
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <section key={i} className="nt-sl__sec">
-                      <div className="nt-sl__h2">{['', 'Who we are building for', 'Pricing that grows with usage', 'Partners before paid ads', 'The first 90 days', 'What success looks like'][i]}</div>
-                      <div className="nt-sl__para"><Bar w="94%" h={7} tone={3} /><Bar w="88%" h={7} tone={3} /><Bar w="60%" h={7} tone={3} /></div>
-                      <figure className="nt-sl__fig" data-target={`fig-${i}`}>
-                        <Slide i={i} width={wide ? 520 : 280} />
-                        <figcaption>Slide {i + 1} · {SLIDES[i].kicker}</figcaption>
-                      </figure>
-                    </section>
-                  ))}
-                </article>
-              </Scroll>
-            </Window>
             <span data-target="rest" className="nt-sl__rest" />
           </>
         )

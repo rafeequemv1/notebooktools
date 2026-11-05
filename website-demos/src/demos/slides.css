@@ -1,12 +1,23 @@
 .nt-sl .ss-stage { overflow: hidden; }
 
-/* Notebook (hero at first), whole across, off the bottom */
-.nt-sl .nt-sl__nb {
+/* One Chrome window, whole across, off the bottom */
+.nt-sl .nt-sl__win {
   box-shadow: var(--ss-shadow-hero);
-  height: 660px; left: 40px; position: absolute; top: 32px; width: 880px;
-  transition: opacity 0.4s ease;
+  height: 660px; left: 40px; position: absolute; top: 28px; width: 880px;
 }
-.nt-sl .ss-stage[data-layout="compact"] .nt-sl__nb { left: 20px; top: 24px; width: 400px; height: 620px; }
+.nt-sl .ss-stage[data-layout="compact"] .nt-sl__win { left: 12px; top: 20px; width: 334px; height: 620px; }
+.nt-sl .nt-sl__view { height: 100%; position: relative; }
+
+/* Tabs: the second opens like Chrome's, growing in from nothing */
+.nt-sl .nt-sl__win .ss-window__tab { width: 200px; transition: width .22s cubic-bezier(.3,0,.2,1), padding .22s, opacity .15s; }
+.nt-sl .nt-sl__win .ss-window__tab:nth-child(3) { opacity: 0; padding: 0; width: 0; }
+.nt-sl .nt-sl__win[data-tab] .ss-window__tab:nth-child(3) { opacity: 1; padding: 0 12px; width: 200px; }
+.nt-sl .ss-stage[data-layout="compact"] .nt-sl__win .ss-window__tab { width: 118px; }
+.nt-sl .ss-stage[data-layout="compact"] .nt-sl__win[data-tab] .ss-window__tab:nth-child(3) { width: 118px; }
+.nt-sl .nt-sl__tab-ico { align-items: center; border-radius: 3px; color: var(--ss-text); display: inline-flex; flex: none; height: 14px; justify-content: center; width: 14px; }
+.nt-sl .nt-sl__tab-ico[data-loading] { color: #0b57d0; }
+.nt-sl .nt-sl__addr { align-items: center; display: inline-flex; gap: 8px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-sl .nt-sl__addr-chip { background: rgba(0,0,0,.06); border-radius: 999px; color: var(--ss-text-strong); flex: none; font-size: 11px; font-weight: 500; padding: 2px 8px; }
 
 .nt-sl .nt-sl__page { background: #f4f7fc; display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 14px 16px 0; }
 .nt-sl .nt-sl__head { align-items: center; display: flex; gap: 12px; padding: 2px 4px; }
@@ -91,14 +102,18 @@
 .nt-sl .nt-sl__go[data-done] { background: #0b57d0; }
 .nt-sl .nt-sl__go-row { align-items: center; display: inline-flex; gap: 8px; }
 
-/* The blog post, coming forward over the notebook */
-.nt-sl .nt-sl__blog {
-  box-shadow: var(--ss-shadow-hero); height: 600px; left: 110px; opacity: 0; pointer-events: none;
-  position: absolute; top: 56px; transform: translateY(24px) scale(.97); transform-origin: 50% 0;
-  transition: opacity .45s ease, transform .7s cubic-bezier(.25,.8,.25,1); width: 740px; z-index: 4;
-}
-.nt-sl .nt-sl__blog[data-show] { opacity: 1; pointer-events: auto; transform: none; }
-.nt-sl .ss-stage[data-layout="compact"] .nt-sl__blog { height: 540px; left: 12px; top: 40px; width: 334px; }
+/* The post's tab: shown at once, then blank while it loads, then the text,
+   then the slide images as they decode */
+.nt-sl .nt-sl__blog { background: #fff; inset: 0; position: absolute; visibility: hidden; z-index: 2; }
+.nt-sl .nt-sl__blog:not([data-load="0"]) { visibility: visible; }
+.nt-sl .nt-sl__progress { background: #0b57d0; height: 2px; left: 0; position: absolute; top: 0; width: 0; z-index: 3; }
+.nt-sl .nt-sl__blog[data-load="1"] .nt-sl__progress { transition: width .6s cubic-bezier(.1,.6,.3,1); width: 72%; }
+.nt-sl .nt-sl__blog[data-load="2"] .nt-sl__progress,
+.nt-sl .nt-sl__blog[data-load="3"] .nt-sl__progress { opacity: 0; transition: width .2s ease, opacity .25s ease .2s; width: 100%; }
+.nt-sl .nt-sl__blog[data-load="1"] .nt-sl__post { visibility: hidden; }
+.nt-sl .nt-sl__fig .nt-sl__slide-box { background: #f1f3f4; }
+.nt-sl .nt-sl__fig .nt-sl__slide { opacity: 0; }
+.nt-sl .nt-sl__blog[data-load="3"] .nt-sl__fig .nt-sl__slide { opacity: 1; transition: opacity .25s ease; }
 .nt-sl .nt-sl__scroll { background: #fff; height: 100%; }
 .nt-sl .nt-sl__post { margin: 0 auto; max-width: 560px; padding: 34px 24px 80px; }
 .nt-sl .ss-stage[data-layout="compact"] .nt-sl__post { padding: 22px 18px 60px; }

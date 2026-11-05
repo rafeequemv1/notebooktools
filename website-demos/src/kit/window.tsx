@@ -10,6 +10,10 @@ export interface WindowProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
   /** Browser: tab titles above the address bar; the first is the active tab. */
   /** Tab titles. A title that changes should animate the part that changed, so pass a node */
   tabs?: ReactNode[]
+  /** Browser: which tab is active (default the first). */
+  activeTab?: number
+  /** Browser: per-tab favicons, in place of the plain square. */
+  tabIcons?: ReactNode[]
   /** Browser: back and forward buttons before the address. */
   nav?: boolean
   /** App: the window title. Centered in a plain title bar; with a `toolbar`, left-aligned 14px after the lights (a unified toolbar) with the toolbar on the right; beside a sidebar, the content column's heading at its 16px inset. */
@@ -94,7 +98,7 @@ function Chevron({ back }: { back?: boolean }) {
  * - app (`title`): a plain title bar with a centered title
  * - sidebar app (`sidebar`): the sidebar runs to the top and holds the lights; the content column gets its own toolbar
  */
-export function Window({ url, urlShape, tabs, nav, title, sidebar, sidebarWidth = 180, sidebarStyle, toolbar, lead, body, className, receded, chrome, lights, lightsSize, barSize, children, ...rest }: WindowProps) {
+export function Window({ url, urlShape, tabs, activeTab = 0, tabIcons, nav, title, sidebar, sidebarWidth = 180, sidebarStyle, toolbar, lead, body, className, receded, chrome, lights, lightsSize, barSize, children, ...rest }: WindowProps) {
   const cls = `ss-window ss-recede${className ? ` ${className}` : ''}`
   const large = lightsSize === 'large' ? 'large' : undefined
   const tall = barSize === 'tall' ? 'tall' : undefined
@@ -170,8 +174,8 @@ export function Window({ url, urlShape, tabs, nav, title, sidebar, sidebarWidth 
         <div className="ss-window__tabs">
           <Lights />
           {tabs.map((t, i) => (
-            <span key={i} className="ss-window__tab" data-active={i === 0 || undefined}>
-              <span className="ss-window__favicon" />
+            <span key={i} className="ss-window__tab" data-active={i === activeTab || undefined}>
+              {tabIcons?.[i] ?? <span className="ss-window__favicon" />}
               <span className="ss-window__tab-label">{t}</span>
             </span>
           ))}
