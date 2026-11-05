@@ -47,9 +47,10 @@ CHROME_ICON = (
 
 NAV = [
     ("/features", "Features", "features"),
+    ("/students", "Students", "students"),
+    ("/teachers", "Teachers", "teachers"),
     ("/researchers", "Researchers", "researchers"),
     ("/creators", "Creators", "creators"),
-    ("/teachers", "Teachers", "teachers"),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
     ("/support", "Support", "support"),
@@ -63,7 +64,7 @@ def section_of(rel: str) -> str | None:
         return "blog"
     if rel == "support.html":
         return "support"
-    if rel in ("researchers.html", "creators.html", "teachers.html"):
+    if rel in ("researchers.html", "creators.html", "teachers.html", "students.html"):
         return rel[:-5]
     return None
 
@@ -112,9 +113,10 @@ FOOTER = f"""<footer class="site-footer">
           <nav class="footer-col" aria-label="Product">
             <h2>Product</h2>
             <a href="/features">Features</a>
+            <a href="/students">For students</a>
+            <a href="/teachers">For teachers</a>
             <a href="/researchers">For researchers</a>
             <a href="/creators">For content creators</a>
-            <a href="/teachers">For teachers</a>
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/#install">Install</a>
@@ -124,6 +126,7 @@ FOOTER = f"""<footer class="site-footer">
             <a href="/blog">Blog</a>
             <a href="/blog/what-is-notebooklm">What is NotebookLM?</a>
             <a href="/blog/best-notebooklm-prompts">NotebookLM prompts</a>
+            <a href="/notebooklm-slide-styles">Slide deck styles</a>
             <a href="/blog/notebooklm-tutorial-beginners">Beginner tutorial</a>
           </nav>
           <nav class="footer-col" aria-label="Company">

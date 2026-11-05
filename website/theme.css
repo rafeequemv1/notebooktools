@@ -2456,3 +2456,77 @@ a {
 .uc-copy { background: #fff; border: 1px solid #dadce0; border-radius: 999px; color: #1f1f1f; cursor: pointer; font: 500 12.5px/1 var(--font-body, inherit); letter-spacing: 0; padding: 6px 12px; text-transform: none; }
 .uc-copy:hover { border-color: #0b57d0; color: #0b57d0; }
 .uc-prompt pre { color: #3c4043; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 0; max-height: 210px; overflow: auto; padding: 12px 14px; white-space: pre-wrap; word-break: break-word; }
+
+/* Blog: in-article answer box, plans table and install box */
+.post-answer { background: #f3f7fe; border: 1px solid #d6e3fb; border-radius: 14px; margin: 0 0 22px; padding: 16px 20px; }
+.post-answer p { margin: 0; }
+.post-answer .post-answer-label { color: #0b57d0; font-size: 12px; font-weight: 700; letter-spacing: .08em; margin-bottom: 6px; text-transform: uppercase; }
+.post-table-wrap { margin: 8px 0 10px; overflow-x: auto; }
+.post-table { border-collapse: collapse; font-size: 14.5px; min-width: 620px; width: 100%; }
+.post-table th, .post-table td { border-bottom: 1px solid #e3e6ea; padding: 10px 12px; text-align: left; vertical-align: top; }
+.post-table thead th { background: #f6f8fc; color: #1f1f1f; font-weight: 600; }
+.post-table tbody th { color: #3c4043; font-weight: 600; width: 22%; }
+.post-table td:nth-child(2) { background: #f8fbff; }
+.post-note { color: #5f6368; font-size: 14px; }
+.post-cta { align-items: center; background: #fff; border: 1px solid #dbe3f0; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px -16px rgba(11,31,69,.25); display: grid; gap: 14px 16px; grid-template-columns: auto 1fr auto; margin: 26px 0 30px; padding: 18px 20px; }
+.post-cta-mark { border-radius: 8px; }
+.post-cta-text p { color: #3c4043; font-size: 14.5px; line-height: 1.5; margin: 0; }
+.post-cta-text .post-cta-title { color: #1f1f1f; font: 600 16.5px/1.3 var(--font-display, inherit); margin-bottom: 4px; }
+.post-cta-actions { align-items: center; display: flex; flex-direction: column; gap: 8px; }
+.post-cta-actions .button { white-space: nowrap; }
+.post-cta-link { color: #0b57d0; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.post-cta-link:hover { text-decoration: underline; }
+@media (max-width: 720px) {
+  .post-cta { grid-template-columns: auto 1fr; }
+  .post-cta-actions { align-items: flex-start; grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 12px; }
+}
+
+/* Slide styles page */
+.ss-cats { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 8px auto 6px; max-width: 1080px; padding: 0 20px; }
+.ss-cats a { background: #f1f4f9; border-radius: 999px; color: #1f1f1f; font-size: 14px; font-weight: 500; padding: 8px 14px; text-decoration: none; }
+.ss-cats a span { color: #5f6368; margin-left: 4px; }
+.ss-cats a:hover { background: #e8f0fe; color: #0b57d0; }
+.ss-group { margin: 0 auto; max-width: 1180px; padding: 34px 20px 8px; scroll-margin-top: 80px; }
+.ss-group h2 { font: 600 24px/1.2 var(--font-display, inherit); margin: 0 0 16px; }
+.ss-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.ss-card { background: #fff; border: 1px solid #e6e8eb; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; scroll-margin-top: 80px; }
+.ss-card .pl-preview { aspect-ratio: 16 / 9; border-radius: 0; height: auto; min-height: 0; width: 100%; }
+.ss-card-body { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: 16px 18px 18px; }
+.ss-card-head { align-items: center; display: flex; gap: 10px; justify-content: space-between; }
+.ss-card-head h3 { font: 600 17px/1.3 var(--font-display, inherit); margin: 0; }
+.ss-badge { background: #f1f4f9; border-radius: 999px; color: #5f6368; flex: none; font-size: 12px; font-weight: 600; padding: 3px 9px; }
+.ss-card-body > p { color: #5f6368; font-size: 14px; margin: 0; }
+.ss-card .uc-prompt { margin: 6px 0 0; }
+.ss-card .uc-prompt pre { max-height: 150px; }
+.ss-how .uc-flow { margin-top: 0; }
+
+/* Header with eight links: keep one line down to the 860px menu breakpoint */
+.site-header .header-cta { white-space: nowrap; }
+@media (max-width: 1180px) and (min-width: 861px) {
+  .site-nav > a { font-size: 13.5px; padding: 7px 9px; }
+}
+@media (max-width: 1000px) and (min-width: 861px) {
+  .site-nav > a { padding: 7px 7px; }
+  .site-header .header-cta { padding: 8px 12px 8px 10px; }
+}
+
+/* Blog posts: the article column never grows past the screen (wide tables scroll inside) */
+.blog-article { min-width: 0; }
+@media (max-width: 960px) {
+  .blog-article-layout,
+  .blog-article-layout--with-toc { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* In-article install box: buttons keep button colours inside article link styles */
+.blog-article-body .post-cta a.button { color: #fff; text-decoration: none; }
+.blog-article-body .post-cta a.post-cta-link { color: #0b57d0; text-decoration: none; }
+.blog-article-body .post-cta a.post-cta-link:hover { text-decoration: underline; }
+@media (max-width: 720px) {
+  .blog-article-body table:not(.post-table) { display: block; max-width: 100%; overflow-x: auto; }
+}
+.blog-article-body a { overflow-wrap: anywhere; }
+.ss-cats { margin-top: 30px; }
+.ss-card .pl-preview-inner { inset: 0; padding: 20px 22px; }
+.ss-card .pl-preview-kicker { font-size: 11px; }
+.ss-card .pl-preview-title { font-size: 34px; line-height: 1.05; }
+.ss-card .pl-preview-sub { font-size: 13px; }

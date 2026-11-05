@@ -58,6 +58,13 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - Support: https://www.notebooktools.com/support
 - Privacy: https://www.notebooktools.com/privacy
 
+### Use cases (step-by-step, with prompts)
+- For students (study guides, flashcards, practice papers): https://www.notebooktools.com/students
+- For teachers (exam question papers as PDF, worksheets, lesson plans): https://www.notebooktools.com/teachers
+- For researchers (literature reviews, sources, exports): https://www.notebooktools.com/researchers
+- For content creators (video research, slides to blog, carousels): https://www.notebooktools.com/creators
+- NotebookLM slide deck styles (14 style prompts with previews): https://www.notebooktools.com/notebooklm-slide-styles
+
 ### Category hubs
 - Prompt library: https://www.notebooktools.com/blog/category/prompts
 - Tutorials & extension guides: https://www.notebooktools.com/blog/category/tutorials

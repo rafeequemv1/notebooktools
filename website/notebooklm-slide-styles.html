@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2BJP0Q9LL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-K2BJP0Q9LL');
+    </script>
+    <script defer data-site="bqtzsbfj" data-domain="notebooktools.com" src="https://piqo.app/piqo.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotebookLM Slide Deck Styles: 14 Prompts with Previews | NotebookTools</title>
+    <meta name="description" content="14 ready-to-paste NotebookLM (Gemini Notebook) slide deck style prompts with previews: editorial, minimal, manga, watercolor, neon tech and more. Copy one into Studio or insert it with /.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://www.notebooktools.com/notebooklm-slide-styles">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NotebookTools">
+    <meta property="og:title" content="NotebookLM Slide Deck Styles: 14 Prompts with Previews | NotebookTools">
+    <meta property="og:description" content="14 ready-to-paste NotebookLM (Gemini Notebook) slide deck style prompts with previews: editorial, minimal, manga, watercolor, neon tech and more. Copy one into Studio or insert it with /.">
+    <meta property="og:url" content="https://www.notebooktools.com/notebooklm-slide-styles">
+    <meta property="og:image" content="https://www.notebooktools.com/assets/blog/og/notebooklm-slide-prompts.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&amp;family=Google+Sans+Text:wght@400;500;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/theme.css">
+    <style>
+.pl-preview {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  position: relative;
+}
+.pl-preview-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-end;
+  padding: 14px;
+  position: relative;
+}
+.pl-preview-kicker {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+.pl-preview-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-top: 4px;
+}
+.pl-preview-sub {
+  font-size: 9px;
+  line-height: 1.35;
+  margin-top: 6px;
+  max-width: 72%;
+  opacity: 0.85;
+}
+.pl-preview-accent {
+  border-radius: 2px;
+  height: 3px;
+  left: 14px;
+  position: absolute;
+  top: 14px;
+  width: 28px;
+}
+.pl-preview--editorial {
+  background: #f5f5f5;
+  color: #111;
+}
+.pl-preview--editorial .pl-preview-accent {
+  background: #ffcc00;
+}
+.pl-preview--minimal {
+  background: #ececec;
+  color: #111;
+}
+.pl-preview--minimal .pl-preview-kicker {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+}
+.pl-preview--minimal .pl-preview-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.pl-preview--yellow-black {
+  background: #f5d000;
+  color: #111;
+}
+.pl-preview--yellow-black .pl-preview-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+}
+.pl-preview--agency {
+  background: #fff;
+  color: #111;
+}
+.pl-preview--agency .pl-preview-accent {
+  background: #e85d04;
+  width: 40px;
+}
+.pl-preview--seminar {
+  background: #fff;
+  color: #111;
+}
+.pl-preview--seminar .pl-preview-title {
+  font-size: 20px;
+}
+.pl-preview--seminar .pl-preview-accent {
+  background: #d93025;
+}
+.pl-preview--manga {
+  background: #fff8ef;
+  color: #222;
+}
+.pl-preview--manga::after {
+  background: #111;
+  border-radius: 10px 10px 10px 2px;
+  color: #fff;
+  content: "Let's learn this!";
+  font-size: 8px;
+  padding: 5px 7px;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+.pl-preview--magazine {
+  background: #e8d4d0;
+  color: #333;
+}
+.pl-preview--magazine .pl-preview-kicker {
+  background: #fff;
+  display: inline-block;
+  padding: 2px 5px;
+}
+.pl-preview--retro-dev {
+  background:
+    linear-gradient(#f3efe4 1px, transparent 1px),
+    linear-gradient(90deg, #f3efe4 1px, transparent 1px),
+    #faf7ef;
+  background-size: 12px 12px;
+  color: #111;
+}
+.pl-preview--retro-dev .pl-preview-accent {
+  background: #ff4fa3;
+  height: 18px;
+  width: 18px;
+}
+.pl-preview--street-pop {
+  background: #f4a9c8;
+  color: #111;
+}
+.pl-preview--street-pop .pl-preview-title {
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+.pl-preview--watercolor {
+  background: linear-gradient(135deg, #1e3a8a 0%, #7f1d1d 55%, #dbeafe 100%);
+  color: #fff;
+}
+.pl-preview--neon-tech {
+  background: #e8e6d8;
+  color: #333;
+}
+.pl-preview--neon-tech::before {
+  background: #dfff00;
+  border-radius: 50%;
+  content: "";
+  height: 36px;
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  width: 36px;
+}
+.pl-preview--mockup {
+  background: linear-gradient(180deg, #f5f5f7 0%, #fff 100%);
+  color: #111;
+}
+.pl-preview--mockup::after {
+  background: #111;
+  border-radius: 6px;
+  bottom: 12px;
+  content: "";
+  height: 42%;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 58%;
+}
+.pl-preview--sports {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)), #222;
+  color: #fff;
+}
+.pl-preview--sports .pl-preview-title {
+  font-style: italic;
+  text-transform: uppercase;
+}
+.pl-preview--sports .pl-preview-accent {
+  background: #ccff00;
+}
+.pl-preview--calm-product {
+  background: #fff;
+  color: #111;
+}
+.pl-preview--calm-product::before {
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.18), rgba(142, 68, 173, 0.14));
+  border-radius: 0 0 0 40px;
+  content: "";
+  height: 55%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 45%;
+}
+.pl-preview {
+  aspect-ratio: 16 / 9;
+}
+    </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "@id": "https://www.notebooktools.com/notebooklm-slide-styles", "url": "https://www.notebooktools.com/notebooklm-slide-styles", "name": "NotebookLM Slide Deck Styles: 14 Prompts with Previews", "isPartOf": {"@type": "WebSite", "name": "NotebookTools", "url": "https://www.notebooktools.com"}}, {"@type": "ItemList", "name": "NotebookLM slide deck styles", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Smart editorial deck", "url": "https://www.notebooktools.com/notebooklm-slide-styles#smart-editorial"}, {"@type": "ListItem", "position": 2, "name": "Architectural portfolio", "url": "https://www.notebooktools.com/notebooklm-slide-styles#architectural-minimal"}, {"@type": "ListItem", "position": 3, "name": "Yellow and black feature", "url": "https://www.notebooktools.com/notebooklm-slide-styles#yellow-black"}, {"@type": "ListItem", "position": 4, "name": "Creative studio orange", "url": "https://www.notebooktools.com/notebooklm-slide-styles#creative-orange"}, {"@type": "ListItem", "position": 5, "name": "Speaker minimal", "url": "https://www.notebooktools.com/notebooklm-slide-styles#speaker-minimal"}, {"@type": "ListItem", "position": 6, "name": "Comic explainer", "url": "https://www.notebooktools.com/notebooklm-slide-styles#comic-explainer"}, {"@type": "ListItem", "position": 7, "name": "Dusty pink editorial", "url": "https://www.notebooktools.com/notebooklm-slide-styles#dusty-pink"}, {"@type": "ListItem", "position": 8, "name": "Neo-retro builder", "url": "https://www.notebooktools.com/notebooklm-slide-styles#neo-retro-dev"}, {"@type": "ListItem", "position": 9, "name": "Pink street collage", "url": "https://www.notebooktools.com/notebooklm-slide-styles#pink-street"}, {"@type": "ListItem", "position": 10, "name": "Royal blue and red wash", "url": "https://www.notebooktools.com/notebooklm-slide-styles#watercolor"}, {"@type": "ListItem", "position": 11, "name": "Constructivist collage", "url": "https://www.notebooktools.com/notebooklm-slide-styles#constructivist"}, {"@type": "ListItem", "position": 12, "name": "Studio device showcase", "url": "https://www.notebooktools.com/notebooklm-slide-styles#studio-mockup"}, {"@type": "ListItem", "position": 13, "name": "Athletic energy", "url": "https://www.notebooktools.com/notebooklm-slide-styles#athletic-energy"}, {"@type": "ListItem", "position": 14, "name": "Anti-gravity clarity", "url": "https://www.notebooktools.com/notebooklm-slide-styles#anti-gravity"}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.notebooktools.com/"}, {"@type": "ListItem", "position": 2, "name": "Slide deck styles", "item": "https://www.notebooktools.com/notebooklm-slide-styles"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I change the style of a NotebookLM slide deck?", "acceptedAnswer": {"@type": "Answer", "text": "Open Studio in your notebook, choose Slide deck, then the customise (pencil) option, and paste a style prompt from this page into the description box before you generate. With the NotebookTools extension you can also type / in the chat and pick a style."}}, {"@type": "Question", "name": "Do these prompts change what the slides say?", "acceptedAnswer": {"@type": "Answer", "text": "No. Each prompt describes the look (colours, type, layout) and tells Gemini Notebook to take every fact from your own sources, so the content still comes from your notebook."}}, {"@type": "Question", "name": "Can I use these slide styles for free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Slide decks are part of NotebookLM's free plan, within its usage limits, and these prompts are free to copy."}}, {"@type": "Question", "name": "Can I turn the finished deck into a blog post or carousel?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. NotebookTools can turn a finished deck into a blog post with every slide as an image, or into a LinkedIn or Instagram carousel."}}]}]}</script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a class="logo" href="/" aria-label="NotebookTools home">
+          <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
+          <span class="logo-text">NotebookTools</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+          <a href="/features">Features</a>
+          <a href="/students">Students</a>
+          <a href="/teachers">Teachers</a>
+          <a href="/researchers">Researchers</a>
+          <a href="/creators">Creators</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/blog">Blog</a>
+          <a href="/support">Support</a>
+          <div class="site-nav-actions">
+            <a class="button button-primary" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome — free</a>
+            <a class="button button-ghost" href="/#pricing">Get Pro — $49</a>
+          </div>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-primary button-sm header-cta" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg><span>Add to Chrome</span></a>
+          <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="uc-page ss-page">
+      <section class="uc-hero">
+        <p class="eyebrow">Slide deck styles</p>
+        <h1>NotebookLM slide deck styles, <span class="grad">ready to paste</span></h1>
+        <p class="uc-lead">14 style prompts for Gemini Notebook (formerly NotebookLM) slide decks, each with a preview. Copy one into Studio, or insert it with / using the free NotebookTools extension. Your slides still take every fact from your own sources.</p>
+        <div class="uc-actions">
+          <a class="button button-primary button-lg" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">Add to Chrome — free</a>
+          <a class="button button-ghost button-lg" href="/blog/notebooklm-slide-prompts">How to use slide prompts</a>
+        </div>
+      </section>
+
+      <section class="uc-section ss-how">
+        <ol class="uc-flow">
+          <li><span class="uc-flow-n">1</span><b>Open Studio</b><span>In your notebook, choose Slide deck and open the customise option.</span></li>
+          <li><span class="uc-flow-n">2</span><b>Paste a style</b><span>Copy a prompt below into the description box. With NotebookTools, type / instead.</span></li>
+          <li><span class="uc-flow-n">3</span><b>Generate</b><span>The deck uses that look, with content from your sources.</span></li>
+          <li><span class="uc-flow-n">4</span><b>Reuse it</b><span>Turn the deck into a blog post or a LinkedIn carousel.</span></li>
+        </ol>
+      </section>
+
+      <nav class="ss-cats" aria-label="Style categories"><a href="#business">Business <span>5</span></a><a href="#pop">Pop &amp; bold <span>4</span></a><a href="#artistic">Artistic <span>2</span></a><a href="#premium">Premium <span>3</span></a></nav>
+      
+        <section class="ss-group" id="business">
+          <h2>Business</h2>
+          <div class="ss-grid">
+            <article class="ss-card" id="smart-editorial">
+              <div class="pl-preview pl-preview--editorial pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Cover</span><span class="pl-preview-title">Ideas</span><span class="pl-preview-sub">Why this matters now</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Smart editorial deck</h3><span class="ss-badge">Business media</span></div>
+                <p>Asymmetrical cover, yellow accents, magazine-style headlines.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Build a slide deck from my notebook sources in a sharp digital business magazine style. Slide text must be plain text only with no markdown symbols. Cover slide: asymmetrical Swiss-style layout, a 2-5 word headline as the visual anchor, and a short subtitle that states the reader&#x27;s problem. Colors: white or cool gray background, near-black text, electric yellow or red accents. Headlines should fill 30-50% of each slide with a 10:1 size jump over body copy. One message per slide. Use cutout-style photos and yellow marker highlights on key numbers. Ground every point in my sources.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="architectural-minimal">
+              <div class="pl-preview pl-preview--minimal pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">01. Intro</span><span class="pl-preview-title">Overview</span><span class="pl-preview-sub">Clean structure</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Architectural portfolio</h3><span class="ss-badge">Minimal</span></div>
+                <p>Grid-based whitespace, section labels, oversized numbers.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Turn my sources into a refined minimal presentation. Tone: professional, grid-based, whitespace-heavy. Palette: light gray or white base, black typography, optional full-black slides for emphasis. Add a small section label on every slide (example: 01. INTRODUCTION). Favor asymmetrical splits, oversized numbers beside narrative text, thin divider lines, and vertical timelines. Sans-serif headings, airy body text. No clutter. Content must come only from my uploaded sources.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="yellow-black">
+              <div class="pl-preview pl-preview--yellow-black pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Feature</span><span class="pl-preview-title">Signal</span><span class="pl-preview-sub">Editorial point of view</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Yellow and black feature</h3><span class="ss-badge">Editorial</span></div>
+                <p>Bold fashion-editorial contrast with dynamic serif type.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Create slides from my notebook in a bold fashion-editorial style. Background: saturated yellow. Text: black in a large modern serif. Layout like a magazine spread with dynamic type placement. Use striking portrait photography and small handwritten-style accents or sticker-like details. High contrast, confident, visual-first. Plain text on slides, no markdown. Source-grounded content only.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="creative-orange">
+              <div class="pl-preview pl-preview--agency pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Pitch</span><span class="pl-preview-title">Launch</span><span class="pl-preview-sub">Creative direction</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Creative studio orange</h3><span class="ss-badge">Agency</span></div>
+                <p>Agency pitch look with blood-orange accents and clean type.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Generate a slide deck from my sources that looks like a top creative agency pitch. White background, black text, blood-orange accent color. Mix dynamic photography with clean English display type. Confident spacing, strong hierarchy, one idea per slide. No markdown on slide faces. Keep claims tied to my notebook materials.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="speaker-minimal">
+              <div class="pl-preview pl-preview--seminar pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Talk</span><span class="pl-preview-title">Focus</span><span class="pl-preview-sub">One clear message</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Speaker minimal</h3><span class="ss-badge">Seminar</span></div>
+                <p>Conference slides with very little on-screen text.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Build a conference-style deck from my sources with very little on-slide text. White background, black sans-serif type, red accent only for emphasis. One headline and at most two short lines per slide. Use a single high-quality portrait or abstract photo per slide. Let me talk; the slides should support, not replace, the narrative. Plain text only. Ground content in my sources.</pre>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+        <section class="ss-group" id="pop">
+          <h2>Pop &amp; bold</h2>
+          <div class="ss-grid">
+            <article class="ss-card" id="comic-explainer">
+              <div class="pl-preview pl-preview--manga pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Scene 1</span><span class="pl-preview-title">Story</span><span class="pl-preview-sub">Learn through panels</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Comic explainer</h3><span class="ss-badge">Manga</span></div>
+                <p>Panel layouts and speech bubbles for memorable teaching.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Turn my notebook content into a manga-inspired slide story. Use panel-style layouts, speech bubbles, and a light narrative arc so ideas are easier to remember. Friendly tone, short dialogue, visual pacing between setup and payoff. Plain text in bubbles. Teach the core concepts from my sources through scenes and characters, not bullet walls.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="dusty-pink">
+              <div class="pl-preview pl-preview--magazine pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">No.1</span><span class="pl-preview-title">Edit</span><span class="pl-preview-sub">Trend notes</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Dusty pink editorial</h3><span class="ss-badge">Magazine</span></div>
+                <p>Mature-cute magazine layout with numbered callouts.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Compile my sources as a mature-cute magazine editorial deck. Matte dusty-pink background, charcoal text, cutout subject photo centered with movement. Numbered callouts (NO.1, NO.2) in the margins, vertical side copy, subtle crop marks in corners. Hand-drawn bubbles for key quotes. Landscape slides, polished and trendy. Plain text only. Content from my notebook.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="neo-retro-dev">
+              <div class="pl-preview pl-preview--retro-dev pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Build</span><span class="pl-preview-title">Agents</span><span class="pl-preview-sub">System layers</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Neo-retro builder</h3><span class="ss-badge">Dev deck</span></div>
+                <p>Grid paper, pixel icons, modular color blocks for tech topics.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Create a developer-focused slide deck from my sources in neo-retro editorial style. Light cream grid-paper background, thick black borders, modular color blocks (hot pink, bright yellow, cyan). Pixel-style icons for agents, code, browsers, and tools. Short declarative copy, no marketing fluff. Stacked layers for architecture slides, left-to-right evolution for timelines. Feels like annotated engineering notes, not corporate PPT.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="pink-street">
+              <div class="pl-preview pl-preview--street-pop pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Pop</span><span class="pl-preview-title">Vibes</span><span class="pl-preview-sub">Street energy</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Pink street collage</h3><span class="ss-badge">Street pop</span></div>
+                <p>Playful pink street style with flat illustrations.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Design slides from my notebook in a pink street-pop style. Pink backgrounds, white and black text, thick-outline flat illustrations, soft trimmed photo shapes. Loose, playful, slightly rebellious energy. Flat colors, no gradients. One bold idea per slide. Plain text on slides. Keep facts tied to my sources.</pre>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+        <section class="ss-group" id="artistic">
+          <h2>Artistic</h2>
+          <div class="ss-grid">
+            <article class="ss-card" id="watercolor">
+              <div class="pl-preview pl-preview--watercolor pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Art</span><span class="pl-preview-title">Mood</span><span class="pl-preview-sub">Painted narrative</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Royal blue and red wash</h3><span class="ss-badge">Watercolor</span></div>
+                <p>Painterly textures with minimal, elegant type.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Build an artistic slide deck from my sources using wet watercolor textures in royal blue and red. Painterly backgrounds, elegant type, gallery-like pacing. Let visuals carry emotion while text stays minimal and precise. Vary brush intensity slide to slide. Plain text only. Ground narrative in my notebook.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="constructivist">
+              <div class="pl-preview pl-preview--neon-tech pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Fig.1</span><span class="pl-preview-title">Model</span><span class="pl-preview-sub">Structural map</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Constructivist collage</h3><span class="ss-badge">Neon tech</span></div>
+                <p>Beige paper, neon yellow geometry, blueprint annotations.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Turn my sources into a constructivist tech-art deck. Warm beige paper texture background, charcoal text, neon yellow geometric accents, ultra-thin draft lines. Monochrome cutout portraits masked inside circles and squares. Blueprint-style labels (Fig.1, Fig.2), radar charts with bold yellow plot lines. Intellectual, structural, future-facing. Plain slide text. Source-based content.</pre>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+        <section class="ss-group" id="premium">
+          <h2>Premium</h2>
+          <div class="ss-grid">
+            <article class="ss-card" id="studio-mockup">
+              <div class="pl-preview pl-preview--mockup pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Product</span><span class="pl-preview-title">Studio</span><span class="pl-preview-sub">Device showcase</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Studio device showcase</h3><span class="ss-badge">Mockup</span></div>
+                <p>Premium device mockups on studio backgrounds.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Create a premium product deck from my notebook sources. High-quality device mockups on white or light-gray studio backgrounds with soft shadows. Screens are the hero (70-80% of slide area). UI inside screens: bold sans-serif on black or vivid gradients, purple and acid-yellow accents. Spacious card layouts, oversized numbers, thin dividers. Clean, advanced, launch-ready. Plain text on slides. Facts from my sources only.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="athletic-energy">
+              <div class="pl-preview pl-preview--sports pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Live</span><span class="pl-preview-title">Drive</span><span class="pl-preview-sub">High intensity</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Athletic energy</h3><span class="ss-badge">Sports</span></div>
+                <p>High-energy sports broadcast with bold italic headlines.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Generate a high-energy slide deck from my sources with a sports broadcast feel. Dark asphalt-black base, white italic headlines, bolt-lime and neon-orange accents. Dynamic action photography with motion blur, diagonal cuts, skewed shapes, scoreboard-style metrics. Passionate, fast, competitive tone. Plain text on slides. Ground stats and claims in my notebook.</pre>
+                </div>
+              </div>
+            </article>
+            <article class="ss-card" id="anti-gravity">
+              <div class="pl-preview pl-preview--calm-product pl-preview-large"><div class="pl-preview-inner"><span class="pl-preview-accent" aria-hidden="true"></span><span class="pl-preview-kicker">Flow</span><span class="pl-preview-title">Artifact</span><span class="pl-preview-sub">Calm clarity</span></div></div>
+              <div class="ss-card-body">
+                <div class="ss-card-head"><h3>Anti-gravity clarity</h3><span class="ss-badge">Calm product</span></div>
+                <p>Airy white canvas with soft gradient accents.</p>
+                <div class="uc-prompt">
+                  <div class="uc-prompt-head"><span>Style prompt</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+                  <pre>Build a calm, premium product narrative deck from my sources. Pure white canvas, wide margins, left-aligned type. Soft blue-to-violet gradient accents only at slide edges, never behind text. Thin-line icons, rounded capability cards, realistic UI screenshots where helpful. Tone: precise, confident, no hype words. Show messy thinking becoming clean structure. One idea per slide. Plain text. Source-grounded.</pre>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      <section class="uc-section uc-faq">
+        <div class="section-head center"><h2>Questions</h2></div>
+        <details class="uc-faq-item"><summary>How do I change the style of a NotebookLM slide deck?</summary><p>Open Studio in your notebook, choose Slide deck, then the customise (pencil) option, and paste a style prompt from this page into the description box before you generate. With the NotebookTools extension you can also type / in the chat and pick a style.</p></details><details class="uc-faq-item"><summary>Do these prompts change what the slides say?</summary><p>No. Each prompt describes the look (colours, type, layout) and tells Gemini Notebook to take every fact from your own sources, so the content still comes from your notebook.</p></details><details class="uc-faq-item"><summary>Can I use these slide styles for free?</summary><p>Yes. Slide decks are part of NotebookLM&#x27;s free plan, within its usage limits, and these prompts are free to copy.</p></details><details class="uc-faq-item"><summary>Can I turn the finished deck into a blog post or carousel?</summary><p>Yes. NotebookTools can turn a finished deck into a blog post with every slide as an image, or into a LinkedIn or Instagram carousel.</p></details>
+      </section>
+
+      <section class="uc-section">
+        <div class="uc-cta">
+          <div>
+            <h2>Every style, one keystroke away</h2>
+            <p>NotebookTools puts these styles inside Gemini Notebook: type / and pick one. Free Chrome extension.</p>
+          </div>
+          <a class="button button-primary button-lg" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">Add to Chrome — free</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a class="logo" href="/" aria-label="NotebookTools home">
+              <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
+              <span class="logo-text">NotebookTools</span>
+            </a>
+            <p>The Chrome extension for NotebookLM. Import faster, organize every notebook, and get more from your research. Free to start, Pro for life.</p>
+            <a class="header-chrome footer-chrome" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg><span>Add to Chrome</span></a>
+          </div>
+          <nav class="footer-col" aria-label="Product">
+            <h2>Product</h2>
+            <a href="/features">Features</a>
+            <a href="/students">For students</a>
+            <a href="/teachers">For teachers</a>
+            <a href="/researchers">For researchers</a>
+            <a href="/creators">For content creators</a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/#install">Install</a>
+          </nav>
+          <nav class="footer-col" aria-label="Resources">
+            <h2>Resources</h2>
+            <a href="/blog">Blog</a>
+            <a href="/blog/what-is-notebooklm">What is NotebookLM?</a>
+            <a href="/blog/best-notebooklm-prompts">NotebookLM prompts</a>
+            <a href="/notebooklm-slide-styles">Slide deck styles</a>
+            <a href="/blog/notebooklm-tutorial-beginners">Beginner tutorial</a>
+          </nav>
+          <nav class="footer-col" aria-label="Company">
+            <h2>Company</h2>
+            <a href="/support">Support</a>
+            <a href="/privacy">Privacy policy</a>
+            <a href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM ↗</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 NotebookTools</p>
+          <p>An independent tool for NotebookLM. Not affiliated with Google.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-copy]");
+        if (!button) return;
+        const text = button.closest(".uc-prompt").querySelector("pre").textContent;
+        try { await navigator.clipboard.writeText(text); button.textContent = "Copied"; }
+        catch (_) { button.textContent = "Select and copy"; }
+        setTimeout(() => { button.textContent = "Copy"; }, 1600);
+      });
+    </script>
+    <script src="/site.js" defer></script>
+  </body>
+</html>

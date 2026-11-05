@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the use-case pages (/researchers, /creators, /teachers) from the data below.
+"""Build the use-case pages (/students, /teachers, /researchers, /creators) from the data below.
 
     python3 scripts/build-use-case-pages.py && python3 scripts/sync-site-chrome.py
 
@@ -37,6 +37,107 @@ F = {  # feature chips → demo pages
 LOGOS = [("chatgpt", "ChatGPT"), ("claude", "Claude"), ("gemini", "Gemini"), ("perplexity", "Perplexity"), ("grok", "Grok"), ("kimi", "Kimi")]
 
 PAGES = {
+    "students": {
+        "slug": "students",
+        "eyebrow": "For students",
+        "title": "Gemini Notebook (NotebookLM) for Students: Study Guides, Flashcards & Revision | NotebookTools",
+        "description": "Step-by-step ways students use Gemini Notebook (NotebookLM) with NotebookTools: study guides, flashcards, lecture notes from YouTube, practice papers, revision sheets and podcasts, with prompts to copy.",
+        "h1": "Turn your notes into <span class=\"grad\">exam-ready revision</span>",
+        "lead": "Practical, step-by-step ways students use Gemini Notebook (formerly NotebookLM) with NotebookTools. Study guides, flashcards, practice papers and revision podcasts made from your own lectures and textbooks, with the prompts to copy.",
+        "uses_heading": "10 ways to study smarter this week",
+        "uses_eyebrow": "Step by step",
+        "uses": [
+            ("Turn lecture notes into a study guide",
+             "Weeks of slides and notes, and the exam is on Friday.",
+             ["Make a notebook for the subject and add your lecture slides, notes and textbook chapters.",
+              "Paste the prompt below and name the topic.",
+              "In the ribbon, click Export, then Last answer only, then PDF, and keep it with your notes."],
+             ["bulk", "answer", "prompts"],
+             "Study guide · PDF",
+             "From my sources, make a study guide for [subject/topic]. Include: the key concepts with one-line definitions, the main ideas in a logical order, two worked examples, common mistakes students make, and 10 practice questions with answers in a separate section at the end."),
+            ("Flashcards, quizzes and a mind map",
+             "Rereading feels like studying. Testing yourself actually is.",
+             ["Open Studio and generate Flashcards and a Quiz from the chapter.",
+              "Make a Mind map to see how the topics connect.",
+              "Come back to the quiz a few days later and see what stuck."],
+             ["studio"],
+             "Flashcards & quiz"),
+            ("Turn a lecture playlist into notes",
+             "Half your course is on YouTube, and nobody can rewatch 20 hours.",
+             ["Open the playlist and import every video in one click.",
+              "Paste the prompt to get notes for each lecture.",
+              "Export the notes as a PDF to revise from."],
+             ["youtube", "bulk", "answer"],
+             "Lecture notes · PDF",
+             "For each video in my sources, write revision notes: a 5-point summary, the key terms with definitions, and 3 questions I should be able to answer after watching. Title each part with the video's title."),
+            ("Practise with past papers",
+             "You know the content but not how the exam asks about it.",
+             ["Add past papers and the syllabus to the notebook.",
+              "Paste the prompt to find the patterns and get new practice questions.",
+              "Answer them on paper, then check against the answers section."],
+             ["answer", "prompts"],
+             "Practice paper · PDF",
+             "Using the past papers in my sources, list the topics that come up most often and how they are usually asked. Then write 5 new practice questions per topic in the same style and difficulty, with model answers in a separate section at the end."),
+            ("Make a one-page revision sheet",
+             "The night before, you need everything on a single page.",
+             ["Pick one topic or chapter.",
+              "Paste the prompt for a dense, one-page summary.",
+              "Export as PDF and print it."],
+             ["answer"],
+             "Revision sheet · PDF",
+             "Summarise [topic] from my sources as a one-page revision sheet: the key definitions or formulas, the 5 facts I must know, 3 common exam traps, and a quick self-test of 5 short questions. Keep it short enough to fit on one page."),
+            ("Get unstuck on a hard concept",
+             "The textbook explanation just isn't landing.",
+             ["Ask about the concept with the prompt below.",
+              "Click the citation to read the exact page it comes from.",
+              "Ask a follow-up until you could explain it to a friend."],
+             ["prompts"],
+             "Explanation",
+             "Explain [concept] from my sources as if I'm new to it. Start with a simple everyday analogy, then give the proper definition, then one worked example step by step. Tell me which source and page it comes from."),
+            ("A revision podcast for your commute",
+             "Dead time on the bus could be revision time.",
+             ["In Studio, open Audio Overview, choose Customize and paste the focus below.",
+              "Download it from Studio files in the ribbon.",
+              "Listen on the way to class or the exam."],
+             ["studio"],
+             "Audio Overview",
+             "Explain [chapter or topic] for a student revising for an exam. Focus on [the parts I find hardest]. Use simple examples, and finish by asking three questions I should be able to answer."),
+            ("Research an essay with real citations",
+             "You need arguments you can back up, not made-up references.",
+             ["Add your readings, plus articles and pages from the web.",
+              "Paste the prompt for arguments with their sources and an outline.",
+              "Write the essay yourself, checking each claim against its citation."],
+             ["bulk", "web", "highlights"],
+             "Essay outline",
+             "From my sources, list the main arguments for and against [thesis], each with the source and page it comes from. Then suggest an outline for a [1,500]-word essay. Do not write the essay."),
+            ("Bring your AI study chats in",
+             "You worked through a topic in ChatGPT, but it's not in your notes.",
+             ["Open the conversation and click Import.",
+              "The chat lands in your notebook as a source.",
+              "Ask Gemini Notebook to check it against your textbook and flag anything that disagrees."],
+             ["chats"]),
+            ("One notebook per subject, shared with your group",
+             "Notes for six subjects end up in one messy notebook.",
+             ["Make one notebook per subject and put them in a folder per semester.",
+              "Tag notebooks by exam date so you can filter what's next.",
+              "Share a notebook with your study group so everyone works from the same sources."],
+             ["hub"]),
+        ],
+        "workflow_heading": "From lectures to exam day",
+        "workflow": [
+            ("Add", "Lecture slides, notes, textbook chapters, videos and past papers."),
+            ("Ask", "Paste a prompt from this page, or save it and type /."),
+            ("Practise", "Flashcards, quizzes and practice papers from your own material."),
+            ("Revise", "One-page sheets as PDF and Audio Overviews on the go."),
+        ],
+        "faq": [
+            ("Is NotebookLM good for studying?", "Yes. It answers only from the material you add, such as your lecture slides and textbook, and cites the exact passage, so you can check everything. Its Studio also makes flashcards, quizzes, mind maps and Audio Overviews from the same material."),
+            ("Is it free for students?", "Yes. Gemini Notebook (NotebookLM) is free with a Google account, with up to 100 notebooks of 50 sources each. NotebookTools is a free Chrome extension; every feature works on the free plan."),
+            ("Is using it cheating?", "Using it to understand, practise and revise is studying. Follow your school's rules on AI, and write graded work yourself. The prompts on this page help you learn and plan; the essay prompt deliberately stops at an outline."),
+            ("Can I study with friends?", "Yes. Share a notebook with your study group so everyone asks questions of the same sources and uses the same flashcards and quizzes."),
+            ("Where can I find more study prompts?", "See our list of the best NotebookLM prompts for studying, and save the ones you like to your prompt library so they're one / away."),
+        ],
+    },
     "researchers": {
         "slug": "researchers",
         "eyebrow": "For researchers",
@@ -282,9 +383,13 @@ PAGES = {
     },
 }
 
-OTHER = {"researchers": [("creators", "For content creators", "Research once, publish everywhere."), ("teachers", "For teachers", "Exam papers and worksheets from your own material.")],
-         "creators": [("researchers", "For researchers", "Do a week of reading in an afternoon."), ("teachers", "For teachers", "Exam papers and worksheets from your own material.")],
-         "teachers": [("researchers", "For researchers", "Do a week of reading in an afternoon."), ("creators", "For content creators", "Research once, publish everywhere.")]}
+PAGE_LINKS = {
+    "students": ("For students", "Turn your notes into exam-ready revision."),
+    "teachers": ("For teachers", "Exam papers and worksheets from your own material."),
+    "researchers": ("For researchers", "Do a week of reading in an afternoon."),
+    "creators": ("For content creators", "Research once, publish everywhere."),
+}
+OTHER = {slug: [(o, *PAGE_LINKS[o]) for o in PAGE_LINKS if o != slug] for slug in PAGE_LINKS}
 
 CHROME_ICON = (
     '<svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">'
