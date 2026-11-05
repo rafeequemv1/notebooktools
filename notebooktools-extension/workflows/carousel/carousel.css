@@ -1,0 +1,280 @@
+/* Slide deck → carousel dialog. Scoped with .ntc- so the page's own CSS can't reach in. */
+.ntc-backdrop {
+  --ntc-bg: #ffffff;
+  --ntc-panel: #f6f8fc;
+  --ntc-line: rgba(31, 31, 31, 0.12);
+  --ntc-ink: #1f1f1f;
+  --ntc-muted: #5f6368;
+  --ntc-accent: #0b57d0;
+  --ntc-accent-soft: rgba(11, 87, 208, 0.1);
+  align-items: center;
+  background: rgba(15, 20, 30, 0.42);
+  display: flex;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  inset: 0;
+  justify-content: center;
+  padding: 24px;
+  position: fixed;
+  z-index: 2147483646;
+}
+
+.ntc-backdrop.is-dark {
+  --ntc-bg: #1e1f22;
+  --ntc-panel: #16171a;
+  --ntc-line: rgba(255, 255, 255, 0.12);
+  --ntc-ink: #e8eaed;
+  --ntc-muted: #9aa0a6;
+  --ntc-accent: #a8c7fa;
+  --ntc-accent-soft: rgba(168, 199, 250, 0.14);
+}
+
+.ntc-backdrop *,
+.ntc-backdrop *::before,
+.ntc-backdrop *::after {
+  box-sizing: border-box;
+}
+
+.ntc-dialog {
+  background: var(--ntc-bg);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+  color: var(--ntc-ink);
+  display: flex;
+  flex-direction: column;
+  max-height: min(760px, calc(100vh - 48px));
+  overflow: hidden;
+  width: min(980px, 100%);
+}
+
+.ntc-head {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 20px 22px 14px;
+}
+
+.ntc-head h2 {
+  font: 500 20px/1.25 "Google Sans", Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.ntc-head p {
+  color: var(--ntc-muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.ntc-close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ntc-muted);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.ntc-close:hover {
+  background: var(--ntc-accent-soft);
+  color: var(--ntc-ink);
+}
+
+.ntc-body {
+  display: grid;
+  gap: 0;
+  grid-template-columns: 300px minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+  border-top: 1px solid var(--ntc-line);
+  border-bottom: 1px solid var(--ntc-line);
+  flex: 1;
+}
+
+.ntc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding: 18px 22px 20px;
+}
+
+.ntc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+}
+
+.ntc-label {
+  color: var(--ntc-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ntc-select,
+.ntc-input {
+  background: var(--ntc-bg);
+  border: 1px solid var(--ntc-line);
+  border-radius: 10px;
+  color: var(--ntc-ink);
+  font-size: 14px;
+  font-family: inherit;
+  height: 38px;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.ntc-select:focus,
+.ntc-input:focus {
+  border-color: var(--ntc-accent);
+  outline: 2px solid var(--ntc-accent-soft);
+}
+
+.ntc-seg {
+  background: var(--ntc-panel);
+  border: 1px solid var(--ntc-line);
+  border-radius: 10px;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+}
+
+.ntc-seg-btn {
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  color: var(--ntc-muted);
+  cursor: pointer;
+  flex: 1;
+  font-size: 12.5px; font-weight: 500; line-height: 1.2;
+  font-family: inherit;
+  min-height: 30px;
+  padding: 6px 6px;
+}
+
+.ntc-seg-btn:hover {
+  color: var(--ntc-ink);
+}
+
+.ntc-seg-btn.is-on {
+  background: var(--ntc-bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  color: var(--ntc-ink);
+}
+
+.ntc-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ntc-check {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: 13.5px;
+  gap: 9px;
+}
+
+.ntc-check input {
+  accent-color: var(--ntc-accent);
+  height: 16px;
+  margin: 0;
+  width: 16px;
+}
+
+.ntc-preview {
+  background: var(--ntc-panel);
+  min-width: 0;
+  overflow: auto;
+  padding: 20px;
+}
+
+.ntc-strip {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.ntc-page {
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.12);
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.ntc-empty {
+  color: var(--ntc-muted);
+  font-size: 13.5px;
+  grid-column: 1 / -1;
+  line-height: 1.5;
+  margin: 40px auto;
+  max-width: 360px;
+  text-align: center;
+}
+
+.ntc-empty.is-error {
+  color: #c5221f;
+}
+
+.ntc-foot {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  padding: 14px 22px;
+}
+
+.ntc-status {
+  color: var(--ntc-muted);
+  flex: 1;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.ntc-btn {
+  background: transparent;
+  border: 1px solid var(--ntc-line);
+  border-radius: 999px;
+  color: var(--ntc-ink);
+  cursor: pointer;
+  font-size: 14px; font-weight: 500;
+  font-family: inherit;
+  height: 38px;
+  padding: 0 18px;
+}
+
+.ntc-btn:hover {
+  background: var(--ntc-accent-soft);
+}
+
+.ntc-btn.is-primary {
+  background: var(--ntc-accent);
+  border-color: var(--ntc-accent);
+  color: #fff;
+}
+
+.ntc-backdrop.is-dark .ntc-btn.is-primary {
+  color: #062e6f;
+}
+
+.ntc-btn.is-primary:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@media (max-width: 760px) {
+  .ntc-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .ntc-preview {
+    overflow: visible;
+  }
+}

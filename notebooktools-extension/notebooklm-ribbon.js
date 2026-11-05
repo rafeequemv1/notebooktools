@@ -28,6 +28,7 @@
     slash: '<path d="M15 4 9 20"/>',
     grid: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M9.5 9.5v10"/>',
     doc: '<path d="M7 3.5h7l4.5 4.5v12.5H7z"/><path d="M14 3.5V8h4.5M9.5 12.5h6M9.5 16h6"/>',
+    carousel: '<rect x="6.5" y="4.5" width="11" height="15" rx="2"/><path d="M3.5 7v10M20.5 7v10"/>',
     chevron: '<path d="m6 15 6-6 6 6"/>',
     caret: '<path d="m7 10 5 5 5-5"/>'
   };
@@ -293,6 +294,9 @@
       case "manage-sources": return send({ type: "notebooktools-ribbon-open-hub", notebookId: notebookId(), tab: "sources", title: document.title });
       case "studio-files": return send({ type: "notebooktools-ribbon-open-hub", notebookId: notebookId(), tab: "studio", title: document.title });
       case "blog": return clickWorkflow(".notebooktools-blog-workflow-btn", "Blog workflow", button);
+      case "carousel":
+        if (!window.NotebookToolsCarousel) return toast("Carousel is still loading. Try again in a moment.", true);
+        return window.NotebookToolsCarousel.open(notebookId());
       case "snapdoc": return clickWorkflow(".notebooktools-snapshot-workflow-btn", "Snapshots", button);
       case "snapshot": {
         const ok = await send({ type: "notebooktools-ribbon-snapshot" });
@@ -337,6 +341,7 @@
       </div></div>
       <div class="ntr-group" data-group="Create"><span class="ntr-gname">Create</span><div class="ntr-items">
         ${btn("blog", "doc", "Blog", "Write a blog post with slide images from this notebook")}
+        ${btn("carousel", "carousel", "Carousel", "Turn a slide deck into a LinkedIn or Instagram carousel")}
         ${btn("snapdoc", "camera", "Snapshot doc", "Turn captured screenshots into a document")}
         ${btn("studio-files", "studio", "Studio files", "Browse, rename and download Studio outputs", " is-secondary")}
       </div></div>
