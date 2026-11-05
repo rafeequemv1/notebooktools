@@ -47,6 +47,8 @@ CHROME_ICON = (
 
 NAV = [
     ("/features", "Features", "features"),
+    ("/researchers", "Researchers", "researchers"),
+    ("/creators", "Creators", "creators"),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
     ("/support", "Support", "support"),
@@ -60,6 +62,8 @@ def section_of(rel: str) -> str | None:
         return "blog"
     if rel == "support.html":
         return "support"
+    if rel in ("researchers.html", "creators.html"):
+        return rel[:-5]
     return None
 
 
@@ -107,7 +111,8 @@ FOOTER = f"""<footer class="site-footer">
           <nav class="footer-col" aria-label="Product">
             <h2>Product</h2>
             <a href="/features">Features</a>
-            <a href="/#notebooks-app">Notebooks app</a>
+            <a href="/researchers">For researchers</a>
+            <a href="/creators">For content creators</a>
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/#install">Install</a>
