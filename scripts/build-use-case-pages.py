@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the use-case pages (/researchers, /creators) from the data below.
+"""Build the use-case pages (/researchers, /creators, /teachers) from the data below.
 
     python3 scripts/build-use-case-pages.py && python3 scripts/sync-site-chrome.py
 
@@ -31,6 +31,7 @@ F = {  # feature chips → demo pages
     "blog": ("Slides to blog", "/features/slides-to-blog"),
     "snapshots": ("Snapshots", "/features/snapshots"),
     "chats": ("AI chat import", "/#works-with"),
+    "answer": ("Answer to PDF / Word", "/features/chat-export"),
 }
 
 LOGOS = [("chatgpt", "ChatGPT"), ("claude", "Claude"), ("gemini", "Gemini"), ("perplexity", "Perplexity"), ("grok", "Grok"), ("kimi", "Kimi")]
@@ -78,8 +79,8 @@ PAGES = {
              ["prompts"]),
             ("Export answers into your notes and drafts",
              "Copying a long, cited answer out of the chat breaks the formatting.",
-             ["Use Export in the notebook ribbon.", "Save the chat as Markdown, Word, HTML or PDF with citations intact.", "Drop it into Obsidian, Zotero notes or your draft."],
-             ["export"]),
+             ["Use Export in the notebook ribbon.", "Save the last answer as a clean PDF or Word file, or the whole chat as Markdown, HTML or PDF.", "Drop it into Obsidian, Zotero notes or your draft."],
+             ["export", "answer"]),
             ("Turn findings into a talk and a write-up",
              "The lab meeting is tomorrow and the slides don't exist yet.",
              ["Generate a slide deck in Studio with a style from the slide prompts.", "Turn the deck into a written report with every slide as a figure.", "Make an Audio Overview to review the material on your commute."],
@@ -160,10 +161,130 @@ PAGES = {
             ("Is it free?", "Yes. Every feature works on the free plan. Pro is a one-time lifetime upgrade."),
         ],
     },
+    "teachers": {
+        "slug": "teachers",
+        "eyebrow": "For teachers",
+        "title": "Gemini Notebook (NotebookLM) for Teachers: Exam Papers, Worksheets & Lesson Plans | NotebookTools",
+        "description": "Step-by-step ways teachers use Gemini Notebook (NotebookLM) with NotebookTools: exam question papers as PDF, answer keys, differentiated worksheets, lesson plans, quizzes, rubrics and revision podcasts, with prompts to copy.",
+        "h1": "Exam papers, worksheets and lessons <span class=\"grad\">from your own material</span>",
+        "lead": "Practical, case-by-case ways teachers and tutors use Gemini Notebook (formerly NotebookLM) with NotebookTools. Each case gives you the prompt to paste and shows how to save the result as a clean PDF or Word file.",
+        "works": False,
+        "uses_heading": "12 things to make this week",
+        "uses_eyebrow": "Case by case",
+        "uses": [
+            ("Make an exam question paper as a PDF",
+             "An end-of-term paper for your class, built from the chapters you actually taught.",
+             ["Make a notebook for the class and add the chapter PDFs, your notes and past papers. Bulk import takes many at once.",
+              "Paste the prompt below and fill in the class, chapters, marks and time.",
+              "In the ribbon, click Export, then Last answer only, then PDF. You get just the paper, print-ready. Pick Word to add your school's header first."],
+             ["bulk", "answer", "prompts"],
+             "Question paper · PDF or Word",
+             "Using only my sources, write an exam question paper for [class/grade] [subject] covering [chapters or topics].\nTotal marks: [80]. Time: [2 hours].\nStart with a title line, the time and maximum marks, then short general instructions for students.\nSection A: [10] multiple-choice questions, 1 mark each, with four options labelled a) to d).\nSection B: [6] short-answer questions, [3] marks each.\nSection C: [4] long-answer questions, [8] marks each, including one with an internal choice (\"or\").\nShow the marks in brackets after every question and number the questions continuously.\nMix difficulty: about 30% easy, 50% medium, 20% hard. Do not include answers or hints."),
+            ("Write the answer key and marking scheme",
+             "The paper is done. Now every marker needs the same model answers.",
+             ["In the same chat, paste the prompt below.",
+              "Check each answer against the page it cites in your material.",
+              "Export the last answer as its own PDF or Word file, for markers only."],
+             ["answer"],
+             "Answer key · PDF or Word",
+             "For the exam paper above, write the answer key and marking scheme. For each question give the correct answer, the marks for each step or point, acceptable alternative answers, and one common mistake to watch for. Keep the same question numbers. Cite the source for each answer."),
+            ("Make one worksheet at three levels",
+             "One class, three levels of reading and skill, one topic.",
+             ["Add the lesson's chapter or article to the notebook.",
+              "Paste the prompt. You get Support, Core and Stretch versions in one answer.",
+              "Export to Word to adjust spacing, then print."],
+             ["answer", "prompts"],
+             "Worksheets · Word",
+             "Using my sources on [topic], create a worksheet for [class/grade] in three versions:\nSupport: simpler language, one worked example, fill-in-the-blanks.\nCore: standard questions.\nStretch: application and reasoning questions.\nEach version needs a title and 8 to 10 numbered questions. Put a short answer key for all three at the end."),
+            ("Plan tomorrow's lesson",
+             "A 40-minute lesson, planned the evening before.",
+             ["Add the chapter, the syllabus outcomes and any resources you like to use.",
+              "Paste the prompt with your timing and class.",
+              "Export as Word and keep it in your planning folder."],
+             ["answer", "prompts"],
+             "Lesson plan · Word",
+             "Using my sources, write a [40]-minute lesson plan on [topic] for [class/grade]. Include learning objectives, a 5-minute starter, the main teaching sequence with timings, one class activity, questions to check understanding, a plenary, homework, and notes on support and extension for different learners."),
+            ("Quizzes and flashcards for revision",
+             "Students need to practise, not just reread their notes.",
+             ["In Studio, generate Flashcards and a Quiz from the chapter.",
+              "Share the notebook with your class, where your school's accounts allow it, so students practise on their own.",
+              "For a printed quiz, paste the prompt and export the answer as a PDF."],
+             ["studio", "answer"],
+             "Quiz · on screen or PDF",
+             "Make a 15-question quiz on [topic] from my sources for [class/grade]: 10 multiple-choice questions with four options labelled a) to d), and 5 true/false questions. Put the answers in a separate section at the end titled Answers."),
+            ("A revision podcast for each chapter",
+             "Students who won't reread the chapter will listen to it on the bus.",
+             ["In Studio, open Audio Overview, choose Customize and paste the focus below.",
+              "Download the audio from Studio files in the ribbon.",
+              "Post it in your class group or learning platform."],
+             ["studio"],
+             "Audio Overview · audio file",
+             "Explain [chapter] for [class/grade] students revising for a test. Focus on [key ideas]. Use simple, everyday examples and finish with three questions students should be able to answer."),
+            ("Slides and a handout from the same lesson",
+             "The slides exist; students want notes they can keep.",
+             ["Generate a slide deck in Studio. A clean style from the slide prompts keeps it readable.",
+              "Click Blog in the ribbon to turn the deck into a written handout with every slide as an image.",
+              "Download the handout as Word or PDF and share it after class."],
+             ["studio", "prompts", "blog"],
+             "Slides + handout"),
+            ("Notes and questions from YouTube lessons",
+             "The clearest explanation of a topic is often a video your students already watch.",
+             ["Import a lesson video or a whole playlist in one click.",
+              "Paste the prompt for notes and questions per video.",
+              "Export the answer as a PDF to hand out alongside the videos."],
+             ["youtube", "bulk", "answer"],
+             "Video notes · PDF",
+             "For each video in my sources, write a 5-point summary, 3 key terms with definitions, and 5 comprehension questions in the order the ideas appear. Title each part with the video's title."),
+            ("Reading comprehension from any article",
+             "You want a current, real-world text at the right reading level.",
+             ["Add a news article or web page as a source from the side panel.",
+              "Paste the prompt to adapt it and add questions.",
+              "Export the passage and questions as one PDF."],
+             ["web", "answer"],
+             "Passage + questions · PDF",
+             "Rewrite the article in my sources as a reading passage for [class/grade], about [400] words, keeping every fact accurate. Then add 5 vocabulary words with meanings, 6 comprehension questions (literal, inference and opinion), and an answer key at the end."),
+            ("A rubric for a project or essay",
+             "Students keep asking what a good answer looks like.",
+             ["Add the assignment brief and the syllabus outcomes.",
+              "Paste the prompt. The rubric comes back as a table.",
+              "Export to Word, adjust the marks, and share it with the assignment."],
+             ["answer", "prompts"],
+             "Rubric · Word",
+             "Create a marking rubric for [assignment] for [class/grade] based on the requirements in my sources. Use a table with 4 to 5 criteria as rows and four levels as columns (Excellent, Good, Developing, Beginning), with marks for each. Describe each level in student-friendly language."),
+            ("Step-by-step guides for class technology",
+             "Every term you explain again how to submit work on the class platform.",
+             ["Do the task once and capture each step with Alt+Shift+S.",
+              "Click Create how-to guide.",
+              "Get a written guide with every screenshot in place, ready for students and parents."],
+             ["snapshots"],
+             "How-to guide · DOC"),
+            ("One notebook per class and unit",
+             "Six classes, three terms, and materials everywhere.",
+             ["Make a notebook per class and unit, and put them in a folder per class.",
+              "Tag notebooks by term or status: planned, taught, assessed.",
+              "Save your best prompts (exam paper, rubric) and insert them with / in any notebook."],
+             ["hub", "prompts"]),
+        ],
+        "workflow_heading": "From your material to a printed page",
+        "workflow": [
+            ("Add", "Chapters, notes, past papers, articles and videos."),
+            ("Ask", "Paste a prompt from this page, or save it and type /."),
+            ("Check", "Every answer cites your own material. Read before you print."),
+            ("Export", "The last answer as a clean PDF or Word file."),
+        ],
+        "faq": [
+            ("Can Gemini Notebook make an exam question paper as a PDF?", "Yes. Add your chapters and notes, ask for the paper with the prompt on this page, then use Export, Last answer only, PDF in the NotebookTools ribbon. You get just the paper, with headings, numbered questions and tables, and none of the chat around it. Choose Word if you want to add your school's header first."),
+            ("Will the questions stay within my syllabus?", "Gemini Notebook answers from the sources you add and cites them, so add the chapters you actually taught. Always read the paper before printing: AI can still word a question badly or get a fact wrong."),
+            ("Can my students use it too?", "Where your school's Google accounts allow it, share a notebook with your class so students can ask questions, practise with flashcards and quizzes, and listen to Audio Overviews of the material you chose."),
+            ("Is it safe with student information?", "Keep student names, marks and personal details out of your notebooks, and follow your school's policy. NotebookTools works in your browser with your own Google account."),
+            ("Is it free for teachers?", "Yes. Every feature works on the free plan. Pro is a one-time lifetime upgrade."),
+        ],
+    },
 }
 
-OTHER = {"researchers": ("creators", "For content creators", "Research once, publish everywhere."),
-         "creators": ("researchers", "For researchers", "Do a week of reading in an afternoon.")}
+OTHER = {"researchers": [("creators", "For content creators", "Research once, publish everywhere."), ("teachers", "For teachers", "Exam papers and worksheets from your own material.")],
+         "creators": [("researchers", "For researchers", "Do a week of reading in an afternoon."), ("teachers", "For teachers", "Exam papers and worksheets from your own material.")],
+         "teachers": [("researchers", "For researchers", "Do a week of reading in an afternoon."), ("creators", "For content creators", "Research once, publish everywhere.")]}
 
 CHROME_ICON = (
     '<svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">'
@@ -188,15 +309,28 @@ def logos_html() -> str:
 def page(p: dict) -> str:
     url = f"{BASE}/{p['slug']}"
     cards = []
-    for i, (title, job, steps, feats) in enumerate(p["uses"], 1):
+    has_prompts = False
+    for i, use in enumerate(p["uses"], 1):
+        title, job, steps, feats = use[:4]
+        makes = use[4] if len(use) > 4 else ""
+        prompt = use[5] if len(use) > 5 else ""
         chips = "".join(f'<a class="uc-chip" href="{F[f][1]}">{e(F[f][0])}</a>' for f in feats)
         lis = "".join(f"<li>{e(s)}</li>" for s in steps)
+        makes_html = f'<span class="uc-makes">{e(makes)}</span>' if makes else ""
+        prompt_html = ""
+        if prompt:
+            has_prompts = True
+            prompt_html = f"""
+            <div class="uc-prompt">
+              <div class="uc-prompt-head"><span>Prompt to paste</span><button type="button" class="uc-copy" data-copy>Copy</button></div>
+              <pre>{e(prompt)}</pre>
+            </div>"""
         cards.append(f"""
-          <article class="uc-card">
-            <span class="uc-num">{i:02d}</span>
+          <article class="uc-card{' has-prompt' if prompt else ''}">
+            <div class="uc-card-top"><span class="uc-num">{i:02d}</span>{makes_html}</div>
             <h3>{e(title)}</h3>
             <p class="uc-job"><b>The job:</b> {e(job)}</p>
-            <ol class="uc-steps">{lis}</ol>
+            <ol class="uc-steps">{lis}</ol>{prompt_html}
             <div class="uc-chips">{chips}</div>
           </article>""")
     flow = "".join(
@@ -215,7 +349,19 @@ def page(p: dict) -> str:
                 {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in p["faq"]]},
         ],
     }
-    other_slug, other_label, other_line = OTHER[p["slug"]]
+    others = "".join(f'<a class="uc-other" href="/{slug}"><span>{e(label)}</span>{e(line)} →</a>' for slug, label, line in OTHER[p["slug"]])
+    works = f'\n        <div class="uc-works"><span>Works with your AI chats</span><ul>{logos_html()}</ul></div>' if p.get("works", True) else ""
+    copy_js = """
+    <script>
+      document.addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-copy]");
+        if (!button) return;
+        const text = button.closest(".uc-prompt").querySelector("pre").textContent;
+        try { await navigator.clipboard.writeText(text); button.textContent = "Copied"; }
+        catch (_) { button.textContent = "Select and copy"; }
+        setTimeout(() => { button.textContent = "Copy"; }, 1600);
+      });
+    </script>""" if has_prompts else ""
     return f"""<!doctype html>
 <html lang="en">
   <head>
@@ -260,14 +406,13 @@ def page(p: dict) -> str:
         <div class="uc-actions">
           <a class="button button-primary button-lg" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}Add to Chrome — free</a>
           <a class="button button-ghost button-lg" href="/features">See the features</a>
-        </div>
-        <div class="uc-works"><span>Works with your AI chats</span><ul>{logos_html()}</ul></div>
+        </div>{works}
       </section>
 
       <section class="uc-section">
         <div class="section-head center">
-          <p class="eyebrow">Practical uses</p>
-          <h2>{len(p['uses'])} ways to use it this week</h2>
+          <p class="eyebrow">{e(p.get('uses_eyebrow', 'Practical uses'))}</p>
+          <h2>{e(p.get('uses_heading', f"{len(p['uses'])} ways to use it this week"))}</h2>
         </div>
         <div class="uc-grid">{''.join(cards)}
         </div>
@@ -276,7 +421,7 @@ def page(p: dict) -> str:
       <section class="uc-section">
         <div class="section-head center">
           <p class="eyebrow">The workflow</p>
-          <h2>From scattered sources to finished work</h2>
+          <h2>{e(p.get('workflow_heading', 'From scattered sources to finished work'))}</h2>
         </div>
         <ol class="uc-flow">{flow}</ol>
       </section>
@@ -294,9 +439,9 @@ def page(p: dict) -> str:
           </div>
           <a class="button button-primary button-lg" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}Add to Chrome — free</a>
         </div>
-        <a class="uc-other" href="/{other_slug}"><span>{e(other_label)}</span>{e(other_line)} →</a>
+        <div class="uc-others">{others}</div>
       </section>
-    </main>
+    </main>{copy_js}
   </body>
 </html>
 """

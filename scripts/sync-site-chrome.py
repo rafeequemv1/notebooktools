@@ -49,6 +49,7 @@ NAV = [
     ("/features", "Features", "features"),
     ("/researchers", "Researchers", "researchers"),
     ("/creators", "Creators", "creators"),
+    ("/teachers", "Teachers", "teachers"),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
     ("/support", "Support", "support"),
@@ -62,7 +63,7 @@ def section_of(rel: str) -> str | None:
         return "blog"
     if rel == "support.html":
         return "support"
-    if rel in ("researchers.html", "creators.html"):
+    if rel in ("researchers.html", "creators.html", "teachers.html"):
         return rel[:-5]
     return None
 
@@ -113,6 +114,7 @@ FOOTER = f"""<footer class="site-footer">
             <a href="/features">Features</a>
             <a href="/researchers">For researchers</a>
             <a href="/creators">For content creators</a>
+            <a href="/teachers">For teachers</a>
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/#install">Install</a>

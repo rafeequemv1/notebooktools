@@ -230,10 +230,19 @@
   function exportMenu(anchor) {
     const formats = window.NotebookToolsChatExport?.listFormats?.() || [];
     if (!formats.length) return toast("Export is not available on this page.", true);
+    const answer = [
+      ["answer:pdf", "doc", "PDF (print-ready)"],
+      ["answer:word", "doc", "Word (.doc)"],
+      ["answer:markdown", "copy", "Markdown"]
+    ].map(([v, ic, label]) => `<button type="button" class="ntr-menu-item" data-value="${v}">${icon(ic, 15)}<span>${esc(label)}</span></button>`).join("");
     const items = formats.map((f) => `<button type="button" class="ntr-menu-item" data-value="${esc(f.id)}">${icon("download", 15)}<span>${esc(f.label)}</span></button>`).join("");
-    openMenu(anchor, `<p class="ntr-menu-title">Export chat as</p>${items}`, async (formatId) => {
+    openMenu(anchor, `<p class="ntr-menu-title">Last answer only</p>${answer}<p class="ntr-menu-title">Whole chat</p>${items}`, async (formatId) => {
       closeMenu();
       try {
+        if (formatId.startsWith("answer:")) {
+          if (!window.NotebookToolsAnswerExport) throw new Error("Export is still loading. Try again in a moment.");
+          return toast(await window.NotebookToolsAnswerExport.exportLastAnswer(formatId.slice(7)));
+        }
         const payload = window.NotebookToolsNotebookLmChatExtract.extractNotebookLmChat();
         const result = await window.NotebookToolsChatExport.exportConversation(payload, formatId);
         toast(result?.openedPrintDialog ? "PDF view opened. Choose Save as PDF." : `Exported ${result?.filename || "chat"}`);
@@ -332,7 +341,7 @@
       <div class="ntr-group" data-group="Organize"><span class="ntr-gname">Organize</span><div class="ntr-items" data-ntr-organize></div></div>
       <div class="ntr-group" data-group="Chat"><span class="ntr-gname">Chat</span><div class="ntr-items">
         ${btn("copy", "copy", "Copy", "Copy the chat as Markdown", " is-tertiary")}
-        ${btn("export", "download", "Export", "Export the chat (Markdown, PDF, Word…)", " has-caret")}
+        ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
       </div></div>
       <div class="ntr-group" data-group="Sources"><span class="ntr-gname">Sources</span><div class="ntr-items">
         ${btn("add-links", "link", "Add links", "Paste many links or YouTube videos at once")}

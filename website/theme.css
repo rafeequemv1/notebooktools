@@ -2437,7 +2437,8 @@ a {
 .uc-cta h2 { color: #fff; font-size: 26px; letter-spacing: -0.02em; margin: 0 0 6px; }
 .uc-cta p { color: #c4cbd8; margin: 0; }
 .uc-cta .button-primary { background: #fff; color: #1f1f1f; flex: none; }
-.uc-other { border: 1px solid var(--line); border-radius: 14px; color: var(--ink); display: flex; flex-direction: column; gap: 4px; margin-top: 16px; padding: 16px 20px; text-decoration: none; }
+.uc-others { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 16px; }
+.uc-other { border: 1px solid var(--line); border-radius: 14px; color: var(--ink); display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; text-decoration: none; }
 .uc-other span { color: var(--accent); font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 .uc-other:hover { border-color: var(--accent); }
 @media (max-width: 860px) {
@@ -2446,3 +2447,12 @@ a {
   .uc-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .uc-cta { align-items: flex-start; flex-direction: column; padding: 26px 22px; }
 }
+
+/* Use-case cards: what it makes, and a prompt to copy (teachers page) */
+.uc-card-top { align-items: center; display: flex; gap: 10px; justify-content: space-between; }
+.uc-makes { background: #e8f0fe; border-radius: 999px; color: #0b57d0; font-size: 12px; font-weight: 600; padding: 4px 10px; white-space: nowrap; }
+.uc-prompt { background: #f6f8fc; border: 1px solid #e3e8f1; border-radius: 12px; margin: 4px 0 14px; overflow: hidden; }
+.uc-prompt-head { align-items: center; border-bottom: 1px solid #e3e8f1; color: #5f6368; display: flex; font-size: 12px; font-weight: 600; justify-content: space-between; letter-spacing: .04em; padding: 7px 8px 7px 14px; text-transform: uppercase; }
+.uc-copy { background: #fff; border: 1px solid #dadce0; border-radius: 999px; color: #1f1f1f; cursor: pointer; font: 500 12.5px/1 var(--font-body, inherit); letter-spacing: 0; padding: 6px 12px; text-transform: none; }
+.uc-copy:hover { border-color: #0b57d0; color: #0b57d0; }
+.uc-prompt pre { color: #3c4043; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 0; max-height: 210px; overflow: auto; padding: 12px 14px; white-space: pre-wrap; word-break: break-word; }
