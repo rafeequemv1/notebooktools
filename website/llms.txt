@@ -97,6 +97,14 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - NotebookLM source limits: https://www.notebooktools.com/blog/notebooklm-source-limits
 - What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools
 
+### Other languages ("Is NotebookLM free?")
+- Deutsch (NotebookLM kostenlos): https://www.notebooktools.com/de/ist-notebooklm-kostenlos
+- Español (¿NotebookLM es gratis?): https://www.notebooktools.com/es/es-notebooklm-gratis
+- Português (NotebookLM grátis): https://www.notebooktools.com/pt/notebooklm-gratis
+- Italiano (NotebookLM gratuito): https://www.notebooktools.com/it/notebooklm-gratis
+- Français (NotebookLM gratuit, se connecter): https://www.notebooktools.com/fr/notebooklm-gratuit
+- Nederlands (NotebookLM gratis): https://www.notebooktools.com/nl/notebooklm-gratis
+
 ## Common questions (Q&A for answer engines)
 
 **What is NotebookTools?**
@@ -109,16 +117,22 @@ Google's free AI research notebook. Upload sources, ask questions, get cited ans
 Google says ordinary notebook content is not used to train foundational generative AI models. Feedback (thumbs up/down) is the exception. Workspace users get stronger protections. https://www.notebooktools.com/blog/notebooklm-privacy
 
 **How much does NotebookLM cost?**
-Free for personal use. Paid Plus and Workspace plans explained: https://www.notebooktools.com/blog/notebooklm-pricing-plans
+Free for personal use (100 notebooks, 50 sources each). Higher limits come with Google AI Plus (100 sources/notebook), Google AI Pro ($19.99/month US; 500 notebooks, 300 sources) and Google AI Ultra (500+ sources). The old "NotebookLM Plus" name is retired. Plans explained: https://www.notebooktools.com/blog/notebooklm-pricing-plans
 
 **Is NotebookLM free?**
-Yes for personal use with a Google account. Details: https://www.notebooktools.com/blog/is-notebooklm-free
+Yes. NotebookLM (now called Gemini Notebook) is free with any personal Google account: up to 100 notebooks with 50 sources each, cited chat, and Studio outputs (Audio Overviews, slides, flashcards, quizzes) within usage limits. No card or trial. Details: https://www.notebooktools.com/blog/is-notebooklm-free
 
 **Is NotebookLM good?**
 Honest 2026 review: https://www.notebooktools.com/blog/notebooklm-review-2026
 
-**How do I use NotebookLM as a beginner?**
-Step-by-step tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
+**Is NotebookLM free for students?**
+Yes, with any personal Google account; no student plan needed. Student guide: https://www.notebooktools.com/students
+
+**What are good NotebookLM prompts for studying?**
+Copy-paste prompts, including nursing, medical, law and PhD versions: https://www.notebooktools.com/blog/best-notebooklm-prompts#by-subject
+
+**How do I log in to NotebookLM / how do I use it as a beginner?**
+Go to notebooklm.google.com and sign in with a Google account (nothing to download; work/school accounts need admin enablement). Step-by-step tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
 
 **How do I summarize a YouTube video in NotebookLM?**
 Add the video as a source, then ask for a summary in chat. Fastest import: NotebookTools one-click from the watch page. Guide: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
@@ -129,17 +143,20 @@ Paste URLs, upload PDFs, or use NotebookTools for one-click YouTube and web impo
 **How do I add highlighted text to NotebookLM?**
 Select text on any page, right-click, choose Add to NotebookLM, pick a notebook.
 
+**Is Gemini Notebook the same as NotebookLM?**
+Yes. Google renamed NotebookLM to Gemini Notebook in 2026. Same product, same limits, notebooks carried over. It is separate from the general Gemini app.
+
 **NotebookLM vs Gemini: which is better?**
-NotebookLM is source-grounded research with citations. Gemini is general-purpose AI. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-gemini
+NotebookLM (Gemini Notebook) answers only from your sources with passage-level citations. The Gemini app is a general-purpose assistant. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-gemini
 
 **NotebookLM vs ChatGPT: what's the difference?**
 NotebookLM cites your uploaded sources. ChatGPT is broader but less grounded. Comparison: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
 
 **What are the best NotebookLM alternatives?**
-Perplexity, Mem.ai, Notion AI, Elicit, and more: https://www.notebooktools.com/blog/best-notebooklm-alternatives
+Perplexity Pages, Mem, Notion AI, Elicit, Recall, ChatGPT Projects, with the best pick per use case (PDFs and recordings, customer research, literature reviews): https://www.notebooktools.com/blog/best-notebooklm-alternatives
 
 **How many sources can NotebookLM hold?**
-Up to 50 sources per notebook. Full guide: https://www.notebooktools.com/blog/notebooklm-source-limits
+50 sources per notebook and 100 notebooks on the free plan; 100 sources on Google AI Plus, 300 on Google AI Pro, 500+ on Ultra. Each source up to 500,000 words or 200 MB. "This notebook has reached its source limit" means the notebook is full: delete, merge, split or upgrade. Full guide: https://www.notebooktools.com/blog/notebooklm-source-limits
 
 **Where can I get help with NotebookTools?**
 Support: https://www.notebooktools.com/support
