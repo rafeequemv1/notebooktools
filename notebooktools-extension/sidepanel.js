@@ -35,8 +35,29 @@ function openNotebooksPage() {
 
 openNotebooksButton?.addEventListener("click", (event) => {
   event.preventDefault();
-  openNotebooksPage();
+  void NotebookToolsPlan.requirePro("notebooks-hub", openNotebooksPage);
 });
+
+// Side panel tabs that need Pro (feature keys from plan-gate.js). Import and Bulk are free.
+const PRO_PANELS = { snapshots: "snapshots", prompts: "prompt-library" };
+
+async function openPanel(panelName) {
+  const key = PRO_PANELS[panelName];
+  if (key && !(await NotebookToolsPlan.can(key))) {
+    NotebookToolsPlan.showUpgrade(key);
+    return false;
+  }
+  setActivePanel(panelName);
+  return true;
+}
+
+function markProTabs() {
+  panelTabs.forEach((tab) => {
+    if (PRO_PANELS[tab.dataset.panel] && !tab.querySelector(".sp-pro-tag")) {
+      tab.insertAdjacentHTML("beforeend", ' <span class="sp-pro-tag" title="Pro feature">Pro</span>');
+    }
+  });
+}
 
 const panelTabs = [...document.querySelectorAll(".sidepanel-tab")];
 const panels = {
@@ -666,7 +687,7 @@ async function initSidePanel() {
   }
 
   panelTabs.forEach((tab) => {
-    tab.addEventListener("click", () => setActivePanel(tab.dataset.panel));
+    tab.addEventListener("click", () => void openPanel(tab.dataset.panel));
   });
 
   modeButtons.forEach((button) => {
@@ -674,7 +695,15 @@ async function initSidePanel() {
   });
 
   importButton.addEventListener("click", runImport);
-  studioButton?.addEventListener("click", runStudioImport);
+  studioButton?.addEventListener("click", () => void NotebookToolsPlan.requirePro("studio-create", runStudioImport));
+  const syncProTabs = () => NotebookToolsPlan.readState().then((state) => {
+    if (state.plan === "pro") document.querySelectorAll(".sp-pro-tag").forEach((tag) => tag.remove());
+    else markProTabs();
+  });
+  void syncProTabs();
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && (changes.notebooktoolsAuthProfile || changes.notebooktoolsAuthSession)) void syncProTabs();
+  });
   await NotebookToolsStudioImport.initControls({
     typeSelect: studioArtifactType,
     openTabToggle: studioOpenTabToggle,
@@ -705,14 +734,19 @@ async function initSidePanel() {
     });
   }
 
-  if (initialPanel === "prompts") {
-    setActivePanel("prompts");
-  } else if (initialPanel === "bulk") {
+  setActivePanel("import");
+  if (initialPanel === "bulk") {
     setActivePanel("bulk");
-  } else if (initialPanel === "snapshots") {
-    setActivePanel("snapshots");
-  } else {
-    setActivePanel("import");
+  } else if (initialPanel === "prompts" || initialPanel === "snapshots") {
+    void openPanel(initialPanel);
+  }
+
+  // Opened from an upgrade dialog or a Pro shortcut: show sign-in or the upgrade dialog.
+  if (params.get("account") === "1") {
+    NotebookToolsAccountUI.open?.();
+  }
+  if (params.get("upgrade") && NotebookToolsPlan.isProFeature(params.get("upgrade"))) {
+    NotebookToolsPlan.showUpgrade(params.get("upgrade"));
   }
 
   document.addEventListener("visibilitychange", () => {

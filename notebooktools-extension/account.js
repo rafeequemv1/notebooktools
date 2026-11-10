@@ -14,18 +14,19 @@ const NotebookToolsAccount = (() => {
     supabaseUrl: "https://vgqfjwwnezwhzwfhpmkz.supabase.co",
     // Publishable key: safe to ship in the extension (access is enforced by RLS).
     supabaseKey: "sb_publishable_B5AIRo0MVD0lbE4JP_GLpQ_pT5t6KKh",
-    // Dodo product for NotebookTools Pro (Scidart business). Empty until it exists;
-    // Upgrade then opens the pricing page instead of checkout.
-    proProductId: "",
+    // Dodo product for NotebookTools Pro (lifetime). Defined once in plan-gate.js.
+    proProductId: globalThis.NotebookToolsPlan?.PRODUCT_ID || "",
+    // Landing page for email confirmation and password-reset links.
+    // Must be listed under Supabase Auth > URL Configuration > Redirect URLs.
+    accountPageUrl: "https://www.notebooktools.com/account",
     pricingUrl: "https://www.notebooktools.com/#pricing",
     checkoutBase: "https://checkout.dodopayments.com/buy/",
     checkoutReturnUrl: "https://www.notebooktools.com/?checkout=success#pricing",
     priceLabel: "$49",
   };
 
-  // Feature keys that require Pro. Add keys here when paid features are decided,
-  // e.g. "bulk-import", "studio-generate". Empty = everything is free.
-  const PRO_FEATURES = new Set([]);
+  // Free vs Pro features are defined in plan-gate.js (NotebookToolsPlan.PRO_FEATURES).
+  const PRO_FEATURES = new Set(Object.keys(globalThis.NotebookToolsPlan?.PRO_FEATURES || {}));
 
   const SESSION_KEY = "notebooktoolsAuthSession";
   const PROFILE_KEY = "notebooktoolsAuthProfile";
@@ -134,7 +135,8 @@ const NotebookToolsAccount = (() => {
 
   /** Returns { confirmEmail: true } when the user must confirm their address first. */
   async function signUp(email, password) {
-    const data = await request("/auth/v1/signup", {
+    const redirect = encodeURIComponent(`${CONFIG.accountPageUrl}?confirmed=1`);
+    const data = await request(`/auth/v1/signup?redirect_to=${redirect}`, {
       method: "POST",
       body: { email: String(email).trim(), password },
     });
@@ -147,7 +149,8 @@ const NotebookToolsAccount = (() => {
   }
 
   async function sendPasswordReset(email) {
-    await request("/auth/v1/recover", { method: "POST", body: { email: String(email).trim() } });
+    const redirect = encodeURIComponent(CONFIG.accountPageUrl);
+    await request(`/auth/v1/recover?redirect_to=${redirect}`, { method: "POST", body: { email: String(email).trim() } });
   }
 
   async function signOut() {
@@ -190,7 +193,7 @@ const NotebookToolsAccount = (() => {
     return (await getState()).plan === "pro";
   }
 
-  /** Feature gate. Every feature is allowed until it is listed in PRO_FEATURES. */
+  /** Feature gate. Free unless the key is listed in plan-gate.js PRO_FEATURES. */
   async function can(featureKey) {
     if (!PRO_FEATURES.has(featureKey)) return true;
     return isPro();
@@ -206,10 +209,8 @@ const NotebookToolsAccount = (() => {
     const state = await getState();
     const params = new URLSearchParams({ quantity: "1", redirect_url: CONFIG.checkoutReturnUrl });
     if (state.email) params.set("email", state.email);
-    if (state.userId) {
-      params.set("metadata_user_id", state.userId);
-      params.set("metadata_app", "notebooktools");
-    }
+    params.set("metadata_app", "notebooktools");
+    if (state.userId) params.set("metadata_user_id", state.userId);
     return `${CONFIG.checkoutBase}${CONFIG.proProductId}?${params.toString()}`;
   }
 
@@ -251,4 +252,4 @@ const NotebookToolsAccount = (() => {
   };
 })();
 
-window.NotebookToolsAccount = NotebookToolsAccount;
+globalThis.NotebookToolsAccount = NotebookToolsAccount;

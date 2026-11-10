@@ -6,7 +6,12 @@
 // that, by email. A purchase with no matching account is kept and applied when
 // that email signs up (see public.handle_new_user). refund.succeeded reverts it.
 //
-// Secrets: DODO_WEBHOOK_SECRET (from the Dodo webhook endpoint, "whsec_...").
+// After a new purchase it emails the buyer a "Pro is active" confirmation
+// through Resend (skipped when RESEND_API_KEY is not set; never blocks the webhook).
+//
+// Secrets: DODO_WEBHOOK_SECRET (from the Dodo webhook endpoint, "whsec_..."),
+// RESEND_API_KEY, optional RESEND_FROM (default "NotebookTools <noreply@notebooktools.com>";
+// must be on a domain verified in Resend).
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
@@ -67,13 +72,59 @@ async function verify(req: Request, body: string): Promise<boolean> {
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Finds the buyer's account by checkout metadata or email (creating a missing
+// profile row). Null when no account exists yet for this email.
 async function findUserId(metadataUserId: unknown, email: string): Promise<string | null> {
-  if (typeof metadataUserId === "string" && UUID.test(metadataUserId)) {
-    const { data } = await supabase.from("profiles").select("id").eq("id", metadataUserId).maybeSingle();
-    if (data) return data.id;
+  const targetId = typeof metadataUserId === "string" && UUID.test(metadataUserId) ? metadataUserId : null;
+  const { data, error } = await supabase.rpc("profile_id_for", { target_id: targetId, target_email: email });
+  if (error) throw error;
+  return (data as string | null) ?? null;
+}
+
+function proEmailHtml(hasAccount: boolean, email: string): string {
+  const safe = email.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const body = hasAccount
+    ? `NotebookTools Pro is now active on <strong>${safe}</strong>, for life. Open the NotebookTools side panel in Chrome; if it still shows Free, sign out and back in.`
+    : `Thanks for buying NotebookTools Pro. To switch it on, open the NotebookTools side panel in Chrome and create an account with <strong>${safe}</strong>. Pro activates as soon as you sign in.`;
+  return `<!doctype html><html lang="en"><body style="margin:0;padding:0;background:#f6f8fc;font-family:'Google Sans',Roboto,Arial,Helvetica,sans-serif;color:#1f1f1f;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f6f8fc;"><tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
+<tr><td style="padding:0 4px 20px;"><a href="https://www.notebooktools.com" style="text-decoration:none;color:#1f1f1f;"><img src="https://www.notebooktools.com/assets/logo-mark.png" width="28" height="28" alt="" style="vertical-align:middle;border:0;border-radius:6px;"><span style="font-size:17px;font-weight:600;vertical-align:middle;padding-left:8px;">NotebookTools</span></a></td></tr>
+<tr><td style="background:#ffffff;border:1px solid #e3e8f0;border-radius:16px;padding:32px 28px;">
+<p style="margin:0 0 12px;"><span style="display:inline-block;background:#e8f0fe;color:#0b57d0;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;">Pro &middot; lifetime</span></p>
+<h1 style="margin:0 0 12px;font-size:22px;line-height:1.3;font-weight:600;">${hasAccount ? "Your Pro plan is active" : "One step to activate Pro"}</h1>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#444746;">${body}</p>
+<p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#444746;">Pro unlocks the notebooks dashboard, folders and tags, the source manager, blog and carousel makers, snapshots, the prompt library and chat export.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;"><tr><td style="border-radius:999px;background:#1f1f1f;"><a href="https://notebooklm.google.com/" style="display:inline-block;padding:12px 24px;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;border-radius:999px;">Open NotebookLM</a></td></tr></table>
+<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#5f6368;">Your payment receipt comes separately from Dodo Payments. Questions? Reply to this email or visit <a href="https://www.notebooktools.com/support" style="color:#0b57d0;">support</a>.</p>
+</td></tr>
+<tr><td style="padding:20px 4px 0;font-size:12px;line-height:1.6;color:#80868b;">NotebookTools, the Chrome extension for NotebookLM. An independent tool, not affiliated with Google.</td></tr>
+</table></td></tr></table></body></html>`;
+}
+
+async function sendProEmail(email: string, hasAccount: boolean) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  if (!apiKey) return "skipped: RESEND_API_KEY not set";
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: Deno.env.get("RESEND_FROM") || "NotebookTools <noreply@notebooktools.com>",
+        to: [email],
+        subject: hasAccount ? "Your NotebookTools Pro is active" : "Activate your NotebookTools Pro",
+        html: proEmailHtml(hasAccount, email),
+      }),
+    });
+    if (!response.ok) {
+      console.error("resend error", response.status, await response.text());
+      return `failed: ${response.status}`;
+    }
+    return "sent";
+  } catch (err) {
+    console.error("resend error", err);
+    return "failed";
   }
-  const { data } = await supabase.from("profiles").select("id").ilike("email", email).limit(1).maybeSingle();
-  return data?.id ?? null;
 }
 
 async function onPaymentSucceeded(data: any) {
@@ -85,6 +136,13 @@ async function onPaymentSucceeded(data: any) {
   if (!email) return { skipped: "no customer email" };
 
   const userId = await findUserId(data.metadata?.user_id, email);
+  const { data: existing } = await supabase
+    .from("purchases")
+    .select("status")
+    .eq("payment_id", data.payment_id)
+    .maybeSingle();
+  const isNew = existing?.status !== "succeeded";
+
   const { error } = await supabase.from("purchases").upsert(
     {
       payment_id: data.payment_id,
@@ -100,10 +158,16 @@ async function onPaymentSucceeded(data: any) {
   );
   if (error) throw error;
 
-  if (!userId) return { recorded: true, pending: "no account yet for this email" };
-  const { data: plan, error: rpcError } = await supabase.rpc("refresh_plan", { target: userId });
-  if (rpcError) throw rpcError;
-  return { recorded: true, plan };
+  let plan: unknown = null;
+  if (userId) {
+    const { data: refreshed, error: rpcError } = await supabase.rpc("refresh_plan", { target: userId });
+    if (rpcError) throw rpcError;
+    plan = refreshed;
+  }
+  // Email once per payment (Dodo retries must not send duplicates).
+  const emailed = isNew ? await sendProEmail(email, Boolean(userId)) : "skipped: already processed";
+  if (!userId) return { recorded: true, pending: "no account yet for this email", emailed };
+  return { recorded: true, plan, emailed };
 }
 
 async function onRefundSucceeded(data: any) {

@@ -250,7 +250,18 @@ const NotebookToolsAccountUI = (() => {
     });
   }
 
-  return { init, render };
+  /** Opens the account card (sign-in form when signed out). */
+  function open() {
+    setCardOpen(true);
+    Account.getState().then((state) => {
+      if (!state.signedIn && mode === "closed") {
+        mode = "signin";
+      }
+      render();
+    });
+  }
+
+  return { init, render, open };
 })();
 
 window.NotebookToolsAccountUI = NotebookToolsAccountUI;

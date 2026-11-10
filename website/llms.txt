@@ -37,7 +37,7 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 
 ## Key facts
 
-- **Price:** Free (all features)
+- **Price:** Free for every import option; Pro $49 one-time lifetime (notebooks dashboard, source manager, blog/carousel makers, snapshots, prompt library, chat export)
 - **Platform:** Google Chrome (Manifest V3)
 - **Auth:** Your signed-in NotebookLM / Google session
 - **Affiliation:** Independent. Not affiliated with Google or NotebookLM.

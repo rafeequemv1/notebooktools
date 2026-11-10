@@ -1,3 +1,5 @@
+> **Outdated (v0.2.3).** Use [`docs/CHROME_STORE_LISTING.md`](../docs/CHROME_STORE_LISTING.md) for the current listing and submission steps.
+
 # Chrome Web Store listing — NotebookTools v0.2.3
 
 Copy these fields into the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole).

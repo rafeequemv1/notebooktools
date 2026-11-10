@@ -289,7 +289,28 @@
     window.requestAnimationFrame(() => button.click());
   }
 
+  // Ribbon actions that need Pro (feature keys from plan-gate.js). Others are free.
+  const PRO_ACTIONS = {
+    folder: "organize",
+    tags: "organize",
+    favorite: "organize",
+    export: "chat-export",
+    "manage-sources": "manage-sources",
+    "studio-files": "studio-files",
+    blog: "blog-maker",
+    carousel: "carousel-maker",
+    snapdoc: "snapshots",
+    snapshot: "snapshots",
+    prompts: "prompt-library",
+    hub: "notebooks-hub",
+  };
+
   async function handle(action, button, ribbon) {
+    const proKey = PRO_ACTIONS[action];
+    if (proKey && window.NotebookToolsPlan && !(await window.NotebookToolsPlan.can(proKey))) {
+      window.NotebookToolsPlan.showUpgrade(proKey);
+      return;
+    }
     switch (action) {
       case "folder": return folderMenu(button, ribbon);
       case "tags": return tagMenu(button, ribbon);
@@ -309,6 +330,7 @@
       case "snapdoc": return clickWorkflow(".notebooktools-snapshot-workflow-btn", "Snapshots", button);
       case "snapshot": {
         const ok = await send({ type: "notebooktools-ribbon-snapshot" });
+        if (ok?.upgrade) return window.NotebookToolsPlan?.showUpgrade(ok.upgrade);
         if (!ok?.ok) toast(ok?.error || "Could not start the snapshot.", true);
         return;
       }

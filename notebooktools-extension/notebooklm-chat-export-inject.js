@@ -139,9 +139,15 @@
       menu.append(option);
     }
 
-    button.addEventListener("click", (event) => {
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
+      // Chat export is a Pro feature (plan-gate.js).
+      if (window.NotebookToolsPlan && !(await window.NotebookToolsPlan.can("chat-export"))) {
+        wrap.classList.remove("is-open");
+        window.NotebookToolsPlan.showUpgrade("chat-export");
+        return;
+      }
       wrap.classList.toggle("is-open");
     });
 

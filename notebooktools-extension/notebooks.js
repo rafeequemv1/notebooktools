@@ -1762,6 +1762,12 @@ document.addEventListener("click", (event) => {
 });
 
 async function init() {
+  // The notebooks dashboard is a Pro feature (plan-gate.js). Free users see a
+  // lock screen that reloads the page once Pro is active.
+  if (!(await NotebookToolsPlan.lockPage("notebooks-hub"))) {
+    return;
+  }
+
   await NotebookToolsTheme.init();
   await loadAppSettings();
 

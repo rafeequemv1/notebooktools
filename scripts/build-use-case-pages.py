@@ -132,7 +132,7 @@ PAGES = {
         ],
         "faq": [
             ("Is NotebookLM good for studying?", "Yes. It answers only from the material you add, such as your lecture slides and textbook, and cites the exact passage, so you can check everything. Its Studio also makes flashcards, quizzes, mind maps and Audio Overviews from the same material."),
-            ("Is it free for students?", "Yes. Gemini Notebook (NotebookLM) is free with a Google account, with up to 100 notebooks of 50 sources each. NotebookTools is a free Chrome extension; every feature works on the free plan."),
+            ("Is it free for students?", "Yes. Gemini Notebook (NotebookLM) is free with a Google account, with up to 100 notebooks of 50 sources each. NotebookTools is free for every import option; Pro ($49 once) adds the notebooks dashboard, prompt library and study tools."),
             ("Is using it cheating?", "Using it to understand, practise and revise is studying. Follow your school's rules on AI, and write graded work yourself. The prompts on this page help you learn and plan; the essay prompt deliberately stops at an outline."),
             ("Can I study with friends?", "Yes. Share a notebook with your study group so everyone asks questions of the same sources and uses the same flashcards and quizzes."),
             ("Where can I find more study prompts?", "See our list of the best NotebookLM prompts for studying, and save the ones you like to your prompt library so they're one / away."),
@@ -540,7 +540,7 @@ def page(p: dict) -> str:
         <div class="uc-cta">
           <div>
             <h2>Try it on your next project</h2>
-            <p>Free Chrome extension for Gemini Notebook. Every feature on the free plan.</p>
+            <p>Free Chrome extension for Gemini Notebook. Free imports, Pro $49 lifetime.</p>
           </div>
           <a class="button button-primary button-lg" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{CHROME_ICON}Add to Chrome — free</a>
         </div>

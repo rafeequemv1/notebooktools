@@ -5,7 +5,7 @@ NotebookTools is a Chrome extension and website for sending YouTube videos to No
 ## Folders
 
 - `notebooktools-extension` — development copy of the Chrome MV3 extension
-- `version 0.1/` — **Chrome Web Store submission package** (zip the `extension` folder)
+- `version 0.1/` — old v0.2.3 store package (outdated; build from `notebooktools-extension` instead)
 - `website` — landing page and privacy policy for Vercel hosting
 
 ## Version 0.1 features
@@ -19,18 +19,21 @@ NotebookTools is a Chrome extension and website for sending YouTube videos to No
 1. Open `chrome://extensions`
 2. Turn on **Developer mode**
 3. Click **Load unpacked**
-4. Select `version 0.1/extension` (or `notebooktools-extension`)
+4. Select `notebooktools-extension`
 
 ## Chrome Web Store upload
 
-See [`version 0.1/README.md`](version%200.1/README.md) for packaging and listing instructions.
-
-```powershell
-cd "version 0.1"
-.\package-extension.ps1
+```bash
+bash scripts/build-extension-zip.sh
 ```
 
-Upload `notebooktools-v0.1.0.zip` in the Chrome Developer Dashboard.
+Upload `dist/notebooktools-extension.zip`. Listing text, permission justifications, privacy answers
+and the pre-submit checklist are in [`docs/CHROME_STORE_LISTING.md`](docs/CHROME_STORE_LISTING.md).
+
+## Free and Pro
+
+Free covers every import option; Pro ($49 one-time, Dodo Payments) unlocks everything else.
+Which features are Pro is set in one place: `notebooktools-extension/plan-gate.js`.
 
 ## NotebookLM direct import
 

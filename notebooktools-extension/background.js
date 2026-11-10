@@ -1,4 +1,26 @@
-importScripts("notebooklm-client.js", "link-extract.js", "snapshot-store.js", "snapshot-capture.js");
+importScripts("plan-gate.js", "account.js", "notebooklm-client.js", "link-extract.js", "snapshot-store.js", "snapshot-capture.js");
+
+/* Shows the Pro upgrade dialog inside a tab (used when a Pro shortcut or menu runs from the background). */
+async function showUpgradeInTab(tabId, featureKey) {
+  try {
+    await chrome.scripting.executeScript({ target: { tabId }, files: ["plan-gate.js"] });
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      func: (key) => globalThis.NotebookToolsPlan?.showUpgrade(key),
+      args: [featureKey]
+    });
+  } catch (_error) {
+    // Pages like chrome:// block scripts: show it in the side panel instead.
+    await openSidePanel(tabId, `upgrade=${encodeURIComponent(featureKey)}`).catch(() => {});
+  }
+}
+
+/* Runs a Pro-only background action, or shows the upgrade dialog in the tab. */
+async function runPro(featureKey, tab, action) {
+  if (await NotebookToolsPlan.can(featureKey)) return action();
+  if (tab?.id) await showUpgradeInTab(tab.id, featureKey);
+  return null;
+}
 
 const PENDING_TEXT_KEY = "pendingTextImport";
 const PENDING_LINK_EXTRACT_KEY = "pendingLinkExtract";
@@ -93,6 +115,10 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 chrome.runtime.onStartup.addListener(() => {
   setupContextMenu();
+  // Keep the cached plan current (picks up purchases and refunds).
+  NotebookToolsAccount.getState().then((state) => {
+    if (state.signedIn) NotebookToolsAccount.refreshProfile().catch(() => {});
+  });
 });
 
 setupContextMenu();
@@ -188,6 +214,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message?.type === "notebooktools-refresh-plan") {
+    NotebookToolsAccount.refreshProfile()
+      .then((profile) => sendResponse({ ok: true, plan: profile?.plan || "free" }))
+      .catch(() => sendResponse({ ok: false }));
+    return true;
+  }
+
   // --- Ribbon inside Gemini Notebook ---
   if (message?.type === "notebooktools-ribbon-open-panel") {
     const tabId = sender?.tab?.id;
@@ -224,6 +257,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     const query = params.toString();
+    // notebooks.html shows its own Pro lock screen for Free users.
     chrome.tabs.create({ url: chrome.runtime.getURL(`notebooks.html${query ? `?${query}` : ""}`) });
     sendResponse({ ok: true });
     return true;
@@ -232,6 +266,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "notebooktools-ribbon-snapshot") {
     void (async () => {
       try {
+        if (!(await NotebookToolsPlan.can("snapshots"))) {
+          sendResponse({ ok: false, upgrade: "snapshots" });
+          return;
+        }
         await startSnapshotCapture(sender.tab, true);
         sendResponse({ ok: true });
       } catch (error) {
@@ -537,7 +575,7 @@ chrome.commands.onCommand.addListener(async (command) => {
   if (command === "capture-snapshot") {
     try {
       const tab = await NotebookToolsSnapshotCapture.resolveTargetTab();
-      await startSnapshotCapture(tab, true);
+      await runPro("snapshots", tab, () => startSnapshotCapture(tab, true));
     } catch (error) {
       console.error("NotebookTools snapshot shortcut failed:", error);
     }
@@ -551,7 +589,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     }
 
     try {
-      await startSnapshotCapture(tab, true);
+      await runPro("snapshots", tab, () => startSnapshotCapture(tab, true));
     } catch (error) {
       console.error("NotebookTools snapshot capture failed:", error);
     }

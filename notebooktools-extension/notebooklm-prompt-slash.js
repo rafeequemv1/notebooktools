@@ -5,6 +5,12 @@
   const CUSTOM_PROMPTS_KEY = "notebooktoolsCustomPrompts";
 
   let allPrompts = [];
+  let proUnlocked = false;
+  const checkPlan = () => window.NotebookToolsPlan?.can("prompt-library").then((ok) => { proUnlocked = ok; });
+  checkPlan();
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && (changes.notebooktoolsAuthProfile || changes.notebooktoolsAuthSession)) checkPlan();
+  });
   let activeInput = null;
   let slashContext = null;
   let selectedIndex = 0;
@@ -191,6 +197,15 @@
   }
 
   function selectPrompt(index) {
+    // The prompt library is a Pro feature (plan-gate.js); check before inserting.
+    if (window.NotebookToolsPlan && !proUnlocked) {
+      hideMenu();
+      window.NotebookToolsPlan.can("prompt-library").then((ok) => {
+        proUnlocked = ok;
+        if (!ok) window.NotebookToolsPlan.showUpgrade("prompt-library");
+      });
+      return;
+    }
     const items = filteredPrompts(slashContext?.query || "");
 
     if (!activeInput || !slashContext || !items[index]) {
