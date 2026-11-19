@@ -12,6 +12,12 @@
       "permanent": true
     },
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "notebooktools.vercel.app" }],
+      "destination": "https://www.notebooktools.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/blog",
       "has": [{ "type": "query", "key": "category", "value": "youtube" }],
       "destination": "/blog/category/youtube",

@@ -173,6 +173,74 @@ const SCENES = {
 };
 
 const POSTS = {
+  'youtube-to-notebooklm': {
+    kicker: 'YouTube guide', title: 'YouTube to <em>NotebookLM</em>', sub: 'Add one video, or a whole playlist, in a single click.',
+    scene: () => `
+      <div class="card" style="left:620px;top:100px;width:520px;padding:24px">
+        <div class="row" style="gap:10px;margin-bottom:16px">${YT}<span class="t b">Lecture playlist · 24 videos</span></div>
+        ${[1, 1, 1, 0].map((on, i) => `<div class="row" style="height:52px;border-top:1px solid #eef0f3"><span class="check${on ? '' : ' no'}">${on ? '✓' : '·'}</span><span class="bar" style="width:72px;height:40px;border-radius:8px"></span>${bar(['62%', '54%', '70%', '48%'][i])}</div>`).join('')}
+        <div class="row" style="margin-top:18px;justify-content:flex-end"><span class="pill blue" style="font-size:17px;padding:12px 18px">Import 24 videos</span></div>
+      </div>`,
+  },
+  'notebooklm-prompts-for-studying': {
+    zoom: 1.16, kicker: 'Study prompts', title: '<em>30 prompts</em> for studying', sub: 'By subject: nursing, medicine, law, engineering and more.',
+    scene: () => prompts(['Make 10 exam questions', 'Quiz me, then explain', 'Build a drug card table', 'Summarize this lecture']),
+  },
+  'notebooklm-chrome-extensions': {
+    kicker: 'Extensions', title: 'Best NotebookLM <em>extensions</em>', sub: 'What each one adds, and what to look for before you install.',
+    scene: () => `
+      <div class="card" style="left:640px;top:110px;width:480px;padding:24px">
+        <div class="lbl" style="margin-bottom:14px">Chrome extensions</div>
+        ${[['NotebookTools', 1], ['', 0], ['', 0]].map(([n, me]) => `<div class="row" style="height:64px;border-top:1px solid #eef0f3"><span class="ico" style="background:${me ? '#eef2fb' : '#f1f3f4'}">${me ? `<img src="${LOGO}" width="26" height="26" style="border-radius:6px">` : ''}</span>${me ? `<span class="t b" style="flex:1">${n}</span><span class="tag" style="background:#e8f0fe;color:#0b57d0">Free</span>` : bar('55%')}</div>`).join('')}
+      </div>`,
+  },
+  'export-notebooklm-to-pdf': {
+    zoom: 1.16, kicker: 'Export', title: 'NotebookLM to <em>PDF</em>', sub: 'Save chats and answers as clean PDF or Word files.',
+    scene: () => `
+      <div class="card" style="left:640px;top:100px;width:440px;padding:26px">
+        <div class="row" style="gap:10px;margin-bottom:16px">${GN(22)}<span class="lbl">Export chat</span></div>
+        ${[['PDF', '#d93025'], ['Word', '#1a73e8'], ['Markdown', '#5f6368']].map(([n, c], i) => `<div class="row" style="height:56px;padding:0 12px;border-radius:12px;${i === 0 ? 'background:#e8f0fe' : ''}">${DOC(c)}<span class="t" style="font-size:20px;${i === 0 ? 'color:#0b57d0;font-weight:600' : ''}">${n}</span></div>`).join('')}
+      </div>`,
+  },
+  'notebooklm-mind-map': {
+    kicker: 'Studio guide', title: 'NotebookLM <em>mind maps</em>', sub: 'Turn your sources into a map of every idea, then dig in.',
+    scene: () => `<div class="stage">
+      <svg style="position:absolute;left:600px;top:120px" width="560" height="420" fill="none" stroke="#9ab8ef" stroke-width="2.5"><path d="M150 210 C250 210 250 80 360 80 M150 210 C250 210 250 210 360 210 M150 210 C250 210 250 340 360 340"/></svg>
+      <div class="card" style="left:620px;top:300px;padding:16px 22px"><span class="t b">Your notebook</span></div>
+      ${[['Causes', 168], ['Key studies', 298], ['Open questions', 428]].map(([n, y]) => `<div class="card" style="left:960px;top:${y}px;padding:14px 20px"><span class="t">${n}</span></div>`).join('')}</div>`,
+  },
+  'notebooklm-video-overview': {
+    kicker: 'Studio guide', title: 'NotebookLM <em>Video Overviews</em>', sub: 'Narrated slides made from your own sources.',
+    scene: () => win('left:600px;top:90px;width:660px;height:520px', '', `
+      <div style="padding:22px"><div style="aspect-ratio:16/9;border-radius:16px;background:linear-gradient(135deg,#e8f0fe,#c9dcfb);display:flex;flex-direction:column;justify-content:center;padding:34px;gap:14px"><div style="font:700 34px/1.1 var(--sans);color:#0b57d0">Chapter 3</div>${bar('60%')}${bar('44%')}</div>
+      <div class="row" style="margin-top:18px;gap:12px"><span class="pill dark" style="font-size:16px;padding:10px 14px">▶ Play</span><div class="meter" style="flex:1;height:8px"><i style="width:35%"></i></div></div></div>`),
+  },
+  'notebooklm-mcp': {
+    zoom: 1.16, kicker: 'Developers', title: 'NotebookLM <em>+ MCP</em>', sub: 'What works today, the risks, and safer alternatives.',
+    scene: () => `
+      <div class="card" style="left:640px;top:110px;width:460px;padding:26px;background:#1f1f1f;color:#e8eaed">
+        <div class="lbl" style="color:#9aa0a6;margin-bottom:16px">MCP client</div>
+        <div style="font:500 19px/1.6 ui-monospace,monospace">› list notebooks<br><span style="color:#8ab4f8">✓ 12 notebooks</span><br>› ask "key findings?"<br><span style="color:#8ab4f8">✓ answer with citations</span></div>
+      </div>`,
+  },
+  'notebooklm-not-working': {
+    zoom: 1.16, kicker: 'Troubleshooting', title: 'NotebookLM <em>not working?</em>', sub: 'Every common error, what causes it, and the fix.',
+    scene: () => `
+      <div class="card" style="left:640px;top:110px;width:460px;padding:26px">
+        ${[['Source failed to import', '#d93025'], ['Reached its source limit', '#e37400'], ['Usage limit reached', '#e37400'], ['Fixed', '#137333']].map(([n, c]) => `<div class="row" style="height:58px;border-top:1px solid #eef0f3"><span style="width:12px;height:12px;border-radius:50%;background:${c}"></span><span class="t" style="font-size:19px">${n}</span></div>`).join('')}
+      </div>`,
+  },
+  'what-is-gemini-notebook': {
+    kicker: 'Rename explained', title: 'What is <em>Gemini Notebook?</em>', sub: 'The new name for NotebookLM. Same product, same notebooks.',
+    scene: () => vs('Gemini Notebook', 'Gemini app'),
+  },
+  'notebooklm-updates': {
+    zoom: 1.16, kicker: 'Updated monthly', title: 'NotebookLM <em>updates</em>', sub: "What's new in NotebookLM, month by month.",
+    scene: () => `
+      <div class="card" style="left:640px;top:100px;width:460px;padding:26px">
+        ${[['Nov 2026', 'Limits by plan'], ['Sep 2026', 'Rolling usage limits'], ['2026', 'Renamed Gemini Notebook']].map(([d, n]) => `<div class="row" style="height:70px;border-top:1px solid #eef0f3"><span class="tag" style="background:#e8f0fe;color:#0b57d0;width:96px;justify-content:center">${d}</span><span class="t" style="font-size:19px">${n}</span></div>`).join('')}
+      </div>`,
+  },
   'summarize-youtube-videos-notebooklm': {
     kicker: 'YouTube guide', title: 'Summarize any <em>YouTube video</em>', sub: 'Send a video to NotebookLM in one click, then ask it anything.',
     scene: () => win('left:600px;top:70px;width:660px;height:600px', 'youtube.com/watch', `
@@ -252,11 +320,11 @@ const POSTS = {
       <div class="card" style="left:650px;top:96px;width:440px;padding:32px">
         <div class="row" style="gap:10px;margin-bottom:14px">${GN(24)}<span class="lbl">Free plan</span></div>
         <div style="font:700 72px/1 var(--sans);letter-spacing:-0.03em;margin-bottom:24px">$0</div>
-        ${['Unlimited chat', '50 sources per notebook', 'Audio Overviews', 'Answers with citations'].map((x) => `<div class="row" style="height:46px"><span class="check">✓</span><span class="t" style="font-size:20px">${x}</span></div>`).join('')}
+        ${['100 notebooks', '50 sources per notebook', 'Audio Overviews', 'Answers with citations'].map((x) => `<div class="row" style="height:46px"><span class="check">✓</span><span class="t" style="font-size:20px">${x}</span></div>`).join('')}
       </div>`,
   },
   'notebooklm-pricing-plans': {
-    kicker: 'Pricing', title: 'Every plan, <em>compared</em>', sub: 'Free, Plus, and Workspace: limits and prices side by side.',
+    kicker: 'Pricing', title: 'Every plan, <em>compared</em>', sub: 'Free, Google AI Plus, Pro and Ultra: limits and prices side by side.',
     scene: () => `<div class="stage">${[['Free', '$0', 0], ['Plus', '', 1], ['Workspace', '', 0]].map(([n, p, hi], i) => `
       <div class="card" style="left:${600 + i * 196}px;top:${hi ? 90 : 130}px;width:180px;padding:22px 18px;${hi ? 'box-shadow:0 0 0 3px #4c8df6,0 30px 60px -16px rgba(0,0,0,.55)' : ''}">
         <div class="lbl" style="margin-bottom:12px;${hi ? 'color:#0b57d0' : ''}">${n}</div>

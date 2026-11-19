@@ -8,6 +8,9 @@ const importButton = document.querySelector("#importButton");
 const refreshButton = document.querySelector("#refreshButton");
 const statusBox = document.querySelector("#status");
 
+const isGoogleDocs = new URLSearchParams(window.location.search).get("platform") === "googledocs";
+const IMPORT_LABEL = isGoogleDocs ? "Copy text to NotebookLM" : "Import";
+
 let notebookLmNotebooks = [];
 let importPayload = null;
 
@@ -60,7 +63,7 @@ function setStatus(message, options = {}) {
 }
 
 function setBusy(isBusy) {
-  NotebookToolsUI.setImportButtonState(importButton, isBusy, "Import");
+  NotebookToolsUI.setImportButtonState(importButton, isBusy, IMPORT_LABEL);
   refreshButton.disabled = isBusy;
   notebookLmSelect.disabled = isBusy;
   newNotebookLmName.disabled = isBusy;
@@ -212,6 +215,7 @@ async function importConversation() {
       importPayload.title,
       importPayload.markdown || importPayload.plainText
     );
+    void globalThis.NotebookToolsStats?.recordImport();
 
     newNotebookLmName.value = "";
     await refreshNotebookList({ silent: true });
@@ -238,6 +242,17 @@ newNotebookLmName.addEventListener("input", () => {
     notebookLmSelect.value = "";
   }
 });
+
+if (isGoogleDocs) {
+  const sourceNote = document.querySelector("#sourceNote");
+  importButton.textContent = IMPORT_LABEL;
+  importButton.title = "Saved as text and won't sync. For a synced source, add it from Google Drive in NotebookLM.";
+
+  if (sourceNote) {
+    sourceNote.textContent = importButton.title;
+    sourceNote.hidden = false;
+  }
+}
 
 refreshButton.addEventListener("click", () => refreshNotebookList());
 importButton.addEventListener("click", importConversation);

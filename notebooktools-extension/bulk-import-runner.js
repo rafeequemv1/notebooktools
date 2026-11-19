@@ -45,6 +45,7 @@ const NotebookToolsBulkRunner = (() => {
         item.status = "success";
         item.error = "";
         summary.success += 1;
+        globalThis.NotebookToolsStats?.recordImport();
       } catch (error) {
         const message = error?.message || "Import failed.";
         item.status = "failed";

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Copy the demo markup from website/features/index.html to every feature page.
+"""Copy the demo markup from scripts/feature-demos.html to every feature page.
 
-All feature pages share the same <main> (sidebar + every demo); each page only
-marks its own feature as active. Edit index.html, then run:
+All feature pages share the same <main> sidebar; each page keeps only its own
+demo panel (one topic per URL) and marks its feature as active. Edit scripts/feature-demos.html (not the pages), then run:
 
     python3 scripts/sync-feature-pages.py
 """
@@ -32,7 +32,7 @@ def icon_names() -> str:
         text = f.read_text(encoding="utf-8")
         names |= set(re.findall(r'"ms:([a-z0-9_]+)"', text))
         names |= set(re.findall(r'\bms\("([a-z0-9_]+)"', text))
-    html = (FEATURES / "index.html").read_text(encoding="utf-8")
+    html = (Path(__file__).resolve().parent / "feature-demos.html").read_text(encoding="utf-8")
     names |= set(re.findall(r'class="nlm-ms[^"]*"[^>]*>([a-z0-9_]+)<', html))
     return ",".join(sorted(names))
 
@@ -67,14 +67,24 @@ def activate(main: str, feature: str) -> str:
     return main
 
 
+PANEL_RE = re.compile(r'\s*<article class="md-panel[^"]*" data-panel="([^"]+)".*?</article>', re.S)
+
+
+def only_own_panel(main: str, feature: str) -> str:
+    """Keep just this page's demo panel. Shipping all 14 panels on every page made
+    the feature pages near-duplicates for search engines; demo.js now loads the
+    other feature's page when you pick it in the sidebar."""
+    return PANEL_RE.sub(lambda m: m.group(0) if m.group(1) == feature else "", main)
+
+
 def main() -> None:
-    source = (FEATURES / "index.html").read_text(encoding="utf-8")
+    source = (Path(__file__).resolve().parent / "feature-demos.html").read_text(encoding="utf-8")
     master = MAIN_RE.search(source).group(0)
     changed = 0
     for page in sorted(FEATURES.glob("*.html")):
         text = page.read_text(encoding="utf-8")
         feature = re.search(r'data-initial-feature="([^"]+)"', text).group(1)
-        new = MAIN_RE.sub(lambda _: activate(master, feature), text, count=1)
+        new = MAIN_RE.sub(lambda _: only_own_panel(activate(master, feature), feature), text, count=1)
         # Drop older copies of the NotebookLM links, then add the current ones.
         new = re.sub(r'\n\s*<link href="https://fonts\.googleapis\.com/css2\?family=(Google\+Sans|Material\+Symbols)[^"]*" rel="stylesheet">', "", new)
         new = re.sub(r'\n\s*<link rel="stylesheet" href="/features/((nlm/)?nlm-ui|surfaces/surfaces|stage/stage)\.css">', "", new)

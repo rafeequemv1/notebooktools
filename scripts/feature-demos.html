@@ -1,0 +1,686 @@
+<!-- Master demo markup for website/features/*.html.
+     Edit here, then run: python3 scripts/sync-feature-pages.py -->
+<main class="md-main">
+      <nav class="feature-breadcrumb" aria-label="Breadcrumb" id="features-breadcrumb">
+        <a href="/">Home</a>
+        <span class="feature-breadcrumb-sep" aria-hidden="true">/</span>
+        <span>Features</span>
+      </nav>
+      <div class="md-mobile-select-wrap">
+        <label class="md-mobile-label" for="md-feature-select">Feature</label>
+        <select id="md-feature-select" class="md-mobile-select" aria-label="Choose a feature">
+          <option value="overview" selected>Overview</option>
+          <option value="add-youtube">Add YouTube</option>
+          <option value="bulk-import">Bulk import</option>
+          <option value="notebooks-hub">Notebooks hub</option>
+          <option value="manage-sources">Manage sources</option>
+          <option value="drive-refresh">Drive refresh</option>
+          <option value="studio-podcasts">Studio & podcasts</option>
+          <option value="prompts">Prompt library</option>
+          <option value="add-webpage">Add webpage</option>
+          <option value="x-twitter">X / Twitter</option>
+          <option value="highlights">Highlights</option>
+          <option value="chat-export">Chat export</option>
+          <option value="slides-to-blog">Slides to blog</option>
+          <option value="snapshots">Snapshots</option>
+        </select>
+      </div>
+      <div class="md-layout">
+<aside class="md-sidebar" aria-label="Features">
+        <div class="md-sidebar-head">
+          <p class="eyebrow">Features</p>
+          <h2 class="md-sidebar-title">Explore</h2>
+        </div>
+        <nav class="md-nav" id="features-nav">
+          <a class="md-nav-item md-nav-overview is-active" aria-current="page" href="/features" data-feature="overview">
+            <span class="md-nav-icon md-icon-overview"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Overview</span>
+              <span class="md-nav-desc">All features at a glance</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/add-youtube" data-feature="add-youtube">
+            <span class="md-nav-icon md-icon-yt"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 9.5v5l5-2.5-5-2.5z" fill="currentColor"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Add YouTube</span>
+              <span class="md-nav-desc">One click on any watch page — video lands in your notebo…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/bulk-import" data-feature="bulk-import">
+            <span class="md-nav-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Bulk import</span>
+              <span class="md-nav-desc">Queue tabs, playlists, and pasted URLs — import dozens w…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/notebooks-hub" data-feature="notebooks-hub">
+            <span class="md-nav-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Notebooks hub</span>
+              <span class="md-nav-desc">Pin, star, folder, and search every notebook in one calm…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/manage-sources" data-feature="manage-sources">
+            <span class="md-nav-icon md-icon-manage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="15" y="15" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.6"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Manage sources</span>
+              <span class="md-nav-desc">Select all, delete, and organize Sources &amp; Studio into folders.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/drive-refresh" data-feature="drive-refresh">
+            <span class="md-nav-icon md-icon-drive"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4l8 14H4L12 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Drive refresh</span>
+              <span class="md-nav-desc">See Update available on Docs, Slides, Sheets & Drive PDF…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/studio-podcasts" data-feature="studio-podcasts">
+            <span class="md-nav-icon md-icon-studio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h2l2-5 3 10 2-5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Studio & podcasts</span>
+              <span class="md-nav-desc">Generate Audio Overviews and play podcasts across every …</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/prompts" data-feature="prompts">
+            <span class="md-nav-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Prompt library</span>
+              <span class="md-nav-desc">Curated prompts in the side panel — type / in NotebookLM…</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/add-webpage" data-feature="add-webpage">
+            <span class="md-nav-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Add webpage</span>
+              <span class="md-nav-desc">Import the current tab URL from the side panel into any notebook.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/x-twitter" data-feature="x-twitter">
+            <span class="md-nav-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">X / Twitter</span>
+              <span class="md-nav-desc">Import threads and posts as clean text sources.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/highlights" data-feature="highlights">
+            <span class="md-nav-icon md-icon-highlights"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19l3.5-1L19 7.5 16.5 5 5 16.5V19z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.5 7l2.5 2.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Highlights</span>
+              <span class="md-nav-desc">Select text → right-click → Add to NotebookLM.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/chat-export" data-feature="chat-export">
+            <span class="md-nav-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Chat export</span>
+              <span class="md-nav-desc">Export NotebookLM conversations — Markdown, text, or PDF.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/slides-to-blog" data-feature="slides-to-blog">
+            <span class="md-nav-icon md-icon-slidestoblog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h4M7 12h10M7 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 7l3 2-3 2V7z" fill="currentColor"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Slides to blog</span>
+              <span class="md-nav-desc">Turn a NotebookLM slide deck into a blog or guide with images.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/snapshots" data-feature="snapshots">
+            <span class="md-nav-icon md-icon-snapshots"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 6l1.5-2h5L16 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Snapshots</span>
+              <span class="md-nav-desc">Capture screen areas, annotate, and assemble PDF or guide exports.</span>
+            </span>
+          </a>
+        </nav>
+        <div class="md-sidebar-cta">
+          <a class="button button-primary button-sm" href="/#pricing">Get Pro — $49</a>
+        </div>
+      </aside>
+        <div class="md-detail" id="features-detail" role="region" aria-live="polite">
+        <article class="md-panel is-active" data-panel="overview" id="panel-overview">
+          <div class="md-panel-intro">
+            <p class="eyebrow">NotebookTools</p>
+            <h1>See every major feature</h1>
+            <p class="lead">Interactive demos recreating NotebookLM’s UI — Sources, chat, and Studio — so you can visualize how NotebookTools fits your research flow. Pick a feature on the left; demos play here.</p>
+            <div class="feature-hero-cta">
+              <a class="button button-primary button-lg" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome — free</a>
+              <a class="button button-ghost button-lg" href="/#pricing">View pricing</a>
+            </div>
+          </div>
+          <div class="md-overview-grid">
+            <button type="button" class="md-overview-card" data-feature="add-youtube" data-action="select-feature">
+              <span class="md-overview-icon md-icon-yt"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 9.5v5l5-2.5-5-2.5z" fill="currentColor"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Add YouTube to NotebookLM</strong>
+                <span>One click on any watch page — video lands in your notebook Sources.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="bulk-import" data-action="select-feature">
+              <span class="md-overview-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Bulk import queue</strong>
+                <span>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="notebooks-hub" data-action="select-feature">
+              <span class="md-overview-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Notebooks hub</strong>
+                <span>Pin, star, folder, and search every notebook in one calm dashboard.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="manage-sources" data-action="select-feature">
+              <span class="md-overview-icon md-icon-manage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="15" y="15" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Manage sources</strong>
+                <span>Select all, delete, and organize Sources &amp; Studio files into folders.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="drive-refresh" data-action="select-feature">
+              <span class="md-overview-icon md-icon-drive"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4l8 14H4L12 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Google Drive source refresh</strong>
+                <span>See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="studio-podcasts" data-action="select-feature">
+              <span class="md-overview-icon md-icon-studio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h2l2-5 3 10 2-5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Studio & podcasts</strong>
+                <span>Generate Audio Overviews and play podcasts across every notebook in one player.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="prompts" data-action="select-feature">
+              <span class="md-overview-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Prompt library</strong>
+                <span>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="add-webpage" data-action="select-feature">
+              <span class="md-overview-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Add webpage</strong>
+                <span>Import the current tab URL from the side panel — any article or docs page.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="x-twitter" data-action="select-feature">
+              <span class="md-overview-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>X / Twitter import</strong>
+                <span>Import threads and posts as clean text sources with one click.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="highlights" data-action="select-feature">
+              <span class="md-overview-icon md-icon-highlights"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19l3.5-1L19 7.5 16.5 5 5 16.5V19z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.5 7l2.5 2.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Highlights</strong>
+                <span>Select text → right-click → Add to NotebookLM as a clean text source.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="chat-export" data-action="select-feature">
+              <span class="md-overview-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Chat export</strong>
+                <span>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="slides-to-blog" data-action="select-feature">
+              <span class="md-overview-icon md-icon-slidestoblog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h4M7 12h10M7 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 7l3 2-3 2V7z" fill="currentColor"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Slides to blog</strong>
+                <span>Turn a Studio slide deck into a blog or guide with slide images and export formats.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="snapshots" data-action="select-feature">
+              <span class="md-overview-icon md-icon-snapshots"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 6l1.5-2h5L16 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Snapshots</strong>
+                <span>Capture screen areas (Alt+Shift+S), annotate, and assemble PDF or guide exports.</span>
+              </span>
+            </button>
+          </div>
+          <section class="feature-cta-band md-inline-cta">
+            <div class="feature-cta-inner">
+              <h2>Every feature, free to start</h2>
+              <p>Every import option is free. Pro is a one-time <strong>$49</strong> that unlocks the dashboard, makers and every other tool for life.</p>
+              <div class="feature-cta-actions">
+                <a class="button button-primary button-lg" href="/#pricing">Get Pro — $49</a>
+                <a class="button button-ghost button-lg" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome — free</a>
+              </div>
+            </div>
+          </section>
+        </article>
+        <article class="md-panel" data-panel="add-youtube" id="panel-add-youtube" hidden>
+          <h1 class="sr-only">Add YouTube to NotebookLM</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="youtube" data-stage-label="YouTube import"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a YouTube video</strong><p>NotebookTools adds <b>NotebookLM</b> and <b>Studio</b> buttons next to Like and Share.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click NotebookLM</strong><p>A small panel opens under the button with your notebooks.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Search, choose one, or type a name to create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import</strong><p>The video is added as a source. Open the notebook from the panel.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="bulk-import" id="panel-bulk-import" hidden>
+          <h1 class="sr-only">Bulk import queue</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="bulk">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "Retrieval-augmented generation - Wikipedia", "url": "en.wikipedia.org/wiki/Retrieval-augmented_generation", "icon": "web", "active": true}, {"title": "Introducing NotebookLM Video Overviews", "url": "youtube.com/watch?v=Qv3jF0sXc2Y", "icon": "yt"}, {"title": "Evaluating RAG pipelines", "url": "blog.langchain.dev/evaluating-rag-pipelines", "icon": "web"}, {"title": "Long-context vs RAG — talk", "url": "youtube.com/watch?v=8nX2kq1ZpQe", "icon": "yt"}, {"title": "Chunking strategies that work", "url": "pinecone.io/learn/chunking-strategies", "icon": "web"}]'>
+            <div class="br-page"><div class="pg-article"><span class="pg-kicker">Wikipedia</span><h2>Retrieval-augmented generation</h2><div class="pg-meta">From Wikipedia, the free encyclopedia</div><p><b>Retrieval-augmented generation</b> (RAG) is a technique that grants generative models the ability to retrieve and incorporate new information before responding.</p><p>Instead of relying only on what a model learned in training, RAG first searches a set of documents, then passes the most relevant passages to the model as context.</p><p>The approach reduces hallucinations and lets answers cite their sources, which is why research tools such as NotebookLM ground every answer in your uploads.</p></div></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div>
+            <aside data-surface="sidepanel" data-tab="Bulk" data-tagline="Bulk import queue">
+              <section class="sp-card"><h4 class="sp-card-title">Playlist / channel</h4><p class="sp-hint">Open a playlist or channel /videos page, then import in one click.</p><span class="sp-btn">Load from tab</span></section>
+              <section class="sp-card"><h4 class="sp-card-title">Add links</h4>
+                <div class="sp-grid-2"><span class="sp-btn">Extract from page</span><span class="sp-btn" data-s="open-tabs">Open tabs</span><span class="sp-btn">Paste links</span></div>
+                <div class="sp-textarea">One link per line</div></section>
+              <section class="sp-card"><h4 class="sp-card-title">Queue <small data-s="q-meta">0 items</small></h4>
+                <div class="q-tools"><span>All</span><span>Remove</span><span>Retry</span><span>Clear</span></div>
+                <div class="q-list"><div class="q-empty" data-s="q-empty">Add open tabs or paste links to build your queue.</div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Retrieval-augmented generation</span><span class="q-url">en.wikipedia.org/wiki/Retrieval-augmented_generation</span></span><span class="q-pill">WEBPAGE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Introducing NotebookLM Video Overviews</span><span class="q-url">youtube.com/watch?v=Qv3jF0sXc2Y</span></span><span class="q-pill yt">YOUTUBE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Evaluating RAG pipelines</span><span class="q-url">blog.langchain.dev/evaluating-rag-pipelines</span></span><span class="q-pill">WEBPAGE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Long-context vs RAG — talk</span><span class="q-url">youtube.com/watch?v=8nX2kq1ZpQe</span></span><span class="q-pill yt">YOUTUBE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Chunking strategies that work</span><span class="q-url">pinecone.io/learn/chunking-strategies</span></span><span class="q-pill">WEBPAGE</span></div></div></section>
+              <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
+              <div class="q-progress"><i data-s="q-fill"></i></div>
+              <span class="q-progress-text" data-s="q-progress-text">0 of 0 processed</span>
+              <span class="sp-primary" data-s="bulk-import">Import queue</span>
+              <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="bulk-open" hidden>Open notebook</span></div>
+              <p class="sp-status" data-s="bulk-status" hidden></p>
+            </aside>
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open the side panel</strong><p>Click the NotebookTools icon, then the <b>Bulk</b> tab.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Build the queue</strong><p>Add open tabs, paste links, extract links from a page, or load a playlist.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Choose a notebook</strong><p>Pick an existing notebook or create a new one.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import N sources</strong><p>Watch each item import with live progress and a final summary.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="notebooks-hub" id="panel-notebooks-hub" hidden>
+          <h1 class="sr-only">Notebooks hub</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="hub" data-stage-label="notebooks table"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open notebooks</strong><p>In the side panel, click <b>Open notebooks</b> to open the hub in a new tab.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Star and pin</strong><p>Favorite notebooks and pin the ones you use most to the top.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Organize</strong><p>Filter by folder or tag, sort by title, sources, tags or favorites.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Clean up</strong><p>Click <b>Select</b>, tick notebooks, and delete them in one go.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        
+        <article class="md-panel" data-panel="manage-sources" id="panel-manage-sources" hidden>
+          <h1 class="sr-only">Manage &amp; organize sources</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="manage">
+          <div class="ntb-stage"><div class="br-window" data-surface="browser" data-tabs='[{"title": "Notebooks — NotebookTools", "url": "chrome-extension://fhjgbniefbimnklnnomlhkkiekcjddmj/notebooks.html", "icon": "ext", "active": true}]'>
+            <div class="br-page"><div data-surface="hub" data-tabs="Notebooks,Sources,Studio,Notes" data-active="Sources"><div class="ntb-toolbar" style="margin-bottom:12px"><span class="ntb-btn"><span class="nlm-ms sf-ms" aria-hidden="true">arrow_back</span></span><h3 style="margin:0;flex:1">Research — AI tools</h3><span class="ntb-btn">Notes <span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span><span class="ntb-btn">Open in NotebookLM</span></div>
+                <div class="ntb-toolbar"><span class="ntb-search">Search sources</span><span class="ntb-btn">Add sources</span><span class="ntb-btn">Check updates</span><span class="ntb-btn" data-s="dup-open">Scan duplicates</span><span class="ntb-btn" data-s="mg-open">Manage</span><span class="ntb-btn">Export (0)</span></div>
+                <div class="ntb-pills"><span class="ntb-pill">All</span><span class="ntb-pill">📄 Papers</span><span class="ntb-pill">🎥 Talks</span><span class="ntb-pill">Unfiled</span><span class="ntb-pill is-add">+ Folder</span></div>
+                <div class="ntb-sources"><div class="ntb-src" data-s="s1"><span class="ntb-src-type">PDF</span><span class="ntb-src-main"><b>RAG survey 2026<span class="ntb-src-folder" data-s="src-papers" hidden>📄 Papers</span></b><small data-s="s1-time">arxiv.org/abs/2601.04411</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="s2"><span class="ntb-src-type">PDF</span><span class="ntb-src-main"><b>Lost in the Middle<span class="ntb-src-folder" data-s="src-papers" hidden>📄 Papers</span></b><small data-s="s2-time">arxiv.org/abs/2307.03172</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="s3"><span class="ntb-src-type">PDF</span><span class="ntb-src-main"><b>RAGAS: automated evaluation<span class="ntb-src-folder" data-s="src-papers" hidden>📄 Papers</span></b><small data-s="s3-time">arxiv.org/abs/2309.15217</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="s4"><span class="ntb-src-type">YouTube</span><span class="ntb-src-main"><b>Long-context vs RAG — talk</b><small data-s="s4-time">youtube.com/watch?v=8nX2kq1ZpQe</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="s5"><span class="ntb-src-type">Web</span><span class="ntb-src-main"><b>Evaluating retrieval systems</b><small data-s="s5-time">blog.langchain.dev/evaluating-rag</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="src-dup"><span class="ntb-src-type">Web</span><span class="ntb-src-main"><b>Evaluating retrieval systems</b><small data-s="src-dup-time">blog.langchain.dev/evaluating-rag</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div></div>
+                <div class="ntb-modal-backdrop" data-s="mg-modal" hidden><div class="ntb-modal">
+                  <div class="ntb-modal-head"><b>Manage sources</b><span class="nlm-ms sf-ms" data-s="mg-close">close</span></div>
+                  <div class="ntb-toolbar" style="margin:0"><span class="ntb-btn">Select all</span><span class="ntb-sort" data-s="mg-count">0 selected</span><span style="flex:1"></span><span class="ntb-btn" data-s="mg-organize-btn">Organize</span><span class="ntb-btn is-danger">Delete</span></div>
+                  <div class="mg-organize" data-s="mg-organize" hidden><span class="ntb-sort">Move selected into folder</span>
+                    <div class="ntb-pills" style="margin:0"><span class="ntb-pill" data-s="mg-folder-papers">📄 Papers</span><span class="ntb-pill">🎥 Talks</span></div>
+                    <div class="ntb-toolbar" style="margin:0"><span class="ntb-search" style="flex:1">New folder name</span><span class="ntb-btn">Create</span><span class="ntb-btn">Remove from folders</span></div></div>
+                  <p class="ntb-status" data-s="mg-status" hidden></p>
+                  <div><div class="mg-row" data-s="mg-r1"><i class="mg-cb"></i><span>RAG survey 2026</span><small>PDF</small></div><div class="mg-row" data-s="mg-r2"><i class="mg-cb"></i><span>Lost in the Middle</span><small>PDF</small></div><div class="mg-row" data-s="mg-r3"><i class="mg-cb"></i><span>RAGAS: automated evaluation</span><small>PDF</small></div><div class="mg-row" data-s="mg-r4"><i class="mg-cb"></i><span>Long-context vs RAG — talk</span><small>YouTube</small></div><div class="mg-row" data-s="mg-r5"><i class="mg-cb"></i><span>Evaluating retrieval systems</span><small>Web</small></div><div class="mg-row" data-s="mg-r6"><i class="mg-cb"></i><span>Evaluating retrieval systems</span><small>Web</small></div></div>
+                </div></div>
+                <div class="ntb-modal-backdrop" data-s="dup-modal" hidden><div class="ntb-modal">
+                  <div data-s="dup-choose" class="ntb-step">
+                    <div class="ntb-modal-head"><b>Find duplicates</b></div>
+                    <p>Choose how to detect duplicates in <b>Research — AI tools</b>.</p>
+                    <div class="mg-organize"><b style="font-size:13px">◉ Fast scan</b><span class="ntb-sub" style="margin:0">Match by URL and similar titles. Instant, no extra API calls.</span></div>
+                    <div class="mg-organize" style="background:#fff"><b style="font-size:13px">○ Deep scan</b><span class="ntb-sub" style="margin:0">Also compare fetched source content. Slower but catches near-identical text.</span></div>
+                    <div class="ntb-modal-actions"><span class="ntb-btn">Cancel</span><span class="ntb-btn is-primary" data-s="dup-run">Run fast scan</span></div>
+                  </div>
+                  <div data-s="dup-scanning" class="ntb-step" hidden>
+                    <div class="ntb-modal-head"><b>Scanning 6 sources...</b></div>
+                    <div class="q-progress"><i data-s="dup-fill"></i></div>
+                    <p data-s="dup-scan-status">Analyzing sources...</p>
+                  </div>
+                  <div data-s="dup-review" class="ntb-step" hidden>
+                    <div class="ntb-modal-head"><b>Found 1 duplicate groups</b></div>
+                    <p>Found <b>1</b> duplicate groups (1 removable).</p>
+                    <div class="ntb-toolbar" style="margin:0"><span class="ntb-sort">Keep</span><span class="sf-select" style="min-width:150px"><span class="sf-select-value">Oldest source</span><span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span></div>
+                    <div class="mg-organize"><div class="ntb-toolbar" style="margin:0"><b style="font-size:13px;flex:1">Evaluating retrieval systems</b><span class="ntb-sort">100% · 2 sources · Same URL</span><span class="ntb-btn">Skip</span></div>
+                      <div class="mg-row" style="grid-template-columns:auto 1fr auto"><span>◉ Keep</span><span>12 Aug 2026 <span class="ntb-tag">oldest</span></span><small>blog.langchain.dev/…</small></div>
+                      <div class="mg-row" style="grid-template-columns:auto 1fr auto"><span>◉ Remove</span><span>3 Sept 2026 <span class="ntb-tag">newest</span></span><small>blog.langchain.dev/…</small></div></div>
+                    <div class="ntb-modal-actions"><span class="ntb-btn">Rescan</span><span class="ntb-btn is-primary" data-s="dup-clean">Clean up 1 duplicates</span></div>
+                  </div>
+                  <div data-s="dup-confirm" class="ntb-step" hidden>
+                    <div class="ntb-modal-head"><b>Confirm cleanup</b></div>
+                    <p>Delete <b>1</b> duplicate sources and keep <b>5</b> sources?</p><p>This cannot be undone.</p>
+                    <div class="ntb-modal-actions"><span class="ntb-btn">Back</span><span class="ntb-btn is-danger" data-s="dup-delete">Delete 1 duplicates</span></div>
+                  </div>
+                  <div data-s="dup-done" class="ntb-step" hidden>
+                    <div class="ntb-modal-head"><b>Cleanup complete</b></div>
+                    <p>Removed 1 duplicate sources.</p>
+                    <div class="ntb-modal-actions"><span class="ntb-btn is-primary" data-s="dup-ok">Done</span></div>
+                  </div>
+                </div></div></div></div>
+            
+          </div></div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in the hub</strong><p>The Sources tab lists every source with its type.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Manage</strong><p>Select sources, then <b>Organize</b> them into folders or delete them.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Scan duplicates</strong><p>Run a fast URL/title scan or a deep content scan.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Clean up</strong><p>Review each group, choose what to keep, and remove the rest.</p></div></li>
+        </ol>
+      </section>
+        </article>
+<article class="md-panel" data-panel="drive-refresh" id="panel-drive-refresh" hidden>
+          <h1 class="sr-only">Google Drive source refresh</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="drive">
+          <div class="ntb-stage"><div class="br-window" data-surface="browser" data-tabs='[{"title": "Notebooks — NotebookTools", "url": "chrome-extension://fhjgbniefbimnklnnomlhkkiekcjddmj/notebooks.html", "icon": "ext", "active": true}]'>
+            <div class="br-page"><div data-surface="hub" data-tabs="Notebooks,Sources,Studio,Notes" data-active="Sources"><div class="ntb-toolbar" style="margin-bottom:12px"><span class="ntb-btn"><span class="nlm-ms sf-ms" aria-hidden="true">arrow_back</span></span><h3 style="margin:0;flex:1">Q3 planning</h3><span class="ntb-btn">Notes <span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span><span class="ntb-btn">Open in NotebookLM</span></div>
+                <div class="ntb-toolbar"><span class="ntb-search">Search sources</span><span class="ntb-btn">Add sources</span><span class="ntb-btn">Check updates</span><span class="ntb-btn is-amber" data-s="dr-refresh" hidden>Refresh stale (2)</span><span class="ntb-btn">Scan duplicates</span><span class="ntb-btn">Manage</span></div>
+                <p class="ntb-status" data-s="dr-status" hidden></p>
+                <div class="ntb-sources"><div class="ntb-src" data-s="dr-1"><span class="ntb-src-type">Doc</span><span class="ntb-src-main"><b>Q3 roadmap</b><small data-s="dr-1-time">Google Doc · docs.google.com/document/d/1Qx…</small></span><span class="ntb-src-badge" data-s="dr-1-badge" hidden></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="dr-2"><span class="ntb-src-type">Slides</span><span class="ntb-src-main"><b>Launch deck</b><small data-s="dr-2-time">Google Slides · docs.google.com/presentation/d/7Ft…</small></span><span class="ntb-src-badge" data-s="dr-2-badge" hidden></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="dr-3"><span class="ntb-src-type">Sheets</span><span class="ntb-src-main"><b>Budget sheet</b><small data-s="dr-3-time">Google Sheets · docs.google.com/spreadsheets/d/2Lm…</small></span><span class="ntb-src-badge" data-s="dr-3-badge" hidden></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="dr-4"><span class="ntb-src-type">Text</span><span class="ntb-src-main"><b>Meeting notes — 2 Sept</b><small data-s="dr-4-time">Pasted text</small></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div><div class="ntb-src" data-s="dr-5"><span class="ntb-src-type">PDF</span><span class="ntb-src-main"><b>Vendor contract</b><small data-s="dr-5-time">drive.google.com/file/d/9Ka…</small></span><span class="ntb-src-badge" data-s="dr-5-badge" hidden></span><span class="nlm-ms sf-ms ntb-src-refresh">refresh</span><span class="nlm-ms sf-ms ntb-src-more">more_horiz</span></div></div></div></div>
+            
+          </div></div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in the hub</strong><p>NotebookTools quietly checks Docs, Slides, Sheets, PDFs, web and YouTube sources.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>See what changed</strong><p>Out-of-date sources show <b>Update available</b>.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Click Refresh stale (N)</strong><p>Every changed source re-syncs one by one.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Or refresh one</strong><p>Use the ↻ button on any single source.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="studio-podcasts" id="panel-studio-podcasts" hidden>
+          <h1 class="sr-only">Studio & podcasts</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="studio">
+          <div class="ntb-stage"><div class="br-window" data-surface="browser" data-tabs='[{"title": "Notebooks — NotebookTools", "url": "chrome-extension://fhjgbniefbimnklnnomlhkkiekcjddmj/notebooks.html", "icon": "ext", "active": true}]'>
+            <div class="br-page"><div data-surface="hub" data-tabs="Notebooks,Sources,Studio,Notes" data-active="Studio">
+                <div data-s="st-view"><div class="ntb-toolbar" style="margin-bottom:12px"><span class="ntb-btn"><span class="nlm-ms sf-ms" aria-hidden="true">arrow_back</span></span><h3 style="margin:0;flex:1">History seminar</h3><span class="ntb-btn">Notes <span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span><span class="ntb-btn">Open in NotebookLM</span></div>
+                  <div class="st-bar">
+                    <div class="st-row"><span class="ntb-pill">Audio</span><span class="ntb-pill">Quiz</span><span class="ntb-pill">Cards</span><span class="ntb-pill">Report</span><span class="ntb-pill">Slides</span><span class="ntb-pill">Table</span><span class="ntb-pill">Mind map</span><span class="ntb-pill">Video</span><span class="ntb-pill">Graphic</span></div>
+                    <div class="st-row"><span class="sf-select" style="min-width:180px"><span class="sf-select-value">All sources (3)</span><span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span><span class="ntb-btn is-primary" data-s="st-generate">Generate audio</span></div>
+                    <div class="st-row"><span class="st-label">Format</span><span class="ntb-pill">Deep dive</span><span class="ntb-pill">Brief</span><span class="ntb-pill">Critique</span><span class="ntb-pill">Debate</span></div>
+                    <div class="st-row"><span class="st-label">Length</span><span class="ntb-pill">Short</span><span class="ntb-pill">Default</span><span class="ntb-pill">Long</span></div>
+                    <span class="sf-input sf-ph" data-s="st-instructions">Optional instructions...</span>
+                  </div>
+                  <p class="ntb-status" data-s="st-status" hidden></p>
+                  <div class="ntb-toolbar"><b style="flex:1;font-size:15px;font-weight:500">Outputs</b><span class="ntb-btn">Manage</span><span class="ntb-btn">Export sources</span></div>
+                  <div class="st-out" data-s="st-new" hidden><span class="ntb-src-type">Audio</span><span>Deep dive · Industrial Revolution</span><span class="st-state" data-s="st-new-state">…</span><span class="ntb-btn" data-s="st-new-open" hidden>Open in NotebookLM</span></div>
+                  <div class="st-out"><span class="ntb-src-type">Report</span><span>Briefing Doc</span><span class="st-state is-ready">Ready</span><span class="ntb-btn">Open in NotebookLM</span></div>
+                </div>
+                <div data-s="pc-view" hidden>
+                  <h3>Podcasts</h3><p class="ntb-sub">Audio Overviews from all your notebooks</p>
+                  <div class="ntb-toolbar"><span class="ntb-search">Search podcasts</span></div>
+                  <span class="sp-primary" data-s="pc-scan" style="margin:0 0 10px">Scan notebooks</span>
+                  <p class="ntb-status" data-s="pc-status">Click Scan notebooks to find Audio Overviews from all notebooks.</p>
+                  <div data-s="pc-list" hidden><div class="pc-item" data-s="pc-item-1"><span class="pc-play" data-s=pc-first>▶</span><div><b>Industrial Revolution — deep dive</b><small>History seminar</small></div><span class="pc-dur">8:42</span></div><div class="pc-item" data-s="pc-item-2"><span class="pc-play">▶</span><div><b>RAG vs long context</b><small>Research — AI tools</small></div><span class="pc-dur">11:05</span></div><div class="pc-item" data-s="pc-item-3"><span class="pc-play">▶</span><div><b>Cell biology crash course</b><small>Exam prep — biology</small></div><span class="pc-dur">14:20</span></div><div class="pc-item" data-s="pc-item-4"><span class="pc-play">▶</span><div><b>Pricing the launch</b><small>Product launch 2026</small></div><span class="pc-dur">6:58</span></div></div>
+                </div>
+                <div class="pc-player" data-s="pc-player" hidden>
+                  <div><b>Industrial Revolution — deep dive</b><small>History seminar</small></div>
+                  <div class="pc-controls"><span class="ntb-btn">Prev</span><span class="ntb-btn is-primary">Pause</span><span class="ntb-btn">Next</span></div>
+                  <div class="pc-bar"><i data-s="pc-fill" style="width:48%"></i></div>
+                  <span class="pc-time" data-s="pc-time">4:12 / 8:42</span>
+                </div></div></div>
+            
+          </div></div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook's Studio tab</strong><p>Choose output types: audio, quiz, cards, report, slides and more.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Set options</strong><p>Pick format and length, and add optional instructions.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Generate</strong><p>Outputs appear in the list and open directly in NotebookLM.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Listen in Podcast</strong><p>Scan every notebook for Audio Overviews and play them in one player that remembers your place.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="prompts" id="panel-prompts" hidden>
+          <h1 class="sr-only">Prompt library</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="prompts">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "Research — AI tools - NotebookLM", "url": "notebooklm.google.com/notebook/8f2c41d0", "icon": "nlm", "active": true}]'>
+            <div class="br-page"><div class="nlm-app">
+              <header class="nlm-topbar" data-nlm="topbar"><span class="nlm-notebook-title">Research — AI tools</span></header>
+              <div class="nlm-body">
+                <aside class="nlm-sources">
+                  <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+                  <div data-nlm="source-tools"></div>
+                  <ul class="nlm-source-list"><li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf"></span><span class="nlm-src-name">RAG survey 2026.pdf</span></li><li class="nlm-source"><span class="nlm-src-icon nlm-src-web"></span><span class="nlm-src-name">Evaluating retrieval systems</span></li><li class="nlm-source"><span class="nlm-src-icon nlm-src-yt"></span><span class="nlm-src-name">Long-context vs RAG — talk</span></li></ul>
+                </aside>
+                <section class="nlm-chat">
+                  <div class="nlm-chat-scroll">
+                    <div data-nlm="nb-head" data-title="Research — AI tools" data-meta="3 sources · 5 Sept 2026"></div>
+                    <p class="nlm-summary">These sources compare <strong>retrieval-augmented generation</strong> with long-context models. The survey maps the main <strong>retrieval strategies</strong>, the evaluation guide covers <strong>faithfulness metrics</strong>, and the talk argues when a long context window is enough.</p>
+                    <div data-nlm="msg-actions"></div>
+                    <div data-nlm="suggest"><div class="nlm-suggest-card">When does RAG beat a long context window?</div><div class="nlm-suggest-card">Which evaluation metrics matter most?</div><div class="nlm-suggest-card">Summarize the survey in five bullets</div></div>
+                    <div class="nlm-messages" style="overflow:visible;padding:18px 0 0">
+                      <div class="nlm-msg user" data-s="prompt-q" hidden>Summarize the key arguments across all sources in 5 bullets, with a citation for each.</div>
+                      <div class="nlm-msg bot" data-s="prompt-a" hidden><strong>1. Retrieval keeps evidence close.</strong> Long contexts still miss facts in the middle <span class="nlm-cite">1</span>.<br><strong>2. Evaluation needs faithfulness, not just accuracy</strong> <span class="nlm-cite">2</span>.<br><strong>3. Chunking choices drive recall</strong> <span class="nlm-cite">1</span> <span class="nlm-cite">3</span>.<br><strong>4. Long context wins for single, short documents</strong> <span class="nlm-cite">3</span>.<br><strong>5. Hybrid setups are the practical default</strong> <span class="nlm-cite">1</span> <span class="nlm-cite">2</span>.</div>
+                      <div data-nlm="msg-actions" data-s="prompt-a-actions" hidden></div>
+                    </div></div>
+                  
+                  <div data-nlm="composer" data-sources="3"><span class="nlm-composer-input" data-s="prompt-input"></span><div class="nt-slash" data-s="slash" hidden><div class="nt-slash-item" data-s="slash-item" data-key="key"><b>Key arguments in 5 bullets</b><em>My prompts</em><span>Summarize the key arguments across all sources in 5 bullets, with a citati…</span></div><div class="nt-slash-item" data-s="slash-item" data-key="smart"><b>Smart editorial deck</b><em>Templates</em><span>Create a slide deck with an asymmetrical cover, yellow accents and maga…</span></div><div class="nt-slash-item" data-s="slash-item" data-key="speaker"><b>Speaker minimal</b><em>Templates</em><span>Design a minimal speaker deck: one idea per slide, large type, generous…</span></div><div class="nt-slash-item" data-s="slash-item" data-key="comic"><b>Comic explainer</b><em>Templates</em><span>Turn the sources into a comic-style explainer deck with panels and spee…</span></div></div></div>
+                </section>
+                <aside class="nlm-studio">
+                  <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+                  <div data-nlm="studio"></div>
+                </aside>
+              </div>
+            </div></div>
+            
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in NotebookLM</strong><p>NotebookTools works inside the chat box.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Type /</strong><p>A menu shows your saved prompts first, then the slide templates.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Filter and pick</strong><p>Keep typing to filter; use ↑ ↓ and Enter.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Send</strong><p>The full prompt is inserted, ready to send. Manage prompts in the side panel's Prompts tab.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="add-webpage" id="panel-add-webpage" hidden>
+          <h1 class="sr-only">Add webpage</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="webpage">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "The state of AI research assistants", "url": "stratechery.example.com/2026/ai-research-assistants", "icon": "web", "active": true}]'>
+            <div class="br-page"><div class="pg-article"><span class="pg-kicker">Analysis</span><h2>The state of AI research assistants</h2><div class="pg-meta">By Dana Whitfield · 12 min read</div><p>A year ago, “research assistant” meant a chatbot that sounded confident. Today the best tools ground every answer in documents you choose.</p><p>NotebookLM leads that shift: you add sources, and every reply points back to the exact passage it came from.</p><p>The bottleneck is no longer the model. It is getting the right material into the notebook quickly — articles, videos, threads and notes.</p></div></div>
+            <aside data-surface="sidepanel" data-tab="Import" data-tagline="Current webpage" hidden>
+              <section class="sp-card"><div class="sp-modes"><span class="is-active">Web</span><span>YouTube</span></div>
+                <div class="sp-preview"><span class="br-tab-ico"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ff6719"/><path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h12l-6 4z" fill="#fff"/></svg></span><div>The state of AI research assistants<small>stratechery.example.com/2026/ai-research-assistants</small></div></div></section>
+              <div data-surface="picker" data-variant="card" data-selected="Product launch (8)"></div>
+              <span class="sp-primary" data-s="wp-add">Add to NotebookLM</span>
+              <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="wp-open" hidden>Open notebook</span></div>
+              <p class="sp-status" data-s="wp-status" hidden></p>
+            </aside>
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open any article</strong><p>Docs, blogs, news or research pages.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Open the side panel</strong><p>Click the NotebookTools icon in the toolbar.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one or create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Add to NotebookLM</strong><p>The page is added as a source.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="x-twitter" id="panel-x-twitter" hidden>
+          <h1 class="sr-only">X / Twitter</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="xtwitter">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "Maya Chen on X: \"Thread: five papers…\"", "url": "x.com/mayabuilds/status/1834201977", "icon": "x", "active": true}]'>
+            <div class="br-page"><div class="pg-x">
+              <nav class="x-nav"><span class="br-tab-ico"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0f1419"/><path d="M13.3 10.8 18.5 5h-1.2l-4.5 5-3.6-5H5l5.4 7.6L5 19h1.2l4.8-5.3 3.8 5.3H19z" fill="#fff"/></svg></span><span><span class="nlm-ms sf-ms" aria-hidden="true">home</span>Home</span><span><span class="nlm-ms sf-ms" aria-hidden="true">search</span>Explore</span><span><span class="nlm-ms sf-ms" aria-hidden="true">notifications</span>Notifications</span><span><span class="nlm-ms sf-ms" aria-hidden="true">mail</span>Messages</span></nav>
+              <div class="x-col">
+                <div class="x-colhead"><span class="nlm-ms sf-ms" aria-hidden="true">arrow_back</span><b>Post</b>
+                  <span class="nt-pill" data-s="x-btn" title="Import this conversation to NotebookLM"><img class="sf-ext-icon" src="/assets/logo-mark-32.png" alt="" width="18" height="18">NotebookLM</span>
+                </div>
+                <div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>Thread: five papers that changed how we think about retrieval-augmented generation 🧵</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div><div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>1/ “Lost in the Middle” showed long contexts still miss facts buried in the middle. Retrieval keeps the evidence near the question.</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div><div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>2/ RAGAS made evaluation practical: faithfulness, answer relevance and context precision, scored automatically.</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div><div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>3/ Late-chunking and contextual retrieval cut failed lookups by a third in our tests.</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div>
+                <div class="nt-drop" data-s="x-drop" hidden style="right:12px;top:58px;width:288px">
+                  <div class="nt-drop-head"><img class="sf-ext-icon" src="/assets/logo-mark-32.png" alt="" width="18" height="18"><div><b>[X] Thread: five papers that changed RAG</b><small>4 segments · x.com/mayabuilds/status/18342…</small></div></div>
+                  <span class="sp-card-title" style="margin:2px 0 0">Notebook</span>
+                  <span class="sf-select"><span class="sf-select-value">Research — AI tools (12)</span><span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span>
+                  <span class="sp-hint">or create new</span>
+                  <span class="sf-input sf-ph">Notebook name</span>
+                  <span class="sp-primary" data-s="x-import">Import</span>
+                  <p class="nt-drop-status" data-s="x-status"></p>
+                  <div class="nt-drop-links"><span>Refresh list</span></div>
+                </div>
+              </div>
+              <div class="x-side"><div class="x-search">Search</div></div>
+            </div></div>
+            
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a post or thread on X</strong><p>A <b>NotebookLM</b> button appears in the column header.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click NotebookLM</strong><p>The panel shows the thread title and how many posts it found.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one or name a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import</strong><p>The thread is saved as a clean text source.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="highlights" id="panel-highlights" hidden>
+          <h1 class="sr-only">Highlights</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="highlights">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "Why shared sources beat smart summaries", "url": "hbr.example.org/2026/09/shared-sources", "icon": "web", "active": true}]'>
+            <div class="br-page"><div class="pg-article"><span class="pg-kicker">Harvard Business Review</span><h2>Why shared sources beat smart summaries</h2><div class="pg-meta">By Priya Raman · 8 min read</div><p>Most teams now ask an AI to summarise the reading. It is fast, and it feels thorough.</p><p><span data-s="hl-start"></span><mark data-s="hl-mark">Teams that review sources together make better decisions than teams that rely on summaries alone.</mark><span data-s="hl-end"></span> In our study of 140 product teams, groups that read the underlying documents caught twice as many risks.</p><p>The fix is not to abandon summaries, but to keep the sources one click away — and to save the passages that matter.</p></div><div data-surface="ctxmenu" data-kind="selection" data-selection="Teams that review sources together make better decisions than teams that rely on summaries alone." data-s="hl-menu" hidden style="left:300px;top:230px"></div></div>
+            <aside data-surface="sidepanel" data-tab="Import" data-tagline="Selected text" hidden>
+              <section class="sp-card"><div class="sp-modes three"><span>Web</span><span>YouTube</span><span class="is-active">Text</span></div>
+                <blockquote class="sp-quote">Teams that review sources together make better decisions than teams that rely on summaries alone....</blockquote></section>
+              <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
+              <span class="sp-primary" data-s="hl-import">Import text</span>
+              <p class="sp-status" data-s="hl-status" hidden></p>
+            </aside>
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Select text on any page</strong><p>Highlight the passage you want to keep.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Right-click → Add to NotebookLM</strong><p>The side panel opens with your selection.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose where the quote should go.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import text</strong><p>It is saved as a text source titled with the page name.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="chat-export" id="panel-chat-export" hidden>
+          <h1 class="sr-only">Chat export</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="chat-export" data-stage-label="chat export"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook chat</strong><p>NotebookTools adds an <b>Export chat</b> button above the chat box.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Export chat</strong><p>Choose Markdown, Plain text, JSON, CSV, HTML or PDF.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Download</strong><p>The file is named after your notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>PDF</strong><p>Opens a print-ready page; choose Save as PDF.</p></div></li>
+        </ol>
+      </section>
+        </article>
+                <article class="md-panel" data-panel="slides-to-blog" id="panel-slides-to-blog" hidden>
+          <h1 class="sr-only">Slides to blog</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="slides-to-blog" data-stage-label="slides to blog"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Create a slide deck in Studio</strong><p>Any ready slide deck in the notebook works.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Blog workflow</strong><p>The orange button sits above the chat box.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Run Auto blog</strong><p>It imports the deck PDF, has NotebookLM write the article, and extracts every slide image.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Download</strong><p>Save the finished blog as HTML, CSV, DOC or PDF.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        <article class="md-panel" data-panel="snapshots" id="panel-snapshots" hidden>
+          <h1 class="sr-only">Snapshots</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="snapshots" data-stage-label="snapshots how-to guide"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Capture</strong><p>Press Alt+Shift+S or click <b>Drag to capture</b>, then drag over any area.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Annotate</strong><p>Draw boxes, circles, arrows or pencil marks, then Save.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Review in the side panel</strong><p>Each snapshot keeps its recorded action and optional notes.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Send to a notebook</strong><p>NotebookLM writes a blog or tutorial with your images inline.</p></div></li>
+        </ol>
+      </section>
+        </article>
+        </div>
+      </div>
+      <noscript class="md-noscript-seo">
+        <ul>
+          <li><h2>Add YouTube to NotebookLM</h2><p>Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.</p><p>One click on any watch page — video lands in your notebook Sources.</p></li>
+          <li><h2>Bulk import queue</h2><p>Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.</p><p>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</p></li>
+          <li><h2>Notebooks hub</h2><p>NotebookTools notebooks hub — a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.</p><p>Pin, star, folder, and search every notebook in one calm dashboard.</p></li>
+          <li><h2>Google Drive source refresh</h2><p>Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.</p><p>See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</p></li>
+          <li><h2>Studio & podcasts</h2><p>NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.</p><p>Generate Audio Overviews and play podcasts across every notebook in one player.</p></li>
+          <li><h2>Prompt library</h2><p>NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.</p><p>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</p></li>
+          <li><h2>Add webpage</h2><p>Add any webpage to NotebookLM from the NotebookTools side panel. One click imports the current tab URL as a source.</p><p>Import the current tab URL from the side panel — any article or docs page.</p></li>
+          <li><h2>X / Twitter import</h2><p>Import X (Twitter) posts and threads into NotebookLM as clean text sources with the NotebookTools in-page button.</p><p>Import threads and posts as clean text sources with one click.</p></li>
+          <li><h2>Highlights</h2><p>Select text on any page, right-click, and add the highlight to NotebookLM as a text source with NotebookTools.</p><p>Select text → right-click → Add to NotebookLM as a clean text source.</p></li>
+          <li><h2>Chat export</h2><p>Export NotebookLM conversations from the page with NotebookTools. Download Markdown, plain text, or open a printable PDF view.</p><p>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</p></li>
+          <li><h2>Slides to blog</h2><p>Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.</p><p>Turn a Studio slide deck into a blog or guide with slide images and export formats.</p></li>
+          <li><h2>Snapshots</h2><p>Capture webpage snapshots with NotebookTools, annotate them, and assemble PDF or guide exports for NotebookLM workflows.</p><p>Capture screen areas (Alt+Shift+S), annotate, and assemble PDF or guide exports.</p></li>
+        </ul>
+      </noscript>
+    </main>

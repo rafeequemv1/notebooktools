@@ -1189,6 +1189,12 @@
     opts = opts || {};
     if (!FEATURE_META[feature]) feature = "overview";
     if (feature === currentFeature && !opts.force) return;
+    // Each feature page only ships its own panel (one topic per URL for search).
+    // For any other feature, load its page instead of switching in place.
+    if (!document.querySelector('.md-panel[data-panel="' + feature + '"]')) {
+      if (currentFeature !== null) window.location.href = FEATURE_META[feature].path;
+      return;
+    }
     currentFeature = feature;
     showPanel(feature);
     updateNav(feature);

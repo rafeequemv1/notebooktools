@@ -41,6 +41,9 @@ const CONTENT_DETECT_PLATFORMS = new Set(["chatgpt", "gemini", "x", "claude", "p
 const CONVERSATION_PLATFORMS = new Set(["chatgpt", "gemini", "claude", "perplexity", "grok", "kimi"]);
 // Platforms that keep the original full-width top bar when no header anchor exists.
 const BAR_FALLBACK_PLATFORMS = new Set(["x"]);
+// Google Docs is imported as a pasted-text copy, so say so on the button.
+const GOOGLE_DOCS_LABEL = "Copy text to NotebookLM";
+const GOOGLE_DOCS_NOTE = "Saved as text and won't sync. For a synced source, add it from Google Drive in NotebookLM.";
 // Floating pill position per platform (default: top-right, below the site header).
 const FLOAT_BOTTOM_PLATFORMS = new Set(["googledocs"]);
 
@@ -246,7 +249,7 @@ async function openPanel(wrapper) {
 
   panel.id = PLATFORM_PANEL_ID;
   panel.className = "notebooktools-platform-panel";
-  panel.title = "Import to NotebookLM";
+  panel.title = platform === "googledocs" ? GOOGLE_DOCS_LABEL : "Import to NotebookLM";
   panel.src = frameUrl.toString();
   panel.addEventListener("load", () => {
     sendPayloadToPanel(panel);
@@ -295,12 +298,15 @@ function createButton() {
   markImg.height = 16;
   mark.append(markImg);
   text.className = "notebooktools-platform-text";
-  text.textContent = "NotebookLM";
+  const isGoogleDocs = currentPlatform === "googledocs";
+  text.textContent = isGoogleDocs ? GOOGLE_DOCS_LABEL : "NotebookLM";
 
   button.type = "button";
-  button.title = CONVERSATION_PLATFORMS.has(currentPlatform)
-    ? "Import this conversation to NotebookLM"
-    : "Import this page to NotebookLM";
+  button.title = isGoogleDocs
+    ? `${GOOGLE_DOCS_LABEL}. ${GOOGLE_DOCS_NOTE}`
+    : CONVERSATION_PLATFORMS.has(currentPlatform)
+      ? "Import this conversation to NotebookLM"
+      : "Import this page to NotebookLM";
   button.setAttribute("aria-expanded", "false");
   button.append(mark, text);
   wrapper.append(button);

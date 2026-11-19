@@ -1481,3 +1481,29 @@ textarea {
   padding: 1px 6px;
   vertical-align: 1px;
 }
+
+/* Side panel nudges: one-time review ask and Pro hint (sidepanel.js) */
+.sp-nudges { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.sp-nudges:empty { display: none; }
+.sp-nudge { background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 16px; padding: 12px; }
+.sp-nudge p { color: var(--nt-ink); font-size: 12.5px; margin: 0; }
+.sp-nudge-actions { align-items: center; display: flex; gap: 6px; margin-top: 10px; }
+.sp-nudge-actions .button { margin-top: 0; min-height: 32px; padding: 6px 14px; width: auto; }
+.sp-nudge-hint { align-items: flex-start; background: var(--nt-accent-soft); border-color: transparent; display: flex; gap: 6px; padding: 8px 6px 8px 12px; }
+.sp-nudge-hint p { flex: 1; line-height: 1.45; }
+.sp-nudge-hint a { color: var(--nt-accent); font-weight: 500; white-space: nowrap; }
+.sp-nudge-close { background: none; border: 0; border-radius: 999px; color: var(--nt-subtle); cursor: pointer; flex: none; font-size: 16px; line-height: 1; padding: 2px 6px; }
+.sp-nudge-close:hover { color: var(--nt-ink); }
+
+/* Secondary line in the platform import panel (Google Docs: text copy, no sync) */
+.source-note {
+  background: var(--nt-warning-bg);
+  border: 1px solid var(--nt-warning-line);
+  border-radius: 8px;
+  color: var(--nt-warning-text);
+  font-size: 11px;
+  line-height: 1.4;
+  margin: -4px 0 10px;
+  padding: 8px 10px;
+}
+.source-note[hidden] { display: none; }

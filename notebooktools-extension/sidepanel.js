@@ -622,6 +622,8 @@ async function runImport() {
       await NotebookToolsNotebookLM.addWebpageToNotebookLm(targetNotebook.id, webpageUrl);
     }
 
+    void NotebookToolsStats.recordImport();
+
     document.querySelector("#newNotebookLmName").value = "";
     await picker.refresh({ silent: true });
     document.querySelector("#notebookLmSelect").value = targetNotebook.id;
@@ -645,6 +647,103 @@ async function runImport() {
       youtubeBatchActive ? idleLabel : MODE_LABELS[activeMode] || "Import"
     );
   }
+}
+
+/* ---------- One-time nudges: review ask and a Pro hint for Free users ---------- */
+
+const REVIEW_URL = "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj/reviews";
+const REVIEW_DONE_KEY = "notebooktoolsReviewPromptDone";
+const UPGRADE_HINT_DONE_KEY = "notebooktoolsBulkUpgradeHintDone";
+const REVIEW_AFTER_IMPORTS = 5;
+const UPGRADE_HINT_AFTER_BULK_RUNS = 3;
+const nudgesRoot = document.querySelector("#spNudges");
+
+function dismissNudge(card, flagKey) {
+  card.remove();
+  void chrome.storage.local.set({ [flagKey]: true });
+}
+
+function renderReviewNudge() {
+  if (!nudgesRoot || nudgesRoot.querySelector("[data-nudge='review']")) {
+    return;
+  }
+
+  const card = document.createElement("section");
+  card.className = "sp-nudge";
+  card.dataset.nudge = "review";
+  card.innerHTML = `
+    <p>Enjoying NotebookTools? A quick review helps others find it.</p>
+    <div class="sp-nudge-actions">
+      <a class="button" data-act="review" href="${REVIEW_URL}" target="_blank" rel="noopener noreferrer">Leave a review</a>
+      <button type="button" class="text-button" data-act="later">Not now</button>
+    </div>`;
+  card.querySelector("[data-act='review']").addEventListener("click", () => dismissNudge(card, REVIEW_DONE_KEY));
+  card.querySelector("[data-act='later']").addEventListener("click", () => dismissNudge(card, REVIEW_DONE_KEY));
+  nudgesRoot.prepend(card);
+}
+
+function renderUpgradeHint() {
+  if (!nudgesRoot || nudgesRoot.querySelector("[data-nudge='upgrade']")) {
+    return;
+  }
+
+  const card = document.createElement("section");
+  card.className = "sp-nudge sp-nudge-hint";
+  card.dataset.nudge = "upgrade";
+  card.innerHTML = `
+    <p>Keep notebooks tidy: Pro finds duplicate sources and refreshes Drive files in bulk. <a href="#" data-act="see-pro">See Pro</a></p>
+    <button type="button" class="sp-nudge-close" data-act="close" title="Dismiss" aria-label="Dismiss">&times;</button>`;
+  card.querySelector("[data-act='see-pro']").addEventListener("click", (event) => {
+    event.preventDefault();
+    NotebookToolsPlan.showUpgrade("manage-sources");
+    dismissNudge(card, UPGRADE_HINT_DONE_KEY);
+  });
+  card.querySelector("[data-act='close']").addEventListener("click", () => dismissNudge(card, UPGRADE_HINT_DONE_KEY));
+  nudgesRoot.append(card);
+}
+
+async function refreshNudges() {
+  if (!nudgesRoot) {
+    return;
+  }
+
+  const keys = [NotebookToolsStats.KEYS.imports, NotebookToolsStats.KEYS.bulkRuns, REVIEW_DONE_KEY, UPGRADE_HINT_DONE_KEY];
+  const items = await chrome.storage.local.get(keys);
+  const imports = Number(items[NotebookToolsStats.KEYS.imports]) || 0;
+  const bulkRuns = Number(items[NotebookToolsStats.KEYS.bulkRuns]) || 0;
+
+  if (imports >= REVIEW_AFTER_IMPORTS && !items[REVIEW_DONE_KEY]) {
+    renderReviewNudge();
+  } else {
+    nudgesRoot.querySelector("[data-nudge='review']")?.remove();
+  }
+
+  const isFree = bulkRuns >= UPGRADE_HINT_AFTER_BULK_RUNS && !items[UPGRADE_HINT_DONE_KEY]
+    ? (await NotebookToolsPlan.readState()).plan !== "pro"
+    : false;
+
+  if (isFree) {
+    renderUpgradeHint();
+  } else {
+    nudgesRoot.querySelector("[data-nudge='upgrade']")?.remove();
+  }
+}
+
+function initNudges() {
+  void refreshNudges().catch(() => {});
+  const watched = new Set([
+    NotebookToolsStats.KEYS.imports,
+    NotebookToolsStats.KEYS.bulkRuns,
+    REVIEW_DONE_KEY,
+    UPGRADE_HINT_DONE_KEY,
+    "notebooktoolsAuthProfile",
+    "notebooktoolsAuthSession"
+  ]);
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && Object.keys(changes).some((key) => watched.has(key))) {
+      void refreshNudges().catch(() => {});
+    }
+  });
 }
 
 async function initSidePanel() {
@@ -724,6 +823,7 @@ async function initSidePanel() {
     void refreshYouTubeBatchPreview({ force: true });
   });
   picker.bind();
+  initNudges();
   updateModeUi();
   void picker.refresh({ silent: true });
 

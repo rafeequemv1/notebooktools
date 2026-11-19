@@ -95,6 +95,8 @@ const NotebookToolsStudioImport = {
       await NotebookToolsNotebookLM.addWebpageToNotebookLm(targetNotebookId, url);
     }
 
+    void globalThis.NotebookToolsStats?.recordImport();
+
     const waitOptions = {
       beforeSourceIds: resolvedBeforeSourceIds,
       onProgress: ({ phase }) => {

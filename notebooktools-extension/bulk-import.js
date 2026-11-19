@@ -656,6 +656,11 @@ const NotebookToolsBulkImportUI = (() => {
       });
 
       await NotebookToolsBulkQueue.persist();
+
+      if (summary.success > 0) {
+        void globalThis.NotebookToolsStats?.recordBulkRun();
+      }
+
       root.querySelector("#bulkNewNotebookName").value = "";
       await picker.refresh({ silent: true });
       root.querySelector("#bulkNotebookSelect").value = targetNotebook.id;

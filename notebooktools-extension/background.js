@@ -1,4 +1,4 @@
-importScripts("plan-gate.js", "account.js", "notebooklm-client.js", "link-extract.js", "snapshot-store.js", "snapshot-capture.js");
+importScripts("plan-gate.js", "account.js", "notebooklm-client.js", "link-extract.js", "snapshot-store.js", "snapshot-capture.js", "stats.js");
 
 /* Shows the Pro upgrade dialog inside a tab (used when a Pro shortcut or menu runs from the background). */
 async function showUpgradeInTab(tabId, featureKey) {
@@ -202,6 +202,20 @@ chrome.storage.local.get("notebooktoolsDevReloadTabs", ({ notebooktoolsDevReload
 void devCheck();
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Usage counters (stats.js): pages and content scripts report successful imports here.
+  if (message?.type === "notebooktools-record-import") {
+    if (!NotebookToolsStats.isAllowedKey(message.key)) {
+      sendResponse({ ok: false });
+      return false;
+    }
+
+    const count = Math.min(500, Math.max(0, Math.floor(Number(message.count) || 0)));
+    NotebookToolsStats.bumpLocal(message.key, count).then((value) => {
+      sendResponse({ ok: value !== null, value });
+    });
+    return true;
+  }
+
   if (message?.type === "notebooktools-dev-check") {
     isDevInstall().then((dev) => {
       sendResponse({ dev });

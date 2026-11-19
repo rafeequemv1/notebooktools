@@ -34,6 +34,12 @@
         margin-bottom: 8px;
       }
 
+      .welcome-progress {
+        color: var(--nt-subtle);
+        font-size: 13px;
+        margin: 0 0 12px;
+      }
+
       .welcome-card {
         margin-bottom: 16px;
       }
@@ -54,6 +60,111 @@
         margin-top: 0;
         width: auto;
       }
+
+      .welcome-step {
+        display: flex;
+        gap: 14px;
+      }
+
+      .welcome-step-body {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .welcome-check {
+        align-items: center;
+        background: var(--nt-surface);
+        border: 2px solid var(--nt-line-strong);
+        border-radius: 999px;
+        color: var(--nt-subtle);
+        cursor: pointer;
+        display: inline-flex;
+        flex: none;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        height: 28px;
+        justify-content: center;
+        padding: 0;
+        width: 28px;
+      }
+
+      .welcome-check:disabled {
+        cursor: default;
+      }
+
+      .welcome-check svg {
+        display: none;
+      }
+
+      .welcome-step.is-done .welcome-check {
+        background: var(--nt-success);
+        border-color: var(--nt-success);
+        color: #fff;
+      }
+
+      .welcome-step.is-done .welcome-check span {
+        display: none;
+      }
+
+      .welcome-step.is-done .welcome-check svg {
+        display: block;
+      }
+
+      .welcome-step.is-done h2 {
+        color: var(--nt-muted);
+      }
+
+      .welcome-done-note {
+        color: var(--nt-success);
+        display: none;
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 8px;
+      }
+
+      .welcome-step.is-done .welcome-done-note {
+        display: block;
+      }
+
+      .welcome-pin-how {
+        color: var(--nt-muted);
+        font-size: 13px;
+        line-height: 1.7;
+        margin: 10px 0 0;
+        padding-left: 20px;
+      }
+
+      .welcome-icon {
+        background: var(--nt-bg);
+        border: 1px solid var(--nt-line);
+        border-radius: 6px;
+        display: inline-flex;
+        height: 22px;
+        justify-content: center;
+        align-items: center;
+        margin: 0 2px;
+        vertical-align: -6px;
+        width: 22px;
+      }
+
+      .welcome-list {
+        color: var(--nt-muted);
+        font-size: 13px;
+        line-height: 1.7;
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .welcome-plan {
+        font-size: 13px;
+        margin: 8px 0 0;
+        text-align: center;
+      }
+
+      .welcome-plan a {
+        color: var(--nt-accent);
+      }
     </style>
   </head>
   <body>
@@ -61,36 +172,73 @@
       <header class="welcome-hero">
         <img src="icons/icon128.png" alt="">
         <h1>Thanks for installing NotebookTools</h1>
-        <p>Import YouTube videos, webpages, X posts, and highlighted text into NotebookLM.</p>
+        <p>Import YouTube videos, webpages, X posts, AI chats and highlighted text into NotebookLM.</p>
       </header>
 
-      <section class="card welcome-card">
-        <h2>1. Pin the extension</h2>
-        <p>Click the puzzle icon in Chrome, then pin NotebookTools for quick access.</p>
+      <p class="welcome-progress" id="welcomeProgress">Get set up in three steps.</p>
+
+      <section class="card welcome-card welcome-step" id="stepPin">
+        <button type="button" class="welcome-check" data-manual="pin" aria-label="Mark step 1 as done" title="Mark as done">
+          <span>1</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="welcome-step-body">
+          <h2>Pin the extension</h2>
+          <p>Keep NotebookTools one click away in your toolbar.</p>
+          <ol class="welcome-pin-how">
+            <li>Click the puzzle icon
+              <span class="welcome-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+              at the top right of Chrome.</li>
+            <li>Find <strong>NotebookTools</strong> and click the pin
+              <span class="welcome-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 3h6l-1 6 3 3v2H7v-2l3-3-1-6Zm3 11v7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></span>
+              next to it.</li>
+          </ol>
+          <p class="welcome-done-note">Pinned. Click the NotebookTools icon any time to open the side panel.</p>
+        </div>
       </section>
 
-      <section class="card welcome-card">
-        <h2>2. Try YouTube import</h2>
-        <p>On any YouTube watch page, click <strong>NotebookLM</strong> next to Like and Share. Pick a notebook and import in one click.</p>
-        <div class="welcome-actions">
-          <a class="button" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">Open YouTube video</a>
+      <section class="card welcome-card welcome-step" id="stepSignIn">
+        <button type="button" class="welcome-check" data-manual="signin" aria-label="Mark step 2 as done" title="Mark as done">
+          <span>2</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="welcome-step-body">
+          <h2>Open NotebookLM and sign in</h2>
+          <p>NotebookTools adds sources with your NotebookLM account, so keep it signed in in this Chrome profile.</p>
+          <div class="welcome-actions">
+            <a class="button" id="openNotebookLm" href="https://notebooklm.google.com/" target="_blank" rel="noopener noreferrer">Open NotebookLM</a>
+          </div>
+          <p class="welcome-done-note">Done. Stay signed in and your notebooks show up in the side panel.</p>
+        </div>
+      </section>
+
+      <section class="card welcome-card welcome-step" id="stepImport">
+        <button type="button" class="welcome-check" disabled aria-label="Step 3 ticks after your first import" title="Ticks after your first import">
+          <span>3</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="welcome-step-body">
+          <h2>Try your first import</h2>
+          <p>On a YouTube watch page, click <strong>NotebookLM</strong> next to Like and Share. On any other page, click the NotebookTools icon to open the side panel and add the current tab.</p>
+          <div class="welcome-actions">
+            <a class="button" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">Open YouTube video</a>
+          </div>
+          <p class="welcome-done-note">Your first source is in NotebookLM. This step ticked itself.</p>
         </div>
       </section>
 
       <section class="card welcome-card">
-        <h2>3. Import any tab</h2>
-        <p>Click the NotebookTools icon on any webpage to open the side panel and add the current tab to NotebookLM.</p>
+        <h2>More ways to import</h2>
+        <ul class="welcome-list">
+          <li>Select text on any page, right-click, and choose <strong>Add to NotebookLM</strong>.</li>
+          <li>On ChatGPT, Claude, Gemini, X, Reddit and more, use the <strong>NotebookLM</strong> button on the page.</li>
+          <li>Open the side panel's <strong>Bulk</strong> tab to import many links, open tabs or a playlist at once.</li>
+        </ul>
       </section>
 
-      <section class="card welcome-card">
-        <h2>4. Right-click highlights</h2>
-        <p>Select text on any page, right-click, and choose <strong>Add to NotebookLM</strong>.</p>
-      </section>
-
-      <section class="card welcome-card">
-        <h2>Sign in once</h2>
-        <p>Keep NotebookLM signed in at <a href="https://notebook.google.com/" target="_blank" rel="noopener noreferrer">notebook.google.com</a> before importing.</p>
-      </section>
+      <p class="welcome-plan">Free includes every import option. Pro adds the notebooks dashboard, source manager, Studio tools and more. <a href="https://www.notebooktools.com/#pricing" target="_blank" rel="noopener noreferrer">Free vs Pro</a></p>
     </main>
+    <script src="stats.js"></script>
+    <script src="welcome.js"></script>
   </body>
 </html>

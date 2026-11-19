@@ -111,6 +111,7 @@ async function runImport() {
     } else {
       setStatus("Sending to NotebookLM...", { loading: true });
       await NotebookToolsNotebookLM.addYoutubeToNotebookLm(targetNotebook.id, youtubeUrl);
+      void globalThis.NotebookToolsStats?.recordImport();
       showOpenNotebook(targetNotebook.id);
       await NotebookToolsSettings.openNotebookIfEnabled(targetNotebook.id);
       setStatus(`Added to "${targetNotebook.title}"`, { done: true });
