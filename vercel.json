@@ -63,7 +63,8 @@
     { "source": "/website/", "destination": "/", "permanent": true },
     { "source": "/website/:path*", "destination": "/:path*", "permanent": true },
     { "source": "/what-is-notebooktools", "destination": "/blog/what-is-notebooktools", "permanent": true },
-    { "source": "/summarize-youtube-videos-notebooklm", "destination": "/blog/summarize-youtube-videos-notebooklm", "permanent": true }
+    { "source": "/summarize-youtube-videos-notebooklm", "destination": "/blog/youtube-to-notebooklm", "permanent": true },
+    { "source": "/blog/summarize-youtube-videos-notebooklm", "destination": "/blog/youtube-to-notebooklm", "permanent": true }
   ],
   "headers": [
     {

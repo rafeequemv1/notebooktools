@@ -187,8 +187,22 @@ the matching feature, visible "Updated" date. Studio how-tos get real screenshot
 - [ ] Connect Bing, Dodo and Supabase in Piqo
 - [ ] Verify the Dodo live webhook
 - [ ] Submit v0.12.0 to the Chrome Web Store
-- [ ] De-duplicate the feature pages
-- [ ] Redirect `notebooktools.vercel.app`
-- [ ] Rewrite the 3 titles in §3
-- [ ] Add in-language install CTAs to the 6 localized pages
-- [ ] Start the YouTube guide and the studying-prompts page
+- [x] De-duplicate the feature pages
+- [x] Redirect `notebooktools.vercel.app`
+- [x] Rewrite the 3 titles in §3
+- [x] Add in-language install CTAs to the 6 localized pages
+- [x] Start the YouTube guide and the studying-prompts page
+
+---
+
+## Status (19 Nov 2026)
+
+Done in code (branch `feat/growth-week1`):
+- Feature pages: one demo per page, unique copy, titles, FAQ and SoftwareApplication schema.
+- Titles rewritten for CTR (free, privacy, YouTube feature page); short answer boxes on every guide.
+- 10 new posts: youtube-to-notebooklm (replaces summarize-youtube-videos-notebooklm, 301), notebooklm-prompts-for-studying, notebooklm-chrome-extensions, export-notebooklm-to-pdf, notebooklm-mind-map, notebooklm-video-overview, notebooklm-mcp, notebooklm-not-working, what-is-gemini-notebook, notebooklm-updates.
+- Spanish and German pricing and limits pages; install CTAs on all 6 localized free pages.
+- Extension 0.12.1: onboarding checklist, review ask after 5 imports, Pro hint after 3 bulk runs, Google Docs import relabelled.
+- IndexNow key + `scripts/indexnow.py`; `notebooktools.vercel.app` redirects to www.
+
+Still for you: connect Bing/Dodo/Supabase in Piqo, verify the Dodo webhook, submit the extension, run `python3 scripts/indexnow.py` after deploy, distribution (§8), and the original data post (§7, week 6), which needs real aggregated data.

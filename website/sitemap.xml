@@ -8,7 +8,7 @@
 
   <url>
     <loc>https://www.notebooktools.com/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/"/>
@@ -29,7 +29,7 @@
 
   <url>
     <loc>https://www.notebooktools.com/blog</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog"/>
@@ -39,7 +39,7 @@
   <!-- Category hubs -->
   <url>
     <loc>https://www.notebooktools.com/blog/category/notebooklm</loc>
-    <lastmod>2026-08-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/notebooklm"/>
@@ -47,7 +47,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/category/comparisons</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/comparisons"/>
@@ -55,7 +55,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/category/students</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/students"/>
@@ -63,7 +63,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/category/prompts</loc>
-    <lastmod>2026-08-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/prompts"/>
@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/category/tutorials</loc>
-    <lastmod>2026-06-24</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/tutorials"/>
@@ -79,7 +79,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/category/youtube</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/youtube"/>
@@ -87,7 +87,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/category/product</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/category/product"/>
@@ -97,7 +97,7 @@
   <!-- Pillar & high-intent articles -->
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-privacy</loc>
-    <lastmod>2026-08-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-privacy"/>
@@ -105,7 +105,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/what-is-notebooklm</loc>
-    <lastmod>2026-06-24</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/what-is-notebooklm"/>
@@ -117,15 +117,17 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-pricing-plans</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.93</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-pricing-plans"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.notebooktools.com/es/precio-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-preise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-pricing-plans"/>
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/is-notebooklm-free</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.92</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -139,7 +141,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-tutorial-beginners</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.92</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-tutorial-beginners"/>
@@ -147,7 +149,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-review-2026</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-review-2026"/>
@@ -173,7 +175,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/best-notebooklm-alternatives</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/best-notebooklm-alternatives"/>
@@ -181,14 +183,6 @@
   </url>
 
   <!-- Import & YouTube -->
-  <url>
-    <loc>https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm"/>
-  </url>
   <url>
     <loc>https://www.notebooktools.com/blog/best-ways-import-content-notebooklm</loc>
     <lastmod>2026-06-24</lastmod>
@@ -209,7 +203,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/best-notebooklm-prompts</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/best-notebooklm-prompts"/>
@@ -217,7 +211,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/20-notebooklm-prompts</loc>
-    <lastmod>2026-08-23</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.84</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/20-notebooklm-prompts"/>
@@ -225,7 +219,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-slide-prompts</loc>
-    <lastmod>2026-06-24</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-slide-prompts"/>
@@ -233,10 +227,12 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/blog/notebooklm-source-limits</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.notebooktools.com/es/limites-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-limits"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
   </url>
 
@@ -269,85 +265,85 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/features</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/add-youtube</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/bulk-import</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/notebooks-hub</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/manage-sources</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/drive-refresh</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/studio-podcasts</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/prompts</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/add-webpage</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/x-twitter</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/highlights</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/chat-export</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/slides-to-blog</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.notebooktools.com/features/snapshots</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -385,7 +381,7 @@
   <!-- Localized: Is NotebookLM free? -->
   <url>
     <loc>https://www.notebooktools.com/de/ist-notebooklm-kostenlos</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -399,7 +395,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/es/es-notebooklm-gratis</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -413,7 +409,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/pt/notebooklm-gratis</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -427,7 +423,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/it/notebooklm-gratis</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -441,7 +437,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/fr/notebooklm-gratuit</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -455,7 +451,7 @@
   </url>
   <url>
     <loc>https://www.notebooktools.com/nl/notebooklm-gratis</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
@@ -466,5 +462,126 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.notebooktools.com/fr/notebooklm-gratuit"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.notebooktools.com/nl/notebooklm-gratis"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/is-notebooklm-free"/>
+  </url>
+  <!-- Added 2026-11-19 -->
+  <url>
+    <loc>https://www.notebooktools.com/blog/youtube-to-notebooklm</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/youtube-to-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/youtube-to-notebooklm"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-prompts-for-studying</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-prompts-for-studying"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-prompts-for-studying"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-chrome-extensions</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-chrome-extensions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-chrome-extensions"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/export-notebooklm-to-pdf</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/export-notebooklm-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/export-notebooklm-to-pdf"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-mind-map</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-mind-map"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-mind-map"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-video-overview</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-video-overview"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-video-overview"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-mcp</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-mcp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-mcp"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-not-working</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-not-working"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-not-working"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/what-is-gemini-notebook</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/what-is-gemini-notebook"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/what-is-gemini-notebook"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/blog/notebooklm-updates</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-updates"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-updates"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/es/precio-notebooklm</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-pricing-plans"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.notebooktools.com/es/precio-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-preise"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-pricing-plans"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/de/notebooklm-preise</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-pricing-plans"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.notebooktools.com/es/precio-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-preise"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-pricing-plans"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/es/limites-notebooklm</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.notebooktools.com/es/limites-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-limits"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/de/notebooklm-limits</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.notebooktools.com/es/limites-notebooklm"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-limits"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
   </url>
 </urlset>

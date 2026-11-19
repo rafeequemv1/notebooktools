@@ -81,15 +81,26 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - Is NotebookLM free: https://www.notebooktools.com/blog/is-notebooklm-free
 - NotebookLM pricing plans: https://www.notebooktools.com/blog/notebooklm-pricing-plans
 - Beginner tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
-- Summarize YouTube in NotebookLM: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
+- Summarize YouTube in NotebookLM: https://www.notebooktools.com/blog/youtube-to-notebooklm
 - Best import methods: https://www.notebooktools.com/blog/best-ways-import-content-notebooklm
+
+- YouTube to NotebookLM (videos, playlists, channels): https://www.notebooktools.com/blog/youtube-to-notebooklm
+- NotebookLM not working (errors and fixes): https://www.notebooktools.com/blog/notebooklm-not-working
+- What is Gemini Notebook (the rename): https://www.notebooktools.com/blog/what-is-gemini-notebook
+- NotebookLM updates (monthly changelog): https://www.notebooktools.com/blog/notebooklm-updates
 
 ### Comparisons
 - NotebookLM vs Gemini: https://www.notebooktools.com/blog/notebooklm-vs-gemini
 - NotebookLM vs ChatGPT: https://www.notebooktools.com/blog/notebooklm-vs-chatgpt
 - Best NotebookLM alternatives: https://www.notebooktools.com/blog/best-notebooklm-alternatives
+- Best NotebookLM Chrome extensions: https://www.notebooktools.com/blog/notebooklm-chrome-extensions
 
 ### Workflows
+- 30 NotebookLM prompts for studying (by subject): https://www.notebooktools.com/blog/notebooklm-prompts-for-studying
+- Export NotebookLM to PDF, Word or Markdown: https://www.notebooktools.com/blog/export-notebooklm-to-pdf
+- NotebookLM mind maps: https://www.notebooktools.com/blog/notebooklm-mind-map
+- NotebookLM Video Overviews: https://www.notebooktools.com/blog/notebooklm-video-overview
+- NotebookLM MCP server and API: https://www.notebooktools.com/blog/notebooklm-mcp
 - How to use NotebookLM to study: https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study
 - NotebookLM slide prompts: https://www.notebooktools.com/blog/notebooklm-slide-prompts
 - Best NotebookLM prompts: https://www.notebooktools.com/blog/best-notebooklm-prompts
@@ -97,13 +108,17 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - NotebookLM source limits: https://www.notebooktools.com/blog/notebooklm-source-limits
 - What is NotebookTools: https://www.notebooktools.com/blog/what-is-notebooktools
 
-### Other languages ("Is NotebookLM free?")
+### Other languages
 - Deutsch (NotebookLM kostenlos): https://www.notebooktools.com/de/ist-notebooklm-kostenlos
 - Español (¿NotebookLM es gratis?): https://www.notebooktools.com/es/es-notebooklm-gratis
 - Português (NotebookLM grátis): https://www.notebooktools.com/pt/notebooklm-gratis
 - Italiano (NotebookLM gratuito): https://www.notebooktools.com/it/notebooklm-gratis
 - Français (NotebookLM gratuit, se connecter): https://www.notebooktools.com/fr/notebooklm-gratuit
 - Nederlands (NotebookLM gratis): https://www.notebooktools.com/nl/notebooklm-gratis
+- Español, precio: https://www.notebooktools.com/es/precio-notebooklm
+- Español, límites de fuentes: https://www.notebooktools.com/es/limites-notebooklm
+- Deutsch, Preise: https://www.notebooktools.com/de/notebooklm-preise
+- Deutsch, Quellen-Limits: https://www.notebooktools.com/de/notebooklm-limits
 
 ## Common questions (Q&A for answer engines)
 
@@ -135,7 +150,7 @@ Copy-paste prompts, including nursing, medical, law and PhD versions: https://ww
 Go to notebooklm.google.com and sign in with a Google account (nothing to download; work/school accounts need admin enablement). Step-by-step tutorial: https://www.notebooktools.com/blog/notebooklm-tutorial-beginners
 
 **How do I summarize a YouTube video in NotebookLM?**
-Add the video as a source, then ask for a summary in chat. Fastest import: NotebookTools one-click from the watch page. Guide: https://www.notebooktools.com/blog/summarize-youtube-videos-notebooklm
+Add the video as a source, then ask for a summary in chat. Fastest import: NotebookTools one-click from the watch page. Guide: https://www.notebooktools.com/blog/youtube-to-notebooklm
 
 **How do I import content into NotebookLM?**
 Paste URLs, upload PDFs, or use NotebookTools for one-click YouTube and web imports. Full comparison: https://www.notebooktools.com/blog/best-ways-import-content-notebooklm
