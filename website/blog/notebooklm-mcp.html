@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2BJP0Q9LL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-K2BJP0Q9LL');
+    </script>
+    <script defer data-site="bqtzsbfj" data-domain="notebooktools.com" src="https://piqo.app/piqo.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotebookLM MCP Server and API: What Works in 2026</title>
+    <meta
+      name="description"
+      content="There is no official consumer NotebookLM API or MCP server. Google offers an API only for NotebookLM Enterprise; community MCP servers are unofficial and risky."
+    >
+    <meta name="keywords" content="notebooklm mcp, notebooklm mcp server, claude notebooklm, notebooklm api, gemini notebook api, notebooklm enterprise api">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://www.notebooktools.com/blog/notebooklm-mcp">
+    <link rel="alternate" hreflang="en" href="https://www.notebooktools.com/blog/notebooklm-mcp">
+    <link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-mcp">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="NotebookTools">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="NotebookLM MCP Server and API: What Works in 2026">
+    <meta property="og:description" content="The NotebookLM Enterprise API, unofficial community MCP servers for Claude, their risks, and a safer workflow.">
+    <meta property="og:url" content="https://www.notebooktools.com/blog/notebooklm-mcp">
+    <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
+    <meta property="article:published_time" content="2026-11-19">
+    <meta property="article:modified_time" content="2026-11-19">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NotebookLM MCP Server and API: What Works in 2026">
+    <meta name="twitter:description" content="The NotebookLM Enterprise API, unofficial community MCP servers for Claude, their risks, and a safer workflow.">
+    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&amp;family=Google+Sans+Text:wght@400;500;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/theme.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "headline": "NotebookLM MCP Server and API: What Works in 2026",
+          "description": "How to connect Claude and other AI agents to NotebookLM: the NotebookLM Enterprise API, unofficial community MCP servers, their risks, and a safer workflow.",
+          "datePublished": "2026-11-19",
+          "dateModified": "2026-11-19",
+          "author": {
+            "@type": "Organization",
+            "name": "NotebookTools"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "NotebookTools",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.notebooktools.com/assets/logo-mark.png"
+            }
+          },
+          "image": "https://www.notebooktools.com/assets/og-image.png",
+          "mainEntityOfPage": "https://www.notebooktools.com/blog/notebooklm-mcp"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.notebooktools.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": "https://www.notebooktools.com/blog"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Tutorials",
+              "item": "https://www.notebooktools.com/blog/category/tutorials"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "NotebookLM MCP guide",
+              "item": "https://www.notebooktools.com/blog/notebooklm-mcp"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Does NotebookLM have an API?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Consumer NotebookLM (the free version and the one included with Google AI plans) has no public API. Google documents an API only for NotebookLM Enterprise, which runs in a Google Cloud project with licensed users."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is there an official NotebookLM MCP server?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. We found no MCP server made by Google for NotebookLM. The NotebookLM MCP servers on GitHub are community projects that automate the website or reuse your Google session cookies."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can Claude use NotebookLM?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Not directly through an official connection. You can use an unofficial MCP server at your own risk, or export NotebookLM answers to PDF or Word and attach them to a Claude chat."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are NotebookLM MCP servers safe?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "They carry real risks. They need access to your signed-in Google session, they can break whenever NotebookLM changes, and their own authors warn they may not fit Google's terms. Use a separate account and non-sensitive sources if you try one."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does the Gemini Notebook rename change API access?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Gemini Notebook is the new name for NotebookLM. The consumer product still has no public API, and the Enterprise API is still the official route for organizations."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="blog-page blog-article-page">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a class="logo" href="/" aria-label="NotebookTools home">
+          <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
+          <span class="logo-text">NotebookTools</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+          <a href="/features">Features</a>
+          <a href="/students">Students</a>
+          <a href="/teachers">Teachers</a>
+          <a href="/researchers">Researchers</a>
+          <a href="/creators">Creators</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/blog" aria-current="page">Blog</a>
+          <a href="/support">Support</a>
+          <div class="site-nav-actions">
+            <a class="button button-primary" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome — free</a>
+            <a class="button button-ghost" href="/#pricing">Get Pro — $49</a>
+          </div>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-primary button-sm header-cta" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg><span>Add to Chrome</span></a>
+          <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+
+    <main class="blog-article-wrap">
+      <div class="blog-article-layout">
+        <div class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+        <a href="/blog">Blog</a>
+        <span aria-hidden="true">/</span>
+        <a href="/blog/category/tutorials">Tutorials</a>
+        <span aria-hidden="true">/</span>
+        <span>NotebookLM MCP guide</span>
+      </nav>
+
+      <article>
+        <header class="blog-article-header">
+          <span class="blog-card-tag">Tutorials</span>
+          <h1>NotebookLM MCP server and API: what works in 2026</h1>
+          <div class="blog-article-byline">
+            <span>Updated <time datetime="2026-11-19">November 19, 2026</time></span>
+            <span class="blog-article-dot">·</span>
+            <span>8 min read</span>
+          </div>
+        </header>
+
+        <div class="blog-article-body">
+          <div class="post-answer">
+            <p class="post-answer-label">Short answer</p>
+            <p><strong>Consumer NotebookLM has no official public API and no official MCP server.</strong> Google documents an API only for <strong>NotebookLM Enterprise</strong>, which runs in a Google Cloud project with per-user licenses. The NotebookLM MCP servers you find on GitHub are <strong>unofficial community projects</strong> that drive your logged-in browser or reuse your Google session cookies, so they can break without notice and may not fit Google&rsquo;s terms.</p>
+          </div>
+
+          <!-- post-cta -->
+          <aside class="post-cta" aria-label="NotebookTools">
+            <img class="post-cta-mark" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
+            <div class="post-cta-text">
+              <p class="post-cta-title">A safer way to move NotebookLM answers into Claude</p>
+              <p>Imports are free. Pro ($49 one-time, lifetime) unlocks the notebooks dashboard, source manager (duplicate scan, Drive refresh), Studio files, blog and carousel makers, snapshots, a prompt library with / commands, and chat export to PDF/Word.</p>
+            </div>
+            <div class="post-cta-actions">
+              <a class="button button-primary" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome, free</a>
+              <a class="post-cta-link" href="/features/chat-export">Export NotebookLM chats to PDF or Word →</a>
+            </div>
+          </aside>
+          <!-- /post-cta -->
+
+          <h2 id="what-is-mcp">What is MCP, in one paragraph</h2>
+          <p>
+            MCP (Model Context Protocol) is an open standard that Anthropic introduced in November 2024. It lets an AI assistant such as Claude call outside tools through small programs called <em>MCP servers</em>. A server exposes actions (&ldquo;search this notebook&rdquo;, &ldquo;add this source&rdquo;) and the assistant decides when to use them. Claude Desktop, Claude Code and a growing list of other clients can connect to MCP servers.
+          </p>
+          <p>
+            So a &ldquo;NotebookLM MCP server&rdquo; is a program that sits between Claude and NotebookLM (now Gemini Notebook). Claude sends it a request, the server talks to NotebookLM, and the answer comes back into your Claude chat. The hard part is the middle step: how the server reaches NotebookLM at all.
+          </p>
+
+          <h2 id="api-status">Is there a NotebookLM API?</h2>
+          <p>It depends on which NotebookLM you use.</p>
+          <div class="post-table-wrap">
+            <table class="post-table">
+              <thead>
+                <tr><th></th><th>Consumer NotebookLM</th><th>NotebookLM Enterprise</th></tr>
+              </thead>
+              <tbody>
+                <tr><th>Who it is for</th><td>Personal Google accounts and most Workspace accounts</td><td>Organizations on Google Cloud</td></tr>
+                <tr><th>Official API</th><td><strong>No</strong> public API</td><td><strong>Yes</strong>, documented by Google Cloud</td></tr>
+                <tr><th>How you sign in</th><td>Your Google account in the browser</td><td>Google Cloud credentials and IAM roles</td></tr>
+                <tr><th>What you need</th><td>A Google account</td><td>A Cloud project, NotebookLM Enterprise licenses, the right IAM role</td></tr>
+                <tr><th>Official MCP server</th><td>None</td><td>None from Google that we could confirm</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Google&rsquo;s Cloud documentation has a page called <a href="https://cloud.google.com/gemini/enterprise/notebooklm-enterprise/docs/api-notebooks" target="_blank" rel="noopener noreferrer">&ldquo;Create and manage notebooks (API)&rdquo;</a> for NotebookLM Enterprise. It covers creating and managing notebooks with REST calls authenticated through Google Cloud. If your company already pays for NotebookLM Enterprise, that API is the supported route, and anything you build on it (including your own MCP server) rests on documented ground.
+          </p>
+          <p>
+            The free NotebookLM at notebooklm.google.com, and the versions included with Google AI Plus, Pro and Ultra, have no public API. Everything that automates them works by imitating a person using the website.
+          </p>
+
+          <h2 id="community-servers">Community NotebookLM MCP servers</h2>
+          <p>
+            Several open-source projects on GitHub call themselves NotebookLM MCP servers. None of them are made or endorsed by Google. Two well-known examples, as of November 2026:
+          </p>
+          <ul>
+            <li>
+              <strong><a href="https://github.com/PleasePrompto/notebooklm-mcp" target="_blank" rel="noopener noreferrer">PleasePrompto/notebooklm-mcp</a></strong> (TypeScript). It drives a real Chrome browser: you log in to Google once in a visible window and it reuses that browser profile to ask your notebooks questions and return cited answers. Its README now says the project is <strong>archived and no longer maintained</strong>, and that it may stop working when NotebookLM changes.
+            </li>
+            <li>
+              <strong><a href="https://github.com/jacob-bd/notebooklm-mcp" target="_blank" rel="noopener noreferrer">jacob-bd/notebooklm-mcp</a></strong> (Python). It ships a command-line tool and an MCP server. It signs in by extracting your Google session cookies from a browser profile and calls NotebookLM&rsquo;s internal web endpoints. Its own disclaimer says those endpoints are undocumented, may change without notice, and that the tool may not be aligned with Google&rsquo;s Terms of Service.
+            </li>
+          </ul>
+          <p>
+            Other forks and smaller projects exist, and new ones appear often. Most follow one of the same two patterns: <strong>browser automation</strong> or <strong>reused session cookies</strong>. We do not list install commands here because they change between versions. If you decide to try one, follow the current README of the exact repository and read its open issues first.
+          </p>
+
+          <h2 id="risks">Risks of unofficial NotebookLM MCP servers</h2>
+          <p>Before you connect Claude to your notebooks this way, weigh these points:</p>
+          <ul>
+            <li><strong>It is unofficial.</strong> Google does not support these tools. If something goes wrong, there is no help desk.</li>
+            <li><strong>It uses your Google session.</strong> A browser profile or a cookie file that is signed in to your Google account can often reach more than NotebookLM. Anyone who gets that file may be able to act as you. Use a separate Google account if you experiment.</li>
+            <li><strong>It can break at any time.</strong> NotebookLM&rsquo;s web app changes often. A redesign, a new sign-in check or a renamed button can stop a server overnight. One of the best-known projects is already archived.</li>
+            <li><strong>Google&rsquo;s terms.</strong> Automated access to Google services outside official APIs may conflict with Google&rsquo;s Terms of Service. Read them yourself, and do not use these tools on a work account without your IT team&rsquo;s approval.</li>
+            <li><strong>Usage limits still apply.</strong> Since September 2026, NotebookLM chat and Studio use is measured with limits that refresh every few hours up to a weekly cap. An agent that fires many questions can use up your allowance quickly.</li>
+            <li><strong>Data flows to two AI services.</strong> Answers from your notebooks pass into Claude&rsquo;s context. Check that you are allowed to share that material with both providers. Our <a href="/blog/notebooklm-privacy">NotebookLM privacy guide</a> covers the Google side.</li>
+          </ul>
+
+          <h2 id="safer-workflow">A safer workflow: NotebookLM and Claude without an MCP server</h2>
+          <p>
+            For most people the goal is simple: use NotebookLM&rsquo;s source-grounded answers inside a Claude conversation. You can do that without handing a third-party tool your Google login.
+          </p>
+          <ol>
+            <li><strong>Build the notebook in NotebookLM.</strong> Add your PDFs, Google Docs, web pages and YouTube videos. Free accounts get 50 sources per notebook; see <a href="/blog/notebooklm-source-limits">NotebookLM source limits</a>.</li>
+            <li><strong>Ask NotebookLM the grounded questions.</strong> Let it do what it is good at: answers with citations to your own sources. Our <a href="/blog/best-notebooklm-prompts">NotebookLM prompts guide</a> has starting points.</li>
+            <li><strong>Export the answers.</strong> Copy the replies, save them as notes, or use the <a href="/features/chat-export">NotebookTools chat export to PDF or Word</a> to save the whole conversation with its formatting.</li>
+            <li><strong>Give the export to Claude.</strong> Attach the PDF or Word file to a Claude chat or project. Claude can now rewrite, compare or plan from it, and you control exactly what it sees.</li>
+            <li><strong>Keep shared sources in Google Drive.</strong> If both tools need the same raw documents, keep them in Drive. Add them to NotebookLM as Drive sources and upload the same files to Claude when needed.</li>
+            <li><strong>Use the Enterprise API if your company has it.</strong> Teams that need real automation should ask IT about NotebookLM Enterprise and its documented API rather than cookie-based tools.</li>
+          </ol>
+          <p>
+            This takes a few more clicks than an MCP server, but nothing breaks when NotebookLM updates, and your Google session never leaves your browser.
+          </p>
+
+          <h2 id="when-mcp">When an unofficial MCP server might still make sense</h2>
+          <p>
+            If you are a developer experimenting on a personal, throwaway Google account with non-sensitive sources, a community server can be a useful way to see how agent workflows feel. Treat it as a prototype. Pin a specific version, keep the cookie or profile files private, and expect to fix it when NotebookLM changes. For anything you depend on, use the official Enterprise API or the export workflow above.
+          </p>
+
+          <h2 id="faq">FAQ</h2>
+          <h3>Does NotebookLM have an API?</h3>
+          <p>Consumer NotebookLM (the free version and the one included with Google AI plans) has no public API. Google documents an API only for NotebookLM Enterprise, which runs in a Google Cloud project with licensed users.</p>
+          <h3>Is there an official NotebookLM MCP server?</h3>
+          <p>No. We found no MCP server made by Google for NotebookLM. The NotebookLM MCP servers on GitHub are community projects that automate the website or reuse your Google session cookies.</p>
+          <h3>Can Claude use NotebookLM?</h3>
+          <p>Not directly through an official connection. You can use an unofficial MCP server at your own risk, or export NotebookLM answers to PDF or Word and attach them to a Claude chat.</p>
+          <h3>Are NotebookLM MCP servers safe?</h3>
+          <p>They carry real risks. They need access to your signed-in Google session, they can break whenever NotebookLM changes, and their own authors warn they may not fit Google&#x27;s terms. Use a separate account and non-sensitive sources if you try one.</p>
+          <h3>Does the Gemini Notebook rename change API access?</h3>
+          <p>No. Gemini Notebook is the new name for NotebookLM. The consumer product still has no public API, and the Enterprise API is still the official route for organizations.</p>
+        </div>
+
+        <footer class="blog-article-footer">
+          <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+            <img class="chrome-store-badge" src="../assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="248" height="60">
+          </a>
+          <p class="blog-article-footer-note">
+            More: <a href="/blog/what-is-notebooklm">What is NotebookLM?</a> ·
+            <a href="/blog/notebooklm-privacy">NotebookLM privacy</a> ·
+            <a href="/blog/notebooklm-vs-chatgpt">NotebookLM vs ChatGPT</a> ·
+            <a href="/blog/category/tutorials">Tutorials</a> ·
+            <a href="/support">Support</a> ·
+            <a href="/blog">All blog posts</a>
+          </p>
+        </footer>
+      </article>
+        </div>
+        <aside class="blog-cta-sidebar" aria-label="Install NotebookTools">
+          <div class="blog-cta-card">
+            <img class="blog-cta-logo" src="/assets/logo-wordmark-sm.png" alt="NotebookTools" width="140" height="20">
+            <h2>Import to NotebookLM in one click</h2>
+            <p>Free Chrome extension. Import YouTube, webpages, X posts, and highlights into your notebooks.</p>
+            <ul class="blog-cta-features">
+              <li>YouTube watch-page button</li>
+              <li>Right-click any highlight</li>
+              <li>Works with your Google sign-in</li>
+            </ul>
+            <a class="chrome-store-link" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">
+              <img class="chrome-store-badge" src="/assets/chrome-web-store-badge.png" alt="Available in the Chrome Web Store" width="206" height="54">
+            </a>
+            <p class="blog-cta-note">Free · No extra account</p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a class="logo" href="/" aria-label="NotebookTools home">
+              <img class="logo-img logo-mark-header" src="/assets/logo-mark-32.png" alt="" width="32" height="32">
+              <span class="logo-text">NotebookTools</span>
+            </a>
+            <p>The Chrome extension for NotebookLM. Import faster, organize every notebook, and get more from your research. Free to start, Pro for life.</p>
+            <a class="header-chrome footer-chrome" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg><span>Add to Chrome</span></a>
+          </div>
+          <nav class="footer-col" aria-label="Product">
+            <h2>Product</h2>
+            <a href="/features">Features</a>
+            <a href="/students">For students</a>
+            <a href="/teachers">For teachers</a>
+            <a href="/researchers">For researchers</a>
+            <a href="/creators">For content creators</a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/#install">Install</a>
+          </nav>
+          <nav class="footer-col" aria-label="Resources">
+            <h2>Resources</h2>
+            <a href="/blog">Blog</a>
+            <a href="/blog/what-is-notebooklm">What is NotebookLM?</a>
+            <a href="/blog/best-notebooklm-prompts">NotebookLM prompts</a>
+            <a href="/notebooklm-slide-styles">Slide deck styles</a>
+            <a href="/blog/notebooklm-tutorial-beginners">Beginner tutorial</a>
+          </nav>
+          <nav class="footer-col" aria-label="Company">
+            <h2>Company</h2>
+            <a href="/support">Support</a>
+            <a href="/privacy">Privacy policy</a>
+            <a href="https://github.com/rafeequemv1/notebooktools" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM ↗</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 NotebookTools</p>
+          <p>An independent tool for NotebookLM. Not affiliated with Google.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script src="/site.js" defer></script>
+  </body>
+</html>
