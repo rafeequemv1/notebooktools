@@ -23,17 +23,102 @@
     <link rel="stylesheet" href="/features/surfaces/surfaces.css">
     <link rel="stylesheet" href="/features/stage/stage.css">
     <link rel="stylesheet" href="/theme.css">
-    <title>Refresh Google Drive Sources in NotebookLM | NotebookTools</title>
-    <meta name="description" content="See which Google Docs, Sheets and Slides sources in NotebookLM (Gemini Notebook) are out of date and refresh them in bulk, so answers use the latest version.">
+    <title>Sync Google Drive Sources in NotebookLM in One Click</title>
+    <meta name="description" content="Sync Google Drive sources in NotebookLM: see which Docs, Slides, Sheets and Drive PDFs changed since import and refresh every stale source in one click.">
     <link rel="canonical" href="https://www.notebooktools.com/features/drive-refresh">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
-    <meta property="og:title" content="Refresh Google Drive Sources in NotebookLM | NotebookTools">
-    <meta property="og:description" content="See which Google Docs, Sheets and Slides sources in NotebookLM (Gemini Notebook) are out of date and refresh them in bulk, so answers use the latest version.">
+    <meta property="og:title" content="Sync Google Drive Sources in NotebookLM in One Click">
+    <meta property="og:description" content="Sync Google Drive sources in NotebookLM: see which Docs, Slides, Sheets and Drive PDFs changed since import and refresh every stale source in one click.">
     <meta property="og:url" content="https://www.notebooktools.com/features/drive-refresh">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sync Google Drive Sources in NotebookLM in One Click">
+    <meta name="twitter:description" content="Sync Google Drive sources in NotebookLM: see which Docs, Slides, Sheets and Drive PDFs changed since import and refresh every stale source in one click.">
+    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="robots" content="index, follow">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "NotebookTools",
+          "applicationCategory": "BrowserApplication",
+          "operatingSystem": "Chrome",
+          "url": "https://www.notebooktools.com/features/drive-refresh",
+          "downloadUrl": "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj",
+          "description": "Sync Google Drive sources in NotebookLM: see which Docs, Slides, Sheets and Drive PDFs changed since import and refresh every stale source in one click.",
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "Free",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            {
+              "@type": "Offer",
+              "name": "Pro (lifetime)",
+              "price": "49",
+              "priceCurrency": "USD"
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.notebooktools.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Features",
+              "item": "https://www.notebooktools.com/features"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Drive refresh",
+              "item": "https://www.notebooktools.com/features/drive-refresh"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Does NotebookLM update Google Docs sources automatically?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. NotebookLM keeps the version it imported until you sync the source. NotebookTools shows which Drive sources have changed and refreshes them in bulk."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which sources can NotebookTools refresh?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Google Docs, Google Slides, Google Sheets and PDFs stored in Drive, plus web and YouTube sources."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Drive refresh free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. It is part of NotebookTools Pro ($49 one-time, lifetime), together with the source manager and duplicate scan."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="feature-page feature-master feature-drive-refresh" data-initial-feature="drive-refresh">
     <header class="site-header">
@@ -226,6 +311,42 @@
           <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in the hub</strong><p>NotebookTools quietly checks Docs, Slides, Sheets, PDFs, web and YouTube sources.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>See what changed</strong><p>Out-of-date sources show <b>Update available</b>.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Click Refresh stale (N)</strong><p>Every changed source re-syncs one by one.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Or refresh one</strong><p>Use the ↻ button on any single source.</p></div></li>
         </ol>
       </section>
+        <section class="feature-seo" aria-labelledby="seo-drive-refresh">
+          <div class="feature-seo-inner">
+            <h2 id="seo-drive-refresh">Sync Google Drive sources in NotebookLM when files change</h2>
+            <p class="feature-seo-lead">When you add a Google Doc, Slides deck, Sheet or Drive PDF to NotebookLM, the notebook works from the version you imported. NotebookTools checks those sources, plus web and YouTube sources, and marks the ones that changed with <b>Update available</b>, so you can re-sync them all at once.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>Open a notebook in the NotebookTools hub.</li>
+              <li>Wait a moment while it checks each source against the latest version.</li>
+              <li>Look for the <b>Update available</b> label on changed sources.</li>
+              <li>Click <b>Refresh stale (N)</b> to re-sync every changed source one by one.</li>
+              <li>Or use the &#8635; button to refresh a single source.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>NotebookLM answers from the copy it holds, so an old version of your lecture notes, spec or price sheet gives old answers. Checking each Drive source by hand is slow when a notebook holds 20 of them, and it is easy to miss one. NotebookTools shows exactly which sources are stale and refreshes them with one button. That matters most for living documents: a team handbook, a course syllabus that changes each week, or a research log you keep adding to while the notebook is in use.</p>
+            <p class="feature-seo-plan"><strong>Pro.</strong> Drive refresh is part of the source manager in NotebookTools Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
+            <h3>Related guides</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/blog/best-ways-import-content-notebooklm">Adding Google Drive files and other sources to NotebookLM</a></li>
+              <li><a href="/blog/notebooklm-source-limits">Size and count limits for NotebookLM sources</a></li>
+              <li><a href="/blog/notebooklm-privacy">What NotebookLM does with your Drive files</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">Drive refresh: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>Does NotebookLM update Google Docs sources automatically?</h3>
+              <p>No. NotebookLM keeps the version it imported until you sync the source. NotebookTools shows which Drive sources have changed and refreshes them in bulk.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Which sources can NotebookTools refresh?</h3>
+              <p>Google Docs, Google Slides, Google Sheets and PDFs stored in Drive, plus web and YouTube sources.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Is Drive refresh free?</h3>
+              <p>No. It is part of NotebookTools Pro ($49 one-time, lifetime), together with the source manager and duplicate scan.</p>
+            </div>
+          </div>
+        </section>
         </article>
         </div>
       </div>

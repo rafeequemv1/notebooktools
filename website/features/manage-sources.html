@@ -23,17 +23,102 @@
     <link rel="stylesheet" href="/features/surfaces/surfaces.css">
     <link rel="stylesheet" href="/features/stage/stage.css">
     <link rel="stylesheet" href="/theme.css">
-    <title>Manage NotebookLM Sources in Bulk | NotebookTools</title>
-    <meta name="description" content="Search, sort, select and delete NotebookLM (Gemini Notebook) sources in bulk, find duplicate sources and organise them into folders. Free Chrome extension.">
+    <title>Manage NotebookLM Sources &amp; Delete Duplicates</title>
+    <meta name="description" content="Manage NotebookLM sources in bulk: select many at once, delete them, sort them into folders, and find duplicate sources with a fast or deep content scan.">
     <link rel="canonical" href="https://www.notebooktools.com/features/manage-sources">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
-    <meta property="og:title" content="Manage NotebookLM Sources in Bulk | NotebookTools">
-    <meta property="og:description" content="Search, sort, select and delete NotebookLM (Gemini Notebook) sources in bulk, find duplicate sources and organise them into folders. Free Chrome extension.">
+    <meta property="og:title" content="Manage NotebookLM Sources &amp; Delete Duplicates">
+    <meta property="og:description" content="Manage NotebookLM sources in bulk: select many at once, delete them, sort them into folders, and find duplicate sources with a fast or deep content scan.">
     <meta property="og:url" content="https://www.notebooktools.com/features/manage-sources">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Manage NotebookLM Sources &amp; Delete Duplicates">
+    <meta name="twitter:description" content="Manage NotebookLM sources in bulk: select many at once, delete them, sort them into folders, and find duplicate sources with a fast or deep content scan.">
+    <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="robots" content="index, follow">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "NotebookTools",
+          "applicationCategory": "BrowserApplication",
+          "operatingSystem": "Chrome",
+          "url": "https://www.notebooktools.com/features/manage-sources",
+          "downloadUrl": "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj",
+          "description": "Manage NotebookLM sources in bulk: select many at once, delete them, sort them into folders, and find duplicate sources with a fast or deep content scan.",
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "Free",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            {
+              "@type": "Offer",
+              "name": "Pro (lifetime)",
+              "price": "49",
+              "priceCurrency": "USD"
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.notebooktools.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Features",
+              "item": "https://www.notebooktools.com/features"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Manage sources",
+              "item": "https://www.notebooktools.com/features/manage-sources"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How do I delete multiple sources in NotebookLM?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Open the notebook in the NotebookTools hub, click Manage on the Sources tab, tick the sources and delete them together. The deletion applies to the notebook in NotebookLM."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the duplicate source scan work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The fast scan groups sources with the same URL or title. The deep scan also compares the text of each source, so it finds copies saved under different names. You choose which copy to keep in each group."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do source folders change my notebook in NotebookLM?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Folders only change how NotebookTools groups your sources and Studio files. Deleting a source does remove it from NotebookLM, so review before you confirm."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="feature-page feature-master feature-manage-sources" data-initial-feature="manage-sources">
     <header class="site-header">
@@ -269,6 +354,41 @@
           <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in the hub</strong><p>The Sources tab lists every source with its type.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Manage</strong><p>Select sources, then <b>Organize</b> them into folders or delete them.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Scan duplicates</strong><p>Run a fast URL/title scan or a deep content scan.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Clean up</strong><p>Review each group, choose what to keep, and remove the rest.</p></div></li>
         </ol>
       </section>
+        <section class="feature-seo" aria-labelledby="seo-manage-sources">
+          <div class="feature-seo-inner">
+            <h2 id="seo-manage-sources">Manage NotebookLM sources and delete duplicate sources</h2>
+            <p class="feature-seo-lead">Open any notebook in the NotebookTools hub and the <b>Sources</b> tab lists every source with its type. From there you can select many sources at once, move them into folders, delete them, and scan the notebook for duplicate sources so each slot holds something new.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>Open the notebooks hub and click a notebook. The <b>Sources</b> tab lists every source.</li>
+              <li>Click <b>Manage</b>, tick the sources you want, then organize them into folders or delete them.</li>
+              <li>To find duplicates, run a <b>fast scan</b> (matching URLs and titles) or a <b>deep scan</b> (comparing content).</li>
+              <li>Review each duplicate group, choose the copy to keep and remove the rest.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>Duplicates creep in when you import the same article twice or re-add a video from a playlist. Each copy uses one of your 50 source slots on a free Google account. Deleting sources one by one in NotebookLM means a menu per source; bulk selection clears dozens in a few clicks. Folders also work for Studio files, so a notebook with 100 or more items stays easy to read.</p>
+            <p class="feature-seo-plan"><strong>Pro.</strong> The source manager, duplicate scan and Drive refresh are part of NotebookTools Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
+            <h3>Related guides</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/blog/notebooklm-source-limits">NotebookLM source limits and how to stay under them</a></li>
+              <li><a href="/blog/is-notebooklm-free">What the free NotebookLM plan includes</a></li>
+              <li><a href="/blog/best-ways-import-content-notebooklm">Ways to import sources into NotebookLM</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">Manage sources: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>How do I delete multiple sources in NotebookLM?</h3>
+              <p>Open the notebook in the NotebookTools hub, click Manage on the Sources tab, tick the sources and delete them together. The deletion applies to the notebook in NotebookLM.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>How does the duplicate source scan work?</h3>
+              <p>The fast scan groups sources with the same URL or title. The deep scan also compares the text of each source, so it finds copies saved under different names. You choose which copy to keep in each group.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Do source folders change my notebook in NotebookLM?</h3>
+              <p>No. Folders only change how NotebookTools groups your sources and Studio files. Deleting a source does remove it from NotebookLM, so review before you confirm.</p>
+            </div>
+          </div>
+        </section>
         </article>
         </div>
       </div>
