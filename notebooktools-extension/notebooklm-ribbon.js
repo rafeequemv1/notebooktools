@@ -1,7 +1,8 @@
 /* ==========================================================================
-   NotebookTools ribbon: one slim command bar inside a Gemini Notebook
-   notebook, between the page header and the Sources / Chat / Studio panels.
-   Groups every NotebookTools feature in one place.
+   NotebookTools ribbon inside a Gemini Notebook notebook, between the page
+   header and the Sources / Chat / Studio panels. It is split into three bars,
+   each sitting right above the panel its tools belong to. When the panels
+   can't be matched (narrow window, unusual layout) it falls back to one bar.
    ========================================================================== */
 (function () {
   "use strict";
@@ -129,12 +130,68 @@
 
   // Shrink in steps until everything fits: group names, then secondary
   // labels, then icons only.
+  const FIT_LEVELS = ["fit-1", "fit-2", "fit-3", "fit-4"];
+
   function fitRibbon(ribbon) {
     if (!ribbon) return;
-    ribbon.classList.remove("fit-1", "fit-2", "fit-3", "fit-4");
-    for (const level of ["fit-1", "fit-2", "fit-3", "fit-4"]) {
+    const segs = [...ribbon.querySelectorAll(".ntr-seg")];
+    segs.forEach((seg) => seg.classList.remove(...FIT_LEVELS));
+    if (ribbon.classList.contains("is-split")) {
+      // Each bar shrinks on its own to fit the panel below it.
+      for (const seg of segs) {
+        for (const level of FIT_LEVELS) {
+          if (seg.scrollWidth <= seg.clientWidth + 1) break;
+          seg.classList.add(level);
+        }
+      }
+      return;
+    }
+    for (const level of FIT_LEVELS) {
       if (ribbon.scrollWidth <= ribbon.clientWidth + 1) return;
-      ribbon.classList.add(level);
+      segs.forEach((seg) => seg.classList.add(level));
+    }
+  }
+
+  /* ---------- Three bars above the three panels ---------- */
+  // The panels are the children of the panel row: Sources, Chat (holds the
+  // chat box) and Studio. Thin children such as resize handles are skipped.
+  function findColumns(row) {
+    const input = findChatInput();
+    let chat = input;
+    while (chat && chat.parentElement !== row) chat = chat.parentElement;
+    if (!chat) return null;
+    const kids = [...row.children].filter((el) => {
+      const r = el.getBoundingClientRect();
+      return r.width > 40 && r.height > 120;
+    });
+    const i = kids.indexOf(chat);
+    if (i < 1 || i > kids.length - 2) return null;
+    return { sources: kids[i - 1], chat, studio: kids[i + 1] };
+  }
+
+  function layoutSegments(ribbon, row) {
+    const cols = row && findColumns(row);
+    const segs = {
+      sources: ribbon.querySelector('[data-seg="sources"]'),
+      chat: ribbon.querySelector('[data-seg="chat"]'),
+      studio: ribbon.querySelector('[data-seg="studio"]')
+    };
+    if (!cols || window.innerWidth < 900) {
+      ribbon.classList.remove("is-split");
+      Object.values(segs).forEach((seg) => {
+        seg?.style.removeProperty("left");
+        seg?.style.removeProperty("width");
+      });
+      return;
+    }
+    ribbon.classList.add("is-split");
+    const origin = ribbon.getBoundingClientRect().left;
+    for (const [name, col] of Object.entries(cols)) {
+      const r = col.getBoundingClientRect();
+      const seg = segs[name];
+      if (!seg) continue;
+      seg.style.left = `${Math.round(r.left - origin)}px`;
+      seg.style.width = `${Math.max(48, Math.round(r.width))}px`;
     }
   }
 
@@ -359,31 +416,35 @@
     ribbon.setAttribute("role", "toolbar");
     ribbon.setAttribute("aria-label", "NotebookTools");
     ribbon.innerHTML = `
-      <div class="ntr-brand" title="NotebookTools"><img src="${chrome.runtime.getURL("icons/icon48.png")}" alt="" width="18" height="18"></div>
-      <div class="ntr-group" data-group="Organize"><span class="ntr-gname">Organize</span><div class="ntr-items" data-ntr-organize></div></div>
-      <div class="ntr-group" data-group="Chat"><span class="ntr-gname">Chat</span><div class="ntr-items">
-        ${btn("copy", "copy", "Copy", "Copy the chat as Markdown", " is-tertiary")}
-        ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
-      </div></div>
-      <div class="ntr-group" data-group="Sources"><span class="ntr-gname">Sources</span><div class="ntr-items">
-        ${btn("add-links", "link", "Add links", "Paste many links or YouTube videos at once")}
-        ${btn("from-tabs", "tabs", "Open tabs", "Add your open browser tabs as sources", " is-secondary")}
-        ${btn("manage-sources", "list", "Manage", "Search, organize, de-duplicate and export sources")}
-      </div></div>
-      <div class="ntr-group" data-group="Create"><span class="ntr-gname">Create</span><div class="ntr-items">
-        ${btn("blog", "doc", "Blog", "Write a blog post with slide images from this notebook")}
-        ${btn("carousel", "carousel", "Carousel", "Turn a slide deck into a LinkedIn or Instagram carousel")}
-        ${btn("snapdoc", "camera", "Snapshot doc", "Turn captured screenshots into a document")}
-        ${btn("studio-files", "studio", "Studio files", "Browse, rename and download Studio outputs", " is-secondary")}
-      </div></div>
-      <div class="ntr-group" data-group="Capture"><span class="ntr-gname">Capture</span><div class="ntr-items">
-        ${btn("snapshot", "camera", "Snapshot", "Capture part of the screen (Alt+Shift+S)")}
-      </div></div>
-      <div class="ntr-spacer"></div>
-      <div class="ntr-end">
-        <button type="button" class="ntr-btn ntr-pill" data-ntr="prompts" title="Insert a saved prompt (type / in the chat)">${icon("slash")}<span class="ntr-label">Prompts</span></button>
-        ${btn("hub", "grid", "All notebooks", "Open the NotebookTools notebooks table", " is-tertiary")}
-        <button type="button" class="ntr-btn ntr-icon ntr-collapse" data-ntr="collapse" title="${collapsed ? "Show labels" : "Compact ribbon"}">${icon("chevron", 15)}</button>
+      <div class="ntr-seg" data-seg="sources" role="group" aria-label="Sources tools">
+        <div class="ntr-brand" title="NotebookTools"><img src="${chrome.runtime.getURL("icons/icon48.png")}" alt="" width="18" height="18"></div>
+        <div class="ntr-group" data-group="Sources"><div class="ntr-items">
+          ${btn("add-links", "link", "Add links", "Paste many links or YouTube videos at once")}
+          ${btn("from-tabs", "tabs", "Open tabs", "Add your open browser tabs as sources", " is-secondary")}
+          ${btn("manage-sources", "list", "Manage", "Search, organize, de-duplicate and export sources")}
+          ${btn("snapshot", "camera", "Snapshot", "Capture part of the screen (Alt+Shift+S)", " is-tertiary")}
+        </div></div>
+      </div>
+      <div class="ntr-seg" data-seg="chat" role="group" aria-label="Chat tools">
+        <div class="ntr-group" data-group="Organize"><div class="ntr-items" data-ntr-organize></div></div>
+        <div class="ntr-group" data-group="Chat"><div class="ntr-items">
+          ${btn("copy", "copy", "Copy", "Copy the chat as Markdown", " is-tertiary")}
+          ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
+        </div></div>
+        <div class="ntr-spacer"></div>
+        <div class="ntr-end">
+          <button type="button" class="ntr-btn ntr-pill" data-ntr="prompts" title="Insert a saved prompt (type / in the chat)">${icon("slash")}<span class="ntr-label">Prompts</span></button>
+          ${btn("hub", "grid", "All notebooks", "Open the NotebookTools notebooks table", " is-tertiary")}
+          <button type="button" class="ntr-btn ntr-icon ntr-collapse" data-ntr="collapse" title="${collapsed ? "Show labels" : "Compact ribbon"}">${icon("chevron", 15)}</button>
+        </div>
+      </div>
+      <div class="ntr-seg" data-seg="studio" role="group" aria-label="Studio tools">
+        <div class="ntr-group" data-group="Create"><div class="ntr-items">
+          ${btn("studio-files", "studio", "Studio files", "Browse, rename and download Studio outputs")}
+          ${btn("blog", "doc", "Blog", "Write a blog post with slide images from this notebook")}
+          ${btn("carousel", "carousel", "Carousel", "Turn a slide deck into a LinkedIn or Instagram carousel", " is-secondary")}
+          ${btn("snapdoc", "camera", "Snapshot doc", "Turn captured screenshots into a document", " is-tertiary")}
+        </div></div>
       </div>`;
 
     ribbon.addEventListener("click", (event) => {
@@ -407,6 +468,8 @@
     if (!row) return;
     if (existing && existing.nextElementSibling === row) {
       existing.classList.toggle("is-dark", isDarkPage());
+      layoutSegments(existing, row);
+      fitRibbon(existing);
       return;
     }
     existing?.remove();
@@ -414,6 +477,7 @@
     row.parentElement.insertBefore(ribbon, row);
     document.documentElement.classList.add("ntr-on");
     renderOrganize(ribbon);
+    layoutSegments(ribbon, row);
     fitRibbon(ribbon);
     fitRow(row, ribbon);
   }
@@ -442,6 +506,7 @@
   });
   window.addEventListener("resize", () => {
     const ribbon = document.getElementById(RIBBON_ID);
+    if (ribbon) layoutSegments(ribbon, sizedRow || findPanelRow());
     if (ribbon) fitRibbon(ribbon);
     if (ribbon && sizedRow) fitRow(sizedRow, ribbon);
   });

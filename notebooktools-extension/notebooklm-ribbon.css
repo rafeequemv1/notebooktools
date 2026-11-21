@@ -223,31 +223,31 @@
 }
 
 /* Auto-fit levels (set by fitRibbon in JS) */
-.ntr[class*="fit-"] .ntr-gname {
+.ntr-seg[class*="fit-"] .ntr-gname {
   display: none;
 }
 
-.ntr.fit-2 .is-secondary .ntr-label,
-.ntr.fit-3 .is-secondary .ntr-label,
-.ntr.fit-3 .is-tertiary .ntr-label,
-.ntr.fit-4 .ntr-btn:not(.ntr-pill) .ntr-label {
+.ntr-seg.fit-2 .is-secondary .ntr-label,
+.ntr-seg.fit-3 .is-secondary .ntr-label,
+.ntr-seg.fit-3 .is-tertiary .ntr-label,
+.ntr-seg.fit-4 .ntr-btn:not(.ntr-pill) .ntr-label {
   display: none;
 }
 
-.ntr.fit-2 .is-secondary,
-.ntr.fit-3 .is-secondary,
-.ntr.fit-3 .is-tertiary,
-.ntr.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
+.ntr-seg.fit-2 .is-secondary,
+.ntr-seg.fit-3 .is-secondary,
+.ntr-seg.fit-3 .is-tertiary,
+.ntr-seg.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
   justify-content: center;
   padding: 0;
   width: 32px;
 }
 
-.ntr.fit-4 .ntr-chip {
+.ntr-seg.fit-4 .ntr-chip {
   padding: 0 6px;
 }
 
-.ntr.fit-4 .ntr-chip svg:last-child {
+.ntr-seg.fit-4 .ntr-chip svg:last-child {
   display: none;
 }
 
@@ -405,4 +405,46 @@ html.ntr-on #notebooktools-snapshot-workflow-bar {
   position: fixed !important;
   top: var(--ntr-anchor-top, 0) !important;
   width: 1px !important;
+}
+
+/* Three bars: Sources, Chat and Studio tools, each above its own panel */
+.ntr-seg {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  height: 100%;
+  min-width: 0;
+}
+
+.ntr:not(.is-split) .ntr-seg + .ntr-seg {
+  border-left: 1px solid var(--ntr-line);
+  margin-left: 6px;
+  padding-left: 6px;
+}
+
+.ntr:not(.is-split) .ntr-seg[data-seg="chat"] {
+  flex: 1 1 auto;
+}
+
+.ntr.is-split {
+  background: transparent;
+  border: 0;
+  overflow: visible;
+  padding: 0;
+}
+
+.ntr.is-split .ntr-seg {
+  background: var(--ntr-bg);
+  border: 1px solid var(--ntr-line);
+  border-radius: 16px;
+  bottom: 0;
+  overflow: hidden;
+  padding: 0 6px;
+  position: absolute;
+  top: 0;
+}
+
+.ntr.is-split .ntr-group:first-child {
+  padding-left: 2px;
 }
