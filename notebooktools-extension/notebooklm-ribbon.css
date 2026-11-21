@@ -502,71 +502,78 @@ html.ntr-on #notebooktools-snapshot-workflow-bar {
 }
 
 /* ==========================================================================
-   Minimal look: no bar frames; every control is a soft filled pill like
-   NotebookLM's own "+ Add sources" button.
+   Minimal look: each group is one soft rounded bar (like NotebookLM's
+   "+ Add sources" button); controls inside are flat with a hover tint.
    ========================================================================== */
 .ntr {
-  --ntr-btn-bg: rgba(31, 31, 31, 0.05);
-  --ntr-btn-hover: rgba(31, 31, 31, 0.09);
+  --ntr-bar: rgba(31, 31, 31, 0.04);
+  --ntr-btn-hover: rgba(31, 31, 31, 0.07);
   --ntr-btn-on: rgba(11, 87, 208, 0.1);
 }
 
 .ntr.is-dark {
-  --ntr-btn-bg: rgba(255, 255, 255, 0.07);
-  --ntr-btn-hover: rgba(255, 255, 255, 0.12);
+  --ntr-bar: rgba(255, 255, 255, 0.06);
+  --ntr-btn-hover: rgba(255, 255, 255, 0.09);
   --ntr-btn-on: rgba(138, 180, 248, 0.16);
 }
 
-.ntr,
+/* The bar(s) */
+.ntr:not(.is-split),
 .ntr.is-split .ntr-seg {
-  background: transparent;
+  background: var(--ntr-bar);
   border: 0;
+  border-radius: 999px;
   box-shadow: none;
 }
 
+.ntr.is-split {
+  background: transparent;
+}
+
 .ntr.is-split .ntr-seg {
-  gap: 6px;
-  padding: 0;
+  gap: 2px;
+  padding: 0 5px;
 }
 
 .ntr:not(.is-split) .ntr-seg + .ntr-seg {
   border-left: 0;
 }
 
+/* Groups: separated by a faint hairline, no labels */
 .ntr-group {
-  gap: 6px;
-  padding: 0;
-}
-
-.ntr-group + .ntr-group {
-  margin-left: 6px;
+  gap: 2px;
+  padding: 0 4px;
 }
 
 .ntr-group + .ntr-group::before {
-  display: none;
+  background: var(--ntr-line);
+  height: 16px;
 }
 
 .ntr-items {
-  gap: 6px;
+  gap: 2px;
 }
 
+/* Controls: flat, rounded, tint on hover */
 .ntr-btn,
 .ntr-chip,
 .ntr-pill {
-  background: var(--ntr-btn-bg);
+  background: transparent;
   border: 0;
   border-radius: 999px;
   color: var(--ntr-ink);
-  font: 500 13.5px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
-  height: 36px;
+  font: 500 13px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+  height: 32px;
   margin: 0;
-  max-width: none;
-  padding: 0 14px;
+  max-width: 190px;
+  padding: 0 11px;
 }
 
-.ntr-btn svg {
+.ntr-btn svg,
+.ntr-pill svg,
+.ntr-pill:hover svg {
   color: var(--ntr-ink);
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .ntr-btn:hover,
@@ -576,30 +583,24 @@ html.ntr-on #notebooktools-snapshot-workflow-bar {
   color: var(--ntr-ink);
 }
 
-.ntr-pill svg,
-.ntr-pill:hover svg {
-  color: var(--ntr-ink);
-}
-
-/* Icon-only controls: round */
 .ntr-icon,
 .ntr-collapse {
   justify-content: center;
   padding: 0;
-  width: 36px;
+  width: 32px;
 }
 
 .ntr-icon.is-on {
   background: var(--ntr-btn-on);
 }
 
-/* Type filter as a pill */
+/* Type filter: flat like the buttons */
 .ntr-typefilter {
-  background: var(--ntr-btn-bg);
+  background: transparent;
   border: 0;
   border-radius: 999px;
-  height: 36px;
-  padding: 0 8px 0 14px;
+  height: 32px;
+  padding: 0 6px 0 11px;
 }
 
 .ntr-typefilter:hover {
@@ -611,19 +612,14 @@ html.ntr-on #notebooktools-snapshot-workflow-bar {
 }
 
 .ntr-typefilter select {
-  font: 500 13.5px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+  font: 500 13px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
 }
 
-/* Shrunk to icons: round buttons */
+/* Shrunk to icons: round */
 .ntr-seg.fit-2 .is-secondary,
 .ntr-seg.fit-3 .is-secondary,
 .ntr-seg.fit-3 .is-tertiary,
 .ntr-seg.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
   padding: 0;
-  width: 36px;
-}
-
-.ntr-seg.fit-4 .ntr-chip,
-.ntr-seg.fit-4 .ntr-pill {
-  padding: 0 10px;
+  width: 32px;
 }
