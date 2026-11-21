@@ -1507,3 +1507,172 @@ textarea {
   padding: 8px 10px;
 }
 .source-note[hidden] { display: none; }
+
+/* ==========================================================================
+   Side panel: minimal, light layout (applies last; scoped to the side panel)
+   ========================================================================== */
+.sidepanel-body {
+  font-weight: 400;
+}
+
+.sidepanel-body .sidepanel-header {
+  margin-bottom: 12px;
+}
+
+.sidepanel-body .sidepanel-logo {
+  height: 14px;
+  opacity: 0.92;
+  width: auto;
+}
+
+.sidepanel-body .sidepanel-header .header-icon-btn {
+  border: 0;
+  color: var(--nt-muted);
+  height: 28px;
+  width: 28px;
+}
+
+.sidepanel-body .sp-account-chip {
+  background: transparent;
+  border: 1px solid var(--nt-line);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  height: 26px;
+  padding: 0 10px;
+}
+
+/* Tabs: four equal columns, one height, quiet active state */
+.sidepanel-body .sidepanel-tabs {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--nt-line);
+  border-radius: 0;
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 0 14px;
+  padding: 0;
+}
+
+.sidepanel-body .sidepanel-tab {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--nt-muted);
+  display: flex;
+  font-size: 12.5px;
+  font-weight: 500;
+  height: 36px;
+  justify-content: center;
+  margin-bottom: -1px;
+  min-width: 0;
+  padding: 0 4px;
+  position: relative;
+  white-space: nowrap;
+}
+
+.sidepanel-body .sidepanel-tab:hover {
+  background: transparent;
+  color: var(--nt-ink);
+}
+
+.sidepanel-body .sidepanel-tab.is-active {
+  background: transparent;
+  border-bottom: 2px solid var(--nt-ink);
+  box-shadow: none;
+  color: var(--nt-ink);
+  font-weight: 500;
+}
+
+/* Pro tag: tiny badge above the label, never changes the tab's size */
+.sidepanel-body .sidepanel-tab .sp-pro-tag {
+  background: var(--nt-accent-soft);
+  border-radius: 4px;
+  color: var(--nt-accent);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin: 0;
+  padding: 2px 3px;
+  pointer-events: none;
+  position: absolute;
+  right: 50%;
+  text-transform: uppercase;
+  top: 1px;
+  transform: translateX(calc(50% + 2.6em));
+  vertical-align: baseline;
+}
+
+/* Destination row */
+.sidepanel-body .sp-target {
+  margin-bottom: 10px;
+}
+
+.sidepanel-body .sp-target-label {
+  font-size: 11.5px;
+}
+
+.sidepanel-body .sp-target-btn,
+.sidepanel-body .sp-target select,
+.sidepanel-body .notebook-select {
+  border-color: var(--nt-line);
+  border-radius: 10px;
+  box-shadow: none;
+  font-size: 13px;
+  min-height: 36px;
+}
+
+/* Cards: flat, hairline borders */
+.sidepanel-body .sp-card {
+  background: var(--nt-surface);
+  border: 1px solid var(--nt-line-soft, var(--nt-line));
+  border-radius: 12px;
+  box-shadow: none;
+  padding: 10px 12px;
+}
+
+.sidepanel-body .sp-stack {
+  gap: 8px;
+}
+
+.sidepanel-body .import-modes {
+  background: var(--nt-bg);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.sidepanel-body .import-mode {
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  height: 28px;
+}
+
+.sidepanel-body .import-mode.is-active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.sidepanel-body .source-preview,
+.sidepanel-body .sp-studio-hint {
+  color: var(--nt-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.sidepanel-body .sp-more-summary {
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* Primary action: slimmer */
+.sidepanel-body .sp-primary {
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  height: 38px;
+  min-height: 38px;
+}
