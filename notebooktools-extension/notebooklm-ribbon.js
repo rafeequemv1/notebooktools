@@ -31,6 +31,7 @@
     doc: '<path d="M7 3.5h7l4.5 4.5v12.5H7z"/><path d="M14 3.5V8h4.5M9.5 12.5h6M9.5 16h6"/>',
     carousel: '<rect x="6.5" y="4.5" width="11" height="15" rx="2"/><path d="M3.5 7v10M20.5 7v10"/>',
     chevron: '<path d="m6 15 6-6 6 6"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
     caret: '<path d="m7 10 5 5 5-5"/>'
   };
 
@@ -309,6 +310,19 @@
     });
   }
 
+  // One Import button: links (pasted, YouTube, playlists) or open tabs, both
+  // handled in the toolbar dropdown's Bulk tab.
+  function importMenu(anchor) {
+    const items = [
+      ["links", "link", "Paste links or YouTube URLs"],
+      ["tabs", "tabs", "Add my open tabs"]
+    ].map(([value, ic, label]) => `<button type="button" class="ntr-menu-item" data-value="${value}">${icon(ic, 15)}<span>${esc(label)}</span></button>`).join("");
+    openMenu(anchor, `<p class="ntr-menu-title">Import to this notebook</p>${items}`, (value) => {
+      closeMenu();
+      send({ type: "notebooktools-ribbon-open-panel", query: value === "tabs" ? "panel=bulk&tabs=1" : "panel=bulk" });
+    });
+  }
+
   /* ---------- Actions ---------- */
   async function copyChat() {
     try {
@@ -375,6 +389,7 @@
         return renderOrganize(ribbon);
       case "copy": return copyChat();
       case "export": return exportMenu(button);
+      case "import": return importMenu(button);
       case "add-links": return send({ type: "notebooktools-ribbon-open-panel", query: "panel=bulk" });
       case "from-tabs": return send({ type: "notebooktools-ribbon-open-panel", query: "panel=bulk&tabs=1" });
       case "manage-sources":
@@ -414,8 +429,7 @@
       <div class="ntr-seg" data-seg="sources" role="group" aria-label="Sources tools">
         <div class="ntr-brand" title="NotebookTools"><img src="${chrome.runtime.getURL("icons/icon48.png")}" alt="" width="18" height="18"></div>
         <div class="ntr-group" data-group="Sources"><div class="ntr-items">
-          ${btn("add-links", "link", "Add links", "Paste many links or YouTube videos at once")}
-          ${btn("from-tabs", "tabs", "Open tabs", "Add your open browser tabs as sources", " is-secondary")}
+          <button type="button" class="ntr-btn has-caret" data-ntr="import" title="Import links, YouTube videos or your open tabs">${icon("plus")}<span class="ntr-label">Import</span>${icon("caret", 13)}</button>
           ${btn("manage-sources", "list", "Manage", "Search, filter, de-duplicate, refresh and delete sources")}
         </div></div>
         <div class="ntr-group" data-group="Filter"><div class="ntr-items" data-ntr-typefilter></div></div>

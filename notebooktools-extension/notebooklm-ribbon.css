@@ -500,3 +500,130 @@ html.ntr-on #notebooktools-snapshot-workflow-bar {
 .ntr.is-split .ntr-typefilter select {
   max-width: 104px;
 }
+
+/* ==========================================================================
+   Minimal look: no bar frames; every control is a soft filled pill like
+   NotebookLM's own "+ Add sources" button.
+   ========================================================================== */
+.ntr {
+  --ntr-btn-bg: rgba(31, 31, 31, 0.05);
+  --ntr-btn-hover: rgba(31, 31, 31, 0.09);
+  --ntr-btn-on: rgba(11, 87, 208, 0.1);
+}
+
+.ntr.is-dark {
+  --ntr-btn-bg: rgba(255, 255, 255, 0.07);
+  --ntr-btn-hover: rgba(255, 255, 255, 0.12);
+  --ntr-btn-on: rgba(138, 180, 248, 0.16);
+}
+
+.ntr,
+.ntr.is-split .ntr-seg {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.ntr.is-split .ntr-seg {
+  gap: 6px;
+  padding: 0;
+}
+
+.ntr:not(.is-split) .ntr-seg + .ntr-seg {
+  border-left: 0;
+}
+
+.ntr-group {
+  gap: 6px;
+  padding: 0;
+}
+
+.ntr-group + .ntr-group {
+  margin-left: 6px;
+}
+
+.ntr-group + .ntr-group::before {
+  display: none;
+}
+
+.ntr-items {
+  gap: 6px;
+}
+
+.ntr-btn,
+.ntr-chip,
+.ntr-pill {
+  background: var(--ntr-btn-bg);
+  border: 0;
+  border-radius: 999px;
+  color: var(--ntr-ink);
+  font: 500 13.5px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+  height: 36px;
+  margin: 0;
+  max-width: none;
+  padding: 0 14px;
+}
+
+.ntr-btn svg {
+  color: var(--ntr-ink);
+  opacity: 0.85;
+}
+
+.ntr-btn:hover,
+.ntr-chip:hover,
+.ntr-pill:hover {
+  background: var(--ntr-btn-hover);
+  color: var(--ntr-ink);
+}
+
+.ntr-pill svg,
+.ntr-pill:hover svg {
+  color: var(--ntr-ink);
+}
+
+/* Icon-only controls: round */
+.ntr-icon,
+.ntr-collapse {
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+}
+
+.ntr-icon.is-on {
+  background: var(--ntr-btn-on);
+}
+
+/* Type filter as a pill */
+.ntr-typefilter {
+  background: var(--ntr-btn-bg);
+  border: 0;
+  border-radius: 999px;
+  height: 36px;
+  padding: 0 8px 0 14px;
+}
+
+.ntr-typefilter:hover {
+  background: var(--ntr-btn-hover);
+}
+
+.ntr-typefilter.is-on {
+  background: var(--ntr-btn-on);
+}
+
+.ntr-typefilter select {
+  font: 500 13.5px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+}
+
+/* Shrunk to icons: round buttons */
+.ntr-seg.fit-2 .is-secondary,
+.ntr-seg.fit-3 .is-secondary,
+.ntr-seg.fit-3 .is-tertiary,
+.ntr-seg.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
+  padding: 0;
+  width: 36px;
+}
+
+.ntr-seg.fit-4 .ntr-chip,
+.ntr-seg.fit-4 .ntr-pill {
+  padding: 0 10px;
+}
