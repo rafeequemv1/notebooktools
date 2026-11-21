@@ -279,3 +279,148 @@
 .notebooktools-snapshot-workflow-toast.is-error {
   background: #b91c1c;
 }
+
+/* ==========================================================================
+   Minimal look, matching the NotebookTools topbar menus. Theme via .is-dark
+   (set from the NotebookLM page when the panel opens).
+   ========================================================================== */
+.notebooktools-snapshot-workflow-menu {
+  --nsw-bg: #ffffff;
+  --nsw-panel: #f3f6fb;
+  --nsw-line: rgba(31, 31, 31, 0.1);
+  --nsw-ink: #1f1f1f;
+  --nsw-muted: #5f6368;
+  --nsw-hover: rgba(11, 87, 208, 0.07);
+  --nsw-accent: #0b57d0;
+  --nsw-on-accent: #ffffff;
+  --nsw-ok: #188038;
+  --nsw-ok-soft: rgba(24, 128, 56, 0.1);
+  --nsw-err: #c5221f;
+  background: var(--nsw-bg);
+  border-color: var(--nsw-line);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  color: var(--nsw-ink);
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 10px;
+  padding: 14px;
+}
+
+.notebooktools-snapshot-workflow-menu.is-dark {
+  --nsw-bg: #232427;
+  --nsw-panel: #2c2d31;
+  --nsw-line: rgba(255, 255, 255, 0.1);
+  --nsw-ink: #e8eaed;
+  --nsw-muted: #9aa0a6;
+  --nsw-hover: rgba(138, 180, 248, 0.12);
+  --nsw-accent: #a8c7fa;
+  --nsw-on-accent: #062e6f;
+  --nsw-ok: #81c995;
+  --nsw-ok-soft: rgba(129, 201, 149, 0.12);
+  --nsw-err: #f2b8b5;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.notebooktools-snapshot-workflow-menu * {
+  font-family: inherit;
+}
+
+.notebooktools-snapshot-workflow-menu.is-complete {
+  border-color: var(--nsw-ok);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+.notebooktools-snapshot-workflow-summary,
+.notebooktools-snapshot-workflow-status {
+  color: var(--nsw-ink);
+  font-size: 13px;
+}
+
+.notebooktools-snapshot-workflow-detail,
+.notebooktools-snapshot-workflow-complete-note,
+.notebooktools-snapshot-workflow-steps {
+  color: var(--nsw-muted);
+}
+
+.notebooktools-snapshot-workflow-menu.is-doc-ready .notebooktools-snapshot-workflow-status,
+.notebooktools-snapshot-workflow-steps li.is-done {
+  color: var(--nsw-ok);
+}
+
+.notebooktools-snapshot-workflow-steps li.is-active {
+  color: var(--nsw-accent);
+}
+
+.notebooktools-snapshot-workflow-steps li.is-error {
+  color: var(--nsw-err);
+}
+
+.notebooktools-snapshot-workflow-ready-banner {
+  background: var(--nsw-ok-soft);
+  border: 0;
+  color: var(--nsw-ok);
+  font-weight: 500;
+}
+
+.notebooktools-snapshot-workflow-option,
+.notebooktools-snapshot-workflow-option.secondary {
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--nsw-ink);
+  font-size: 13px;
+  font-weight: 400;
+  min-height: 36px;
+  padding: 8px 10px;
+}
+
+.notebooktools-snapshot-workflow-option.secondary {
+  color: var(--nsw-muted);
+}
+
+.notebooktools-snapshot-workflow-option:hover:not(:disabled) {
+  background: var(--nsw-hover);
+  border-color: transparent;
+}
+
+.notebooktools-snapshot-workflow-option.is-primary,
+.notebooktools-snapshot-workflow-option.is-primary:hover:not(:disabled) {
+  background: var(--nsw-accent);
+  border-radius: 999px;
+  color: var(--nsw-on-accent);
+  font-weight: 500;
+  text-align: center;
+}
+
+.notebooktools-snapshot-workflow-option.is-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.notebooktools-snapshot-workflow-downloads-label {
+  color: var(--nsw-muted);
+}
+
+.notebooktools-snapshot-workflow-download-btn {
+  background: transparent;
+  border: 1px solid var(--nsw-line);
+  color: var(--nsw-ink);
+  font-weight: 500;
+}
+
+.notebooktools-snapshot-workflow-download-btn:hover:not(:disabled) {
+  background: var(--nsw-hover);
+  border-color: var(--nsw-accent);
+  color: var(--nsw-accent);
+}
+
+.notebooktools-snapshot-workflow-download-btn.is-primary {
+  background: var(--nsw-accent);
+  border-color: var(--nsw-accent);
+  color: var(--nsw-on-accent);
+}
+
+.notebooktools-snapshot-workflow-toast {
+  background: #1f1f1f;
+  border-radius: 999px;
+  font-family: "Google Sans Text", Roboto, Arial, sans-serif;
+}

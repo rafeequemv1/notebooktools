@@ -1,3 +1,5 @@
+/* Blog from slide deck: dropdown panel. Same minimal look as the NotebookTools
+   topbar menus (.ntr-menu); follows NotebookLM's light / dark theme via .is-dark. */
 .notebooktools-blog-workflow-bar {
   display: inline-flex;
   margin-right: 8px;
@@ -11,24 +13,21 @@
 
 .notebooktools-blog-workflow-btn {
   align-items: center;
-  background: #fff7ed;
-  border: 1px solid rgba(234, 88, 12, 0.18);
+  background: transparent;
+  border: 1px solid rgba(31, 31, 31, 0.14);
   border-radius: 999px;
-  color: #9a3412;
+  color: inherit;
   cursor: pointer;
   display: inline-flex;
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
+  font: 500 13px/1 "Google Sans", Roboto, Arial, sans-serif;
   gap: 6px;
-  height: 34px;
+  height: 32px;
   padding: 0 14px;
 }
 
 .notebooktools-blog-workflow-btn:hover,
 .notebooktools-blog-workflow-wrap.is-open .notebooktools-blog-workflow-btn {
-  background: #ffedd5;
-  border-color: rgba(234, 88, 12, 0.28);
+  background: rgba(11, 87, 208, 0.07);
 }
 
 .notebooktools-blog-workflow-btn:disabled {
@@ -36,21 +35,60 @@
   opacity: 0.72;
 }
 
+/* ---------- Panel ---------- */
 .notebooktools-blog-workflow-menu {
-  background: #ffffff;
-  border: 1px solid rgba(15, 15, 15, 0.1);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --nbw-bg: #ffffff;
+  --nbw-panel: #f3f6fb;
+  --nbw-line: rgba(31, 31, 31, 0.1);
+  --nbw-ink: #1f1f1f;
+  --nbw-muted: #5f6368;
+  --nbw-hover: rgba(11, 87, 208, 0.07);
+  --nbw-accent: #0b57d0;
+  --nbw-on-accent: #ffffff;
+  --nbw-ok: #188038;
+  --nbw-ok-soft: rgba(24, 128, 56, 0.1);
+  --nbw-err: #c5221f;
+  --nbw-err-soft: rgba(197, 34, 31, 0.08);
+  background: var(--nbw-bg);
+  border: 1px solid var(--nbw-line);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  color: var(--nbw-ink);
   display: none;
-  gap: 8px;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 10px;
   grid-template-columns: 1fr;
   left: 0;
-  min-width: 280px;
   max-width: min(320px, calc(100vw - 16px));
-  padding: 12px;
+  min-width: 290px;
+  padding: 14px;
   position: fixed;
   top: 0;
   z-index: 2147483647;
+}
+
+.notebooktools-blog-workflow-menu.is-dark {
+  --nbw-bg: #232427;
+  --nbw-panel: #2c2d31;
+  --nbw-line: rgba(255, 255, 255, 0.1);
+  --nbw-ink: #e8eaed;
+  --nbw-muted: #9aa0a6;
+  --nbw-hover: rgba(138, 180, 248, 0.12);
+  --nbw-accent: #a8c7fa;
+  --nbw-on-accent: #062e6f;
+  --nbw-ok: #81c995;
+  --nbw-ok-soft: rgba(129, 201, 149, 0.12);
+  --nbw-err: #f2b8b5;
+  --nbw-err-soft: rgba(242, 184, 181, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.notebooktools-blog-workflow-menu *,
+.notebooktools-blog-workflow-menu *::before,
+.notebooktools-blog-workflow-menu *::after {
+  box-sizing: border-box;
+  font-family: inherit;
 }
 
 .notebooktools-blog-workflow-menu.is-open {
@@ -60,43 +98,140 @@
 }
 
 .notebooktools-blog-workflow-menu.is-busy {
-  min-width: 300px;
   max-width: min(360px, calc(100vw - 16px));
+  min-width: 300px;
 }
 
-.notebooktools-blog-workflow-form {
+.notebooktools-blog-workflow-menu.is-images {
+  max-width: min(400px, calc(100vw - 16px));
+  min-width: 320px;
+}
+
+.notebooktools-blog-workflow-form,
+.notebooktools-blog-workflow-progress,
+.notebooktools-blog-workflow-downloads {
   display: grid;
   gap: 8px;
 }
 
-.notebooktools-blog-workflow-progress {
-  display: grid;
-  gap: 8px;
+.notebooktools-blog-workflow-intro {
+  color: var(--nbw-muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin: 0 2px 2px;
 }
 
+.notebooktools-blog-workflow-label,
+.notebooktools-blog-workflow-history-title,
+.notebooktools-blog-workflow-downloads-label {
+  color: var(--nbw-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 2px 2px 0;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.notebooktools-blog-workflow-select {
+  appearance: none;
+  background: var(--nbw-panel)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--nbw-ink);
+  cursor: pointer;
+  font-size: 13px;
+  height: 38px;
+  padding: 0 34px 0 12px;
+  width: 100%;
+}
+
+.notebooktools-blog-workflow-select:focus {
+  border-color: var(--nbw-accent);
+  outline: none;
+}
+
+.notebooktools-blog-workflow-select option {
+  background: var(--nbw-bg);
+  color: var(--nbw-ink);
+}
+
+/* Actions: one filled primary, the rest flat menu rows */
+.notebooktools-blog-workflow-option {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--nbw-ink);
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  font-weight: 400;
+  gap: 10px;
+  min-height: 36px;
+  padding: 0 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.notebooktools-blog-workflow-option svg {
+  color: var(--nbw-muted);
+  flex: none;
+}
+
+.notebooktools-blog-workflow-option:hover:not(:disabled) {
+  background: var(--nbw-hover);
+}
+
+.notebooktools-blog-workflow-option.is-primary {
+  background: var(--nbw-accent);
+  border-radius: 999px;
+  color: var(--nbw-on-accent);
+  font-weight: 500;
+  justify-content: center;
+  margin: 2px 0 4px;
+  min-height: 38px;
+}
+
+.notebooktools-blog-workflow-option.is-primary svg {
+  color: currentColor;
+}
+
+.notebooktools-blog-workflow-option.is-primary:hover:not(:disabled) {
+  background: var(--nbw-accent);
+  filter: brightness(1.08);
+}
+
+.notebooktools-blog-workflow-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---------- Progress ---------- */
 .notebooktools-blog-workflow-status {
-  color: #202124;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
+  color: var(--nbw-ink);
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1.4;
   margin: 0;
 }
 
 .notebooktools-blog-workflow-menu.is-complete .notebooktools-blog-workflow-status {
-  color: #15803d;
+  color: var(--nbw-ok);
 }
 
 .notebooktools-blog-workflow-progress-bar {
-  background: #f1f3f4;
+  background: var(--nbw-panel);
   border-radius: 999px;
-  height: 8px;
+  height: 4px;
   overflow: hidden;
   width: 100%;
 }
 
 .notebooktools-blog-workflow-progress-fill {
-  background: linear-gradient(90deg, #fb923c, #ea580c);
+  background: var(--nbw-accent);
   border-radius: inherit;
   display: block;
   height: 100%;
@@ -104,11 +239,73 @@
   width: 0;
 }
 
-.notebooktools-blog-workflow-progress-count {
-  color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 11px;
+.notebooktools-blog-workflow-menu.is-error .notebooktools-blog-workflow-progress-fill {
+  background: var(--nbw-err);
+}
+
+.notebooktools-blog-workflow-progress-count,
+.notebooktools-blog-workflow-progress-note,
+.notebooktools-blog-workflow-complete-note {
+  color: var(--nbw-muted);
+  font-size: 11.5px;
+  line-height: 1.4;
   margin: 0;
+}
+
+.notebooktools-blog-workflow-progress-note {
+  display: none;
+}
+
+.notebooktools-blog-workflow-steps {
+  color: var(--nbw-muted);
+  display: grid;
+  font-size: 12px;
+  gap: 2px;
+  line-height: 1.35;
+  list-style: none;
+  margin: 0;
+  max-height: 140px;
+  overflow: auto;
+  padding: 0;
+}
+
+.notebooktools-blog-workflow-step {
+  border-radius: 8px;
+  padding: 5px 8px 5px 22px;
+  position: relative;
+}
+
+.notebooktools-blog-workflow-step::before {
+  background: var(--nbw-line);
+  border-radius: 50%;
+  content: "";
+  height: 7px;
+  left: 8px;
+  position: absolute;
+  top: 10px;
+  width: 7px;
+}
+
+.notebooktools-blog-workflow-step.is-active {
+  background: var(--nbw-hover);
+  color: var(--nbw-ink);
+}
+
+.notebooktools-blog-workflow-step.is-active::before {
+  background: var(--nbw-accent);
+}
+
+.notebooktools-blog-workflow-step.is-done::before {
+  background: var(--nbw-ok);
+}
+
+.notebooktools-blog-workflow-step.is-error {
+  background: var(--nbw-err-soft);
+  color: var(--nbw-err);
+}
+
+.notebooktools-blog-workflow-step.is-error::before {
+  background: var(--nbw-err);
 }
 
 .notebooktools-blog-workflow-thumbs {
@@ -117,20 +314,21 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   max-height: 220px;
   overflow: auto;
-  padding-right: 2px;
+}
+
+.notebooktools-blog-workflow-menu.is-images .notebooktools-blog-workflow-thumbs {
+  max-height: 280px;
 }
 
 .notebooktools-blog-workflow-thumb {
-  background: #f8f9fa;
-  border: 1px solid #e5e7eb;
+  background: var(--nbw-panel);
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .notebooktools-blog-workflow-thumb.is-new {
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.18);
-  transform: scale(1.02);
+  box-shadow: 0 0 0 2px var(--nbw-accent);
 }
 
 .notebooktools-blog-workflow-thumb img {
@@ -141,87 +339,62 @@
 }
 
 .notebooktools-blog-workflow-thumb-label {
-  color: #5f6368;
+  color: var(--nbw-muted);
   display: block;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 10.5px;
   padding: 4px 6px 6px;
 }
 
-.notebooktools-blog-workflow-menu.is-images {
-  min-width: 320px;
-  max-width: min(400px, calc(100vw - 16px));
-}
-
-.notebooktools-blog-workflow-menu.is-images .notebooktools-blog-workflow-thumbs {
-  max-height: 280px;
-}
-
-.notebooktools-blog-workflow-downloads {
-  display: grid;
-  gap: 8px;
-}
-
-.notebooktools-blog-workflow-downloads-label {
-  color: #202124;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  margin: 0;
-  text-align: center;
-}
-
-.notebooktools-blog-workflow-download-buttons {
-  display: grid;
+/* ---------- Download format pills ---------- */
+.notebooktools-blog-workflow-download-buttons,
+.notebooktools-blog-workflow-history-formats {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.notebooktools-blog-workflow-download-buttons-btn {
-  background: #15803d;
-  border: 1px solid #15803d;
-  border-radius: 8px;
-  color: #ffffff;
+.notebooktools-blog-workflow-download-buttons-btn,
+.notebooktools-blog-workflow-history-format {
+  background: transparent;
+  border: 1px solid var(--nbw-line);
+  border-radius: 999px;
+  color: var(--nbw-ink);
   cursor: pointer;
-  font-family: Roboto, Arial, sans-serif;
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  height: 30px;
+  letter-spacing: 0.02em;
+  min-width: 52px;
+  padding: 0 10px;
+}
+
+.notebooktools-blog-workflow-history-format {
   font-size: 11px;
-  font-weight: 600;
-  padding: 8px 6px;
+  height: 26px;
+  min-width: 44px;
 }
 
-.notebooktools-blog-workflow-download-buttons-btn:hover {
-  background: #166534;
-  border-color: #166534;
+.notebooktools-blog-workflow-download-buttons-btn:hover:not(:disabled),
+.notebooktools-blog-workflow-history-format:hover:not(:disabled) {
+  background: var(--nbw-hover);
+  border-color: var(--nbw-accent);
+  color: var(--nbw-accent);
 }
 
-.notebooktools-blog-workflow-download-buttons-btn:disabled {
+.notebooktools-blog-workflow-download-buttons-btn:disabled,
+.notebooktools-blog-workflow-history-format:disabled {
   cursor: wait;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-.notebooktools-blog-workflow-complete-note {
-  color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 11px;
-  line-height: 1.4;
-  margin: 0;
-  text-align: center;
-}
-
+/* ---------- Recent blogs ---------- */
 .notebooktools-blog-workflow-history {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--nbw-line);
   display: grid;
   gap: 8px;
-  margin-top: 4px;
-  padding-top: 10px;
-}
-
-.notebooktools-blog-workflow-history-title {
-  color: #202124;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  margin: 0;
+  margin-top: 2px;
+  padding-top: 12px;
 }
 
 .notebooktools-blog-workflow-history-list {
@@ -231,63 +404,23 @@
   overflow: auto;
 }
 
-.notebooktools-blog-workflow-steps {
-  color: #3c4043;
-  display: grid;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 11px;
-  gap: 4px;
-  line-height: 1.35;
-  list-style: none;
-  margin: 0;
-  max-height: 140px;
-  overflow: auto;
-  padding: 0;
-}
-
-.notebooktools-blog-workflow-step {
-  background: #f8f9fa;
-  border-left: 3px solid #dadce0;
-  border-radius: 6px;
-  padding: 6px 8px;
-}
-
-.notebooktools-blog-workflow-step.is-active {
-  background: #ecfdf5;
-  border-left-color: #15803d;
-}
-
-.notebooktools-blog-workflow-step.is-done {
-  border-left-color: #86efac;
-  opacity: 0.92;
-}
-
-.notebooktools-blog-workflow-step.is-error {
-  background: #fef2f2;
-  border-left-color: #dc2626;
-  color: #991b1b;
-}
-
-.notebooktools-blog-workflow-menu.is-error .notebooktools-blog-workflow-progress-fill {
-  background: #dc2626;
-}
-
 .notebooktools-blog-workflow-history-empty {
-  color: #80868b;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 11px;
-  margin: 0;
+  color: var(--nbw-muted);
+  font-size: 12px;
+  margin: 0 2px;
 }
 
 .notebooktools-blog-workflow-history-item {
-  align-items: start;
-  background: #f8f9fa;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background: var(--nbw-panel);
+  border: 1px solid transparent;
+  border-radius: 10px;
   display: grid;
   gap: 8px;
-  grid-template-columns: 1fr;
-  padding: 8px;
+  padding: 10px;
+}
+
+.notebooktools-blog-workflow-history-item.is-latest {
+  border-color: var(--nbw-ok);
 }
 
 .notebooktools-blog-workflow-history-copy {
@@ -297,125 +430,26 @@
 }
 
 .notebooktools-blog-workflow-history-copy strong {
-  color: #202124;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
+  color: var(--nbw-ink);
+  font-size: 13px;
+  font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .notebooktools-blog-workflow-history-copy span {
-  color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 10px;
-}
-
-.notebooktools-blog-workflow-history-item.is-latest {
-  border-color: rgba(21, 128, 61, 0.35);
-  box-shadow: 0 0 0 1px rgba(21, 128, 61, 0.12);
-}
-
-.notebooktools-blog-workflow-history-formats {
-  display: grid;
-  gap: 4px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.notebooktools-blog-workflow-history-format {
-  background: #ffffff;
-  border: 1px solid #dadce0;
-  border-radius: 6px;
-  color: #202124;
-  cursor: pointer;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 5px 4px;
-}
-
-.notebooktools-blog-workflow-history-format:hover {
-  background: #f1f3f4;
-}
-
-.notebooktools-blog-workflow-history-format:disabled {
-  cursor: wait;
-  opacity: 0.7;
-}
-
-.notebooktools-blog-workflow-progress-note {
-  color: #80868b;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 10px;
-  line-height: 1.35;
-  margin: 0;
-}
-
-.notebooktools-blog-workflow-intro {
-  color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  line-height: 1.4;
-  margin: 0;
-}
-
-.notebooktools-blog-workflow-label {
-  color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
+  color: var(--nbw-muted);
   font-size: 11px;
-  font-weight: 600;
-  margin: 0;
 }
 
-.notebooktools-blog-workflow-select {
-  border: 1px solid #dadce0;
-  border-radius: 8px;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  padding: 7px 8px;
-  width: 100%;
-}
-
-.notebooktools-blog-workflow-option {
-  background: #f8f9fa;
-  border: 1px solid #dadce0;
-  border-radius: 8px;
-  color: #202124;
-  cursor: pointer;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 8px 10px;
-  text-align: left;
-}
-
-.notebooktools-blog-workflow-option:hover {
-  background: #f1f3f4;
-}
-
-.notebooktools-blog-workflow-option.is-primary {
-  background: #ea580c;
-  border-color: #ea580c;
-  color: #ffffff;
-}
-
-.notebooktools-blog-workflow-option.is-primary:hover {
-  background: #c2410c;
-}
-
-.notebooktools-blog-workflow-option:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-
+/* ---------- Toast ---------- */
 .notebooktools-blog-workflow-toast {
-  background: #111827;
+  background: #1f1f1f;
   border-radius: 999px;
   bottom: 24px;
   color: #ffffff;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 13px;
+  font: 13px/1.4 "Google Sans Text", Roboto, Arial, sans-serif;
   left: 50%;
   max-width: min(92vw, 420px);
   padding: 10px 16px;
@@ -426,5 +460,10 @@
 }
 
 .notebooktools-blog-workflow-toast.is-error {
-  background: #b91c1c;
+  background: #b3261e;
+}
+
+/* Only show the progress line while a blog is being built */
+.notebooktools-blog-workflow-menu:not(.is-busy) .notebooktools-blog-workflow-progress-bar {
+  display: none;
 }

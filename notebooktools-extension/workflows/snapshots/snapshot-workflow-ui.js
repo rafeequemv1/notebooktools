@@ -79,8 +79,19 @@
     getMenu()?.classList.remove("is-open");
   }
 
+  function isDarkPage() {
+    for (const node of [document.body, document.documentElement]) {
+      const m = node && getComputedStyle(node).backgroundColor.match(/[\d.]+/g);
+      if (!m || Number(m[3] ?? 1) === 0) continue;
+      const [r, g, b] = m.map(Number);
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.45;
+    }
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches || false;
+  }
+
   function openMenu() {
     getWrap()?.classList.add("is-open");
+    getMenu()?.classList.toggle("is-dark", isDarkPage());
     getMenu()?.classList.add("is-open");
     positionMenu();
     requestAnimationFrame(positionMenu);
@@ -717,7 +728,7 @@
 
     if (!session?.snapshots?.length) {
       summary.textContent =
-        "Capture snapshots (NotebookTools icon → Snapshots), then run Auto to write an article with inline images and download DOC.";
+        "Capture screens from the NotebookTools menu (Snapshots), then turn them into an article with the images inline.";
       return;
     }
 
@@ -735,7 +746,7 @@
     menu.innerHTML = `
       <div class="notebooktools-snapshot-workflow-form">
         <p class="notebooktools-snapshot-workflow-summary"></p>
-        <button type="button" class="notebooktools-snapshot-workflow-option is-primary" data-action="auto">Auto: prompt → inline images → DOC</button>
+        <button type="button" class="notebooktools-snapshot-workflow-option is-primary" data-action="auto">Write article from snapshots</button>
         <button type="button" class="notebooktools-snapshot-workflow-option" data-action="discuss">Discuss snapshots</button>
         <button type="button" class="notebooktools-snapshot-workflow-option" data-action="blog">Create blog with images</button>
         <button type="button" class="notebooktools-snapshot-workflow-option" data-action="guide">Create web app tutorial</button>

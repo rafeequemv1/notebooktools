@@ -1,6 +1,13 @@
 (function () {
   "use strict";
 
+  const svg = (d) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ICONS = {
+    spark: svg('<path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>'),
+    copy: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>'),
+    doc: svg('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>')
+  };
+
   const BAR_ID = "notebooktools-blog-workflow-bar";
   const WRAP_ID = "notebooktools-blog-workflow-wrap";
   const MENU_ID = "notebooktools-blog-workflow-menu";
@@ -78,8 +85,19 @@
     getMenu()?.classList.remove("is-open");
   }
 
+  function isDarkPage() {
+    for (const node of [document.body, document.documentElement]) {
+      const m = node && getComputedStyle(node).backgroundColor.match(/[\d.]+/g);
+      if (!m || Number(m[3] ?? 1) === 0) continue;
+      const [r, g, b] = m.map(Number);
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.45;
+    }
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches || false;
+  }
+
   function openMenu() {
     getWrap()?.classList.add("is-open");
+    getMenu()?.classList.toggle("is-dark", isDarkPage());
     getMenu()?.classList.add("is-open");
     positionMenu();
     requestAnimationFrame(positionMenu);
@@ -953,7 +971,7 @@
     const intro = document.createElement("p");
     intro.className = "notebooktools-blog-workflow-intro";
     intro.textContent =
-      "Import deck PDF, auto-write the blog, then download as HTML, CSV, DOC, or PDF.";
+      "Turn a slide deck into a blog post, with the slides as images.";
 
     const label = document.createElement("label");
     label.className = "notebooktools-blog-workflow-label";
@@ -968,7 +986,7 @@
     const autoButton = document.createElement("button");
     autoButton.type = "button";
     autoButton.className = "notebooktools-blog-workflow-option is-primary";
-    autoButton.textContent = "Auto blog: import PDF → write → download";
+    autoButton.innerHTML = `${ICONS.spark}<span>Write blog from deck</span>`;
     autoButton.addEventListener("click", () => {
       void runFullAutoBlog();
     });
@@ -976,7 +994,7 @@
     const copyButton = document.createElement("button");
     copyButton.type = "button";
     copyButton.className = "notebooktools-blog-workflow-option";
-    copyButton.textContent = "Manual: copy blog prompt";
+    copyButton.innerHTML = `${ICONS.copy}<span>Copy blog prompt</span>`;
     copyButton.addEventListener("click", () => {
       void runCopyPrompt();
     });
@@ -984,7 +1002,7 @@
     const downloadButton = document.createElement("button");
     downloadButton.type = "button";
     downloadButton.className = "notebooktools-blog-workflow-option";
-    downloadButton.textContent = "Manual: build blog file from current chat";
+    downloadButton.innerHTML = `${ICONS.doc}<span>Build blog from current chat</span>`;
     downloadButton.addEventListener("click", () => {
       void runDownloadDoc();
     });
