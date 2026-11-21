@@ -2,68 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&amp;family=Google+Sans+Text:wght@400;500;700&amp;display=swap" rel="stylesheet">
     <title>NotebookTools</title>
-    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="popup.css">
+    <script src="theme.js"></script>
   </head>
   <body>
-    <main class="app">
-      <section class="card">
-        <div class="brand">
-          <img class="brand-logo" src="logo.png" alt="NotebookTools" width="148" height="18">
-          <p class="brand-tagline" id="pageContext">Import to NotebookLM</p>
+    <main class="qp">
+      <header class="qp-head">
+        <img class="qp-logo" src="logo.png" alt="NotebookTools" height="14">
+        <button type="button" class="qp-icon" id="openPanel" title="Open the full panel (Bulk, Snapshots, Prompts)" aria-label="Open the full panel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M14.5 4.5v15"/></svg>
+        </button>
+      </header>
+
+      <section class="qp-page" id="pageCard">
+        <img class="qp-favicon" id="pageIcon" alt="" width="18" height="18" hidden>
+        <div class="qp-page-text">
+          <p class="qp-kind" id="pageKind">Current page</p>
+          <p class="qp-title" id="pageTitle">Loading…</p>
         </div>
-
-        <div class="import-modes" role="tablist" aria-label="Import type">
-          <button class="import-mode is-active" id="modeWebpage" type="button" data-mode="webpage">Webpage</button>
-          <button class="import-mode" id="modeYouTube" type="button" data-mode="youtube">YouTube</button>
-          <button class="import-mode" id="modeText" type="button" data-mode="text" hidden>Selected text</button>
-        </div>
-
-        <p class="source-preview" id="sourcePreview">Current tab</p>
-
-        <label for="notebookSearch">Search notebooks</label>
-        <input id="notebookSearch" type="search" placeholder="Search notebooks..." autocomplete="off">
-
-        <label for="notebookLmSelect">Notebook</label>
-        <select id="notebookLmSelect">
-          <option value="">Loading notebooks...</option>
-        </select>
-
-        <p class="field-divider">or create new</p>
-
-        <input id="newNotebookLmName" type="text" placeholder="Notebook name" aria-label="New notebook name">
-
-        <section class="studio-panel" id="studioSection" hidden>
-          <p class="field-divider">Studio</p>
-          <label for="studioArtifactType">Create</label>
-          <select id="studioArtifactType" aria-label="Studio output type"></select>
-          <label class="embedded-toggle studio-toggle" for="studioOpenTabToggle">
-            <input type="checkbox" id="studioOpenTabToggle" checked>
-            <span class="embedded-toggle-ui" aria-hidden="true"></span>
-            <span class="embedded-toggle-text">Open notebook in new tab</span>
-          </label>
-          <button class="button" id="studioButton" type="button">Create mind map</button>
-        </section>
-
-        <button class="button" id="importButton" type="button">Add current tab to NotebookLM</button>
-
-        <div class="footer-row">
-          <button class="text-button" id="refreshNotebookLmButton" type="button">Refresh list</button>
-          <a class="text-button" id="openNotebookLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open notebook</a>
-        </div>
-
-        <div class="status" id="status" role="status"></div>
       </section>
+
+      <label class="qp-label" for="notebookSelect">Notebook</label>
+      <div class="qp-row">
+        <select id="notebookSelect" class="qp-select" aria-label="Notebook"><option value="">Loading notebooks…</option></select>
+        <button type="button" class="qp-icon qp-new" id="toggleNew" title="New notebook" aria-label="New notebook" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <input id="newNotebookName" class="qp-input" type="text" placeholder="New notebook name" maxlength="120" hidden>
+
+      <button type="button" class="qp-primary" id="addButton" disabled>Add to notebook</button>
+      <p class="qp-status" id="status" role="status" aria-live="polite"></p>
+
+      <nav class="qp-links" aria-label="More">
+        <button type="button" class="qp-link" data-panel="bulk">Bulk import</button>
+        <span aria-hidden="true">·</span>
+        <button type="button" class="qp-link" id="openHub">All notebooks</button>
+        <span aria-hidden="true">·</span>
+        <button type="button" class="qp-link" data-panel="import">Full panel</button>
+      </nav>
     </main>
 
     <script src="utils.js"></script>
     <script src="notebooklm-client.js"></script>
-    <script src="settings.js"></script>
-    <script src="studio-import.js"></script>
     <script src="notebook-picker.js"></script>
+    <script src="stats.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

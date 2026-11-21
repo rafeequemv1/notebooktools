@@ -1,339 +1,137 @@
-const params = new URLSearchParams(window.location.search);
-const initialMode = params.get("mode") || "webpage";
+/* Toolbar dropdown: add the current page or YouTube video to a notebook in
+   one step. Bigger tools (Bulk, Snapshots, Prompts) open in the side panel. */
+const $ = (selector) => document.querySelector(selector);
 
-const pageContext = document.querySelector("#pageContext");
-const sourcePreview = document.querySelector("#sourcePreview");
-const importButton = document.querySelector("#importButton");
-const statusBox = document.querySelector("#status");
-const modeButtons = [...document.querySelectorAll(".import-mode")];
-const modeTextButton = document.querySelector("#modeText");
-const openNotebookLink = document.querySelector("#openNotebookLink");
-const studioSection = document.querySelector("#studioSection");
-const studioArtifactType = document.querySelector("#studioArtifactType");
-const studioOpenTabToggle = document.querySelector("#studioOpenTabToggle");
-const studioButton = document.querySelector("#studioButton");
+const addButton = $("#addButton");
+const statusEl = $("#status");
+const newNameInput = $("#newNotebookName");
+const toggleNew = $("#toggleNew");
 
-let activeMode = initialMode;
 let activeTab = null;
-let pendingText = null;
+let mode = "";
 
-const MODE_LABELS = {
-  webpage: "Add current tab to NotebookLM",
-  youtube: "Import video",
-  text: "Import selection"
-};
+function setStatus(message, kind = "") {
+  statusEl.className = `qp-status${kind ? ` is-${kind}` : ""}`;
+  statusEl.textContent = message || "";
+}
 
 const picker = NotebookToolsPicker.create({
-  searchInput: document.querySelector("#notebookSearch"),
-  selectEl: document.querySelector("#notebookLmSelect"),
-  newNameInput: document.querySelector("#newNotebookLmName"),
-  refreshButton: document.querySelector("#refreshNotebookLmButton"),
+  selectEl: $("#notebookSelect"),
+  newNameInput,
   onStatus: (message, options = {}) => {
-    NotebookToolsUI.setImportStatus(statusBox, {
-      message,
-      type: options.type || "success",
-      loading: options.loading === true,
-      done: options.done === true
-    });
-  }
+    if (options.type === "error") {
+      statusEl.className = "qp-status is-error";
+      statusEl.innerHTML = "";
+      statusEl.append(`${message} `);
+      const link = document.createElement("a");
+      link.href = "https://notebook.google.com/";
+      link.target = "_blank";
+      link.textContent = "Open NotebookLM";
+      statusEl.append(link);
+    } else if (options.loading) {
+      setStatus(message);
+    }
+  },
+  onNotebookChange: updateButton
 });
 
-function setStatus(message, options = {}) {
-  NotebookToolsUI.setImportStatus(statusBox, {
-    message,
-    type: options.type || "success",
-    loading: options.loading === true,
-    done: options.done === true
-  });
+function updateButton() {
+  const hasTarget = Boolean(picker.selectedNotebookId() || picker.selectedNotebookName());
+  addButton.disabled = !mode || !hasTarget;
+  addButton.textContent = mode === "youtube" ? "Add video to notebook" : "Add page to notebook";
 }
 
-function showOpenNotebook(notebookId, artifactId = "", artifactLabel = "") {
-  if (!openNotebookLink || !notebookId) {
-    return;
-  }
+async function describeTab() {
+  [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const url = activeTab?.url || "";
+  const youtube = NotebookToolsStore.normalizeYouTubeVideoUrl(url);
+  const webpage = NotebookToolsStore.normalizeWebpageUrl(url);
+  mode = youtube ? "youtube" : webpage ? "webpage" : "";
 
-  openNotebookLink.hidden = false;
-
-  if (artifactId && NotebookToolsStore.notebookArtifactUrl) {
-    openNotebookLink.textContent = `Open ${(artifactLabel || "output").toLowerCase()}`;
-    openNotebookLink.href = NotebookToolsStore.notebookArtifactUrl(notebookId, artifactId);
-    return;
-  }
-
-  openNotebookLink.textContent = "Open notebook";
-  openNotebookLink.href = `https://notebook.google.com/notebook/${encodeURIComponent(notebookId)}`;
-}
-
-function isStudioAvailable() {
-  if (activeMode === "text") {
-    return false;
-  }
-
-  if (activeMode === "youtube") {
-    return Boolean(NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || ""));
-  }
-
-  if (activeMode === "webpage") {
-    return Boolean(NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || ""));
-  }
-
-  return false;
-}
-
-function shouldShowStudioSection() {
-  return activeMode === "webpage" || activeMode === "youtube";
-}
-
-function updateStudioSectionVisibility() {
-  if (!studioSection) {
-    return;
-  }
-
-  const visible = shouldShowStudioSection();
-  const available = isStudioAvailable();
-
-  studioSection.hidden = !visible;
-  studioSection.classList.toggle("is-unavailable", visible && !available);
-
-  if (studioButton) {
-    studioButton.disabled = !available;
-  }
-
-  if (studioArtifactType) {
-    studioArtifactType.disabled = !available;
-  }
-
-  if (studioOpenTabToggle) {
-    studioOpenTabToggle.disabled = !available;
+  $("#pageKind").textContent = mode === "youtube" ? "YouTube video" : mode === "webpage" ? "Web page" : "This page";
+  $("#pageTitle").textContent = mode ? activeTab.title || url : "Can't be imported. Open a web page or YouTube video.";
+  if (mode && activeTab.favIconUrl && /^https?:/.test(activeTab.favIconUrl)) {
+    const icon = $("#pageIcon");
+    icon.src = activeTab.favIconUrl;
+    icon.hidden = false;
   }
 }
 
-function getActiveTab() {
-  return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-      resolve(tab || null);
-    });
-  });
-}
-
-async function loadPendingText() {
-  if (initialMode !== "text") {
-    return;
-  }
-
-  const stored = await chrome.storage.session.get("pendingTextImport");
-  pendingText = stored.pendingTextImport || null;
-
-  if (!pendingText?.text) {
-    pageContext.textContent = "No text selected";
-    sourcePreview.textContent = "Highlight text on a page, then right-click → Add to NotebookLM.";
-    return;
-  }
-
-  if (modeTextButton) {
-    modeTextButton.hidden = false;
-  }
-  activeMode = "text";
-  pageContext.textContent = "Selected text";
-  sourcePreview.textContent = pendingText.text.slice(0, 140) + (pendingText.text.length > 140 ? "..." : "");
-}
-
-function updateModeUi() {
-  for (const button of modeButtons) {
-    button.classList.toggle("is-active", button.dataset.mode === activeMode);
-    button.hidden = button.dataset.mode === "text" && !pendingText?.text;
-  }
-
-  importButton.textContent = MODE_LABELS[activeMode] || "Import";
-
-  if (activeMode === "text" && pendingText?.text) {
-    sourcePreview.textContent = pendingText.text.slice(0, 140) + (pendingText.text.length > 140 ? "..." : "");
-    updateStudioSectionVisibility();
-    return;
-  }
-
-  const youtubeUrl = NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || "");
-  const webpageUrl = NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || "");
-
-  if (activeMode === "youtube") {
-    sourcePreview.textContent = youtubeUrl
-      ? (activeTab?.title || youtubeUrl)
-      : "Open a YouTube video to import it.";
-    updateStudioSectionVisibility();
-    return;
-  }
-
-  sourcePreview.textContent = webpageUrl
-    ? (activeTab?.title || webpageUrl)
-    : "Open any webpage to import it as a NotebookLM source.";
-
-  updateStudioSectionVisibility();
-}
-
-function setActiveMode(mode) {
-  if (mode === "text" && !pendingText?.text) {
-    return;
-  }
-
-  if (mode === "youtube" && !NotebookToolsStore.isYouTubeUrl(activeTab?.url || "")) {
-    setStatus("Open a YouTube video first.", { type: "error" });
-    return;
-  }
-
-  if (mode === "webpage" && !NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || "")) {
-    setStatus("This page cannot be imported as a webpage.", { type: "error" });
-    return;
-  }
-
-  activeMode = mode;
-  updateModeUi();
-  setStatus("");
-}
-
-async function runStudioImport() {
-  const artifactType = NotebookToolsStudioImport.getSelectedArtifactType(studioArtifactType);
-  const artifactLabel = NotebookToolsStudioImport.getArtifactLabel(artifactType);
-  const idleLabel = `Create ${artifactLabel.toLowerCase()}`;
-
-  NotebookToolsUI.setImportButtonState(studioButton, true, idleLabel);
-  picker.setBusy(true);
-  setStatus(`Preparing ${artifactLabel.toLowerCase()}...`, { loading: true });
-
+async function addToNotebook() {
+  addButton.disabled = true;
   try {
-    if (!isStudioAvailable()) {
-      throw new Error("Studio is not available for this page.");
-    }
-
-    const targetNotebook = await picker.resolveTarget();
-    const kind = activeMode === "youtube" ? "youtube" : "webpage";
-    const sourceUrl =
-      kind === "youtube"
-        ? NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || "")
-        : NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || "");
-
-    if (!sourceUrl) {
-      throw new Error(kind === "youtube" ? "Open a YouTube video first." : "This page cannot be imported.");
-    }
-
-    showOpenNotebook(targetNotebook.id);
-    await NotebookToolsSettings.openYoutubeStudioTabIfEnabled(targetNotebook.id);
-
-    const result = await NotebookToolsStudioImport.runPipeline({
-      notebookId: targetNotebook.id,
-      kind,
-      url: sourceUrl,
-      artifactType,
-      onStatus: ({ message, loading, done, type }) => {
-        setStatus(message, { loading, done, type });
-      }
-    });
-
-    document.querySelector("#newNotebookLmName").value = "";
-    await picker.refresh({ silent: true });
-    document.querySelector("#notebookLmSelect").value = targetNotebook.id;
-    showOpenNotebook(targetNotebook.id, result.artifact.id, result.artifactLabel);
-    await NotebookToolsSettings.openYoutubeStudioArtifactIfEnabled(
-      targetNotebook.id,
-      result.artifact.id
-    );
-    setStatus(`${result.artifactLabel} ready.`, { done: true });
-  } catch (error) {
-    setStatus(error.message || "Studio import failed.", { type: "error" });
-  } finally {
-    NotebookToolsUI.setImportButtonState(studioButton, false, idleLabel);
-    picker.setBusy(false);
-  }
-}
-
-async function runImport() {
-  NotebookToolsUI.setImportButtonState(importButton, true, MODE_LABELS[activeMode] || "Import");
-  setStatus("Preparing import...", { loading: true });
-
-  try {
-    const targetNotebook = await picker.resolveTarget();
-
-    setStatus("Sending to NotebookLM...", { loading: true });
-
-    if (activeMode === "youtube") {
-      const youtubeUrl = NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || "");
-
-      if (!youtubeUrl) {
-        throw new Error("Open a YouTube video first.");
-      }
-
-      await NotebookToolsNotebookLM.addYoutubeToNotebookLm(targetNotebook.id, youtubeUrl);
-    } else if (activeMode === "text") {
-      if (!pendingText?.text) {
-        throw new Error("No selected text found.");
-      }
-
-      await NotebookToolsNotebookLM.addTextToNotebookLm(
-        targetNotebook.id,
-        pendingText.title,
-        pendingText.text
-      );
-      await chrome.storage.session.remove("pendingTextImport");
+    const target = await picker.resolveTarget();
+    setStatus("Sending to NotebookLM…");
+    if (mode === "youtube") {
+      await NotebookToolsNotebookLM.addYoutubeToNotebookLm(target.id, NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab.url));
     } else {
-      const webpageUrl = NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || "");
-
-      if (!webpageUrl) {
-        throw new Error("This page cannot be imported as a webpage.");
-      }
-
-      await NotebookToolsNotebookLM.addWebpageToNotebookLm(targetNotebook.id, webpageUrl);
+      await NotebookToolsNotebookLM.addWebpageToNotebookLm(target.id, NotebookToolsStore.normalizeWebpageUrl(activeTab.url));
     }
-
-    document.querySelector("#newNotebookLmName").value = "";
-    await picker.refresh({ silent: true });
-    document.querySelector("#notebookLmSelect").value = targetNotebook.id;
-    showOpenNotebook(targetNotebook.id);
-    await NotebookToolsSettings.openNotebookIfEnabled(targetNotebook.id);
-    setStatus(`Added to "${targetNotebook.title}"`, { done: true });
+    void NotebookToolsStats?.recordImport?.();
+    statusEl.className = "qp-status is-ok";
+    statusEl.innerHTML = "";
+    statusEl.append(`Added to "${target.title}". `);
+    const link = document.createElement("a");
+    link.href = `https://notebook.google.com/notebook/${encodeURIComponent(target.id)}`;
+    link.target = "_blank";
+    link.textContent = "Open";
+    statusEl.append(link);
+    newNameInput.value = "";
+    newNameInput.hidden = true;
+    toggleNew.setAttribute("aria-expanded", "false");
   } catch (error) {
-    setStatus(error.message || "Import failed.", { type: "error" });
+    setStatus(error.message || "Import failed.", "error");
   } finally {
-    NotebookToolsUI.setImportButtonState(importButton, false, MODE_LABELS[activeMode] || "Import");
+    updateButton();
   }
 }
 
-async function initPopup() {
-  activeTab = await getActiveTab();
-  await loadPendingText();
+// Opens the side panel in this window (the click in the popup counts as the
+// user gesture Chrome requires), then closes the popup.
+async function openPanel(panel = "import") {
+  const path = `sidepanel.html${panel === "import" ? "" : `?panel=${panel}`}`;
+  try {
+    await chrome.sidePanel.setOptions({ path, enabled: true });
+    await chrome.sidePanel.open({ windowId: activeTab?.windowId ?? chrome.windows.WINDOW_ID_CURRENT });
+  } catch (_error) {
+    chrome.windows.create({ url: chrome.runtime.getURL(path), type: "popup", width: 420, height: 760 });
+  }
+  window.close();
+}
 
-  const youtubeUrl = NotebookToolsStore.normalizeYouTubeVideoUrl(activeTab?.url || "");
-  const webpageUrl = NotebookToolsStore.normalizeWebpageUrl(activeTab?.url || "");
-
-  if (initialMode === "text" && pendingText?.text) {
-    activeMode = "text";
-  } else if (youtubeUrl) {
-    activeMode = "youtube";
-  } else if (webpageUrl) {
-    activeMode = "webpage";
+addButton.addEventListener("click", addToNotebook);
+toggleNew.addEventListener("click", () => {
+  const open = newNameInput.hidden;
+  newNameInput.hidden = !open;
+  toggleNew.setAttribute("aria-expanded", String(open));
+  if (open) {
+    newNameInput.focus();
   } else {
-    activeMode = "webpage";
+    newNameInput.value = "";
+    newNameInput.dispatchEvent(new Event("input"));
   }
+});
+newNameInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !addButton.disabled) addToNotebook();
+});
+$("#openPanel").addEventListener("click", () => openPanel("import"));
+document.querySelectorAll("[data-panel]").forEach((button) => {
+  button.addEventListener("click", () => openPanel(button.dataset.panel));
+});
+$("#openHub").addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("notebooks.html") });
+  window.close();
+});
 
-  pageContext.textContent = activeMode === "youtube"
-    ? "YouTube video"
-    : activeMode === "text"
-      ? "Selected text"
-      : "Current webpage";
-
-  modeButtons.forEach((button) => {
-    button.addEventListener("click", () => setActiveMode(button.dataset.mode));
-  });
-
-  importButton.addEventListener("click", runImport);
-  studioButton?.addEventListener("click", runStudioImport);
-  await NotebookToolsStudioImport.initControls({
-    typeSelect: studioArtifactType,
-    openTabToggle: studioOpenTabToggle,
-    studioButton
-  });
-
+(async () => {
+  await NotebookToolsTheme.init();
+  await describeTab();
   picker.bind();
-  updateModeUi();
-  picker.refresh({ silent: true });
-}
-
-initPopup();
+  updateButton();
+  await picker.refresh({ silent: true });
+  if (!picker.notebooks.length) {
+    setStatus("");
+    picker.refresh();
+  }
+  updateButton();
+})();

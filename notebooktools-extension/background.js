@@ -125,7 +125,9 @@ setupContextMenu();
 
 if (chrome.sidePanel?.setPanelBehavior) {
   chrome.sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: true })
+    // The toolbar icon opens the quick-import dropdown (popup.html); the
+    // side panel opens from there, the ribbon, shortcuts and context menus.
+    .setPanelBehavior({ openPanelOnActionClick: false })
     .catch((error) => {
       console.warn("NotebookTools sidePanel.setPanelBehavior:", error);
     });
