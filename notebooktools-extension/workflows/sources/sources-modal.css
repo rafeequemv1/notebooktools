@@ -296,3 +296,39 @@
 .nts-link:hover {
   background: var(--nts-accent-soft);
 }
+
+/* Studio type icons (Manage Studio files) */
+.nts-ficon {
+  align-items: center;
+  color: var(--fc);
+  display: inline-flex;
+  flex: none;
+  height: 32px;
+  justify-content: center;
+  width: 28px;
+}
+
+.nts-backdrop:not(.is-dark) .nts-ficon {
+  color: color-mix(in srgb, var(--fc) 80%, #000);
+}
+
+.nts-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.nts-text .nts-title {
+  flex: none;
+}
+
+.nts-meta {
+  color: var(--nts-muted);
+  font-size: 12px;
+}
+
+.nts-list .nts-row:has(.nts-ficon) {
+  min-height: 52px;
+}

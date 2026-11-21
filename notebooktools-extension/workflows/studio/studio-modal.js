@@ -24,6 +24,24 @@
     return window.NotebookToolsNotebookLM;
   }
 
+  // Icons and colours per Studio type, close to NotebookLM's own Studio list.
+  const TYPE_ICONS = {
+    Audio: ["#7aa7f5", '<path d="M5 10v4M9 7v10M13 4v16M17 8v8"/><path d="M20 3.5l.7 1.6 1.6.7-1.6.7L20 8.1l-.7-1.6-1.6-.7 1.6-.7z" fill="currentColor" stroke="none"/>'],
+    Video: ["#5bb974", '<rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10.5 5-3v9l-5-3"/>'],
+    "Slide deck": ["#f0717f", '<rect x="3" y="5" width="18" height="13" rx="2"/><path d="M7 5v13"/>'],
+    Report: ["#c58af9", '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor" stroke="none"/>'],
+    Quiz: ["#4ecde6", '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9.6 9.5a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .9-1 1.6M12 16.4h.01"/>'],
+    Flashcards: ["#f4c430", '<rect x="4" y="7" width="12" height="13" rx="2.5"/><path d="M8 4h9a3 3 0 0 1 3 3v10"/>'],
+    Infographic: ["#f4c430", '<path d="M5 20V11M10 20V5M15 20v-6M20 20V9"/>'],
+    "Mind map": ["#a78bfa", '<rect x="3" y="9.5" width="6" height="5" rx="1.2"/><rect x="15" y="3.5" width="6" height="5" rx="1.2"/><rect x="15" y="15.5" width="6" height="5" rx="1.2"/><path d="M9 12h3M12 6v12M12 6h3M12 18h3"/>'],
+    "Data table": ["#5bb974", '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M3.5 14.5h17M10 9.5v10"/>']
+  };
+
+  function typeIcon(type) {
+    const [color, path] = TYPE_ICONS[type] || ["#9aa0a6", '<rect x="4" y="4" width="16" height="16" rx="3"/>'];
+    return `<span class="nts-ficon" style="--fc:${color}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${path}</svg></span>`;
+  }
+
   function statusLabel(status) {
     if (!status || status === "ready") return "";
     if (/generat|progress|pending/i.test(status)) return "Generating…";
@@ -93,10 +111,11 @@
             return `
             <label class="nts-row${state.selected.has(a.id) ? " is-selected" : ""}">
               <input type="checkbox" data-id="${esc(a.id)}"${state.selected.has(a.id) ? " checked" : ""}>
-              <span class="nts-type">${esc(a.type)}</span>
-              <span class="nts-title" title="${esc(a.title)}">${esc(a.title)}</span>
-              ${status ? `<span class="nts-host">${esc(status)}</span>` : ""}
-              ${a.duration ? `<span class="nts-host">${esc(a.duration)}</span>` : ""}
+              ${typeIcon(a.type)}
+              <span class="nts-text">
+                <span class="nts-title" title="${esc(a.title)}">${esc(a.title)}</span>
+                <span class="nts-meta">${[a.type, a.duration, status].filter(Boolean).map(esc).join(" · ")}</span>
+              </span>
               ${link ? `<a class="nts-link" href="${esc(link)}" target="_blank" rel="noopener noreferrer" data-stop>${a.downloadUrl ? "Download" : "Open"}</a>` : ""}
             </label>`;
           }).join("")}
