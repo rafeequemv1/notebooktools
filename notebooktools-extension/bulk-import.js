@@ -152,7 +152,7 @@ const NotebookToolsBulkImportUI = (() => {
   }
 
   async function addOpenTabs() {
-    const tabs = await chrome.tabs.query({ currentWindow: true });
+    const tabs = await chrome.tabs.query({ windowId: await NotebookToolsStore.browserWindowId() });
     const candidates = [];
 
     for (const tab of tabs) {
@@ -221,7 +221,7 @@ const NotebookToolsBulkImportUI = (() => {
     setStatus("Extracting links from page...", { loading: true });
 
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
 
       if (!tab?.id) {
         throw new Error("No active tab found.");
@@ -291,7 +291,7 @@ const NotebookToolsBulkImportUI = (() => {
       };
     }
 
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
 
     if (!NotebookToolsStore.isYouTubeBatchUrl(tab?.url || "")) {
       throw new Error("Open a YouTube playlist or channel /videos page first.");
@@ -358,7 +358,7 @@ const NotebookToolsBulkImportUI = (() => {
   }
 
   async function loadYouTubeBatchPreview({ force = false } = {}) {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
 
     if (!NotebookToolsStore.isYouTubeBatchUrl(tab?.url || "")) {
       NotebookToolsYouTubeBatchPreview.reset();
@@ -582,7 +582,7 @@ const NotebookToolsBulkImportUI = (() => {
       return;
     }
 
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
     const batch = NotebookToolsStore.classifyYouTubeBatchUrl(tab?.url || "");
 
     if (!batch) {

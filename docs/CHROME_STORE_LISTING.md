@@ -1,4 +1,4 @@
-# Chrome Web Store listing: NotebookTools v0.12.0
+# Chrome Web Store listing: NotebookTools v0.13.0
 
 This replaces `version 0.1/CHROME_STORE_LISTING.md`, which was written for v0.2.3.
 NotebookTools is already live in the store (ID `fhjgbniefbimnklnnomlhkkiekcjddmj`),
@@ -11,7 +11,7 @@ bash scripts/build-extension-zip.sh
 ```
 
 Upload `dist/notebooktools-extension.zip`. It is built from `notebooktools-extension/`
-(v0.12.0). Do not upload the old `version 0.1/extension` folder.
+(v0.13.0). Do not upload the old `version 0.1/extension` folder.
 
 ---
 
@@ -53,7 +53,7 @@ PRO: $49 ONCE, LIFETIME ACCESS
 HOW IT WORKS
 1. Sign in to NotebookLM at notebooklm.google.com
 2. Install NotebookTools and pin it
-3. Import from any page, the side panel, or right-click
+3. Import from any page, the NotebookTools toolbar button, or right-click
 NotebookTools uses your existing Google sign-in for NotebookLM. A NotebookTools account is only needed for Pro.
 
 PRIVACY
@@ -99,11 +99,6 @@ Adds right-click actions: send highlighted text to NotebookLM, extract the links
 ### tabs
 ```
 Lists open tabs when the user chooses "add open tabs" for bulk import, detects NotebookLM tabs, and opens the notebooks dashboard and checkout pages.
-```
-
-### sidePanel
-```
-The extension's main interface (import, bulk queue, snapshots, prompts and account) runs in Chrome's side panel.
 ```
 
 ### scripting

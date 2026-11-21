@@ -1,4 +1,4 @@
-/* Account card in the side panel: sign in / create account, plan badge,
+/* Account card in the app (toolbar dropdown): sign in / create account, plan badge,
    Upgrade to Pro (Dodo checkout) and automatic plan refresh after paying. */
 const NotebookToolsAccountUI = (() => {
   const Account = window.NotebookToolsAccount;

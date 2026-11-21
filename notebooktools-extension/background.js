@@ -10,7 +10,7 @@ async function showUpgradeInTab(tabId, featureKey) {
       args: [featureKey]
     });
   } catch (_error) {
-    // Pages like chrome:// block scripts: show it in the side panel instead.
+    // Pages like chrome:// block scripts: show it in the app instead.
     await openSidePanel(tabId, `upgrade=${encodeURIComponent(featureKey)}`).catch(() => {});
   }
 }
@@ -77,21 +77,34 @@ function setupContextMenu() {
   });
 }
 
-async function openSidePanel(tabId, query = "") {
-  if (!tabId || !chrome.sidePanel?.open) {
-    return false;
-  }
+/* The app (Import, Bulk, Snapshots, Prompts) lives in the toolbar dropdown.
+   To open it on a given tab or with options, point the dropdown at a URL with
+   those options and open it; the page resets the URL once it has loaded. If
+   Chrome can't open the dropdown (no focused window), use a small window. */
+const APP_POPUP = "sidepanel.html?popup=1";
 
-  const path = query ? `sidepanel.html?${query}` : "sidepanel.html";
-
+async function openAppPanel(query = "") {
+  const popup = query ? `${APP_POPUP}&${query}` : APP_POPUP;
   try {
-    await chrome.sidePanel.setOptions({ tabId, path });
-    await chrome.sidePanel.open({ tabId });
+    await chrome.action.setPopup({ popup });
+    await chrome.action.openPopup();
     return true;
   } catch (error) {
-    console.warn("NotebookTools openSidePanel:", error);
-    return false;
+    await chrome.action.setPopup({ popup: APP_POPUP }).catch(() => {});
+    await chrome.windows.create({
+      url: chrome.runtime.getURL(`sidepanel.html${query ? `?${query}` : ""}`),
+      type: "popup",
+      width: 420,
+      height: 720,
+      focused: true
+    });
+    return true;
   }
+}
+
+// Kept for the callers below; the tab no longer matters.
+async function openSidePanel(_tabId, query = "") {
+  return openAppPanel(query);
 }
 
 async function openWelcomeOnce() {
@@ -123,15 +136,6 @@ chrome.runtime.onStartup.addListener(() => {
 
 setupContextMenu();
 
-if (chrome.sidePanel?.setPanelBehavior) {
-  chrome.sidePanel
-    // The toolbar icon opens the quick-import dropdown (popup.html); the
-    // side panel opens from there, the ribbon, shortcuts and context menus.
-    .setPanelBehavior({ openPanelOnActionClick: false })
-    .catch((error) => {
-      console.warn("NotebookTools sidePanel.setPanelBehavior:", error);
-    });
-}
 
 /* ---------- Dev auto-reload (unpacked installs only) ----------
    scripts/dev-sync.ps1 / dev-sync.sh keep a local clone in sync with GitHub
@@ -239,24 +243,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // --- Ribbon inside Gemini Notebook ---
   if (message?.type === "notebooktools-ribbon-open-panel") {
-    const tabId = sender?.tab?.id;
-    const path = `sidepanel.html?${message.query || ""}`;
-
-    if (tabId && chrome.sidePanel?.open) {
-      // Call open() right away so Chrome still counts the click as a user gesture.
-      chrome.sidePanel.setOptions({ tabId, path }).catch(() => {});
-      chrome.sidePanel
-        .open({ tabId })
-        .then(() => sendResponse({ ok: true }))
-        .catch(() => {
-          chrome.windows.create({ url: chrome.runtime.getURL(path), type: "popup", width: 420, height: 760 });
-          sendResponse({ ok: true, popup: true });
-        });
-    } else {
-      chrome.windows.create({ url: chrome.runtime.getURL(path), type: "popup", width: 420, height: 760 });
-      sendResponse({ ok: true, popup: true });
-    }
-
+    openAppPanel(message.query || "").then(() => sendResponse({ ok: true }));
     return true;
   }
 
@@ -563,28 +550,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return false;
 });
 
-async function startSnapshotCapture(tab, openPanel = true) {
+async function startSnapshotCapture(tab) {
   if (!tab?.id) {
     throw new Error("No active tab to capture.");
   }
 
+  // Snapshots are saved to the Snapshots tab of the toolbar dropdown. The
+  // dropdown isn't opened here: it would close as soon as the user clicks
+  // the page to draw the capture area.
   await NotebookToolsSnapshotCapture.startOverlay(tab.id);
-
-  if (!openPanel) {
-    return;
-  }
-
-  const opened = await openSidePanel(tab.id, "panel=snapshots");
-
-  if (!opened) {
-    await chrome.windows.create({
-      url: chrome.runtime.getURL("sidepanel.html?panel=snapshots"),
-      type: "popup",
-      width: 420,
-      height: 720,
-      focused: false
-    });
-  }
 }
 
 chrome.commands.onCommand.addListener(async (command) => {

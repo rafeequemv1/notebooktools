@@ -163,7 +163,7 @@ const NotebookToolsSnapshotWorkflow = {
 
     if (!snapshots.length) {
       throw new Error(
-        "No snapshots found. Open the Snapshots side panel, capture screens, then click Send snapshots to notebook."
+        "No snapshots found. Click the NotebookTools icon → Snapshots, capture screens, then click Send snapshots to notebook."
       );
     }
 
@@ -215,7 +215,7 @@ const NotebookToolsSnapshotWorkflow = {
     }
 
     if (!snapshots.length) {
-      throw new Error("No snapshots available for this session. Capture screenshots in the side panel first.");
+      throw new Error("No snapshots available for this session. Capture screenshots from the NotebookTools icon → Snapshots first.");
     }
 
     this.emitProgress(onProgress, {

@@ -268,8 +268,21 @@ function setImportButtonState(button, isLoading, idleLabel = "Import") {
   button.textContent = isLoading ? "Adding..." : idleLabel;
 }
 
+/* The browser window the user is working in (a normal window), so the app
+   reads the right tab whether it runs as the toolbar dropdown or popped out
+   into its own window. */
+async function browserWindowId() {
+  try {
+    const win = await chrome.windows.getLastFocused({ windowTypes: ["normal"] });
+    return win?.id ?? chrome.windows.WINDOW_ID_CURRENT;
+  } catch (_error) {
+    return chrome.windows.WINDOW_ID_CURRENT;
+  }
+}
+
 if (typeof window !== "undefined") {
   window.NotebookToolsStore = {
+    browserWindowId,
     cleanNotebookName,
     normalizeYouTubeVideoUrl,
     normalizeWebpageUrl,

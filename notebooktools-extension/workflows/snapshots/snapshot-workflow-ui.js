@@ -552,7 +552,7 @@
     await resolveSession();
 
     if (!session?.snapshots?.length) {
-      showToast("Capture snapshots in the Snapshots side panel first.", true);
+      showToast("Capture snapshots first: NotebookTools icon in the toolbar → Snapshots.", true);
       return;
     }
 
@@ -602,7 +602,7 @@
     await resolveSession();
 
     if (!session?.snapshots?.length) {
-      showToast("Capture snapshots in the Snapshots side panel first.", true);
+      showToast("Capture snapshots first: NotebookTools icon in the toolbar → Snapshots.", true);
       return;
     }
 
@@ -681,7 +681,7 @@
     await resolveSession();
 
     if (!session?.snapshots?.length) {
-      showToast("Capture snapshots in the Snapshots side panel first.", true);
+      showToast("Capture snapshots first: NotebookTools icon in the toolbar → Snapshots.", true);
       return;
     }
 
@@ -717,7 +717,7 @@
 
     if (!session?.snapshots?.length) {
       summary.textContent =
-        "Capture snapshots in the side panel, then run Auto to write an article with inline images and download DOC.";
+        "Capture snapshots (NotebookTools icon → Snapshots), then run Auto to write an article with inline images and download DOC.";
       return;
     }
 

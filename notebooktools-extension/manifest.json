@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.12.6",
+  "version": "0.13.0",
   "description": "Import ChatGPT, Claude, YouTube, X, Reddit, webpages and more into NotebookLM, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
@@ -11,7 +11,6 @@
     "storage",
     "contextMenus",
     "tabs",
-    "sidePanel",
     "scripting"
   ],
   "host_permissions": [
@@ -29,15 +28,12 @@
   },
   "action": {
     "default_title": "NotebookTools — Import to NotebookLM",
-    "default_popup": "popup.html",
+    "default_popup": "sidepanel.html?popup=1",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
-  },
-  "side_panel": {
-    "default_path": "sidepanel.html"
   },
   "commands": {
     "capture-snapshot": {

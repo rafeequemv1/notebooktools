@@ -1,4 +1,14 @@
 const params = new URLSearchParams(window.location.search);
+// Shown as the toolbar dropdown (?popup=1). The background may have pointed
+// the dropdown at a URL with extra options (a tab to open); reset it so the
+// next click opens the default view.
+const IS_POPUP = params.get("popup") === "1";
+if (IS_POPUP) {
+  document.documentElement.classList.add("is-popup");
+  if ([...params.keys()].some((key) => key !== "popup")) {
+    chrome.action?.setPopup({ popup: "sidepanel.html?popup=1" }).catch(() => {});
+  }
+}
 const initialMode = params.get("mode") || "webpage";
 const initialPanel = params.get("panel") || "import";
 const initialExtract = params.get("extract") === "1";
@@ -37,6 +47,37 @@ openNotebooksButton?.addEventListener("click", (event) => {
   event.preventDefault();
   void NotebookToolsPlan.requirePro("notebooks-hub", openNotebooksPage);
 });
+
+// Dropdown only: open the same app in its own small window (keeps running
+// when you click elsewhere, which closes a dropdown).
+function popOut() {
+  const query = new URLSearchParams(window.location.search);
+  query.delete("popup");
+  const active = document.querySelector(".sidepanel-tab.is-active")?.dataset.panel;
+  if (active && active !== "import") query.set("panel", active);
+  const search = query.toString();
+  chrome.windows.create({
+    url: chrome.runtime.getURL(`sidepanel.html${search ? `?${search}` : ""}`),
+    type: "popup",
+    width: 420,
+    height: 720,
+    focused: true
+  });
+  window.close();
+}
+
+document.querySelector("#popOutButton")?.addEventListener("click", popOut);
+
+if (IS_POPUP) {
+  const bulkPanel = document.querySelector("#panelBulk");
+  if (bulkPanel) {
+    const note = document.createElement("p");
+    note.className = "sp-popup-note";
+    note.innerHTML = 'Clicking outside closes this dropdown and stops a running import. For big imports, <button type="button" class="sp-link-btn">pop it out</button>.';
+    note.querySelector("button").addEventListener("click", popOut);
+    bulkPanel.prepend(note);
+  }
+}
 
 // Side panel tabs that need Pro (feature keys from plan-gate.js). Import and Bulk are free.
 const PRO_PANELS = { snapshots: "snapshots", prompts: "prompt-library" };
@@ -157,7 +198,7 @@ async function refreshYouTubeBatchPreview({ force = false } = {}) {
     return;
   }
 
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
   const isBatch = NotebookToolsStore.isYouTubeBatchUrl(tab?.url || "");
 
   if (!isBatch) {
@@ -297,12 +338,9 @@ async function refreshActiveTabContext() {
   }
 }
 
-function getActiveTab() {
-  return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-      resolve(tab || null);
-    });
-  });
+async function getActiveTab() {
+  const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
+  return tab || null;
 }
 
 function setActivePanel(panelName) {

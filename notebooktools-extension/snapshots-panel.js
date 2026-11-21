@@ -170,7 +170,7 @@ const NotebookToolsSnapshotsPanel = {
     let tab = tabs[0];
 
     if (!tab?.id) {
-      const [fallback] = await chrome.tabs.query({ active: true, currentWindow: true });
+      const [fallback] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
       tab = fallback;
     }
 
