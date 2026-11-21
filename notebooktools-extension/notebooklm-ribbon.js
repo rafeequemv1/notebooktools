@@ -309,6 +309,54 @@
     });
   }
 
+  /* ---------- Manage sources modal ---------- */
+  // Opens the extension's Sources manager for this notebook in a modal over
+  // the page (an embedded notebooks.html), instead of a new tab.
+  const MODAL_CLASS = "ntr-modal";
+
+  function closeManageModal() {
+    document.querySelector(`.${MODAL_CLASS}`)?.remove();
+    document.removeEventListener("keydown", onModalKey, true);
+  }
+
+  function onModalKey(event) {
+    if (event.key === "Escape") {
+      event.stopPropagation();
+      closeManageModal();
+    }
+  }
+
+  // The embedded page asks to close on Esc. Only accept it from our own frame.
+  window.addEventListener("message", (event) => {
+    const frame = document.querySelector(".ntr-modal-frame");
+    if (frame && event.source === frame.contentWindow && event.data?.type === "notebooktools-close-manage") {
+      closeManageModal();
+    }
+  });
+
+  function openManageModal() {
+    closeManageModal();
+    closeMenu();
+    const title = document.title.replace(/\s*[-–|]\s*(Gemini Notebook|NotebookLM).*$/i, "");
+    const params = new URLSearchParams({ notebook: notebookId(), tab: "sources", title, embed: "1" });
+    const modal = document.createElement("div");
+    modal.className = `${MODAL_CLASS}${isDarkPage() ? " is-dark" : ""}`;
+    modal.innerHTML = `
+      <div class="ntr-modal-card" role="dialog" aria-modal="true" aria-label="Manage sources">
+        <div class="ntr-modal-head">
+          <span class="ntr-modal-title">${icon("list", 15)}Manage sources</span>
+          <button type="button" class="ntr-modal-close" aria-label="Close" title="Close (Esc)">×</button>
+        </div>
+        <iframe class="ntr-modal-frame" title="Manage sources" src="${chrome.runtime.getURL(`notebooks.html?${params}`)}"></iframe>
+      </div>`;
+    modal.addEventListener("mousedown", (event) => {
+      if (event.target === modal) closeManageModal();
+    });
+    modal.querySelector(".ntr-modal-close").addEventListener("click", closeManageModal);
+    document.addEventListener("keydown", onModalKey, true);
+    document.body.append(modal);
+  }
+
   /* ---------- Actions ---------- */
   async function copyChat() {
     try {
@@ -357,7 +405,6 @@
     blog: "blog-maker",
     carousel: "carousel-maker",
     snapdoc: "snapshots",
-    snapshot: "snapshots",
     prompts: "prompt-library",
     hub: "notebooks-hub",
   };
@@ -378,19 +425,13 @@
       case "export": return exportMenu(button);
       case "add-links": return send({ type: "notebooktools-ribbon-open-panel", query: "panel=bulk" });
       case "from-tabs": return send({ type: "notebooktools-ribbon-open-panel", query: "panel=bulk&tabs=1" });
-      case "manage-sources": return send({ type: "notebooktools-ribbon-open-hub", notebookId: notebookId(), tab: "sources", title: document.title });
+      case "manage-sources": return openManageModal();
       case "studio-files": return send({ type: "notebooktools-ribbon-open-hub", notebookId: notebookId(), tab: "studio", title: document.title });
       case "blog": return clickWorkflow(".notebooktools-blog-workflow-btn", "Blog workflow", button);
       case "carousel":
         if (!window.NotebookToolsCarousel) return toast("Carousel is still loading. Try again in a moment.", true);
         return window.NotebookToolsCarousel.open(notebookId());
       case "snapdoc": return clickWorkflow(".notebooktools-snapshot-workflow-btn", "Snapshots", button);
-      case "snapshot": {
-        const ok = await send({ type: "notebooktools-ribbon-snapshot" });
-        if (ok?.upgrade) return window.NotebookToolsPlan?.showUpgrade(ok.upgrade);
-        if (!ok?.ok) toast(ok?.error || "Could not start the snapshot.", true);
-        return;
-      }
       case "prompts": return openPrompts();
       case "hub": return send({ type: "notebooktools-ribbon-open-hub" });
       case "collapse":
@@ -422,7 +463,6 @@
           ${btn("add-links", "link", "Add links", "Paste many links or YouTube videos at once")}
           ${btn("from-tabs", "tabs", "Open tabs", "Add your open browser tabs as sources", " is-secondary")}
           ${btn("manage-sources", "list", "Manage", "Search, organize, de-duplicate and export sources")}
-          ${btn("snapshot", "camera", "Snapshot", "Capture part of the screen (Alt+Shift+S)", " is-tertiary")}
         </div></div>
       </div>
       <div class="ntr-seg" data-seg="chat" role="group" aria-label="Chat tools">
@@ -491,6 +531,7 @@
     if (location.href !== lastUrl) {
       lastUrl = location.href;
       closeMenu();
+      closeManageModal();
       const ribbon = document.getElementById(RIBBON_ID);
       if (ribbon) renderOrganize(ribbon);
     }

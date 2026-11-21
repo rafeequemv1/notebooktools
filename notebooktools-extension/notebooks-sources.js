@@ -2,6 +2,7 @@ const NotebookToolsSourcesPanel = (() => {
   let listEl = null;
   let statusEl = null;
   let filterEl = null;
+  let typeFilterEl = null;
   let searchEl = null;
   let bulkDeleteEl = null;
   let bulkExportEl = null;
@@ -17,6 +18,7 @@ const NotebookToolsSourcesPanel = (() => {
   let isCheckingFreshness = false;
   let isRefreshingAll = false;
   let activeFilter = "all";
+  let typeFilter = "all";
   let searchQuery = "";
   let selectMode = true;
   let selectedIds = new Set();
@@ -66,6 +68,10 @@ const NotebookToolsSourcesPanel = (() => {
         if (!label || !label.sourceIds.includes(source.id)) {
           return false;
         }
+      }
+
+      if (typeFilter !== "all" && (source.type || "Other") !== typeFilter) {
+        return false;
       }
 
       if (query) {
@@ -160,7 +166,31 @@ const NotebookToolsSourcesPanel = (() => {
     document.querySelectorAll(".src-dropdown-menu, .src-label-menu").forEach((node) => node.remove());
   }
 
+  // Type dropdown: only the types this notebook actually has, with counts.
+  function renderTypeFilter() {
+    if (!typeFilterEl) {
+      return;
+    }
+
+    const counts = new Map();
+    sources.forEach((source) => {
+      const type = source.type || "Other";
+      counts.set(type, (counts.get(type) || 0) + 1);
+    });
+    if (typeFilter !== "all" && !counts.has(typeFilter)) {
+      typeFilter = "all";
+    }
+    const esc = NotebookToolsStore.escapeHtml;
+    const options = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([type, count]) => `<option value="${esc(type)}"${typeFilter === type ? " selected" : ""}>${esc(type)} (${count})</option>`)
+      .join("");
+    typeFilterEl.innerHTML = `<option value="all"${typeFilter === "all" ? " selected" : ""}>All types (${sources.length})</option>${options}`;
+    typeFilterEl.disabled = counts.size < 2 && typeFilter === "all";
+  }
+
   function renderFilters() {
+    renderTypeFilter();
     if (!filterEl) {
       return;
     }
@@ -1057,6 +1087,11 @@ const NotebookToolsSourcesPanel = (() => {
       renderList();
     });
 
+    typeFilterEl?.addEventListener("change", () => {
+      typeFilter = typeFilterEl.value || "all";
+      renderList();
+    });
+
     viewModeEl?.addEventListener("change", () => {
       selectMode = viewModeEl.value === "select";
 
@@ -1177,6 +1212,7 @@ const NotebookToolsSourcesPanel = (() => {
     onSourcesChanged = options.onSourcesChanged || null;
     activeFilter = "all";
     searchQuery = "";
+    typeFilter = "all";
     selectMode = true;
     selectedIds.clear();
 
@@ -1231,6 +1267,7 @@ const NotebookToolsSourcesPanel = (() => {
     statusEl = document.querySelector("#sourcesPanelStatus");
     filterEl = document.querySelector("#sourcesFilters");
     searchEl = document.querySelector("#sourcesSearchInput");
+    typeFilterEl = document.querySelector("#sourcesTypeFilter");
     bulkDeleteEl = document.querySelector("#sourcesBulkDelete");
     bulkExportEl = document.querySelector("#sourcesBulkExport");
     scanDuplicatesEl = document.querySelector("#sourcesScanDuplicates");
