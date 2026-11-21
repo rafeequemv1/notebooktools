@@ -428,7 +428,7 @@ html.nav-open {
 .footer-top {
   display: grid;
   gap: 48px;
-  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr));
 }
 
 .footer-brand p {
@@ -483,7 +483,7 @@ html.nav-open {
 
 @media (max-width: 860px) {
   .footer-top {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .footer-brand {

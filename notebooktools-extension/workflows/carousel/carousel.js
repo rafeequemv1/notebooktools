@@ -413,8 +413,12 @@
   }
 
   function isDarkPage() {
-    const color = getComputedStyle(document.body).backgroundColor.match(/\d+(\.\d+)?/g);
-    return color ? luminance(color.map(Number)) < 0.45 : false;
+    for (const node of [document.body, document.documentElement]) {
+      const color = node && getComputedStyle(node).backgroundColor.match(/\d+(\.\d+)?/g);
+      if (!color || Number(color[3] ?? 1) === 0) continue;
+      return luminance(color.slice(0, 3).map(Number)) < 0.45;
+    }
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches || false;
   }
 
   function render() {

@@ -278,3 +278,129 @@
     overflow: visible;
   }
 }
+
+/* ==========================================================================
+   Minimal look, matching the NotebookTools topbar menus and the Blog panel:
+   same palette, soft filled fields, small caps labels, one filled action.
+   ========================================================================== */
+.ntc-backdrop {
+  --ntc-panel: #f3f6fb;
+  --ntc-line: rgba(31, 31, 31, 0.1);
+  --ntc-hover: rgba(11, 87, 208, 0.07);
+  background: rgba(15, 20, 30, 0.36);
+}
+
+.ntc-backdrop.is-dark {
+  --ntc-bg: #232427;
+  --ntc-panel: #2c2d31;
+  --ntc-line: rgba(255, 255, 255, 0.1);
+  --ntc-hover: rgba(138, 180, 248, 0.12);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.ntc-dialog {
+  border: 1px solid var(--ntc-line);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+}
+
+.ntc-backdrop.is-dark .ntc-dialog {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+.ntc-head {
+  padding: 18px 20px 12px;
+}
+
+.ntc-head h2 {
+  font-size: 18px;
+}
+
+.ntc-close:hover {
+  background: var(--ntc-hover);
+}
+
+.ntc-body {
+  border-color: var(--ntc-line);
+}
+
+.ntc-controls {
+  gap: 18px;
+  padding: 16px 20px 20px;
+}
+
+.ntc-label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ntc-select,
+.ntc-input {
+  background-color: var(--ntc-panel);
+  border: 1px solid transparent;
+  font-size: 13.5px;
+}
+
+.ntc-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  padding-right: 34px;
+}
+
+.ntc-select option {
+  background: var(--ntc-bg);
+  color: var(--ntc-ink);
+}
+
+.ntc-select:focus,
+.ntc-input:focus {
+  border-color: var(--ntc-accent);
+  outline: none;
+}
+
+.ntc-seg {
+  border: 0;
+  border-radius: 999px;
+}
+
+.ntc-seg-btn {
+  border-radius: 999px;
+}
+
+.ntc-backdrop.is-dark .ntc-seg-btn.is-on {
+  background: #3a3b40;
+  box-shadow: none;
+}
+
+.ntc-preview {
+  background: var(--ntc-panel);
+}
+
+.ntc-backdrop.is-dark .ntc-preview {
+  background: #1b1c1f;
+}
+
+.ntc-foot {
+  padding: 12px 20px;
+}
+
+.ntc-btn {
+  height: 36px;
+}
+
+.ntc-btn:hover:not(:disabled) {
+  background: var(--ntc-hover);
+}
+
+.ntc-btn.is-primary:hover:not(:disabled) {
+  background: var(--ntc-accent);
+  filter: brightness(1.08);
+}
+
+.ntc-backdrop.is-dark .ntc-empty.is-error {
+  color: #f2b8b5;
+}
