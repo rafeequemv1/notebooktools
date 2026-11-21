@@ -623,3 +623,15 @@ html.ntr-on #notebooktools-snapshot-workflow-bar {
   padding: 0;
   width: 32px;
 }
+
+.ntr-menu-hint {
+  color: var(--ntr-muted, #5f6368);
+  font-size: 11.5px;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Studio bar: Export sits at the far right */
+.ntr-seg[data-seg="studio"] .ntr-spacer {
+  flex: 1 1 auto;
+}

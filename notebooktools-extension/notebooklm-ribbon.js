@@ -323,6 +323,20 @@
     });
   }
 
+  // Create: things NotebookTools makes from this notebook. Each item runs the
+  // same action (and Pro check) its old button did.
+  function createMenu(anchor, ribbon) {
+    const items = [
+      ["blog", "doc", "Blog post", "with slide images"],
+      ["carousel", "carousel", "Carousel", "from a slide deck"],
+      ["snapdoc", "camera", "Snapshot doc", "from your screenshots"]
+    ].map(([value, ic, label, hint]) => `<button type="button" class="ntr-menu-item" data-value="${value}">${icon(ic, 15)}<span>${esc(label)} <small class="ntr-menu-hint">${esc(hint)}</small></span></button>`).join("");
+    openMenu(anchor, `<p class="ntr-menu-title">Create from this notebook</p>${items}`, (value) => {
+      closeMenu();
+      handle(value, anchor, ribbon);
+    });
+  }
+
   /* ---------- Actions ---------- */
   async function copyChat() {
     try {
@@ -395,7 +409,10 @@
       case "manage-sources":
         if (!window.NotebookToolsSourcesModal) return toast("Manage is still loading. Try again in a moment.", true);
         return window.NotebookToolsSourcesModal.open(notebookId());
-      case "studio-files": return send({ type: "notebooktools-ribbon-open-hub", notebookId: notebookId(), tab: "studio", title: document.title });
+      case "studio-files":
+        if (!window.NotebookToolsStudioModal) return toast("Manage is still loading. Try again in a moment.", true);
+        return window.NotebookToolsStudioModal.open(notebookId());
+      case "create": return createMenu(button, ribbon);
       case "blog": return clickWorkflow(".notebooktools-blog-workflow-btn", "Blog workflow", button);
       case "carousel":
         if (!window.NotebookToolsCarousel) return toast("Carousel is still loading. Try again in a moment.", true);
@@ -438,7 +455,6 @@
         <div class="ntr-group" data-group="Organize"><div class="ntr-items" data-ntr-organize></div></div>
         <div class="ntr-group" data-group="Chat"><div class="ntr-items">
           ${btn("copy", "copy", "Copy", "Copy the chat as Markdown", " is-tertiary")}
-          ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
         </div></div>
         <div class="ntr-spacer"></div>
         <div class="ntr-end">
@@ -448,11 +464,13 @@
         </div>
       </div>
       <div class="ntr-seg" data-seg="studio" role="group" aria-label="Studio tools">
-        <div class="ntr-group" data-group="Create"><div class="ntr-items">
-          ${btn("studio-files", "studio", "Studio files", "Browse, rename and download Studio outputs")}
-          ${btn("blog", "doc", "Blog", "Write a blog post with slide images from this notebook")}
-          ${btn("carousel", "carousel", "Carousel", "Turn a slide deck into a LinkedIn or Instagram carousel", " is-secondary")}
-          ${btn("snapdoc", "camera", "Snapshot doc", "Turn captured screenshots into a document", " is-tertiary")}
+        <div class="ntr-group" data-group="Studio"><div class="ntr-items">
+          ${btn("studio-files", "studio", "Manage", "Search, open, download and delete this notebook's Studio files")}
+          <button type="button" class="ntr-btn has-caret" data-ntr="create" title="Blog post, carousel or snapshot document from this notebook">${icon("plus")}<span class="ntr-label">Create</span>${icon("caret", 13)}</button>
+        </div></div>
+        <div class="ntr-spacer"></div>
+        <div class="ntr-group" data-group="Export"><div class="ntr-items">
+          ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
         </div></div>
       </div>`;
 
@@ -506,6 +524,7 @@
       lastUrl = location.href;
       closeMenu();
       window.NotebookToolsSourcesModal?.close();
+      window.NotebookToolsStudioModal?.close();
       const ribbon = document.getElementById(RIBBON_ID);
       if (ribbon) renderOrganize(ribbon);
     }
