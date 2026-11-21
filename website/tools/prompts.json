@@ -1,0 +1,702 @@
+{
+  "destinations": {
+    "chat": {
+      "label": "Chat",
+      "color": "#0b57d0",
+      "where": [
+        "Open your notebook.",
+        "Tick the sources the prompt should use.",
+        "Paste the prompt into the chat box at the bottom and send."
+      ]
+    },
+    "audio": {
+      "label": "Audio Overview",
+      "color": "#7b3fe4",
+      "where": [
+        "Open Studio on the right.",
+        "Click the pencil on Audio Overview (Customise).",
+        "Paste the prompt into the focus box and generate."
+      ]
+    },
+    "video": {
+      "label": "Video Overview",
+      "color": "#c5221f",
+      "where": [
+        "Open Studio on the right.",
+        "Click the pencil on Video Overview (Customise).",
+        "Paste the prompt into the focus box and generate."
+      ]
+    },
+    "slides": {
+      "label": "Slide deck",
+      "color": "#e37400",
+      "where": [
+        "Open Studio on the right.",
+        "Click the pencil on Slide deck (Customise).",
+        "Paste the prompt into \"Describe the slide deck\" and generate."
+      ]
+    },
+    "report": {
+      "label": "Report",
+      "color": "#137333",
+      "where": [
+        "Open Studio on the right.",
+        "Choose Reports, then Create your own.",
+        "Paste the prompt and generate."
+      ]
+    },
+    "flashcards": {
+      "label": "Flashcards",
+      "color": "#00838f",
+      "where": [
+        "Open Studio on the right.",
+        "Click the pencil on Flashcards (Customise).",
+        "Paste the prompt into the topic box and generate."
+      ]
+    },
+    "quiz": {
+      "label": "Quiz",
+      "color": "#b06000",
+      "where": [
+        "Open Studio on the right.",
+        "Click the pencil on Quiz (Customise).",
+        "Paste the prompt into the topic box and generate."
+      ]
+    },
+    "infographic": {
+      "label": "Infographic",
+      "color": "#d01884",
+      "where": [
+        "Open Studio on the right.",
+        "Click the pencil on Infographic (Customise).",
+        "Paste the prompt into the description box and generate."
+      ]
+    }
+  },
+  "jobs": [
+    "Study",
+    "Research",
+    "Summarize",
+    "Write",
+    "Teach",
+    "Work"
+  ],
+  "prompts": [
+    {
+      "id": "exam-cram-sheet",
+      "title": "Exam cram sheet",
+      "dest": "chat",
+      "jobs": [
+        "Study"
+      ],
+      "summary": "One page that covers what the exam will ask, built from your own lectures and readings.",
+      "when": "The week before an exam, once all the lecture slides and readings for the course are in one notebook.",
+      "blanks": [
+        {
+          "key": "course",
+          "label": "Course or topic",
+          "example": "Introductory macroeconomics"
+        },
+        {
+          "key": "format",
+          "label": "Exam format",
+          "example": "short-answer and essay questions"
+        }
+      ],
+      "prompt": "Make a one-page cram sheet for {{course}}. The exam is {{format}}.\n\n1. List the 10 ideas that come up most often across my sources, each with a one-line definition.\n2. Add the formulas, dates or names I must remember, in a compact table.\n3. Write 5 likely exam questions and the key points a strong answer would hit.\n4. Flag 3 common mistakes students make on this material.\n\nUse only my sources and cite them. If something is not in the sources, leave it out.",
+      "tip": "Untick sources that are not part of the exam, such as last year's notes, before you send it."
+    },
+    {
+      "id": "explain-like-a-tutor",
+      "title": "Explain it like a tutor",
+      "dest": "chat",
+      "jobs": [
+        "Study",
+        "Teach"
+      ],
+      "summary": "A patient, step-by-step explanation of one hard concept, checked against your sources.",
+      "when": "When a chapter or lecture lost you and you want one concept explained from the ground up.",
+      "blanks": [
+        {
+          "key": "concept",
+          "label": "Concept",
+          "example": "opportunity cost"
+        },
+        {
+          "key": "level",
+          "label": "Your level",
+          "example": "a first-year student"
+        }
+      ],
+      "prompt": "Explain {{concept}} to me as {{level}}, the way a good tutor would.\n\nStart with a one-sentence plain-English answer. Then build it up in three short steps, each with an everyday example. Point out the part most people get wrong. Finish with two quick questions I can answer to check I understood, and put the answers at the very end.\n\nStay within my sources and cite them.",
+      "tip": "Ask a follow-up such as \"go deeper on step 2\" instead of starting a new chat, so it keeps the context."
+    },
+    {
+      "id": "literature-themes",
+      "title": "Literature themes and gaps",
+      "dest": "chat",
+      "jobs": [
+        "Research"
+      ],
+      "summary": "Groups your papers into themes, shows where they disagree, and lists the open questions.",
+      "when": "You have the papers for a review in one notebook and want structure before you start writing.",
+      "blanks": [
+        {
+          "key": "question",
+          "label": "Research question",
+          "example": "how sleep affects memory consolidation"
+        },
+        {
+          "key": "themes",
+          "label": "Number of themes",
+          "example": "3 to 5"
+        }
+      ],
+      "prompt": "My research question is: {{question}}.\n\nGroup my sources into {{themes}} themes. For each theme, give a two-sentence summary, the sources that support it, and any source that disagrees. Then list the questions my sources leave open, phrased so I could study them. End with the three sources I should read first and why.\n\nCite a source for every claim. If my sources do not cover something, say \"not covered\" instead of guessing.",
+      "tip": "Works best with five or more papers; themes only appear across several sources."
+    },
+    {
+      "id": "methods-table",
+      "title": "Methods comparison table",
+      "dest": "chat",
+      "jobs": [
+        "Research"
+      ],
+      "summary": "A side-by-side table of how each study was done and what it found.",
+      "when": "When you need to compare study designs, samples and findings at a glance.",
+      "blanks": [
+        {
+          "key": "extra",
+          "label": "Extra column",
+          "example": "funding source"
+        }
+      ],
+      "prompt": "Make a table with one row per source and these columns: Source | Research question | Method | Sample | Key finding | Limitation | {{extra}}.\n\nKeep each cell under 20 words. Write \"not stated\" when a source does not give the information. Under the table, add three sentences on what the methods have in common and where they differ.",
+      "tip": "Copy the table into a sheet with the extension's chat export to keep the formatting."
+    },
+    {
+      "id": "meeting-brief",
+      "title": "Brief from meeting notes",
+      "dest": "chat",
+      "jobs": [
+        "Work",
+        "Summarize"
+      ],
+      "summary": "Turns transcripts and notes into decisions, owners and open questions.",
+      "when": "After a series of meetings or calls, with transcripts or notes added as sources.",
+      "blanks": [
+        {
+          "key": "project",
+          "label": "Project",
+          "example": "the Q3 website relaunch"
+        },
+        {
+          "key": "reader",
+          "label": "Who it is for",
+          "example": "my manager"
+        }
+      ],
+      "prompt": "Write a brief on {{project}} for {{reader}}, based only on these meeting notes.\n\nSections: Decisions made (with dates), Action items (owner and due date), Open questions, Risks. Use bullet points. If an owner or date is missing, write \"unassigned\" or \"no date\" instead of guessing. Keep it under 300 words.",
+      "tip": "Name the people in the notes consistently (first names) so owners are matched correctly."
+    },
+    {
+      "id": "plain-summary",
+      "title": "Summary in plain English",
+      "dest": "chat",
+      "jobs": [
+        "Summarize"
+      ],
+      "summary": "A short, jargon-free summary of the selected sources for a specific reader.",
+      "when": "When you need to explain a dense paper, report or policy to someone outside the field.",
+      "blanks": [
+        {
+          "key": "reader",
+          "label": "Reader",
+          "example": "a parent with no science background"
+        },
+        {
+          "key": "length",
+          "label": "Length",
+          "example": "150 words"
+        }
+      ],
+      "prompt": "Summarize the selected sources for {{reader}} in about {{length}}.\n\nLead with the single most important takeaway. Replace jargon with everyday words, or define it in brackets the first time. Add one concrete example. End with \"What this means for you:\" and one sentence.",
+      "tip": "Select one source at a time for a summary of that source only."
+    },
+    {
+      "id": "essay-outline",
+      "title": "Argued essay outline",
+      "dest": "chat",
+      "jobs": [
+        "Write",
+        "Study"
+      ],
+      "summary": "A thesis and section-by-section outline with the evidence for each point.",
+      "when": "Before writing an essay or article from your research, to plan the argument.",
+      "blanks": [
+        {
+          "key": "question",
+          "label": "Essay question",
+          "example": "Was the printing press the main cause of the Reformation?"
+        },
+        {
+          "key": "words",
+          "label": "Word count",
+          "example": "2,000"
+        }
+      ],
+      "prompt": "Help me plan a {{words}}-word essay answering: {{question}}\n\nPropose a one-sentence thesis. Then outline 4 to 5 sections: for each, the point it makes, the evidence from my sources (with citations) and one counter-argument to address. Suggest roughly how many words each section should get. Do not write the essay itself.",
+      "tip": "Ask for a second thesis that argues the opposite side to test your argument."
+    },
+    {
+      "id": "lesson-plan",
+      "title": "Lesson plan from sources",
+      "dest": "chat",
+      "jobs": [
+        "Teach"
+      ],
+      "summary": "A timed lesson plan with objectives, activities and an exit question.",
+      "when": "Teachers planning a class from a textbook chapter, articles or videos in the notebook.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Lesson topic",
+          "example": "the water cycle"
+        },
+        {
+          "key": "students",
+          "label": "Students",
+          "example": "year 7 (age 11 to 12)"
+        },
+        {
+          "key": "minutes",
+          "label": "Lesson length (minutes)",
+          "example": "50"
+        }
+      ],
+      "prompt": "Write a {{minutes}}-minute lesson plan on {{topic}} for {{students}}, using only my sources.\n\nInclude: 2 to 3 learning objectives; a 5-minute starter; the main activity with timings; one pair or group task; an exit question that shows whether students got it; and a note on what to simplify for students who struggle.",
+      "tip": "Add your school's curriculum standard as a source to have the objectives match it."
+    },
+    {
+      "id": "devils-advocate",
+      "title": "Devil's advocate review",
+      "dest": "chat",
+      "jobs": [
+        "Research",
+        "Write"
+      ],
+      "summary": "Finds the weakest claims in your draft and what the sources say against them.",
+      "when": "When your own draft or proposal is a source and you want it stress-tested before others see it.",
+      "blanks": [
+        {
+          "key": "draft",
+          "label": "Name of your draft source",
+          "example": "Proposal v2"
+        }
+      ],
+      "prompt": "Act as a sceptical reviewer of \"{{draft}}\". Using the other sources in this notebook:\n\n1. List the 5 weakest claims in it, quoting each one.\n2. For each, say why it is weak and what the other sources say (with citations).\n3. Suggest how to fix or soften each claim.\n\nBe direct. Do not praise the draft.",
+      "tip": "Upload the draft as a Google Doc so you can refresh it after edits."
+    },
+    {
+      "id": "audio-study-walkthrough",
+      "title": "Study walkthrough podcast",
+      "dest": "audio",
+      "jobs": [
+        "Study"
+      ],
+      "summary": "An Audio Overview that teaches the material in exam order, with recap questions.",
+      "when": "Revising on the go: commuting, walking or at the gym.",
+      "blanks": [
+        {
+          "key": "course",
+          "label": "Course or topic",
+          "example": "cell biology unit 3"
+        }
+      ],
+      "prompt": "Teach {{course}} as a study session for a student preparing for an exam. Go through the topics in a logical order, define every key term the first time it appears, and use one example per idea. Every few minutes, pause to ask the listener a recap question and then answer it. End with the five things to remember.",
+      "tip": "Generate a short version first to check the focus, then a longer one."
+    },
+    {
+      "id": "audio-debate",
+      "title": "Two-sided debate",
+      "dest": "audio",
+      "jobs": [
+        "Research",
+        "Study"
+      ],
+      "summary": "The two hosts take opposite sides on a question your sources disagree about.",
+      "when": "When your sources contain competing views and you want to hear both argued well.",
+      "blanks": [
+        {
+          "key": "question",
+          "label": "Debate question",
+          "example": "Should cities ban cars from their centres?"
+        }
+      ],
+      "prompt": "Make this a debate on: {{question}}. One host argues for, the other against, each using only evidence from the sources. Keep it respectful and specific, with numbers and examples where the sources give them. Finish with where the evidence is strongest on each side and what is still unknown.",
+      "tip": "Include sources from both sides, or the debate will be lopsided."
+    },
+    {
+      "id": "audio-executive-briefing",
+      "title": "Executive briefing",
+      "dest": "audio",
+      "jobs": [
+        "Work",
+        "Summarize"
+      ],
+      "summary": "A short, decision-focused Audio Overview for someone with ten minutes.",
+      "when": "Briefing a busy stakeholder on a report, market scan or set of documents.",
+      "blanks": [
+        {
+          "key": "listener",
+          "label": "Listener",
+          "example": "a CFO"
+        },
+        {
+          "key": "decision",
+          "label": "Decision they face",
+          "example": "whether to expand into Germany"
+        }
+      ],
+      "prompt": "Brief {{listener}} who must decide {{decision}}. Skip background they already know. Cover the three facts that matter most for the decision, the main risk, the main upside and what is still uncertain. Keep it short and concrete, and end with a clear recommendation the sources support.",
+      "tip": "Choose the shortest length in the Audio Overview settings for a true 5-to-10-minute briefing."
+    },
+    {
+      "id": "audio-beginner",
+      "title": "Beginner-friendly explainer",
+      "dest": "audio",
+      "jobs": [
+        "Summarize",
+        "Teach"
+      ],
+      "summary": "Explains a technical topic to someone hearing about it for the first time.",
+      "when": "When the sources are technical and the listener is new to the field.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "how vaccines train the immune system"
+        }
+      ],
+      "prompt": "Explain {{topic}} to a curious listener with no background. Use analogies from everyday life, avoid jargon or explain it immediately, and build from the basics up. Include one surprising fact from the sources. End by saying what to read or watch next from the sources.",
+      "tip": "Pair it with the Video Overview prompt below for a visual version."
+    },
+    {
+      "id": "video-explainer",
+      "title": "Visual explainer",
+      "dest": "video",
+      "jobs": [
+        "Teach",
+        "Summarize"
+      ],
+      "summary": "A Video Overview that explains one idea step by step with simple visuals.",
+      "when": "Explaining a process or system that is easier to see than to read.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "how a bill becomes law"
+        },
+        {
+          "key": "audience",
+          "label": "Audience",
+          "example": "high-school students"
+        }
+      ],
+      "prompt": "Explain {{topic}} for {{audience}}. Show it as a sequence of clear steps, one idea per slide, with a simple diagram or labelled image for each step. Keep text on screen to a few words. Finish with a one-slide recap of all the steps.",
+      "tip": "If the result is too dense, ask for fewer steps and regenerate."
+    },
+    {
+      "id": "video-case-study",
+      "title": "Case study walkthrough",
+      "dest": "video",
+      "jobs": [
+        "Work",
+        "Research"
+      ],
+      "summary": "Walks through one case: the situation, what was done and what happened.",
+      "when": "Training, pitches or classes built around a real example in your sources.",
+      "blanks": [
+        {
+          "key": "case",
+          "label": "Case",
+          "example": "the 2021 Suez Canal blockage"
+        }
+      ],
+      "prompt": "Walk through {{case}} as a case study. Structure: the situation before, what went wrong or what decision was made, what happened next (with numbers from the sources), and three lessons. Use a timeline visual for the sequence of events.",
+      "tip": "Add a source with figures (a report or data table) for stronger numbers."
+    },
+    {
+      "id": "slides-lecture",
+      "title": "Lecture deck",
+      "dest": "slides",
+      "jobs": [
+        "Teach"
+      ],
+      "summary": "A teaching deck with one idea per slide, examples and a check-in question.",
+      "when": "Turning a chapter or set of readings into slides for a class.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Lecture topic",
+          "example": "the causes of World War I"
+        },
+        {
+          "key": "students",
+          "label": "Students",
+          "example": "first-year undergraduates"
+        }
+      ],
+      "prompt": "Create a lecture deck on {{topic}} for {{students}}. One idea per slide, with a clear headline that states the point. Add an example or image idea for each concept. Every 5 slides, include a check-in question for the class. End with a summary slide and three discussion questions.",
+      "tip": "Add a style from the gallery below the prompt for a consistent look."
+    },
+    {
+      "id": "slides-pitch",
+      "title": "Pitch deck",
+      "dest": "slides",
+      "jobs": [
+        "Work"
+      ],
+      "summary": "Problem, solution, evidence and ask, built from your research.",
+      "when": "Pitching an idea, product or project using market research and notes in the notebook.",
+      "blanks": [
+        {
+          "key": "idea",
+          "label": "What you are pitching",
+          "example": "a tutoring app for nursing students"
+        },
+        {
+          "key": "audience",
+          "label": "Audience",
+          "example": "seed investors"
+        },
+        {
+          "key": "ask",
+          "label": "Your ask",
+          "example": "$250k to build the first version"
+        }
+      ],
+      "prompt": "Create a pitch deck for {{idea}} aimed at {{audience}}. Slides: the problem (with a number from the sources), who has it, the solution, why now, evidence and traction, competition, the plan, and the ask: {{ask}}. Headlines should state the point, not the topic. Keep text short.",
+      "tip": "Use the \"Presenter slides\" format if you will speak over the deck."
+    },
+    {
+      "id": "slides-research-summary",
+      "title": "Research findings deck",
+      "dest": "slides",
+      "jobs": [
+        "Research"
+      ],
+      "summary": "Presents what the sources found, how sure we are, and what to do next.",
+      "when": "Sharing a literature review or research results with a team or supervisor.",
+      "blanks": [
+        {
+          "key": "question",
+          "label": "Research question",
+          "example": "Does remote work affect productivity?"
+        }
+      ],
+      "prompt": "Create a deck presenting what my sources say about: {{question}}. Start with a one-slide answer. Then one slide per key finding with the supporting sources, one slide on where sources disagree, one on limitations, and a final slide with recommended next steps. Put source names on each slide.",
+      "tip": "Works best when every source is a paper or report, not notes."
+    },
+    {
+      "id": "report-study-guide",
+      "title": "Study guide",
+      "dest": "report",
+      "jobs": [
+        "Study"
+      ],
+      "summary": "A structured study guide with definitions, key ideas and practice questions.",
+      "when": "Building revision material for a unit or course.",
+      "blanks": [
+        {
+          "key": "unit",
+          "label": "Unit or topic",
+          "example": "organic chemistry: reaction mechanisms"
+        },
+        {
+          "key": "questions",
+          "label": "Practice questions",
+          "example": "10"
+        }
+      ],
+      "prompt": "Write a study guide for {{unit}}. Sections: key terms with one-line definitions; the main ideas in a logical order; two worked examples; common mistakes; and {{questions}} practice questions with answers in a separate section at the end. Use only the sources and cite them.",
+      "tip": "Generate it again later with a different set of sources ticked for each sub-topic."
+    },
+    {
+      "id": "report-briefing-doc",
+      "title": "Decision briefing",
+      "dest": "report",
+      "jobs": [
+        "Work"
+      ],
+      "summary": "A one-page briefing: situation, findings, risks and a recommendation.",
+      "when": "When someone needs to make a decision from a pile of documents.",
+      "blanks": [
+        {
+          "key": "decision",
+          "label": "Decision",
+          "example": "which CRM to adopt"
+        },
+        {
+          "key": "reader",
+          "label": "Reader",
+          "example": "the leadership team"
+        }
+      ],
+      "prompt": "Write a one-page briefing for {{reader}} on {{decision}}. Sections: Situation; Options (a table comparing them on cost, risk and effort); Key findings with citations; Risks; Recommendation with the reason in one sentence. Max 500 words.",
+      "tip": "Add each vendor's pricing page as a source for a fair comparison."
+    },
+    {
+      "id": "report-faq",
+      "title": "FAQ document",
+      "dest": "report",
+      "jobs": [
+        "Work",
+        "Write"
+      ],
+      "summary": "Turns long documentation into the questions people actually ask, answered.",
+      "when": "Writing a help page, onboarding guide or policy FAQ from long documents.",
+      "blanks": [
+        {
+          "key": "audience",
+          "label": "Who will read it",
+          "example": "new employees"
+        },
+        {
+          "key": "count",
+          "label": "Number of questions",
+          "example": "12"
+        }
+      ],
+      "prompt": "Write an FAQ for {{audience}} with {{count}} questions, based only on the sources. Choose the questions a newcomer would really ask, in the order they would ask them. Answer each in 2 to 4 sentences with a citation. Add a final question: \"Where do I go if my question isn't here?\"",
+      "tip": "Paste a few real questions from colleagues into the focus to steer it."
+    },
+    {
+      "id": "flashcards-definitions",
+      "title": "Definitions and terms",
+      "dest": "flashcards",
+      "jobs": [
+        "Study"
+      ],
+      "summary": "Flashcards for the vocabulary of a course: term on the front, meaning on the back.",
+      "when": "Early in a course, or for subjects with a lot of vocabulary (law, biology, languages).",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "contract law"
+        }
+      ],
+      "prompt": "Make flashcards for the key terms in {{topic}}. Front: the term. Back: a definition in under 20 words and one short example. Skip terms that are not defined or explained in the sources.",
+      "tip": "Review the cards a few days apart; spaced repetition beats one long session."
+    },
+    {
+      "id": "flashcards-cause-effect",
+      "title": "Cause and effect cards",
+      "dest": "flashcards",
+      "jobs": [
+        "Study"
+      ],
+      "summary": "Cards that test why things happen, not just what they are called.",
+      "when": "History, economics, biology and any subject where understanding causes matters.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "the French Revolution"
+        }
+      ],
+      "prompt": "Make flashcards on causes and effects in {{topic}}. Front: \"What caused X?\" or \"What happened because of Y?\". Back: the answer in one or two sentences, naming the mechanism, not just the event.",
+      "tip": "Mix these with definition cards for a complete set."
+    },
+    {
+      "id": "quiz-exam-style",
+      "title": "Exam-style quiz",
+      "dest": "quiz",
+      "jobs": [
+        "Study"
+      ],
+      "summary": "A quiz that mirrors your exam format, from easy to hard.",
+      "when": "A few days before an exam, to find what you don't know yet.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "statistics: hypothesis testing"
+        },
+        {
+          "key": "style",
+          "label": "Exam style",
+          "example": "applied problems, not definitions"
+        }
+      ],
+      "prompt": "Quiz me on {{topic}} with questions in the style of {{style}}. Go from easy to hard. Use plausible wrong answers that reflect common misunderstandings. After each answer, explain why it is right.",
+      "tip": "Redo the quiz after studying the explanations of the ones you got wrong."
+    },
+    {
+      "id": "quiz-misconceptions",
+      "title": "Misconception check",
+      "dest": "quiz",
+      "jobs": [
+        "Teach",
+        "Study"
+      ],
+      "summary": "Questions designed to expose the mistakes learners usually make.",
+      "when": "Teachers checking understanding, or students testing themselves before an exam.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "photosynthesis"
+        }
+      ],
+      "prompt": "Write a quiz on {{topic}} where every wrong option is a real misconception learners have. Focus on understanding, not memorised wording. Explain each correct answer in one sentence that names the misconception it rules out.",
+      "tip": "Share the quiz with a class by sharing the notebook."
+    },
+    {
+      "id": "infographic-process",
+      "title": "Process infographic",
+      "dest": "infographic",
+      "jobs": [
+        "Teach",
+        "Summarize"
+      ],
+      "summary": "A step-by-step visual of how something works.",
+      "when": "Turning a procedure, method or natural process into one image.",
+      "blanks": [
+        {
+          "key": "process",
+          "label": "Process",
+          "example": "how a loan application is approved"
+        }
+      ],
+      "prompt": "Make an infographic of {{process}} as numbered steps from start to finish. Use a short label and one line of explanation per step, with a simple icon for each. Highlight the step where things most often go wrong.",
+      "tip": "Ask for portrait orientation if it is for a phone or a printed handout."
+    },
+    {
+      "id": "infographic-key-stats",
+      "title": "Key numbers at a glance",
+      "dest": "infographic",
+      "jobs": [
+        "Work",
+        "Research"
+      ],
+      "summary": "The most important figures from your sources in one shareable graphic.",
+      "when": "Reports, posts or slides that need the numbers to land quickly.",
+      "blanks": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "example": "global renewable energy in 2025"
+        },
+        {
+          "key": "count",
+          "label": "How many numbers",
+          "example": "6"
+        }
+      ],
+      "prompt": "Make an infographic with the {{count}} most important numbers about {{topic}} from the sources. Each number large, with a one-line explanation and the source name in small text. Group related numbers together and add a one-line headline that states the overall message.",
+      "tip": "Check every number against its citation before you share the image."
+    }
+  ]
+}

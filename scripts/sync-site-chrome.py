@@ -53,6 +53,7 @@ NAV = [
     ("/creators", "Creators", "creators"),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
+    ("/tools", "Free tools", "tools"),
     ("/support", "Support", "support"),
 ]
 
@@ -62,6 +63,8 @@ def section_of(rel: str) -> str | None:
         return "features"
     if rel.startswith("blog/"):
         return "blog"
+    if rel.startswith("tools/"):
+        return "tools"
     if rel == "support.html":
         return "support"
     if rel in ("researchers.html", "creators.html", "teachers.html", "students.html"):
@@ -124,6 +127,7 @@ FOOTER = f"""<footer class="site-footer">
           <nav class="footer-col" aria-label="Resources">
             <h2>Resources</h2>
             <a href="/blog">Blog</a>
+            <a href="/tools">Free tools</a>
             <a href="/blog/what-is-notebooklm">What is NotebookLM?</a>
             <a href="/blog/best-notebooklm-prompts">NotebookLM prompts</a>
             <a href="/notebooklm-slide-styles">Slide deck styles</a>
@@ -146,12 +150,21 @@ FOOTER = f"""<footer class="site-footer">
 
 HEADER_RE = re.compile(r'<header class="site-header">.*?</header>', re.S)
 FOOTER_RE = re.compile(r'<footer class="site-footer">.*?</footer>', re.S)
-FONT_RE = re.compile(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">')
+# Only the text fonts (Google Sans) are shared. Other font links, such as the
+# Material Symbols icon font on the feature pages, are left alone.
+FONT_RE = re.compile(r'<link href="https://fonts\.googleapis\.com/css2\?family=Google\+Sans[^"]*" rel="stylesheet">')
 STYLESHEET_RE = re.compile(r'<link rel="stylesheet" href="[^"]*(styles|features)\.css">')
+
+
+# Translated pages carry their own translated header and footer; never
+# overwrite them with the English chrome.
+LOCALIZED_DIRS = ("de/", "es/", "fr/", "it/", "nl/", "pt/")
 
 
 def sync(path: Path) -> bool:
     rel = path.relative_to(SITE).as_posix()
+    if rel.startswith(LOCALIZED_DIRS):
+        return False
     src = path.read_text(encoding="utf-8")
     out = src
 

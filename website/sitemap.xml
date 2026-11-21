@@ -584,4 +584,262 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-limits"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
   </url>
+  <!-- Free tools -->
+  <url>
+    <loc>https://www.notebooktools.com/tools</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/link-list-cleaner</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/link-list-cleaner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/link-list-cleaner"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/text-splitter</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/text-splitter"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/text-splitter"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-answer-cleaner</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-answer-cleaner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-answer-cleaner"/>
+  </url>
+  <!-- Prompt pages -->
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/exam-cram-sheet</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/exam-cram-sheet"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/exam-cram-sheet"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/explain-like-a-tutor</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/explain-like-a-tutor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/explain-like-a-tutor"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/literature-themes</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/literature-themes"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/literature-themes"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/methods-table</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/methods-table"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/methods-table"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/meeting-brief</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/meeting-brief"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/meeting-brief"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/plain-summary</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/plain-summary"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/plain-summary"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/essay-outline</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/essay-outline"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/essay-outline"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/lesson-plan</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/lesson-plan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/lesson-plan"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/devils-advocate</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/devils-advocate"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/devils-advocate"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/audio-study-walkthrough</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-study-walkthrough"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-study-walkthrough"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/audio-debate</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-debate"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-debate"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/audio-executive-briefing</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-executive-briefing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-executive-briefing"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/audio-beginner</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-beginner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/audio-beginner"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/video-explainer</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/video-explainer"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/video-explainer"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/video-case-study</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/video-case-study"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/video-case-study"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/slides-lecture</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/slides-lecture"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/slides-lecture"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/slides-pitch</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/slides-pitch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/slides-pitch"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/slides-research-summary</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/slides-research-summary"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/slides-research-summary"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/report-study-guide</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/report-study-guide"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/report-study-guide"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/report-briefing-doc</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/report-briefing-doc"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/report-briefing-doc"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/report-faq</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/report-faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/report-faq"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/flashcards-definitions</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/flashcards-definitions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/flashcards-definitions"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/flashcards-cause-effect</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/flashcards-cause-effect"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/flashcards-cause-effect"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/quiz-exam-style</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/quiz-exam-style"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/quiz-exam-style"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/quiz-misconceptions</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/quiz-misconceptions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/quiz-misconceptions"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/infographic-process</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/infographic-process"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/infographic-process"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompts/infographic-key-stats</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/infographic-key-stats"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/infographic-key-stats"/>
+  </url>
 </urlset>
