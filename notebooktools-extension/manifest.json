@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "Import ChatGPT, Claude, YouTube, X, Reddit, webpages and more into NotebookLM, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' data: blob: https: http:;"
@@ -77,7 +77,8 @@
         "workflows/blog-creation/blog-with-deck-images/workflow.css",
         "workflows/carousel/carousel.css",
         "workflows/snapshots/snapshot-workflow.css",
-        "notebooklm-ribbon.css"
+        "notebooklm-ribbon.css",
+        "workflows/sources/sources-modal.css"
       ],
       "js": [
         "plan-gate.js",
@@ -107,6 +108,9 @@
         "notebooklm-chat-export-inject.js",
         "prompt-library-data.js",
         "notebooklm-prompt-slash.js",
+        "duplicate-sources.js",
+        "workflows/sources/sources-modal.js",
+        "notebooklm-source-filter.js",
         "notebooklm-ribbon.js",
         "dev-reload.js"
       ],

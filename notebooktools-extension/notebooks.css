@@ -3881,18 +3881,6 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
   text-decoration: none;
 }
 
-/* Embedded in the NotebookLM page as the "Manage" modal (?embed=1) */
-.is-embed .notebooks-header,
-.is-embed .app-tab[data-app-tab="notebooks"],
-.is-embed .app-tab[data-app-tab="podcast"],
-.is-embed #notebooksListView {
-  display: none !important;
-}
-
-.is-embed .notebooks-app {
-  padding-top: 8px;
-}
-
 /* Type filter beside the search box */
 .src-type-filter {
   flex: none;

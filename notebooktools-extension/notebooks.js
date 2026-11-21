@@ -1761,19 +1761,6 @@ document.addEventListener("click", (event) => {
   }
 });
 
-// Opened inside the NotebookLM page as a modal (ribbon "Manage"): hide this
-// page's own header and list tabs; the modal supplies its own frame.
-const EMBEDDED = new URLSearchParams(location.search).get("embed") === "1";
-if (EMBEDDED) {
-  document.documentElement.classList.add("is-embed");
-  // Esc inside the modal closes it (the parent page can't see this frame's keys).
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !document.querySelector(".src-dropdown-menu, .src-label-menu, dialog[open]")) {
-      window.parent.postMessage({ type: "notebooktools-close-manage" }, "*");
-    }
-  });
-}
-
 async function init() {
   // The notebooks dashboard is a Pro feature (plan-gate.js). Free users see a
   // lock screen that reloads the page once Pro is active.

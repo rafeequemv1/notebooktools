@@ -1,0 +1,282 @@
+/* Manage sources dialog. Same look as the carousel dialog (.ntc-); scoped with .nts-. */
+.nts-backdrop {
+  --nts-bg: #ffffff;
+  --nts-panel: #f6f8fc;
+  --nts-line: rgba(31, 31, 31, 0.12);
+  --nts-ink: #1f1f1f;
+  --nts-muted: #5f6368;
+  --nts-accent: #0b57d0;
+  --nts-accent-soft: rgba(11, 87, 208, 0.1);
+  --nts-danger: #c5221f;
+  align-items: center;
+  background: rgba(15, 20, 30, 0.42);
+  display: flex;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  inset: 0;
+  justify-content: center;
+  padding: 24px;
+  position: fixed;
+  z-index: 2147483646;
+}
+
+.nts-backdrop.is-dark {
+  --nts-bg: #1e1f22;
+  --nts-panel: #16171a;
+  --nts-line: rgba(255, 255, 255, 0.12);
+  --nts-ink: #e8eaed;
+  --nts-muted: #9aa0a6;
+  --nts-accent: #a8c7fa;
+  --nts-accent-soft: rgba(168, 199, 250, 0.14);
+  --nts-danger: #f2b8b5;
+}
+
+.nts-backdrop *,
+.nts-backdrop *::before,
+.nts-backdrop *::after {
+  box-sizing: border-box;
+}
+
+.nts-dialog {
+  background: var(--nts-bg);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+  color: var(--nts-ink);
+  display: flex;
+  flex-direction: column;
+  height: min(680px, calc(100vh - 48px));
+  overflow: hidden;
+  width: min(760px, 100%);
+}
+
+.nts-head {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 20px 22px 14px;
+}
+
+.nts-head h2 {
+  font: 500 20px/1.25 "Google Sans", Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.nts-head p {
+  color: var(--nts-muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.nts-close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--nts-muted);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.nts-close:hover {
+  background: var(--nts-accent-soft);
+  color: var(--nts-ink);
+}
+
+.nts-body {
+  border-bottom: 1px solid var(--nts-line);
+  border-top: 1px solid var(--nts-line);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 14px 22px 8px;
+}
+
+.nts-controls {
+  display: flex;
+  flex: none;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.nts-select,
+.nts-input {
+  background: var(--nts-bg);
+  border: 1px solid var(--nts-line);
+  border-radius: 10px;
+  color: var(--nts-ink);
+  font-family: inherit;
+  font-size: 14px;
+  height: 38px;
+  padding: 0 12px;
+}
+
+.nts-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.nts-select {
+  flex: none;
+  max-width: 200px;
+}
+
+.nts-select:focus,
+.nts-input:focus {
+  border-color: var(--nts-accent);
+  outline: 2px solid var(--nts-accent-soft);
+}
+
+.nts-list {
+  flex: 1;
+  margin: 0 -8px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 8px;
+}
+
+.nts-row {
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 10px;
+}
+
+.nts-row:hover {
+  background: var(--nts-panel);
+}
+
+.nts-row.is-selected {
+  background: var(--nts-accent-soft);
+}
+
+.nts-row-head {
+  color: var(--nts-muted);
+  flex: none;
+  font-size: 13px;
+  min-height: 36px;
+}
+
+.nts-row input {
+  accent-color: var(--nts-accent);
+  flex: none;
+  height: 16px;
+  margin: 0;
+  width: 16px;
+}
+
+.nts-type {
+  background: var(--nts-panel);
+  border: 1px solid var(--nts-line);
+  border-radius: 6px;
+  color: var(--nts-muted);
+  flex: none;
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 58px;
+  padding: 2px 6px;
+  text-align: center;
+}
+
+.nts-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nts-tag {
+  color: var(--nts-danger);
+  flex: none;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.nts-host {
+  color: var(--nts-muted);
+  flex: none;
+  font-size: 12px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nts-empty {
+  color: var(--nts-muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 40px auto;
+  max-width: 360px;
+  text-align: center;
+}
+
+.nts-empty.is-error {
+  color: var(--nts-danger);
+}
+
+.nts-foot {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 22px;
+}
+
+.nts-status {
+  color: var(--nts-muted);
+  flex: 1;
+  font-size: 13px;
+  min-width: 140px;
+}
+
+.nts-btn {
+  background: transparent;
+  border: 1px solid var(--nts-line);
+  border-radius: 999px;
+  color: var(--nts-ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  height: 38px;
+  padding: 0 18px;
+}
+
+.nts-btn:hover:not(:disabled) {
+  background: var(--nts-accent-soft);
+}
+
+.nts-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.nts-btn.is-danger {
+  border-color: var(--nts-danger);
+  color: var(--nts-danger);
+}
+
+.nts-btn.is-danger.is-confirm {
+  background: var(--nts-danger);
+  color: #fff;
+}
+
+.nts-backdrop.is-dark .nts-btn.is-danger.is-confirm {
+  color: #601410;
+}
+
+@media (max-width: 640px) {
+  .nts-host {
+    display: none;
+  }
+}
