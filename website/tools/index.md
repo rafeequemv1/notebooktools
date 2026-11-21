@@ -6,7 +6,7 @@ Updated: 2026-11-21
 
 ## Tools
 
-- [NotebookLM Prompt Builder](https://www.notebooktools.com/tools/notebooklm-prompt-builder): Pick what you want to make, who it's for and how long. Get a ready prompt, with 14 slide deck styles.
+- [NotebookLM Prompt Library](https://www.notebooktools.com/tools/notebooklm-prompts): 27 fill-in-the-blank prompts for chat, Audio and Video Overviews, slide decks, reports, flashcards, quizzes and infographics.
 - [Link List Cleaner](https://www.notebooktools.com/tools/link-list-cleaner): Paste notes, a reading list or HTML. Get a clean list of unique links, ready to add to NotebookLM.
 - [Text Splitter for NotebookLM](https://www.notebooktools.com/tools/text-splitter): Too long for one source? Split a transcript or book into parts that fit NotebookLM's 500,000-word limit.
 - [NotebookLM Answer Cleaner](https://www.notebooktools.com/tools/notebooklm-answer-cleaner): Copied an answer from NotebookLM? Strip the citation numbers and … markers. Get clean text or Markdown.

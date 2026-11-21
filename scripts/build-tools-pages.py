@@ -50,54 +50,32 @@ def icon(name: str, size: int = 22) -> str:
 # ---------------------------------------------------------------------------
 TOOLS = [
     {
-        "slug": "notebooklm-prompt-builder",
+        "slug": "notebooklm-prompts",
         "icon": "prompt",
-        "name": "NotebookLM Prompt Builder",
-        "card": "Pick what you want to make, who it's for and how long. Get a ready prompt, with 14 slide deck styles.",
-        "title": "NotebookLM Prompt Builder: Free Prompts for Slides & Study",
-        "description": "Free NotebookLM prompt builder: choose slide deck, study guide, quiz, Audio Overview, briefing or flashcards, set audience and length, and copy a ready prompt.",
-        "h1": "NotebookLM Prompt Builder",
-        "answer": "A NotebookLM prompt works best when it names the output, the audience, the length and the focus, and asks NotebookLM to use only your sources. Pick those below and copy the prompt. For slide decks, add one of 14 tested visual styles, then paste the prompt into Studio → Slide deck → Customise.",
-        "script": "prompt-builder.js",
+        "name": "NotebookLM Prompt Library",
+        "card": "27 fill-in-the-blank prompts for chat, Audio and Video Overviews, slide decks, reports, flashcards, quizzes and infographics.",
+        "title": "NotebookLM Prompt Library: 27 Fill-in Prompts (Free)",
+        "description": "Free NotebookLM prompt library: 27 prompts for chat, Audio Overview, Video Overview, slide decks, reports, flashcards, quizzes and infographics. Fill the blanks, copy, paste.",
+        "h1": "NotebookLM Prompt Library",
+        "answer": "Pick where the prompt goes (chat, Audio Overview, Video Overview, slide deck, report, flashcards, quiz or infographic), choose a prompt, and type into the highlighted blanks right inside the text. Copy it and follow the \"Paste it here\" steps. Slide deck prompts can add one of 14 visual styles. All 27 prompts tell NotebookLM to stay within your sources.",
+        "script": "prompt-library.js",
         "extra_scripts": ["slide-styles.js"],
-        "app": """
-      <div class="tool-pane">
-        <div class="tool-pane-head"><h2>What do you want to make?</h2></div>
-        <div class="tool-field"><label for="pbGoal">Output</label>
-          <select id="pbGoal">
-            <option value="slides">Slide deck</option><option value="study">Study guide</option>
-            <option value="quiz">Quiz</option><option value="audio">Audio Overview</option>
-            <option value="briefing">Briefing / report</option><option value="flashcards">Flashcards</option>
-          </select></div>
-        <div class="tool-row">
-          <div class="tool-field"><label for="pbAudience">For</label>
-            <select id="pbAudience"><option value="students">Students</option><option value="beginners">Beginners</option><option value="pros">Professionals</option><option value="execs">Decision-makers</option></select></div>
-          <div class="tool-field"><label for="pbLength">Length</label>
-            <select id="pbLength"><option value="short">Short</option><option value="default" selected>Default</option><option value="long">Detailed</option></select></div>
-        </div>
-        <div class="tool-field"><label for="pbFocus">Focus (optional)</label>
-          <input type="text" id="pbFocus" placeholder="e.g. the causes of the 2008 financial crisis" maxlength="200"></div>
-        <div class="tool-field" id="pbStylesField"><span class="tool-label">Slide style (optional)</span><div class="tool-styles" id="pbStyles"></div></div>
-      </div>
-      <div class="tool-pane">
-        <div class="tool-pane-head"><h2>Your prompt</h2><button type="button" class="tool-btn is-primary" id="pbCopy">Copy prompt</button></div>
-        <textarea id="pbOutput" class="is-output" readonly aria-label="Generated prompt"></textarea>
-        <p class="tool-note"><strong>Where to paste it:</strong> <span id="pbWhere"></span></p>
-      </div>""",
+        "raw_app": '<section class="pl-app" id="plApp" aria-label="NotebookLM prompt library"><p class="tool-empty">Loading prompts…</p></section>',
         "steps": [
-            "Choose the output: slide deck, study guide, quiz, Audio Overview, briefing or flashcards.",
-            "Set the audience and length, and type an optional focus.",
-            "For a slide deck, click a style card to add its visual direction.",
-            "Copy the prompt and paste it where the note says (for slides: Studio → Slide deck → Customise).",
+            "Choose where the prompt goes with the tabs (Chat, Audio Overview, Slide deck…) and, if you like, a job such as Study or Research.",
+            "Click a prompt card.",
+            "Type into the highlighted blanks inside the prompt, or click \"Use examples\".",
+            "For a slide deck, pick a visual style (optional).",
+            "Copy the prompt and follow the \"Paste it here\" steps for that destination.",
         ],
         "faq": [
-            ("What makes a good NotebookLM prompt?", "Name the output, the audience, the length and the focus, and tell NotebookLM to use only your sources. Specific formats (a table, 10 questions, 8 slides) work better than open questions."),
-            ("Where do I paste a slide deck prompt in NotebookLM?", "In Studio, open Slide deck, click the pencil to customise, and paste the prompt into the box that describes the deck you want."),
-            ("Are the slide styles free?", "Yes, on this page. Inside NotebookLM, the NotebookTools extension shows the same styles as one-click cards in the slide deck dialog (a Pro feature)."),
-            ("Does this tool send my text anywhere?", "No. The prompt is built in your browser; nothing is uploaded."),
+            ("What makes a good NotebookLM prompt?", "Name the output, the audience, the length and the focus, and tell NotebookLM to stay within your sources. Specific formats (a table, 10 questions, 8 slides) work better than open questions."),
+            ("Where do I paste a prompt in NotebookLM?", "Chat prompts go in the chat box at the bottom of the notebook. Studio prompts go in the Customise box of that output: click the pencil on Audio Overview, Video Overview, Slide deck, Flashcards, Quiz or Infographic, or choose Reports, then Create your own."),
+            ("Do these prompts work in Gemini Notebook?", "Yes. Gemini Notebook is the new name for NotebookLM; the chat and Studio work the same way."),
+            ("Can I use these prompts inside NotebookLM without copying?", "Yes, with the free NotebookTools Chrome extension: type / in the NotebookLM chat for your prompts, and slide styles appear as cards in the slide deck dialog (Pro)."),
         ],
-        "links": [("/blog/notebooklm-slide-prompts", "NotebookLM slide prompts: 14 deck styles"), ("/blog/notebooklm-prompts-for-studying", "30 NotebookLM prompts for studying"), ("/notebooklm-slide-styles", "Slide deck style gallery"), ("/features/prompts", "Prompt library in NotebookLM")],
-        "cta": "<strong>Skip the copy-paste.</strong> With NotebookTools, these styles appear as one-click cards right inside NotebookLM's slide deck dialog, and your prompts are one / away in the chat.",
+        "links": [("/blog/notebooklm-prompts-for-studying", "30 NotebookLM prompts for studying"), ("/blog/notebooklm-slide-prompts", "NotebookLM slide prompts"), ("/notebooklm-slide-styles", "Slide deck style gallery"), ("/blog/best-notebooklm-prompts", "Best NotebookLM prompts for research")],
+        "cta": "<strong>Use them inside NotebookLM.</strong> With NotebookTools, prompts are one / away in the chat and slide styles appear as cards in the slide deck dialog.",
     },
     {
         "slug": "link-list-cleaner",
@@ -333,6 +311,10 @@ def tool_page(t: dict) -> str:
         breadcrumb([("Home", "/"), ("Free tools", "/tools"), (t["name"], path)]),
     ]}
     scripts = "".join(f'\n    <script src="/tools/{s}"></script>' for s in ["tools.js", *t.get("extra_scripts", []), t["script"]])
+    if t.get("raw_app"):
+        app_html = t["raw_app"]
+    else:
+        app_html = '<section class="tool-app" aria-label="' + E(t["name"]) + '">' + t["app"] + "\n      </section>"
     steps = "".join(f"<li>{E(s)}</li>" for s in t["steps"])
     faq = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in t["faq"])
     links = "".join(f'<li><a href="{h}">{E(l)}</a></li>' for h, l in t["links"])
@@ -349,8 +331,7 @@ def tool_page(t: dict) -> str:
         {BADGES}
       </section>
 
-      <section class="tool-app" aria-label="{E(t['name'])}">{t['app']}
-      </section>
+      {app_html}
 
       {cta(t['cta'])}
 
@@ -483,6 +464,163 @@ All tools are free, need no sign-up and run in your browser. NotebookTools is a 
 """
 
 
+# ---------------------------------------------------------------------------
+# One page per prompt: /tools/notebooklm-prompts/<id> (+ Markdown twin)
+# ---------------------------------------------------------------------------
+PROMPT_DIR = OUT / "notebooklm-prompts"
+
+
+def load_prompts() -> dict:
+    return json.loads((OUT / "prompts.json").read_text(encoding="utf-8"))
+
+
+def blank_html(p: dict) -> str:
+    out = E(p["prompt"])
+    for b in p["blanks"]:
+        out = out.replace("{{" + b["key"] + "}}", f'<span class="pp-blank">[{E(b["label"])}]</span>')
+    return out
+
+
+def blank_text(p: dict, examples: bool = False) -> str:
+    out = p["prompt"]
+    for b in p["blanks"]:
+        out = out.replace("{{" + b["key"] + "}}", b["example"] if examples else f"[{b['label']}]")
+    return out
+
+
+def prompt_faq(p: dict, dest: dict) -> list:
+    where = " ".join(dest["where"])
+    return [
+        (f"Where do I paste a NotebookLM {dest['label'].lower()} prompt?", where),
+        ("What do the [brackets] mean?", "They are blanks. Replace each one with your own words before you paste the prompt, or fill them in the prompt library, which shows them as fields inside the text."),
+        ("Does this prompt work in Gemini Notebook?", "Yes. Gemini Notebook is the new name for NotebookLM, and the chat and Studio work the same way."),
+    ]
+
+
+def prompt_page(p: dict, data: dict) -> str:
+    dest = data["destinations"][p["dest"]]
+    path = f"/tools/notebooklm-prompts/{p['id']}"
+    title = f"{p['title']}: NotebookLM {dest['label']} Prompt"
+    description = f"{p['summary']} A free, fill-in-the-blank NotebookLM {dest['label'].lower()} prompt with where to paste it and a worked example."
+    answer = f"{p['summary']} Copy the prompt below, replace the [blanks] with your own details, and paste it in NotebookLM: {' '.join(dest['where'])}"
+    faq = prompt_faq(p, dest)
+    steps = [*dest["where"][:-1], f"{dest['where'][-1]} Replace the [blanks] first."]
+    related = [q for q in data["prompts"] if q["dest"] == p["dest"] and q["id"] != p["id"]][:3]
+    related += [q for q in data["prompts"] if q["dest"] != p["dest"] and set(q["jobs"]) & set(p["jobs"])][: 4 - len(related) if len(related) < 4 else 0]
+    schema = {"@context": "https://schema.org", "@graph": [
+        {"@type": "CreativeWork", "name": title, "headline": title, "description": description, "text": blank_text(p),
+         "url": f"{BASE}{path}", "dateModified": UPDATED, "isAccessibleForFree": True,
+         "publisher": {"@type": "Organization", "name": "NotebookTools", "url": BASE}},
+        {"@type": "HowTo", "name": f"How to use the {p['title']} prompt in NotebookLM", "step": [
+            {"@type": "HowToStep", "position": i + 1, "text": s} for i, s in enumerate(steps)]},
+        faq_schema(faq),
+        breadcrumb([("Home", "/"), ("Free tools", "/tools"), ("NotebookLM Prompt Library", "/tools/notebooklm-prompts"), (p["title"], path)]),
+    ]}
+    rel_html = "".join(f'<li><a href="/tools/notebooklm-prompts/{q["id"]}">{E(q["title"])}</a> ({E(data["destinations"][q["dest"]]["label"])})</li>' for q in related)
+    faq_html = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in faq)
+    return f"""{head(title, description, path, schema)}
+  <body>
+    <header class="site-header"></header>
+
+    <main class="tools-main">
+      <nav class="blog-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/tools">Free tools</a> <span aria-hidden="true">/</span> <a href="/tools/notebooklm-prompts">Prompt library</a> <span aria-hidden="true">/</span> <span>{E(p['title'])}</span></nav>
+      <section class="tools-hero">
+        <p class="eyebrow">NotebookLM {E(dest['label'])} prompt</p>
+        <h1>{E(p['title'])}</h1>
+        <div class="post-answer"><p class="post-answer-label">Short answer</p><p>{E(answer)}</p></div>
+        {BADGES}
+      </section>
+
+      <section aria-label="The prompt">
+        <pre class="pp-prompt" id="ppPrompt">{blank_html(p)}</pre>
+        <div class="tool-actions" style="margin-top:12px">
+          <button type="button" class="tool-btn is-primary" data-copy-prompt>Copy prompt</button>
+          <a class="tool-btn" href="/tools/notebooklm-prompts#{p['id']}">Fill the blanks in the library</a>
+        </div>
+      </section>
+
+      {cta("<strong>Skip the copy-paste.</strong> With NotebookTools, your prompts are one / away in the NotebookLM chat. Free Chrome extension.")}
+
+      <article class="tools-copy">
+        <h2 id="how-to">Where to paste it</h2>
+        <ol>{"".join(f"<li>{E(s)}</li>" for s in steps)}</ol>
+        <h2 id="when">When to use it</h2>
+        <p>{E(p['when'])}</p>
+        {f"<p><strong>Tip.</strong> {E(p['tip'])}</p>" if p.get('tip') else ""}
+        <h2 id="example">Example, filled in</h2>
+        <pre class="pp-prompt">{E(blank_text(p, True))}</pre>
+        <h2 id="faq">FAQ</h2>
+        {faq_html}
+        <h2 id="more">More prompts</h2>
+        <ul>{rel_html}<li><a href="/tools/notebooklm-prompts">All {len(data['prompts'])} prompts in the library</a></li></ul>
+        <p>Also available as <a href="{path}.md">Markdown</a>.</p>
+      </article>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="/tools/tools.js"></script>
+    <script>
+      document.querySelector("[data-copy-prompt]").addEventListener("click", (e) =>
+        NTTools.copy(document.getElementById("ppPrompt").textContent, e.currentTarget));
+    </script>
+  </body>
+</html>
+"""
+
+
+def prompt_md(p: dict, data: dict) -> str:
+    dest = data["destinations"][p["dest"]]
+    steps = "\n".join(f"{i + 1}. {s}" for i, s in enumerate(dest["where"]))
+    faq = "\n\n".join(f"### {q}\n\n{a}" for q, a in prompt_faq(p, dest))
+    return f"""# {p['title']}: NotebookLM {dest['label']} prompt
+
+> {p['summary']} Replace the [blanks], then paste it in NotebookLM ({dest['label']}).
+
+- Page: {BASE}/tools/notebooklm-prompts/{p['id']}
+- Fill the blanks interactively: {BASE}/tools/notebooklm-prompts#{p['id']}
+- Jobs: {", ".join(p['jobs'])}
+- Updated: {UPDATED}
+
+## The prompt
+
+```
+{blank_text(p)}
+```
+
+## Where to paste it
+
+{steps}
+
+## When to use it
+
+{p['when']}
+
+{"**Tip.** " + p['tip'] if p.get('tip') else ""}
+
+## Example, filled in
+
+```
+{blank_text(p, True)}
+```
+
+## FAQ
+
+{faq}
+
+NotebookTools is independent and not affiliated with Google. Chrome extension: {CHROME_STORE}
+"""
+
+
+def library_md_index(data: dict) -> str:
+    lines = []
+    for key, dest in data["destinations"].items():
+        items = [p for p in data["prompts"] if p["dest"] == key]
+        if items:
+            lines.append(f"\n## {dest['label']}\n")
+            lines += [f"- [{p['title']}]({BASE}/tools/notebooklm-prompts/{p['id']}): {p['summary']}" for p in items]
+    return "\n".join(lines)
+
+
 def main() -> None:
     OUT.mkdir(exist_ok=True)
     shutil.copyfile(ROOT / "notebooktools-extension" / "prompt-library-data.js", OUT / "slide-styles.js")
@@ -491,7 +629,14 @@ def main() -> None:
     for t in TOOLS:
         (OUT / f"{t['slug']}.html").write_text(tool_page(t), encoding="utf-8")
         (OUT / f"{t['slug']}.md").write_text(tool_md(t), encoding="utf-8")
-    print(f"Built /tools and {len(TOOLS)} tool pages (HTML + Markdown)")
+    data = load_prompts()
+    PROMPT_DIR.mkdir(exist_ok=True)
+    for p in data["prompts"]:
+        (PROMPT_DIR / f"{p['id']}.html").write_text(prompt_page(p, data), encoding="utf-8")
+        (PROMPT_DIR / f"{p['id']}.md").write_text(prompt_md(p, data), encoding="utf-8")
+    lib_md = OUT / "notebooklm-prompts.md"
+    lib_md.write_text(lib_md.read_text(encoding="utf-8") + "\n## All prompts\n" + library_md_index(data) + "\n", encoding="utf-8")
+    print(f"Built /tools, {len(TOOLS)} tool pages and {len(data['prompts'])} prompt pages (HTML + Markdown)")
 
 
 if __name__ == "__main__":

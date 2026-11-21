@@ -110,7 +110,7 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 
 ### Free tools (run in the browser, nothing uploaded)
 - Free NotebookLM tools hub: https://www.notebooktools.com/tools (Markdown: https://www.notebooktools.com/tools/index.md)
-- NotebookLM Prompt Builder (slide deck styles, study guides, quizzes): https://www.notebooktools.com/tools/notebooklm-prompt-builder (Markdown: https://www.notebooktools.com/tools/notebooklm-prompt-builder.md)
+- NotebookLM Prompt Library (27 fill-in-the-blank prompts for chat, Audio/Video Overview, slide decks, reports, flashcards, quizzes, infographics): https://www.notebooktools.com/tools/notebooklm-prompts (Markdown with every prompt: https://www.notebooktools.com/tools/notebooklm-prompts.md)
 - Link List Cleaner (extract and de-duplicate URLs, count against the 50-source limit): https://www.notebooktools.com/tools/link-list-cleaner (Markdown: https://www.notebooktools.com/tools/link-list-cleaner.md)
 - Text Splitter for NotebookLM (500,000-word source limit): https://www.notebooktools.com/tools/text-splitter (Markdown: https://www.notebooktools.com/tools/text-splitter.md)
 - NotebookLM Answer Cleaner (remove citation numbers from copied answers): https://www.notebooktools.com/tools/notebooklm-answer-cleaner (Markdown: https://www.notebooktools.com/tools/notebooklm-answer-cleaner.md)
