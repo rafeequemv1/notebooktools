@@ -460,6 +460,7 @@
         <div class="ntr-end">
           <button type="button" class="ntr-btn ntr-pill" data-ntr="prompts" title="Insert a saved prompt (type / in the chat)">${icon("slash")}<span class="ntr-label">Prompts</span></button>
           ${btn("hub", "grid", "All notebooks", "Open the NotebookTools notebooks table", " is-tertiary")}
+          ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
           <button type="button" class="ntr-btn ntr-icon ntr-collapse" data-ntr="collapse" title="${collapsed ? "Show labels" : "Compact ribbon"}">${icon("chevron", 15)}</button>
         </div>
       </div>
@@ -467,10 +468,6 @@
         <div class="ntr-group" data-group="Studio"><div class="ntr-items">
           ${btn("studio-files", "studio", "Manage", "Search, open, download and delete this notebook's Studio files")}
           <button type="button" class="ntr-btn has-caret" data-ntr="create" title="Blog post, carousel or snapshot document from this notebook">${icon("plus")}<span class="ntr-label">Create</span>${icon("caret", 13)}</button>
-        </div></div>
-        <div class="ntr-spacer"></div>
-        <div class="ntr-group" data-group="Export"><div class="ntr-items">
-          ${btn("export", "download", "Export", "Save the last answer as a PDF or Word document, or export the whole chat", " has-caret")}
         </div></div>
       </div>`;
 

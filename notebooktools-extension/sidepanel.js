@@ -96,29 +96,32 @@ const googleAccount = (() => {
     return accounts.find((a) => a.authUser === active) || accounts[0] || null;
   }
 
+  const CARET = `<svg class="sp-gacct-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+
   function renderButton() {
     const acc = current();
-    button.innerHTML = acc ? avatar(acc) : `<span class="sp-gacct-avatar is-empty" aria-hidden="true">?</span>`;
-    const name = acc ? accountsApi.label(acc) : "No NotebookLM account found";
-    button.title = `NotebookLM account: ${name}`;
+    const name = acc ? accountsApi.label(acc) : loading ? "Checking…" : "Not signed in to Google";
+    button.innerHTML = `${acc ? avatar(acc) : `<span class="sp-gacct-avatar is-empty" aria-hidden="true">?</span>`}<span class="sp-gacct-btn-email">${escHtml(name)}</span>${CARET}`;
+    button.title = `Google account used for NotebookLM: ${name}`;
     button.setAttribute("aria-label", button.title);
   }
 
   function renderMenu() {
     const acc = current();
     menu.innerHTML = `
-      <div class="sp-gacct-head">NotebookLM account</div>
+      <div class="sp-gacct-head">Google account for NotebookLM</div>
+      <p class="sp-gacct-note">Which Google account's notebooks you see and add to. Separate from your NotebookTools sign-in.</p>
       ${accounts.length ? accounts.map((a) => `
         <button type="button" class="sp-gacct-item${a === acc ? " is-active" : ""}" role="menuitemradio" aria-checked="${a === acc}" data-auth-user="${escHtml(a.authUser)}">
           ${avatar(a, " is-sm")}
           <span class="sp-gacct-text"><span class="sp-gacct-email">${escHtml(accountsApi.label(a))}</span>
-          ${a === acc ? `<span class="sp-gacct-sub">Used by NotebookTools</span>` : ""}</span>
+          ${a === acc ? `<span class="sp-gacct-sub">In use</span>` : ""}</span>
           ${a === acc ? `<svg class="sp-gacct-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>` : ""}
         </button>`).join("") : `<p class="sp-gacct-empty">${loading ? "Looking for accounts…" : "No signed-in Google account can open NotebookLM. Sign in first."}</p>`}
       <div class="sp-gacct-sep"></div>
       <button type="button" class="sp-gacct-item is-action" role="menuitem" data-add-account>
         <span class="sp-gacct-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 19c.8-3.2 3.2-5 6-5s5.2 1.8 6 5M19 8v6M16 11h6"/></svg></span>
-        <span class="sp-gacct-text">Add another account</span>
+        <span class="sp-gacct-text">Add another Google account</span>
       </button>
       <button type="button" class="sp-gacct-item is-action" role="menuitem" data-refresh-accounts${loading ? " disabled" : ""}>
         <span class="sp-gacct-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg></span>
