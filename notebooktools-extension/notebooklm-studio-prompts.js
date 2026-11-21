@@ -69,6 +69,43 @@
     textarea.setSelectionRange(next.length, next.length);
   }
 
+  // A small card: a mini slide in the style's look, then its name.
+  function chipHtml(p) {
+    const copy = window.NotebookToolsPromptLibrary?.previewCopy?.[p.preview] || { kicker: "", title: p.title.split(" ")[0], sub: "" };
+    return `<button type="button" class="nt-style-chip" role="listitem" data-id="${esc(p.id)}" title="${esc(p.description || p.title)}">
+      <span class="nt-style-thumb" aria-hidden="true"><span class="pl-preview pl-preview--${esc(p.preview || "editorial")}"><span class="pl-preview-inner">
+        <span class="pl-preview-accent"></span><span class="pl-preview-kicker">${esc(copy.kicker)}</span>
+        <span class="pl-preview-title">${esc(copy.title)}</span><span class="pl-preview-sub">${esc(copy.sub)}</span>
+      </span></span></span>
+      <span class="nt-style-name">${esc(p.title.replace(/\s+deck$/i, ""))}</span>
+    </button>`;
+  }
+
+  function wireScroll(row) {
+    const strip = row.querySelector(".nt-style-chips");
+    const prev = row.querySelector(".is-prev");
+    const next = row.querySelector(".is-next");
+    const update = () => {
+      prev.hidden = strip.scrollLeft <= 2;
+      next.hidden = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 2;
+    };
+    strip.addEventListener("scroll", update, { passive: true });
+    strip.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+        strip.scrollLeft += event.deltaY;
+        event.preventDefault();
+      }
+    }, { passive: false });
+    row.querySelectorAll("[data-nav]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        strip.scrollBy({ left: Number(button.dataset.nav) * strip.clientWidth * 0.8, behavior: "smooth" });
+      });
+    });
+    requestAnimationFrame(update);
+  }
+
   function buildRow(dialog, textarea, target) {
     const prompts = target.prompts();
     if (!prompts.length) return;
@@ -80,8 +117,12 @@
         <span class="nt-style-by">by NotebookTools</span>
         <span class="nt-style-pro">PRO</span>
       </div>
-      <div class="nt-style-chips" role="list">
-        ${prompts.map((p) => `<button type="button" class="nt-style-chip" role="listitem" data-id="${esc(p.id)}" title="${esc(p.description || p.title)}">${esc(p.title.replace(/\s+deck$/i, ""))}</button>`).join("")}
+      <div class="nt-style-scroller">
+        <button type="button" class="nt-style-nav is-prev" data-nav="-1" aria-label="Previous styles" hidden>‹</button>
+        <div class="nt-style-chips" role="list">
+          ${prompts.map((p) => chipHtml(p)).join("")}
+        </div>
+        <button type="button" class="nt-style-nav is-next" data-nav="1" aria-label="More styles">›</button>
       </div>`;
     row.addEventListener("click", async (event) => {
       const chip = event.target.closest(".nt-style-chip");
@@ -101,6 +142,7 @@
     // wrapper when there is one, so it doesn't sit inside the outline).
     const field = textarea.closest("mat-form-field, .mat-mdc-form-field") || textarea;
     field.parentElement.insertBefore(row, field);
+    wireScroll(row);
     dialog.setAttribute(MARK, "1");
   }
 

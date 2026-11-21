@@ -11,6 +11,7 @@
 }
 
 .nt-style-row.is-dark {
+  --nt-s-bg: #2b2c2f;
   --nt-s-line: rgba(255, 255, 255, 0.16);
   --nt-s-ink: #e3e3e3;
   --nt-s-muted: #a8adb3;
@@ -52,25 +53,36 @@
   display: inline-block;
 }
 
+.nt-style-scroller {
+  position: relative;
+}
+
 .nt-style-chips {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
+  padding: 2px 2px 4px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.nt-style-chips::-webkit-scrollbar {
+  display: none;
 }
 
 .nt-style-chip {
   background: transparent;
   border: 1px solid var(--nt-s-line);
-  border-radius: 999px;
+  border-radius: 10px;
   color: var(--nt-s-ink);
   cursor: pointer;
+  display: flex;
   flex: none;
-  font: 500 12.5px/1 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
-  height: 30px;
-  padding: 0 12px;
-  white-space: nowrap;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px 4px 6px;
+  text-align: left;
+  width: 112px;
 }
 
 .nt-style-chip:hover {
@@ -80,5 +92,298 @@
 .nt-style-chip.is-on {
   background: var(--nt-s-on-bg);
   border-color: var(--nt-s-on);
+}
+
+.nt-style-thumb {
+  border-radius: 6px;
+  display: block;
+  height: 64px;
+  overflow: hidden;
+  position: relative;
+  width: 102px;
+}
+
+/* Render the preview at 2x and scale down, so its type stays crisp.
+   The preview is built from spans (valid inside a button), so make it a block. */
+.nt-style-row .nt-style-thumb .pl-preview {
+  display: block;
+  height: 128px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  width: 204px;
+}
+
+.nt-style-name {
+  font: 500 11.5px/1.2 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  overflow: hidden;
+  padding: 0 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-style-chip.is-on .nt-style-name {
   color: var(--nt-s-on);
 }
+
+.nt-style-nav {
+  align-items: center;
+  background: var(--nt-s-bg, #fff);
+  border: 1px solid var(--nt-s-line);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  color: var(--nt-s-ink);
+  cursor: pointer;
+  display: flex;
+  font: 500 18px/1 Arial, sans-serif;
+  height: 28px;
+  justify-content: center;
+  padding: 0 0 2px;
+  position: absolute;
+  top: 26px;
+  width: 28px;
+  z-index: 2;
+}
+
+.nt-style-nav[hidden] {
+  display: none;
+}
+
+.nt-style-nav.is-prev {
+  left: -10px;
+}
+
+.nt-style-nav.is-next {
+  right: -10px;
+}
+
+/* Mini slide previews (copied from prompt-library.css, scoped to the chip row) */
+.nt-style-row .pl-preview {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  position: relative;
+}
+
+.nt-style-row .pl-preview-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-end;
+  padding: 14px;
+  position: relative;
+}
+
+.nt-style-row .pl-preview-kicker {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.nt-style-row .pl-preview-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-top: 4px;
+}
+
+.nt-style-row .pl-preview-sub {
+  font-size: 9px;
+  line-height: 1.35;
+  margin-top: 6px;
+  max-width: 72%;
+  opacity: 0.85;
+}
+
+.nt-style-row .pl-preview-accent {
+  border-radius: 2px;
+  height: 3px;
+  left: 14px;
+  position: absolute;
+  top: 14px;
+  width: 28px;
+}
+
+.nt-style-row .pl-preview--editorial {
+  background: #f5f5f5;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--editorial .pl-preview-accent {
+  background: #ffcc00;
+}
+
+.nt-style-row .pl-preview--minimal {
+  background: #ececec;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--minimal .pl-preview-kicker {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+}
+
+.nt-style-row .pl-preview--minimal .pl-preview-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nt-style-row .pl-preview--yellow-black {
+  background: #f5d000;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--yellow-black .pl-preview-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+}
+
+.nt-style-row .pl-preview--agency {
+  background: #fff;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--agency .pl-preview-accent {
+  background: #e85d04;
+  width: 40px;
+}
+
+.nt-style-row .pl-preview--seminar {
+  background: #fff;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--seminar .pl-preview-title {
+  font-size: 20px;
+}
+
+.nt-style-row .pl-preview--seminar .pl-preview-accent {
+  background: #d93025;
+}
+
+.nt-style-row .pl-preview--manga {
+  background: #fff8ef;
+  color: #222;
+}
+
+.nt-style-row .pl-preview--manga::after {
+  background: #111;
+  border-radius: 10px 10px 10px 2px;
+  color: #fff;
+  content: "Let's learn this!";
+  font-size: 8px;
+  padding: 5px 7px;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+
+.nt-style-row .pl-preview--magazine {
+  background: #e8d4d0;
+  color: #333;
+}
+
+.nt-style-row .pl-preview--magazine .pl-preview-kicker {
+  background: #fff;
+  display: inline-block;
+  padding: 2px 5px;
+}
+
+.nt-style-row .pl-preview--retro-dev {
+  background:
+    linear-gradient(#f3efe4 1px, transparent 1px),
+    linear-gradient(90deg, #f3efe4 1px, transparent 1px),
+    #faf7ef;
+  background-size: 12px 12px;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--retro-dev .pl-preview-accent {
+  background: #ff4fa3;
+  height: 18px;
+  width: 18px;
+}
+
+.nt-style-row .pl-preview--street-pop {
+  background: #f4a9c8;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--street-pop .pl-preview-title {
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.nt-style-row .pl-preview--watercolor {
+  background: linear-gradient(135deg, #1e3a8a 0%, #7f1d1d 55%, #dbeafe 100%);
+  color: #fff;
+}
+
+.nt-style-row .pl-preview--neon-tech {
+  background: #e8e6d8;
+  color: #333;
+}
+
+.nt-style-row .pl-preview--neon-tech::before {
+  background: #dfff00;
+  border-radius: 50%;
+  content: "";
+  height: 36px;
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  width: 36px;
+}
+
+.nt-style-row .pl-preview--mockup {
+  background: linear-gradient(180deg, #f5f5f7 0%, #fff 100%);
+  color: #111;
+}
+
+.nt-style-row .pl-preview--mockup::after {
+  background: #111;
+  border-radius: 6px;
+  bottom: 12px;
+  content: "";
+  height: 42%;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 58%;
+}
+
+.nt-style-row .pl-preview--sports {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)), #222;
+  color: #fff;
+}
+
+.nt-style-row .pl-preview--sports .pl-preview-title {
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.nt-style-row .pl-preview--sports .pl-preview-accent {
+  background: #ccff00;
+}
+
+.nt-style-row .pl-preview--calm-product {
+  background: #fff;
+  color: #111;
+}
+
+.nt-style-row .pl-preview--calm-product::before {
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.18), rgba(142, 68, 173, 0.14));
+  border-radius: 0 0 0 40px;
+  content: "";
+  height: 55%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 45%;
+}
+

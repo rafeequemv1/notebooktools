@@ -8,7 +8,6 @@
     <title>NotebookTools</title>
     <script src="theme.js"></script>
     <link rel="stylesheet" href="shared.css">
-    <link rel="stylesheet" href="prompt-library.css">
     <link rel="stylesheet" href="bulk-import.css">
     <link rel="stylesheet" href="snapshots.css">
   </head>
@@ -44,7 +43,6 @@
         <button class="sidepanel-tab is-active" id="tabImport" type="button" role="tab" aria-selected="true" aria-controls="panelImport" data-panel="import" data-i18n="tabImport">Import</button>
         <button class="sidepanel-tab" id="tabBulk" type="button" role="tab" aria-selected="false" aria-controls="panelBulk" data-panel="bulk" data-i18n="tabBulk">Bulk</button>
         <button class="sidepanel-tab" id="tabSnapshots" type="button" role="tab" aria-selected="false" aria-controls="panelSnapshots" data-panel="snapshots">Snapshots</button>
-        <button class="sidepanel-tab" id="tabPrompts" type="button" role="tab" aria-selected="false" aria-controls="panelPrompts" data-panel="prompts" data-i18n="tabPrompts">Prompts</button>
       </nav>
 
       <div class="sp-target" id="spTarget" aria-label="Destination notebook"></div>
@@ -122,10 +120,6 @@
       <section class="sidepanel-panel" id="panelSnapshots" role="tabpanel" aria-labelledby="tabSnapshots" hidden>
         <div id="snapshotsPanelRoot"></div>
       </section>
-
-      <section class="sidepanel-panel" id="panelPrompts" role="tabpanel" aria-labelledby="tabPrompts" hidden>
-        <div id="promptLibraryRoot"></div>
-      </section>
     </main>
 
     <script src="utils.js"></script>
@@ -142,9 +136,6 @@
     <script src="bulk-import-runner.js"></script>
     <script src="link-extract.js"></script>
     <script src="youtube-batch-preview.js"></script>
-    <script src="prompt-library-data.js"></script>
-    <script src="custom-prompts.js"></script>
-    <script src="prompt-library.js"></script>
     <script src="bulk-import.js"></script>
     <script src="snapshot-store.js"></script>
     <script src="vendor/pdf-lib/pdf-lib.min.js"></script>

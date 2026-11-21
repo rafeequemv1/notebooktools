@@ -80,7 +80,7 @@ if (IS_POPUP) {
 }
 
 // Side panel tabs that need Pro (feature keys from plan-gate.js). Import and Bulk are free.
-const PRO_PANELS = { snapshots: "snapshots", prompts: "prompt-library" };
+const PRO_PANELS = { snapshots: "snapshots" };
 
 async function openPanel(panelName) {
   const key = PRO_PANELS[panelName];
@@ -105,13 +105,11 @@ const panels = {
   import: document.querySelector("#panelImport"),
   bulk: document.querySelector("#panelBulk"),
   snapshots: document.querySelector("#panelSnapshots"),
-  prompts: document.querySelector("#panelPrompts")
 };
 
 let activeMode = initialMode;
 let activeTab = null;
 let pendingText = null;
-let promptsMounted = false;
 let bulkMounted = false;
 let snapshotsMounted = false;
 let importNotebookState = { notebookId: "", isNewNotebook: false, cachedSourceCount: null };
@@ -360,13 +358,6 @@ function setActivePanel(panelName) {
     panel.hidden = !isActive;
   });
 
-  if (panelName === "prompts" && !promptsMounted) {
-    const root = document.querySelector("#promptLibraryRoot");
-    if (root) {
-      NotebookToolsPromptLibraryUI.mount(root);
-      promptsMounted = true;
-    }
-  }
 
   if (panelName === "bulk" && !bulkMounted) {
     const root = document.querySelector("#bulkImportRoot");
@@ -412,8 +403,6 @@ function setActivePanel(panelName) {
     }
   } else if (panelName === "snapshots") {
     pageContext.textContent = "Capture & send screenshots";
-  } else {
-    pageContext.textContent = "Slide deck prompts";
   }
 }
 
@@ -791,20 +780,10 @@ async function initSidePanel() {
   NotebookToolsI18n.apply(document);
   NotebookToolsSettingsUI.init();
   NotebookToolsAccountUI.init();
-  NotebookToolsPromptLibraryUI.setAppSettings(appSettings);
 
   NotebookToolsSettings.onChange(async (next) => {
     await NotebookToolsI18n.init(next.language);
     NotebookToolsI18n.apply(document);
-    NotebookToolsPromptLibraryUI.setAppSettings(next);
-
-    if (promptsMounted) {
-      const root = document.querySelector("#promptLibraryRoot");
-
-      if (root) {
-        NotebookToolsPromptLibraryUI.refreshDisplay(root);
-      }
-    }
   });
 
   activeTab = await getActiveTab();
@@ -875,7 +854,7 @@ async function initSidePanel() {
   setActivePanel("import");
   if (initialPanel === "bulk") {
     setActivePanel("bulk");
-  } else if (initialPanel === "prompts" || initialPanel === "snapshots") {
+  } else if (initialPanel === "snapshots") {
     void openPanel(initialPanel);
   }
 

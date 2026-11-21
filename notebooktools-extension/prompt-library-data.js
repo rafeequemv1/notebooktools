@@ -1,4 +1,21 @@
 const NotebookToolsPromptLibrary = {
+  // Words shown on each style's mini preview card.
+  previewCopy: {
+    editorial: { kicker: "Cover", title: "Ideas", sub: "Why this matters now" },
+    minimal: { kicker: "01. Intro", title: "Overview", sub: "Clean structure" },
+    "yellow-black": { kicker: "Feature", title: "Signal", sub: "Editorial point of view" },
+    agency: { kicker: "Pitch", title: "Launch", sub: "Creative direction" },
+    seminar: { kicker: "Talk", title: "Focus", sub: "One clear message" },
+    manga: { kicker: "Scene 1", title: "Story", sub: "Learn through panels" },
+    magazine: { kicker: "No.1", title: "Edit", sub: "Trend notes" },
+    "retro-dev": { kicker: "Build", title: "Agents", sub: "System layers" },
+    "street-pop": { kicker: "Pop", title: "Vibes", sub: "Street energy" },
+    watercolor: { kicker: "Art", title: "Mood", sub: "Painted narrative" },
+    "neon-tech": { kicker: "Fig.1", title: "Model", sub: "Structural map" },
+    mockup: { kicker: "Product", title: "Studio", sub: "Device showcase" },
+    sports: { kicker: "Live", title: "Drive", sub: "High intensity" },
+    "calm-product": { kicker: "Flow", title: "Artifact", sub: "Calm clarity" }
+  },
   slideDecks: [
     {
       id: "smart-editorial",
