@@ -584,4 +584,45 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://www.notebooktools.com/de/notebooklm-limits"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/blog/notebooklm-source-limits"/>
   </url>
+  <!-- Free tools -->
+  <url>
+    <loc>https://www.notebooktools.com/tools</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-prompt-builder</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompt-builder"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompt-builder"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/link-list-cleaner</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/link-list-cleaner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/link-list-cleaner"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/text-splitter</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/text-splitter"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/text-splitter"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/notebooklm-answer-cleaner</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-answer-cleaner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-answer-cleaner"/>
+  </url>
 </urlset>

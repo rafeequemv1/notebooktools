@@ -1,0 +1,421 @@
+/* Free tools (/tools). Uses the site tokens from styles.css / theme.css. */
+.tools-main {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 28px 20px 72px;
+}
+
+.tools-hero {
+  margin: 12px 0 28px;
+  max-width: 760px;
+}
+
+.tools-hero h1 {
+  font-size: clamp(30px, 4.4vw, 46px);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin: 8px 0 12px;
+}
+
+.tools-hero .lead {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.tools-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 16px;
+}
+
+.tools-badge {
+  align-items: center;
+  color: var(--muted);
+  display: inline-flex;
+  font-size: 13px;
+  gap: 6px;
+}
+
+.tools-badge svg {
+  color: var(--accent);
+  flex: none;
+}
+
+/* Hub grid */
+.tools-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.tool-card {
+  background: var(--bg, #fff);
+  border: 1px solid var(--line, rgba(31, 31, 31, 0.1));
+  border-radius: 18px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.tool-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.tool-card-icon {
+  align-items: center;
+  background: var(--accent-soft, #e8f0fe);
+  border-radius: 12px;
+  color: var(--accent);
+  display: inline-flex;
+  height: 44px;
+  justify-content: center;
+  margin-bottom: 4px;
+  width: 44px;
+}
+
+.tool-card h2 {
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.tool-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.tool-card-tag {
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+/* Tool workspace */
+.tool-app {
+  background: var(--bg, #fff);
+  border: 1px solid var(--line, rgba(31, 31, 31, 0.1));
+  border-radius: 20px;
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.tool-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 20px;
+}
+
+.tool-pane + .tool-pane {
+  background: var(--bg-soft, #f6f8fc);
+  border-left: 1px solid var(--line, rgba(31, 31, 31, 0.1));
+}
+
+.tool-pane-head {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  min-height: 34px;
+}
+
+.tool-pane-head h2 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.tool-stats {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.tool-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tool-field label,
+.tool-label {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.tool-row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tool-app textarea,
+.tool-app select,
+.tool-app input[type="text"],
+.tool-app input[type="number"] {
+  background: var(--bg, #fff);
+  border: 1px solid var(--line, rgba(31, 31, 31, 0.14));
+  border-radius: 12px;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.tool-app textarea {
+  line-height: 1.5;
+  min-height: 300px;
+  resize: vertical;
+}
+
+.tool-app textarea.is-output {
+  background: var(--bg, #fff);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+
+.tool-app textarea:focus,
+.tool-app select:focus,
+.tool-app input:focus {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent-soft, rgba(11, 87, 208, 0.12));
+}
+
+.tool-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.tool-checks label {
+  align-items: center;
+  color: inherit;
+  display: inline-flex;
+  font-size: 13.5px;
+  font-weight: 400;
+  gap: 6px;
+}
+
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tool-btn {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line, rgba(31, 31, 31, 0.14));
+  border-radius: 999px;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font: 500 13.5px/1 inherit;
+  font-family: inherit;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+}
+
+.tool-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tool-btn.is-primary {
+  background: var(--ink, #1f1f1f);
+  border-color: var(--ink, #1f1f1f);
+  color: #fff;
+}
+
+.tool-btn.is-primary:hover {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.tool-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.tool-note {
+  background: var(--accent-soft, #e8f0fe);
+  border-radius: 12px;
+  color: var(--ink);
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 10px 14px;
+}
+
+.tool-note.is-warn {
+  background: #fef7e0;
+  color: #7a4a00;
+}
+
+.tool-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-part {
+  align-items: center;
+  background: var(--bg, #fff);
+  border: 1px solid var(--line, rgba(31, 31, 31, 0.1));
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.tool-part-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.tool-part-meta {
+  color: var(--muted);
+  display: block;
+  font-size: 12.5px;
+  font-weight: 400;
+}
+
+.tool-empty {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 40px auto;
+  max-width: 300px;
+  text-align: center;
+}
+
+.tool-styles {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+.tool-style {
+  background: var(--bg, #fff);
+  border: 1px solid var(--line, rgba(31, 31, 31, 0.14));
+  border-radius: 10px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.tool-style small {
+  color: var(--muted);
+  display: block;
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.tool-style.is-on {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+/* Call to action: do it in one click with the extension */
+.tool-cta {
+  align-items: center;
+  background: var(--ink, #1f1f1f);
+  border-radius: 20px;
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  justify-content: space-between;
+  margin: 24px 0 8px;
+  padding: 22px 26px;
+}
+
+.tool-cta p {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 640px;
+}
+
+.tool-cta strong {
+  color: #fff;
+}
+
+.tool-cta .button {
+  background: #fff;
+  border-color: #fff;
+  color: #1f1f1f;
+}
+
+/* Text sections below the tool */
+.tools-copy {
+  margin-top: 40px;
+  max-width: 760px;
+}
+
+.tools-copy h2 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 32px 0 10px;
+}
+
+.tools-copy h3 {
+  font-size: 16px;
+  margin: 18px 0 6px;
+}
+
+.tools-copy p,
+.tools-copy li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.tools-more {
+  margin-top: 40px;
+}
+
+.tools-more h2 {
+  font-size: 20px;
+  margin: 0 0 14px;
+}
+
+@media (max-width: 820px) {
+  .tool-app {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-pane + .tool-pane {
+    border-left: 0;
+    border-top: 1px solid var(--line, rgba(31, 31, 31, 0.1));
+  }
+
+  .tool-row {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-app textarea {
+    min-height: 200px;
+  }
+}
