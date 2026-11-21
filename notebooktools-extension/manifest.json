@@ -79,7 +79,8 @@
         "workflows/carousel/carousel.css",
         "workflows/snapshots/snapshot-workflow.css",
         "notebooklm-ribbon.css",
-        "workflows/sources/sources-modal.css"
+        "workflows/sources/sources-modal.css",
+        "notebooklm-studio-prompts.css"
       ],
       "js": [
         "plan-gate.js",
@@ -112,6 +113,7 @@
         "duplicate-sources.js",
         "workflows/sources/sources-modal.js",
         "notebooklm-source-filter.js",
+        "notebooklm-studio-prompts.js",
         "notebooklm-ribbon.js",
         "dev-reload.js"
       ],

@@ -142,3 +142,7 @@ const NotebookToolsPromptLibrary = {
     }
   ]
 };
+
+if (typeof window !== "undefined") {
+  window.NotebookToolsPromptLibrary = NotebookToolsPromptLibrary;
+}

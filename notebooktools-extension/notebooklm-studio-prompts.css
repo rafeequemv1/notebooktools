@@ -1,0 +1,84 @@
+/* Style chips inside NotebookLM's "Customise slide deck" dialog. Scoped .nt-style-. */
+.nt-style-row {
+  --nt-s-line: rgba(31, 31, 31, 0.14);
+  --nt-s-ink: #1f1f1f;
+  --nt-s-muted: #5f6368;
+  --nt-s-hover: rgba(11, 87, 208, 0.08);
+  --nt-s-on: #0b57d0;
+  --nt-s-on-bg: rgba(11, 87, 208, 0.1);
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  margin: 2px 0 10px;
+}
+
+.nt-style-row.is-dark {
+  --nt-s-line: rgba(255, 255, 255, 0.16);
+  --nt-s-ink: #e3e3e3;
+  --nt-s-muted: #a8adb3;
+  --nt-s-hover: rgba(168, 199, 250, 0.1);
+  --nt-s-on: #a8c7fa;
+  --nt-s-on-bg: rgba(168, 199, 250, 0.16);
+}
+
+.nt-style-head {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.nt-style-label {
+  color: var(--nt-s-ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.nt-style-by {
+  color: var(--nt-s-muted);
+  font-size: 11.5px;
+}
+
+.nt-style-pro {
+  background: var(--nt-s-on-bg);
+  border-radius: 4px;
+  color: var(--nt-s-on);
+  display: none;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+}
+
+.nt-style-row.is-locked .nt-style-pro {
+  display: inline-block;
+}
+
+.nt-style-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.nt-style-chip {
+  background: transparent;
+  border: 1px solid var(--nt-s-line);
+  border-radius: 999px;
+  color: var(--nt-s-ink);
+  cursor: pointer;
+  flex: none;
+  font: 500 12.5px/1 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  height: 30px;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.nt-style-chip:hover {
+  background: var(--nt-s-hover);
+}
+
+.nt-style-chip.is-on {
+  background: var(--nt-s-on-bg);
+  border-color: var(--nt-s-on);
+  color: var(--nt-s-on);
+}
