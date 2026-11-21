@@ -57,3 +57,28 @@
   line-height: 1.35;
   overflow: hidden;
 }
+
+/* Dark (NotebookLM dark page or system dark theme) */
+.notebooktools-prompt-slash-menu.is-dark {
+  background: #1e1f22;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+.notebooktools-prompt-slash-menu.is-dark .notebooktools-prompt-slash-item {
+  color: #e8eaed;
+}
+
+.notebooktools-prompt-slash-menu.is-dark .notebooktools-prompt-slash-item:hover,
+.notebooktools-prompt-slash-menu.is-dark .notebooktools-prompt-slash-item.is-active {
+  background: rgba(168, 199, 250, 0.12);
+}
+
+.notebooktools-prompt-slash-menu.is-dark .notebooktools-prompt-slash-meta {
+  color: #9aa0a6;
+}
+
+.notebooktools-prompt-slash-menu.is-dark .notebooktools-prompt-slash-snippet {
+  color: #bdc1c6;
+}

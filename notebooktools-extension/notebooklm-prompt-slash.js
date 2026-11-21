@@ -134,17 +134,33 @@
     }
   }
 
+  // Dark when the NotebookLM page is dark, or the system prefers dark.
+  function isDarkTheme() {
+    for (const node of [document.body, document.documentElement]) {
+      const m = node && getComputedStyle(node).backgroundColor.match(/[\d.]+/g);
+      if (!m) continue;
+      const [r, g, b, a = 1] = m.map(Number);
+      if (Number(a) === 0) continue;
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.45;
+    }
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches || false;
+  }
+
   function positionMenu(input) {
     if (!menuEl || menuEl.hidden) {
       return;
     }
 
+    // Always open above the chat box (it sits at the bottom of the page),
+    // using the space between the box and the top of the window.
     const rect = input.getBoundingClientRect();
-    const maxHeight = Math.min(280, window.innerHeight - rect.top - 80);
-    menuEl.style.left = `${Math.max(8, rect.left)}px`;
-    menuEl.style.top = `${Math.max(8, rect.bottom + 6)}px`;
-    menuEl.style.width = `${Math.min(420, Math.max(260, rect.width))}px`;
-    menuEl.style.maxHeight = `${Math.max(120, maxHeight)}px`;
+    const width = Math.min(420, Math.max(260, rect.width));
+    menuEl.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - width - 8))}px`;
+    menuEl.style.top = "auto";
+    menuEl.style.bottom = `${Math.max(8, window.innerHeight - rect.top + 10)}px`;
+    menuEl.style.width = `${width}px`;
+    menuEl.style.maxHeight = `${Math.max(120, Math.min(360, rect.top - 24))}px`;
+    menuEl.classList.toggle("is-dark", isDarkTheme());
   }
 
   function renderMenu(input, context) {
