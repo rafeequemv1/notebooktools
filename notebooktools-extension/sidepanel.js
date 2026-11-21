@@ -68,6 +68,143 @@ function popOut() {
 
 document.querySelector("#popOutButton")?.addEventListener("click", popOut);
 
+/* ---------- NotebookLM Google account switcher ---------- */
+const googleAccount = (() => {
+  const accountsApi = window.NotebookToolsAccounts;
+  const button = document.querySelector("#googleAccountButton");
+  const menu = document.querySelector("#googleAccountMenu");
+  if (!accountsApi || !button || !menu) return null;
+
+  const COLORS = ["#1a73e8", "#188038", "#c5221f", "#e37400", "#9334e6", "#007b83", "#b0006d"];
+  let accounts = [];
+  let active = "0";
+  let loading = false;
+
+  const escHtml = (value) =>
+    String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+  function color(account) {
+    return COLORS[Number(account?.authUser || 0) % COLORS.length];
+  }
+
+  function avatar(account, size = "") {
+    const text = accountsApi.label(account).charAt(0).toUpperCase() || "?";
+    return `<span class="sp-gacct-avatar${size}" style="background:${color(account)}" aria-hidden="true">${escHtml(text)}</span>`;
+  }
+
+  function current() {
+    return accounts.find((a) => a.authUser === active) || accounts[0] || null;
+  }
+
+  function renderButton() {
+    const acc = current();
+    button.innerHTML = acc ? avatar(acc) : `<span class="sp-gacct-avatar is-empty" aria-hidden="true">?</span>`;
+    const name = acc ? accountsApi.label(acc) : "No NotebookLM account found";
+    button.title = `NotebookLM account: ${name}`;
+    button.setAttribute("aria-label", button.title);
+  }
+
+  function renderMenu() {
+    const acc = current();
+    menu.innerHTML = `
+      <div class="sp-gacct-head">NotebookLM account</div>
+      ${accounts.length ? accounts.map((a) => `
+        <button type="button" class="sp-gacct-item${a === acc ? " is-active" : ""}" role="menuitemradio" aria-checked="${a === acc}" data-auth-user="${escHtml(a.authUser)}">
+          ${avatar(a, " is-sm")}
+          <span class="sp-gacct-text"><span class="sp-gacct-email">${escHtml(accountsApi.label(a))}</span>
+          ${a === acc ? `<span class="sp-gacct-sub">Used by NotebookTools</span>` : ""}</span>
+          ${a === acc ? `<svg class="sp-gacct-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>` : ""}
+        </button>`).join("") : `<p class="sp-gacct-empty">${loading ? "Looking for accounts…" : "No signed-in Google account can open NotebookLM. Sign in first."}</p>`}
+      <div class="sp-gacct-sep"></div>
+      <button type="button" class="sp-gacct-item is-action" role="menuitem" data-add-account>
+        <span class="sp-gacct-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 19c.8-3.2 3.2-5 6-5s5.2 1.8 6 5M19 8v6M16 11h6"/></svg></span>
+        <span class="sp-gacct-text">Add another account</span>
+      </button>
+      <button type="button" class="sp-gacct-item is-action" role="menuitem" data-refresh-accounts${loading ? " disabled" : ""}>
+        <span class="sp-gacct-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg></span>
+        <span class="sp-gacct-text">${loading ? "Checking accounts…" : "Refresh account list"}</span>
+      </button>`;
+  }
+
+  function render() {
+    renderButton();
+    if (!menu.hidden) renderMenu();
+  }
+
+  async function load(force = false) {
+    active = await accountsApi.getActive();
+    const cached = await accountsApi.list({ force: false }).catch(() => ({ accounts: [] }));
+    accounts = cached.accounts || [];
+    render();
+    if (force || !cached.fresh) {
+      loading = true;
+      render();
+      try {
+        accounts = (await accountsApi.list({ force: true })).accounts;
+      } catch (_error) {
+        // Keep what we had.
+      }
+      loading = false;
+      // The saved account may have signed out: fall back to the first one.
+      if (accounts.length && !accounts.some((a) => a.authUser === active)) {
+        active = accounts[0].authUser;
+      }
+      render();
+    }
+  }
+
+  async function choose(authUser) {
+    if (authUser === active) return close();
+    active = authUser;
+    await accountsApi.setActive(authUser);
+    close();
+    render();
+    await picker.refresh({ silent: true });
+  }
+
+  function open() {
+    menu.hidden = false;
+    button.setAttribute("aria-expanded", "true");
+    renderMenu();
+  }
+
+  function close() {
+    menu.hidden = true;
+    button.setAttribute("aria-expanded", "false");
+  }
+
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    menu.hidden ? open() : close();
+  });
+  menu.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const item = event.target.closest("[data-auth-user]");
+    if (item) return void choose(item.dataset.authUser);
+    if (event.target.closest("[data-add-account]")) {
+      chrome.tabs.create({ url: accountsApi.addAccountUrl() });
+      close();
+      return;
+    }
+    if (event.target.closest("[data-refresh-accounts]")) void load(true);
+  });
+  document.addEventListener("click", () => close());
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !menu.hidden) close();
+  });
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "local" || !changes.notebooktoolsAuthUser) return;
+    void accountsApi.getActive().then((value) => {
+      if (value === active) return;
+      active = value;
+      render();
+      void picker.refresh({ silent: true });
+    });
+  });
+
+  return { load };
+})();
+
 if (IS_POPUP) {
   const bulkPanel = document.querySelector("#panelBulk");
   if (bulkPanel) {
@@ -843,6 +980,7 @@ async function initSidePanel() {
   initNudges();
   updateModeUi();
   void picker.refresh({ silent: true });
+  void googleAccount?.load();
 
   if (autoOpenToggle) {
     autoOpenToggle.checked = await NotebookToolsSettings.getAutoOpenNotebook();
