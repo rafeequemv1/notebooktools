@@ -185,8 +185,10 @@
       button.dataset.artifact = item?.id || "";
       button.dataset.title = item?.title || view.title;
       button.classList.toggle("is-dark", isDarkPage());
-      // In the deck's row of icons, just before ⋮ (where it stays visible)
-      if (button.nextElementSibling !== view.more || button.parentElement !== view.more.parentElement) {
+      // In the deck's row of icons, just before ⋮ (where it stays visible).
+      // Only moved when it's missing from that row, so it never fights other
+      // add-ons' icons or NotebookLM's own redraws (no flicker).
+      if (!button.isConnected || button.parentElement !== view.more.parentElement) {
         try {
           view.more.parentElement.insertBefore(button, view.more);
           button.classList.add("is-top");
@@ -216,9 +218,11 @@
   async function downloadDeck(title) {
     const views = openDecks();
     const view = views.find((v) => title && norm(v.title) === norm(title)) || views[0];
-    if (!view) return { ok: false, error: "Open the slide deck in NotebookLM (click it in Studio), then try again." };
+    // Deck not open: its row in the Studio list has a ⋮ with Download too
+    const more = view?.more || studioRowMore(title);
+    if (!more) return { ok: false, error: "Couldn't find the deck in NotebookLM. Open it in Studio, then click Edit slides again." };
     const before = new Set(document.querySelectorAll("[role='menu'], [role='menuitem']"));
-    view.more.click();
+    more.click();
     const items = await waitFor(() => {
       const found = [...document.querySelectorAll("[role='menuitem'], [role='menu'] button, .mat-mdc-menu-item")].filter((m) => visible(m) && !before.has(m));
       return found.length ? found : null;
@@ -234,7 +238,24 @@
     // Download with a choice of kinds (PDF, PowerPoint): the PDF
     const sub = await waitFor(() => [...document.querySelectorAll("[role='menuitem'], [role='menu'] button")].find((m) => visible(m) && m !== download && /pdf/i.test(label(m))) || null, 1200);
     if (sub) sub.click();
-    return { ok: true, title: view.title };
+    return { ok: true, title: view?.title || title };
+  }
+
+  /** The ⋮ button of the Studio list row titled `title` (the deck's own row, not the open view). */
+  function studioRowMore(title) {
+    const want = norm(title);
+    if (!want) return null;
+    for (const more of document.querySelectorAll("button, [role='button']")) {
+      if (!MORE_TEXT.test(label(more))) continue;
+      let row = more.parentElement;
+      for (let i = 0; row && i < 5; i += 1, row = row.parentElement) {
+        // Climbed past this item's row: it holds another item's ⋮, or a lot of text
+        const mores = [...row.querySelectorAll("button, [role='button']")].filter((b) => MORE_TEXT.test(label(b)));
+        if (mores.length > 1 || norm(row.innerText).length > 400) break;
+        if (norm(row.innerText).includes(want)) return more;
+      }
+    }
+    return null;
   }
 
   try {
@@ -253,8 +274,9 @@
   }
 
   new MutationObserver((mutations) => {
-    // Ignore our own insertions
-    if (mutations.every((m) => [...m.addedNodes].every((n) => n.nodeType === 1 && n.classList?.contains(BTN_CLASS)))) return;
+    // Ignore our own insertions and our label changing
+    const ours = (m) => m.target.closest?.(`.${BTN_CLASS}`) || [...m.addedNodes, ...m.removedNodes].every((n) => n.nodeType === 1 && n.classList?.contains(BTN_CLASS));
+    if (mutations.every(ours)) return;
     schedule();
   }).observe(document.documentElement, { childList: true, subtree: true });
   schedule();

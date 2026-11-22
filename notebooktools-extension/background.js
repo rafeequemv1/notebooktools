@@ -560,7 +560,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "notebooktools-deck-via-notebook-download") {
     void (async () => {
       try {
-        sendResponse(await deckViaNotebookDownload(message.notebookId, message.title));
+        sendResponse(await deckViaNotebookDownload(message.notebookId, message.title, sender?.tab));
       } catch (error) {
         sendResponse({ ok: false, error: error.message || "Couldn't download the deck through NotebookLM." });
       }
@@ -764,7 +764,7 @@ function nextDeckDownload(since, timeoutMs) {
   });
 }
 
-async function deckViaNotebookDownload(notebookId, title) {
+async function deckViaNotebookDownload(notebookId, title, editorTab) {
   if (!chrome.downloads || !(await chrome.permissions.contains({ permissions: ["downloads"] }))) {
     return { ok: false, needPermission: true, error: "NotebookTools needs permission to pick up the download." };
   }
@@ -772,7 +772,16 @@ async function deckViaNotebookDownload(notebookId, title) {
   if (!tab?.id) return { ok: false, error: "Open the notebook in a browser tab, then try again." };
   const since = Date.now();
   const download = nextDeckDownload(since, 90000);
+  // Background tabs are throttled and NotebookLM's menus may not open there:
+  // bring the notebook forward for the click, as a person would, then go back.
+  await chrome.windows.update(tab.windowId, { focused: true }).catch(() => undefined);
+  await chrome.tabs.update(tab.id, { active: true }).catch(() => undefined);
+  await new Promise((resolve) => setTimeout(resolve, 500));
   const clicked = await chrome.tabs.sendMessage(tab.id, { type: "ntde-download-deck", title }).catch(() => null);
+  if (editorTab?.id) {
+    await chrome.windows.update(editorTab.windowId, { focused: true }).catch(() => undefined);
+    await chrome.tabs.update(editorTab.id, { active: true }).catch(() => undefined);
+  }
   if (!clicked?.ok) {
     return { ok: false, error: clicked?.error || "Reload the notebook tab (so NotebookTools can reach it), open the deck, then try again." };
   }
