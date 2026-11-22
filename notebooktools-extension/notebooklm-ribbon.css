@@ -388,13 +388,15 @@
   color: #fff;
 }
 
-/* While the ribbon is on, the old chat-box bars are folded into it. */
-html.ntr-on #notebooktools-nlm-export-bar {
+/* The old chat-box bars are folded into the ribbon. Hidden from the first
+   paint (not only once the ribbon has mounted), so they never flash in;
+   the ribbon still opens their menus, anchored under its own buttons. */
+#notebooktools-nlm-export-bar {
   display: none !important;
 }
 
-html.ntr-on #notebooktools-blog-workflow-bar,
-html.ntr-on #notebooktools-snapshot-workflow-bar {
+#notebooktools-blog-workflow-bar,
+#notebooktools-snapshot-workflow-bar {
   height: 1px !important;
   left: var(--ntr-anchor-left, 50%) !important;
   margin: 0 !important;
