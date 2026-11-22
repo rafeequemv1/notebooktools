@@ -98,6 +98,14 @@
         <div class="se-stage-wrap" id="seWrap"><div class="se-stage" id="seStage"></div></div>
         <aside class="se-props" id="seProps" aria-label="Inspector"></aside>
       </div>
+      <div class="se-loader" id="seLoader" hidden aria-live="polite">
+        <div class="se-loader-card">
+          <p class="se-loader-title" id="seLoaderTitle">Opening your deck</p>
+          <div class="se-loader-strip" id="seLoaderStrip"></div>
+          <div class="se-loader-bar"><i id="seLoaderBar"></i></div>
+          <p class="se-loader-text" id="seLoaderText"></p>
+        </div>
+      </div>
       <p class="se-status" id="seStatus" role="status"></p>
       <div class="se-pop" id="sePop" hidden></div>
     </div>
@@ -207,6 +215,59 @@
   /* ---------- Open ---------- */
   P.dropZone($("#seDrop"), { label: "Drop a NotebookLM slide deck PDF", hint: "or slide images, or", multiple: true, accept: ".pdf,application/pdf,image/png,image/jpeg,image/webp", sample: "deck" }, openFiles);
 
+  /* ---------- Import progress: frames fill in slide by slide ---------- */
+  const loader = {
+    frames: 0,
+    show(title) {
+      const box = $("#seLoader");
+      $("#seStart").hidden = true;
+      $("#seEditor").hidden = false;
+      box.classList.remove("is-leaving");
+      box.hidden = false;
+      $("#seLoaderTitle").textContent = title || "Opening your deck";
+      $("#seLoaderText").textContent = "";
+      $("#seLoaderBar").style.width = "0%";
+      $("#seLoaderStrip").classList.add("is-waiting");
+      $("#seLoaderStrip").innerHTML = '<span class="se-loader-frame"></span>'.repeat(5);
+      this.frames = 0;
+    },
+    isOpen() {
+      return !$("#seLoader").hidden;
+    },
+    text(msg) {
+      $("#seLoaderText").textContent = msg || "";
+    },
+    /** Slide i (0-based) of n is in: show its picture in frame i. */
+    frame(i, n, image) {
+      const strip = $("#seLoaderStrip");
+      if (this.frames !== n) {
+        strip.classList.remove("is-waiting");
+        strip.innerHTML = '<span class="se-loader-frame"></span>'.repeat(n);
+        this.frames = n;
+      }
+      const cell = strip.children[i];
+      if (cell && image) {
+        const c = document.createElement("canvas");
+        c.width = 96;
+        c.height = Math.max(1, Math.round((96 * (image.height || 9)) / (image.width || 16)));
+        c.getContext("2d").drawImage(image, 0, 0, c.width, c.height);
+        cell.replaceChildren(c);
+        cell.classList.add("is-in");
+        cell.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+      }
+      strip.querySelectorAll(".is-now").forEach((x) => x.classList.remove("is-now"));
+      strip.children[i + 1]?.classList.add("is-now");
+      $("#seLoaderBar").style.width = `${Math.round(((i + 1) / n) * 100)}%`;
+      this.text(`Slide ${i + 1} of ${n}`);
+    },
+    hide() {
+      const box = $("#seLoader");
+      if (box.hidden) return;
+      box.classList.add("is-leaving");
+      setTimeout(() => { box.hidden = true; box.classList.remove("is-leaving"); }, 260);
+    }
+  };
+
   async function openFiles(files) {
     const ocr = $("#seOcr").checked;
     const objectsOn = $("#seObjects").checked;
@@ -218,6 +279,7 @@
     $("#seStart").hidden = true;
     $("#seEditor").hidden = false;
     status("Opening…");
+    if (!loader.isOpen()) loader.show("Opening your deck");
     try {
       const pdfs = files.filter((f) => /pdf/i.test(f.type) || /\.pdf$/i.test(f.name));
       const images = files.filter((f) => /^image\//.test(f.type));
@@ -226,7 +288,9 @@
         const { pdf, pageCount } = await S.loadPdf(await P.bytesOf(f));
         for (let i = 1; i <= pageCount; i += 1) {
           status(`Opening slide ${i} of ${pageCount}…`);
-          deck.slides.push(S.newSlide(await S.renderOriginal(pdf, i)));
+          const page = await S.renderOriginal(pdf, i);
+          deck.slides.push(S.newSlide(page));
+          loader.frame(i - 1, pageCount, page);
           if (deck.slides.length === 1) renderAll();
         }
       }
@@ -237,12 +301,15 @@
         canvas.height = Math.round((S.W * img.height) / img.width);
         canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
         deck.slides.push(S.newSlide(canvas));
+        loader.frame(images.indexOf(f), images.length, canvas);
       }
       if (!deck.slides.length) throw new Error("No slides found in that file.");
     } catch (error) {
+      loader.hide();
       status(error.message || "That file couldn't be opened. If the PDF has a password, remove it first.", "error");
       return;
     }
+    loader.hide();
     renderAll();
     status(ocr ? "Reading the text on each slide. You can start editing slides that are ready." : "Opened. Text stays part of the slide image.");
     deck.slides.forEach((s, i) => {
@@ -252,6 +319,8 @@
           S.skipAnalysis(s);
         } else {
           showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length}`);
+          s.status = "working";
+          markScanning();
           try {
             await S.analyze(s, (p) => showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length} · ${Math.round(p * 100)}%`), { objects: objectsOn });
           } catch (_error) {
@@ -260,6 +329,7 @@
           }
         }
         renderThumb(deck.slides.indexOf(s));
+        markScanning();
         if (deck.slides[cur] === s) {
           renderStage();
           if (!selected) renderPanels();
@@ -278,12 +348,19 @@
   // Let a host page (the extension) open a deck directly.
   window.NTSlideEditor = {
     open: (files) => openFiles(files),
+    loader,
     status: (msg, type) => {
       $("#seStart").hidden = true;
       $("#seEditor").hidden = false;
       status(msg, type);
     }
   };
+
+  /** A scan line runs over the slide whose text is being read (thumbnail and stage). */
+  function markScanning() {
+    deck.slides.forEach((x, i) => $(`.se-thumb[data-slide="${i}"]`)?.classList.toggle("is-scanning", x.status === "working"));
+    $("#seStage")?.classList.toggle("is-scanning", deck.slides[cur]?.status === "working");
+  }
 
   function showProgress(text) {
     const chip = $("#seProgress");
@@ -307,7 +384,7 @@
   function renderThumbs() {
     const box = $("#seThumbs");
     box.innerHTML = deck.slides.map((s, i) => `
-      <button type="button" class="se-thumb${i === cur ? " is-on" : ""}" data-slide="${i}" aria-label="Slide ${i + 1}">
+      <button type="button" class="se-thumb${i === cur ? " is-on" : ""}${s.status === "working" ? " is-scanning" : ""}" data-slide="${i}" aria-label="Slide ${i + 1}">
         <span class="se-thumb-n">${i + 1}<span class="se-thumb-fx" title="Has motion"></span></span><span class="se-thumb-img"></span>
         ${s.status === "pending" || s.status === "working" ? '<span class="se-thumb-busy" title="Reading text…"></span>' : ""}
       </button>`).join("");
@@ -339,6 +416,7 @@
   }
 
   function renderStage() {
+    $("#seStage")?.classList.toggle("is-scanning", deck.slides[cur]?.status === "working");
     const s = slide();
     const stage = $("#seStage");
     if (!s) {

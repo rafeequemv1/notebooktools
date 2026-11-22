@@ -1888,13 +1888,48 @@ function parseSlideDeckArtifact(record) {
         .filter((slide) => slide.imageUrl || slide.text || slide.description)
     : [];
 
+  // NotebookLM moves fields around between deck versions. Prefer the usual
+  // places, then look through the whole record for the links.
+  const isUrl = (value) => typeof value === "string" && /^https?:\/\//i.test(value);
+  const found = collectArtifactUrls(record);
+  const pick = (test) => found.find((item) => test(item))?.url || "";
+  const isPdf = (item) => /\.pdf\b|[=&/]pdf\b|application\/pdf/i.test(`${item.url} ${item.context}`);
+  const isPptx = (item) => /pptx|presentationml|powerpoint/i.test(`${item.url} ${item.context}`);
+  const pdfUrl = isUrl(readArtifactField(block, 3)) ? String(readArtifactField(block, 3)) : pick(isPdf);
+  const pptxUrl = isUrl(readArtifactField(block, 4)) ? String(readArtifactField(block, 4)) : pick(isPptx);
+
+  let slideList = slides;
+  if (!slideList.some((slide) => slide.imageUrl)) {
+    // Slide pictures: the image links in the deck block, in order
+    const seen = new Set();
+    slideList = collectArtifactUrls(block)
+      .filter((item) => /googleusercontent\.com|ggpht\.com/i.test(item.url) && !isPdf(item) && !isPptx(item))
+      .filter((item) => !seen.has(item.url) && seen.add(item.url))
+      .map((item, index) => ({ index: index + 1, imageUrl: item.url, width: null, height: null, description: "", text: "" }));
+  }
+
   return {
     id: String(record[0] || ""),
     title: cleanText(readArtifactField(block, 1)) || cleanText(record[1]) || "Slide deck",
-    slides,
-    pdfUrl: readArtifactField(block, 3) ? String(readArtifactField(block, 3)) : "",
-    pptxUrl: readArtifactField(block, 4) ? String(readArtifactField(block, 4)) : ""
+    status: mapArtifactStatus(record, record[4]),
+    slides: slideList,
+    pdfUrl,
+    pptxUrl
   };
+}
+
+/** Every http(s) link in a nested record, with the plain strings next to it as context. */
+function collectArtifactUrls(value, out = [], context = "", depth = 0) {
+  if (depth > 12) return out;
+  if (typeof value === "string") {
+    if (/^https?:\/\//i.test(value)) out.push({ url: value, context });
+    return out;
+  }
+  if (Array.isArray(value)) {
+    const hints = value.filter((item) => typeof item === "string" && !/^https?:\/\//i.test(item)).join(" ").slice(0, 200);
+    for (const item of value) collectArtifactUrls(item, out, hints || context, depth + 1);
+  }
+  return out;
 }
 
 async function createNotebookLmArtifact(notebookId, type, config = {}, options = {}) {
