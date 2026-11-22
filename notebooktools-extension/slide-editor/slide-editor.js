@@ -180,7 +180,7 @@
 
   /* ---------- History ---------- */
   function snapshot() {
-    return JSON.stringify({ cur, order: deck.slides.map((s) => s.id), slides: deck.slides.map((s) => ({ id: s.id, bgMode: s.bgMode, bgColor: s.bgColor, notes: s.notes, transition: s.transition || null, elements: s.elements })) });
+    return JSON.stringify({ cur, order: deck.slides.map((s) => s.id), slides: deck.slides.map((s) => ({ id: s.id, status: s.status, bgMode: s.bgMode, bgColor: s.bgColor, notes: s.notes, transition: s.transition || null, elements: s.elements })) });
   }
   const canvases = new Map(); // slide id → slide (keeps its canvases across undo)
   function commit() {
@@ -195,7 +195,11 @@
     deck.slides = data.order.map((idv) => {
       const base = canvases.get(idv);
       const saved = data.slides.find((s) => s.id === idv);
-      return Object.assign(base, { bgMode: saved.bgMode, bgColor: saved.bgColor, notes: saved.notes, transition: saved.transition, elements: JSON.parse(JSON.stringify(saved.elements)) });
+      // Saved before this slide's text was read: keep the text found since
+      // (restoring the empty list would leave a cleaned slide with no text)
+      const readSince = saved.status !== "done" && base.status === "done";
+      const elements = readSince ? base.elements : JSON.parse(JSON.stringify(saved.elements));
+      return Object.assign(base, { bgMode: saved.bgMode, bgColor: saved.bgColor, notes: saved.notes, transition: saved.transition, elements });
     });
     cur = Math.min(data.cur, deck.slides.length - 1);
     selected = null;

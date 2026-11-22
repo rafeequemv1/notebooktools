@@ -527,11 +527,36 @@ window.NTPdf = (() => {
     return data.blocks || [];
   }
 
+  // A second worker that reads one line at a time (page segmentation mode 7),
+  // for a closer look at lines the page pass wasn't sure about.
+  let lineWorkerPromise = null;
+  async function lineWorker() {
+    lineWorkerPromise ||= (async () => {
+      await loadScript(`${VENDOR}/tesseract/tesseract.min.js`);
+      const worker = await window.Tesseract.createWorker("eng", 1, {
+        workerPath: `${VENDOR}/tesseract/worker.min.js`,
+        corePath: `${VENDOR}/tesseract/core`,
+        langPath: `${VENDOR}/tesseract/lang`,
+        workerBlobURL: false,
+        gzip: true
+      });
+      await worker.setParameters({ tessedit_pageseg_mode: "7" });
+      return worker;
+    })();
+    return lineWorkerPromise;
+  }
+
+  async function ocrLine(image) {
+    const worker = await lineWorker();
+    const { data } = await worker.recognize(image, {}, { blocks: true, text: true });
+    return data.blocks || [];
+  }
+
   // NotebookLM limits, for the "will it fit" messages.
   const LIMITS = { words: 500000, bytes: 200 * 1024 * 1024, sources: 50 };
 
   return {
     pdfLib, pdfjs, openPdfjs, openPdfLib, bytesOf, fmtBytes, baseName, saveBlob, pdfBlob,
-    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, sample, LIMITS
+    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, ocrLine, sample, LIMITS
   };
 })();

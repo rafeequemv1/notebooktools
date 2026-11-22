@@ -229,6 +229,43 @@ window.NTSlides = (() => {
     return /^[\p{L}\p{N}][\p{L}\p{N}'’\-./()]*$/u.test(w) && /[\p{L}]{2}/u.test(w);
   }
 
+  // Join a line's words. Wide letter spacing (bold titles) makes OCR split
+  // words ("Rama n Fi ngerpri nt"): a gap much narrower than the line's real
+  // spaces is no space at all.
+  const COMMON_SHORT = new Set(["a", "i", "an", "as", "at", "be", "by", "do", "go", "he", "if", "in", "is", "it", "me", "my", "no", "of", "on", "or", "so", "to", "up", "us", "we", "vs", "the", "and", "for", "are", "was", "not", "but", "all", "any", "can", "has", "its", "new", "one", "our", "out", "two", "who", "why", "how"]);
+  function joinWords(ws) {
+    if (ws.length < 2) return (ws[0]?.text || "").trim();
+    const h = median(ws.map((w) => w.bbox.y1 - w.bbox.y0));
+    const gaps = ws.slice(1).map((w, i) => w.bbox.x0 - ws[i].bbox.x1);
+    const sorted = [...gaps].sort((a, b) => a - b);
+    const wide = sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.75))];
+    let out = ws[0].text.trim();
+    ws.slice(1).forEach((w, i) => {
+      const t = w.text.trim();
+      // ...but only for pieces that aren't words on their own ("n", "nt", "Fi"), never "of graphene"
+      const prev = out.split(" ").pop();
+      const piece = (x) => !COMMON_SHORT.has(x.toLowerCase()) && (x.length <= 2 || !/[aeiouy]/i.test(x));
+      const tight = gaps[i] < Math.min(h * 0.22, wide * 0.5) && /[\p{L}]$/u.test(out) && /^[\p{L}]/u.test(t) && (piece(prev) || piece(t));
+      // A lone "." read off a colon, right after a word: "Verification . The" → "Verification: The"
+      if (t === "." && (w.confidence ?? 100) < 75 && /[\p{L}]$/u.test(out) && ws[i + 2] && /^[A-Z]/.test(ws[i + 2].text)) { out += ":"; return; }
+      out += (tight ? "" : " ") + t;
+    });
+    return out.replace(/\s+/g, " ").trim();
+  }
+
+  // Common OCR misreads on slides.
+  const SUBSCRIPT_2 = /\b(SiO|TiO|SnO|ZrO|HfO|MnO|NO|MoS|WS|MoSe|WSe|MoTe|WTe|NbSe|TaS|PtSe)[,₂2](?=[\s.,;:)]|$)/g;
+  function fixText(text) {
+    return String(text)
+      .replace(/\b(1[5-9]\d0|20[0-9]0)5\b/g, "$1s") // 19305 → 1930s
+      .replace(/(\d{4}s?)\s*-\s*(\d{4})/g, "$1–$2") // 1930s-2004 → 1930s–2004
+      .replace(SUBSCRIPT_2, "$1₂") // SiO, → SiO₂
+      .replace(/\s*(?:[—–-]+\s*>|=>)\s*/g, " → ") // —> arrows
+      .replace(/\s+([,.;:!?])(?=\s|$)/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
   function segmentsOf(blocks, img) {
     const segs = [];
     for (const block of blocks) for (const para of block.paragraphs || []) for (const line of para.lines || []) {
@@ -255,7 +292,7 @@ window.NTSlides = (() => {
       flush();
     }
     return segs.map((ws) => {
-      const text = ws.map((w) => w.text).join(" ").replace(/\s+/g, " ").trim().replace(BULLET_RE, (m) => (m.trim() ? "• " : ""));
+      const text = fixText(joinWords(ws)).replace(BULLET_RE, (m) => (m.trim() ? "• " : ""));
       const real = ws.filter((w) => plausible(w.text));
       const conf = ws.reduce((n, w) => n + (w.confidence ?? 0), 0) / ws.length;
       return {
@@ -295,15 +332,82 @@ window.NTSlides = (() => {
   }
 
   // Luminance standard deviation around a box (large = photo / strong gradient behind it).
-  function ringSpread(img, b, pad) {
+  function ringSpread(img, b, pad, others = []) {
     const { data, width, height } = img;
     const lums = [];
-    const add = (x, y) => { if (x >= 0 && y >= 0 && x < width && y < height) { const i = (y * width + x) * 4; lums.push(0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]); } };
+    // Pixels inside other lines of text aren't background (tight line spacing)
+    const inText = (x, y) => others.some((o) => o !== b && x >= o.x0 - 2 && x <= o.x1 + 2 && y >= o.y0 - 2 && y <= o.y1 + 2);
+    const add = (x, y) => { if (x >= 0 && y >= 0 && x < width && y < height && !inText(x, y)) { const i = (y * width + x) * 4; lums.push(0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]); } };
     for (let x = b.x0 - pad; x <= b.x1 + pad; x += 3) { add(x, b.y0 - pad); add(x, b.y1 + pad); }
     for (let y = b.y0 - pad; y <= b.y1 + pad; y += 3) { add(b.x0 - pad, y); add(b.x1 + pad, y); }
     if (lums.length < 4) return 0;
     const mean = lums.reduce((a, v) => a + v, 0) / lums.length;
     return Math.sqrt(lums.reduce((a, v) => a + (v - mean) ** 2, 0) / lums.length);
+  }
+
+  const rgbOf = (hx) => [1, 3, 5].map((k) => parseInt(String(hx).slice(k, k + 2), 16) || 0);
+  const boxOf = (ws) => ({ x0: Math.min(...ws.map((w) => w.bbox.x0)), y0: Math.min(...ws.map((w) => w.bbox.y0)), x1: Math.max(...ws.map((w) => w.bbox.x1)), y1: Math.max(...ws.map((w) => w.bbox.y1)) });
+  // Bold or not, from the stroke width in pixels at this size (slides are read at 1600 px wide).
+  const isBoldStroke = (px, size) => px > 0.1025 * size + 1.45;
+
+  /** Colour and weight of a line, and of its "Label:" lead-in when it has one. */
+  function lineStyle(img, sg) {
+    const words = sg.words.filter((w, i) => !(i === 0 && /^[•»«·●▪◦*®©¢eo]$/.test(w.text.trim())));
+    const colon = words.slice(0, 6).findIndex((w) => /:$/.test(w.text.trim()));
+    const hasLabel = colon >= 0 && colon < words.length - 1;
+    const rest = hasLabel ? words.slice(colon + 1) : words;
+    const box = boxOf(rest.length ? rest : sg.words);
+    const st = sampleStyle(img, box);
+    sg.bg = st.bg;
+    sg.color = st.color;
+    sg.stroke = strokeRatio(img, box, st.bg, sg.h) * sg.h;
+    sg.bold = isBoldStroke(sg.stroke, sg.h);
+    sg.label = null;
+    if (hasLabel) {
+      const lb = boxOf(words.slice(0, colon + 1));
+      sg.label = { color: sampleStyle(img, lb).color, stroke: strokeRatio(img, lb, st.bg, sg.h) * sg.h };
+    }
+  }
+
+  /** Ink just past either end of a short label: OCR read only part of it. */
+  function cutOff(img, sg) {
+    const { data, width, height } = img;
+    const h = sg.y1 - sg.y0;
+    const reach = Math.max(6, Math.round(h * 0.7));
+    const bg = sg.bg || [255, 255, 255];
+    const inkShare = (xa, xb) => {
+      let ink = 0, all = 0;
+      for (let y = Math.max(0, sg.y0 + 2); y < Math.min(height, sg.y1 - 2); y += 1) for (let x = Math.max(0, xa); x < Math.min(width, xb); x += 1) {
+        const i = (y * width + x) * 4;
+        all += 1;
+        if (Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 160) ink += 1;
+      }
+      return all ? ink / all : 0;
+    };
+    return inkShare(sg.x1 + 2, sg.x1 + reach) > 0.06 || inkShare(sg.x0 - reach, sg.x0 - 2) > 0.06;
+  }
+
+  // Stroke thickness of the text in a box, as a share of the font size:
+  // ~0.08–0.10 for regular weight, ~0.13+ for bold. Ink area divided by
+  // half its outline gives the average stroke width.
+  function strokeRatio(img, box, bg, fontSize) {
+    const { data, width, height } = img;
+    const x0 = Math.max(0, Math.round(box.x0)), x1 = Math.min(width, Math.round(box.x1));
+    const y0 = Math.max(0, Math.round(box.y0)), y1 = Math.min(height, Math.round(box.y1));
+    const w = x1 - x0, h = y1 - y0;
+    if (w < 4 || h < 4 || !fontSize) return 0;
+    const ink = new Uint8Array(w * h);
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+      const i = ((y0 + y) * width + (x0 + x)) * 4;
+      if (Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 160) ink[y * w + x] = 1;
+    }
+    let area = 0, edge = 0;
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+      if (!ink[y * w + x]) continue;
+      area += 1;
+      if (x === 0 || y === 0 || x === w - 1 || y === h - 1 || !ink[y * w + x - 1] || !ink[y * w + x + 1] || !ink[(y - 1) * w + x] || !ink[(y + 1) * w + x]) edge += 1;
+    }
+    return edge ? (2 * area) / edge / fontSize : 0;
   }
 
   // Group segments into paragraphs: same left edge (or centre), similar size, close lines.
@@ -315,11 +419,24 @@ window.NTSlides = (() => {
       const g = groups.find((gr) => {
         const last = gr[gr.length - 1];
         const lh = last.h;
-        if (Math.max(h, lh) / Math.max(1, Math.min(h, lh)) > 1.28) return false;
+        // Sizes of very short lines are guessed from their height ("ness" has no tall
+        // letters and looks half its size), so they get a looser match
+        const loose = seg.text.length < 8 || last.text.length < 8;
+        if (Math.max(h, lh) / Math.max(1, Math.min(h, lh)) > (loose ? 2.2 : 1.28)) return false;
         const gap = seg.y0 - last.y1;
         // Lines in a paragraph sit close; a half-line gap or a bullet starts a new paragraph.
-        if (gap < -lh * 0.35 || gap > Math.max(h, lh) * 0.5) return false;
+        if (gap < -lh * 0.35 || gap > Math.max(h, lh) * (loose ? 0.75 : 0.5)) return false;
         if (/^•/.test(seg.text)) return false;
+        // A heading line on its own ("Mechanism:", "Concept:") is its own paragraph
+        if (/:$/.test(last.text) && last.text.split(/\s+/).length <= 5 && seg.color && last.color
+          && (seg.bold !== last.bold || dist(rgbOf(seg.color), rgbOf(last.color)) > 45)) return false;
+        // A line in another colour or weight starts its own paragraph (red heading over black text)
+        // (a line of a few letters can't be judged for weight, so only a clear colour change counts)
+        if (seg.color && last.color) {
+          const short = Math.min(seg.text.replace(/[^\p{L}]/gu, "").length, last.text.replace(/[^\p{L}]/gu, "").length) < 6;
+          const colourGap = dist(rgbOf(seg.color), rgbOf(last.color));
+          if (short ? colourGap > 120 : seg.bold !== last.bold || colourGap > 60) return false;
+        }
         const left = Math.abs(seg.tx0 - last.tx0) < Math.max(h, lh) * 0.9;
         const centre = Math.abs(cx - (last.x0 + last.x1) / 2) < Math.max(h, lh) * 0.9;
         const overlap = Math.min(seg.x1, last.x1) - Math.max(seg.x0, last.x0) > 0;
@@ -377,14 +494,59 @@ window.NTSlides = (() => {
     if (best) {
       // Weight margin within the winning family: bold only when it fits clearly better.
       best.boldMargin = (scores[`${best.family}B`] || 0) - (scores[best.family] || 0);
+      const serifBest = Math.max(scores.Georgia || 0, scores.GeorgiaB || 0);
+      const sansBest = Math.max(scores.Arial || 0, scores.ArialB || 0);
+      best.familyMargin = best.family === "Georgia" ? serifBest - sansBest : sansBest - serifBest;
+      best.textLength = text.length;
     }
     return best;
+  }
+
+  /* Lines the page pass wasn't sure of ("[ion through" for "matter through"):
+     read each again on its own, enlarged 2x, as a single line, and keep the
+     better reading. Chart numbers and specks are left alone. */
+  async function rereadUnsure(slide, segs, img) {
+    if (typeof P.ocrLine !== "function") return;
+    const unsure = segs
+      .filter((sg) => (sg.conf < 82 || sg.quality < 0.85) && (sg.text.match(/\p{L}/gu) || []).length >= 4 && sg.y1 - sg.y0 >= 10 && sg.x1 - sg.x0 < slide.w * 0.9)
+      .sort((a, b) => a.conf - b.conf)
+      .slice(0, 14);
+    for (const sg of unsure) {
+      const pad = Math.round((sg.y1 - sg.y0) * 0.35);
+      const x0 = Math.max(0, sg.x0 - pad), y0 = Math.max(0, sg.y0 - pad);
+      const w = Math.min(slide.w, sg.x1 + pad) - x0, h = Math.min(slide.h, sg.y1 + pad) - y0;
+      const crop = document.createElement("canvas");
+      crop.width = w * 2;
+      crop.height = h * 2;
+      const cx = crop.getContext("2d");
+      cx.imageSmoothingQuality = "high";
+      cx.drawImage(slide.original, x0, y0, w, h, 0, 0, w * 2, h * 2);
+      let blocks;
+      try {
+        blocks = await P.ocrLine(crop);
+      } catch (_error) {
+        return;
+      }
+      const words = [];
+      for (const b of blocks) for (const pa of b.paragraphs || []) for (const l of pa.lines || []) for (const wd of l.words || []) {
+        if (!wd.text || !wd.text.trim()) continue;
+        // Whole pixels: the colour and stroke samplers index the image with these
+        words.push({ ...wd, bbox: { x0: Math.round(x0 + wd.bbox.x0 / 2), y0: Math.round(y0 + wd.bbox.y0 / 2), x1: Math.round(x0 + wd.bbox.x1 / 2), y1: Math.round(y0 + wd.bbox.y1 / 2) } });
+      }
+      if (!words.length) continue;
+      const again = segmentsOf([{ paragraphs: [{ lines: [{ words }] }] }], null)[0];
+      if (!again) continue;
+      // Better only if clearly more confident and at least as word-like, and about as long
+      const lenOk = again.text.length >= sg.text.length * 0.6 && again.text.length <= sg.text.length * 1.6 + 4;
+      if (lenOk && again.conf > sg.conf + 4 && again.quality >= sg.quality) Object.assign(sg, again);
+    }
   }
 
   const longest0 = (group) => [...group].sort((a, b) => b.text.length - a.text.length)[0];
 
   async function analyze(slide, onProgress = () => {}, options = {}) {
     slide.status = "working";
+    const added = slide.elements.slice(); // anything added by hand while the slide waited
     const blocks = await P.ocrBlocks(slide.original, (m) => {
       if (m.status === "recognizing text") onProgress(m.progress);
     });
@@ -395,11 +557,19 @@ window.NTSlides = (() => {
 
     // 1. Keep real text: confident, plausible words, on a calm background.
     const dropped = [];
-    const segs = segmentsOf(blocks, img).filter((sg) => {
+    const allSegs = segmentsOf(blocks, img);
+    // Chart evidence: numbers (axis ticks, values), read before any re-reading.
+    // Letters from drawings ("OH", "HO" on a molecule) don't count.
+    const chartish = allSegs.filter((sg) => {
+      const digits = (sg.text.match(/\d/g) || []).length;
+      return digits > 0 && digits >= (sg.text.match(/\p{L}/gu) || []).length;
+    });
+    await rereadUnsure(slide, allSegs, img);
+    const segs = allSegs.filter((sg) => {
       const h = sg.y1 - sg.y0;
       const letters = sg.text.replace(/[^\p{L}\p{N}]/gu, "").length;
       const why = letters < 2 || h < 8 ? "tiny"
-        : /notebook\s?lm/i.test(sg.text) && sg.y0 > slide.h * 0.85 && sg.text.length < 20 ? "watermark"
+        : /notebook\s?[li1|]*m/i.test(sg.text) && sg.y0 > slide.h * 0.85 && sg.text.length < 20 ? "watermark"
         : sg.conf < 60 ? `conf ${Math.round(sg.conf)}`
         : sg.quality < (sg.conf >= 80 ? 0.5 : 0.7) ? `quality ${sg.quality.toFixed(2)}`
         : letters <= 3 && sg.conf < 80 ? "short"
@@ -422,8 +592,10 @@ window.NTSlides = (() => {
     segs.length = 0;
     segs.push(...kept);
     slide.debugDropped = dropped;
+    segs.forEach((sg) => lineStyle(img, sg));
 
 
+    const converted = new Set(); // lines turned into text boxes (the rest stay in the picture)
     // 2. Paragraphs, style, boxes.
     const groupsFound = groupSegments(segs);
 
@@ -433,7 +605,24 @@ window.NTSlides = (() => {
       const x1 = Math.max(...group.map((g) => g.x1));
       const y1 = Math.max(...group.map((g) => g.y1));
       // Text over a photo or strong gradient: keep it in the picture (removing it would leave patches).
-      if (ringSpread(img, { x0, y0, x1, y1 }, 10) > 45) continue;
+      const behind = ringSpread(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o)));
+      if (behind > 45) { dropped.push(`on a picture: ${group[0].text}`); continue; }
+      // Short one-line labels stay in the picture when they're part of a figure:
+      // a fragment ("onduction"), a label OCR only half read ("Dirac Point (E"),
+      // or a label among a chart's numbers and ticks.
+      if (group.length === 1) {
+        const sg = group[0];
+        const nWords = sg.text.replace(/^•\s*/, "").split(/\s+/).length;
+        if (nWords <= 4) {
+          const near = chartish.filter((d) => d !== sg && d.x1 > sg.x0 - sg.h * 4 && d.x0 < sg.x1 + sg.h * 4 && d.y1 > sg.y0 - sg.h * 4 && d.y0 < sg.y1 + sg.h * 4).length;
+          const opens = (sg.text.match(/\(/g) || []).length, closes = (sg.text.match(/\)/g) || []).length;
+          const why = /^[a-z]/.test(sg.text) ? "fragment"
+            : opens !== closes ? "unmatched bracket" // the rest of the label is on lines left in the picture
+            : near >= 3 ? "in a chart"
+            : nWords <= 3 && cutOff(img, sg) ? "cut off" : "";
+          if (why) { dropped.push(`${why}: ${sg.text}`); continue; }
+        }
+      }
       const lineH = median(group.map((g) => g.h));
       const style = sampleStyle(img, { x0, y0, x1, y1 });
       // Match the font on lines without a "Label:" lead-in (labels are often bold/grey).
@@ -441,9 +630,17 @@ window.NTSlides = (() => {
       const probe = (plain.length ? plain : group).slice().sort((a, b) => b.text.length - a.text.length).slice(0, 2);
       const votes = probe.map((g) => matchFont(img, g, style.bg)).filter(Boolean);
       const margin = votes.length ? votes.reduce((a, v) => a + (v.boldMargin || 0), 0) / votes.length : 0;
+      // Weight from stroke width (reliable); serif only when it clearly fits better on longer lines
+      const chars = (pred) => group.filter(pred).reduce((n, g) => n + g.text.length, 0);
+      const bold = chars((g) => g.bold) > chars(() => true) / 2;
+      // How much better a serif fits (negative: sans fits better). Condensed and italic
+      // sans fonts can look serif-ish, so only a clear lead counts on its own.
+      const serifLead = votes.length ? votes.reduce((n, v) => n + (v.family === "Georgia" ? 1 : -1) * (v.familyMargin || 0), 0) / votes.length : -1;
+      const serif = serifLead >= 0.075 && votes.some((v) => v.textLength >= 12);
+      void margin;
       const font = votes.length
-        ? { family: votes.filter((v) => v.family === "Georgia").length > votes.length / 2 ? "Georgia" : votes[0].family, bold: margin > 0.13, size: votes[0].size }
-        : { family: "Arial", bold: false, size: lineH * 0.8 };
+        ? { family: serif ? "Georgia" : "Arial", bold, size: votes[0].size }
+        : { family: "Arial", bold, size: lineH * 0.8 };
       // Size: median of width-fitted sizes for the longer lines, in the matched font.
       const sizes = group.filter((g) => g.text.length >= 6).map((g) => sizeFromWidth(g.text.replace(/^•\s*/, ""), g.x1 - g.x0 - (g.text.startsWith("•") ? lineH * 0.9 : 0), font.bold, font.family)).filter(Boolean);
       let fontSize = sizes.length ? median(sizes) : font.size;
@@ -457,25 +654,21 @@ window.NTSlides = (() => {
       let align = "left";
       if (group.length > 1 && spread(lefts) > fontSize * 0.6 && spread(centres) < fontSize * 0.8) align = "center";
       else if (group.length === 1 && Math.abs((x0 + x1) / 2 - slide.w / 2) < slide.w * 0.03 && x0 > slide.w * 0.12) align = "center";
-      // "Label:" lead-ins (NotebookLM style): keep their own colour/weight.
+      // "Label:" lead-ins (NotebookLM style): their own colour and weight, measured per line.
       let label = null;
-      const lab = group.find((g) => /^(?:•\s*)?[^:]{2,40}:\s/.test(g.text));
-      if (lab) {
-        const n = lab.text.replace(/^•\s*/, "").split(":")[0].split(/\s+/).length;
-        const lw = lab.words.filter((w) => w.text.trim() && !/^[•»«]$/.test(w.text)).slice(0, n);
-        if (lw.length) {
-          const lb = { x0: Math.min(...lw.map((w) => w.bbox.x0)), y0: Math.min(...lw.map((w) => w.bbox.y0)), x1: Math.max(...lw.map((w) => w.bbox.x1)), y1: Math.max(...lw.map((w) => w.bbox.y1)) };
-          const ls = sampleStyle(img, lb);
-          const hexToRgb = (hx) => [1, 3, 5].map((k) => parseInt(hx.slice(k, k + 2), 16));
-          const differs = dist(hexToRgb(ls.color), hexToRgb(style.color)) > 45;
-          const lf = matchFont(img, { ...lb, text: lw.map((w) => w.text).join(" ") }, style.bg);
-          const lbold = differs || (lf ? (lf.boldMargin || 0) > 0.05 : ls.inkRatio > style.inkRatio * 1.25);
-          if (differs || lbold !== font.bold) label = { color: differs ? ls.color : style.color, bold: lbold };
-        }
+      const labelled = group.filter((g) => g.label && LABEL_RE.test(g.text));
+      if (labelled.length) {
+        const labStroke = median(labelled.map((g) => g.label.stroke));
+        const restStroke = median(labelled.map((g) => g.stroke));
+        // In a bold paragraph the label is bold too; otherwise only when clearly heavier
+        const lbold = font.bold || labStroke > restStroke * 1.18 || isBoldStroke(labStroke, lineH);
+        const lcolor = labelled[0].label.color;
+        const differs = dist(rgbOf(lcolor), rgbOf(style.color)) > 45;
+        if (differs || lbold !== font.bold) label = { color: differs ? lcolor : style.color, bold: lbold };
       }
       const pad = Math.max(4, Math.round(fontSize * 0.2));
       const inkRgb = [1, 3, 5].map((k) => parseInt(style.color.slice(k, k + 2), 16));
-      group.forEach((g) => boxes.push({ x0: g.x0 - pad, y0: g.y0 - pad, x1: g.x1 + pad, y1: g.y1 + pad, bg: style.bg, ink: inkRgb }));
+      group.forEach((g) => { converted.add(g); boxes.push({ x0: g.x0 - pad, y0: g.y0 - pad, x1: g.x1 + pad, y1: g.y1 + pad, bg: style.bg, ink: inkRgb, seg: g }); });
       // Box wide enough for the longest line in our font, so it doesn't re-wrap.
       measureCtx.font = `${font.bold ? 700 : 400} ${fontSize}px ${font.family === "Georgia" ? "Georgia, serif" : "Arial, sans-serif"}`;
       const textW = Math.max(...group.map((g) => measureCtx.measureText(g.text).width));
@@ -497,6 +690,7 @@ window.NTSlides = (() => {
         fontFamily: font.family,
         _lines: group.map((g) => ({ w: g.x1 - g.x0 })),
         _lineH: lineH,
+        _serifLead: serifLead,
         ...(label ? { labelColor: label.color, labelBold: label.bold } : {})
       });
     }
@@ -505,6 +699,12 @@ window.NTSlides = (() => {
     const isHeading = (e) => e.fontSize >= Math.max(44, bodySize * 1.4) || (e.y < slide.h * 0.22 && e.fontSize >= bodySize * 1.25 && e.fontSize >= 36);
     // Paragraphs of similar size on one slide share a font: use the majority family and weight.
     // Only multi-line paragraphs take part; titles and short labels keep their own font.
+    // Text next to a clearly serif paragraph of about the same size is serif too
+    // when it leans that way (reference lists, captions).
+    elements.forEach((e) => {
+      if (e.fontFamily === "Georgia" || !(e._serifLead > 0)) return;
+      if (elements.some((o) => o.fontFamily === "Georgia" && o._serifLead >= 0.075 && Math.abs(o.fontSize - e.fontSize) <= e.fontSize * 0.25)) e.fontFamily = "Georgia";
+    });
     const body = elements.filter((e) => !isHeading(e) && e.text.includes("\n"));
     body.forEach((e) => {
       const peers = body.filter((o) => Math.abs(o.fontSize - e.fontSize) <= e.fontSize * 0.25);
@@ -512,11 +712,9 @@ window.NTSlides = (() => {
       const weight = (pred) => peers.filter(pred).reduce((n, o) => n + o.text.length, 0);
       const total = weight(() => true);
       e.fontFamily = weight((o) => o.fontFamily === "Georgia") > total / 2 ? "Georgia" : "Arial";
-      e.bold = weight((o) => o.bold) > total * 0.8;
     });
     // Then re-fit size and box width to the final font so nothing re-wraps.
     elements.forEach((e) => {
-      if (isHeading(e)) e.bold = true;
       const lines = e.text.split("\n");
       const fam = e.fontFamily === "Georgia" ? "Georgia, serif" : "Arial, sans-serif";
       const fit = e._lines.map((ln, i) => sizeFromWidth((lines[i] || "").replace(/^•\s*/, ""), ln.w - (lines[i]?.startsWith("•") ? e._lineH * 0.9 : 0), e.bold, e.fontFamily)).filter((v, i) => v && (lines[i] || "").length >= 6);
@@ -535,7 +733,17 @@ window.NTSlides = (() => {
       }
       delete e._lines;
       delete e._lineH;
+      delete e._serifLead;
     });
+    // Cleaning a line's box mustn't clip a neighbouring line that stays in the picture
+    for (const b of boxes) {
+      for (const o of allSegs) {
+        if (converted.has(o) || o.x1 < b.x0 || o.x0 > b.x1) continue;
+        const below = (o.y0 + o.y1) / 2 > (b.seg.y0 + b.seg.y1) / 2;
+        if (below && o.y0 < b.y1) b.y1 = Math.max(b.seg.y0 + 2, o.y0 - 1);
+        if (!below && o.y1 > b.y0) b.y0 = Math.min(b.seg.y1 - 2, o.y1 + 1);
+      }
+    }
     const clean = document.createElement("canvas");
     clean.width = slide.w;
     clean.height = slide.h;
@@ -543,12 +751,12 @@ window.NTSlides = (() => {
     cctx.drawImage(slide.original, 0, 0);
     paintOut(cctx, boxes, slide.w, slide.h);
     slide.clean = clean;
-    slide.elements = elements;
+    slide.elements = [...elements, ...added];
     if (options.objects !== false) {
       try {
         const found = detectObjects(slide);
         await Promise.all(found.objects.filter((o) => o.type === "image").map((o) => imageFor(o.src).decode().catch(() => {})));
-        slide.elements = [...found.objects, ...elements];
+        slide.elements = [...found.objects, ...elements, ...added];
         slide.objectsNote = found.skipped || "";
       } catch (_error) {
         // Keep the flat background if detection fails.
@@ -1019,10 +1227,11 @@ window.NTSlides = (() => {
                 options: { ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}), ...(ri === arr.length - 1 && li < all.length - 1 ? { breakLine: true } : {}) }
               })))
             : el.text;
+          const sizePt = Math.max(1, Math.round(el.fontSize * k * 72 * 10) / 10);
           s.addText(runs, {
             ...box,
             fontFace: el.fontFamily,
-            fontSize: Math.max(1, Math.round(el.fontSize * k * 72 * 10) / 10),
+            fontSize: sizePt,
             color: noHash(el.color),
             bold: Boolean(el.bold),
             italic: Boolean(el.italic),
@@ -1033,7 +1242,11 @@ window.NTSlides = (() => {
             align: el.align || "left",
             valign: el.valign || "top",
             margin: 0,
-            lineSpacingMultiple: el.lineHeight || 1.2,
+            // Exact spacing in points: a multiple is applied on top of the font's own
+            // line height (~1.15) and spreads the lines further apart than on the slide
+            lineSpacing: Math.round(sizePt * (el.lineHeight || 1.2) * 10) / 10,
+            paraSpaceBefore: 0,
+            paraSpaceAfter: 0,
             fit: "none",
             transparency
           });
@@ -1153,5 +1366,5 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
