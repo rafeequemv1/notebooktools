@@ -267,6 +267,7 @@ const NotebookToolsSourcesPanel = (() => {
       <button type="button" class="src-menu-item" data-action="rename" data-id="${source.id}">Rename</button>
       ${canEdit ? `<button type="button" class="src-menu-item" data-action="edit" data-id="${source.id}">Edit text</button>` : ""}
       <button type="button" class="src-menu-item" data-action="folders" data-id="${source.id}">Organize in folders</button>
+      <button type="button" class="src-menu-item" data-action="notes" data-id="${source.id}">Highlights &amp; notes</button>
       <button type="button" class="src-menu-item" data-action="export" data-id="${source.id}">Export</button>
       <button type="button" class="src-menu-item is-danger" data-action="delete" data-id="${source.id}">Delete</button>
     `;
@@ -329,6 +330,11 @@ const NotebookToolsSourcesPanel = (() => {
 
       if (action === "export") {
         await exportSource(current);
+        return;
+      }
+
+      if (action === "notes") {
+        openSourceNotes(current);
         return;
       }
 
@@ -941,6 +947,32 @@ const NotebookToolsSourcesPanel = (() => {
     renderList();
   }
 
+  function openSourceNotes(source) {
+    window.NotebookToolsSourceNotes?.open({
+      notebookId: activeNotebook.id,
+      source,
+      authOptions,
+      onChange: () => void decorateSourceNotes()
+    });
+  }
+
+  async function decorateSourceNotes() {
+    if (!window.NotebookToolsSourceNotes || !activeNotebook || !listEl) return;
+    const counts = await window.NotebookToolsSourceNotes.summary(activeNotebook.id);
+    listEl.querySelectorAll("[data-source-id]").forEach((row) => {
+      const count = counts[row.dataset.sourceId] || 0;
+      let badge = row.querySelector(".src-notes-badge");
+      if (!count) return badge?.remove();
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "src-notes-badge";
+        badge.title = "Your highlights and notes";
+        row.querySelector(".src-item-head")?.append(badge);
+      }
+      badge.textContent = `✎ ${count}`;
+    });
+  }
+
   function renderList() {
     if (!listEl) {
       return;
@@ -1002,6 +1034,20 @@ const NotebookToolsSourcesPanel = (() => {
         `;
       })
       .join("");
+
+    void decorateSourceNotes();
+
+    listEl.querySelectorAll(".src-item-title").forEach((titleEl) => {
+      titleEl.addEventListener("click", (event) => {
+        if (selectMode) return;
+        const id = titleEl.closest("[data-source-id]")?.dataset.sourceId;
+        const source = sources.find((item) => item.id === id);
+        if (source) {
+          event.preventDefault();
+          openSourceNotes(source);
+        }
+      });
+    });
 
     listEl.querySelectorAll("[data-src-refresh-id]").forEach((btn) => {
       btn.addEventListener("click", (event) => {

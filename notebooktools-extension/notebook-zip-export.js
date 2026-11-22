@@ -177,7 +177,13 @@
           totals.failed += 1;
         }
         const file = `${String(i + 1).padStart(2, "0")} ${uniqueName(safeName(source.title, "source"), used)}.${ext}`;
-        files.push({ name: `${folder}sources/${file}`, data: sourceDoc(source, content, format) });
+        let doc = sourceDoc(source, content, format);
+        const mine = window.NotebookToolsSourceNotes ? await window.NotebookToolsSourceNotes.get(notebook.id, source.id) : null;
+        if (mine && (mine.note?.trim() || mine.highlights?.length)) {
+          const extra = window.NotebookToolsSourceNotes.markdown(mine);
+          doc += `\n---\n\n${format === "md" ? extra : stripMarkdown(extra)}`;
+        }
+        files.push({ name: `${folder}sources/${file}`, data: doc });
         index.push({ kind: "source", title: source.title, file: `sources/${file}`, type: source.type, url: source.url });
         totals.sources += 1;
       }
