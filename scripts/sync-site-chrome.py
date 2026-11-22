@@ -45,12 +45,16 @@ CHROME_ICON = (
     "</svg>"
 )
 
+AUDIENCES = [
+    ("/students", "Students", "students", "Study guides, flashcards and revision podcasts", '<path d="M3 9l9-5 9 5-9 5-9-5Z"/><path d="M7 11.5V16c0 1.4 2.2 3 5 3s5-1.6 5-3v-4.5"/>'),
+    ("/teachers", "Teachers", "teachers", "Lesson plans, quizzes and class materials", '<rect x="3.5" y="4.5" width="17" height="11" rx="1.5"/><path d="M8 20h8M12 15.5V20"/>'),
+    ("/researchers", "Researchers", "researchers", "Literature reviews and well-managed sources", '<circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/>'),
+    ("/creators", "Content creators", "creators", "Research, scripts, posts and carousels", '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'),
+]
+
 NAV = [
     ("/features", "Features", "features"),
-    ("/students", "Students", "students"),
-    ("/teachers", "Teachers", "teachers"),
-    ("/researchers", "Researchers", "researchers"),
-    ("/creators", "Creators", "creators"),
+    ("@audiences", "Who it's for", None),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
     ("/tools", "Free tools", "tools"),
@@ -76,6 +80,20 @@ def header_html(rel: str) -> str:
     current = section_of(rel)
     links = []
     for href, label, key in NAV:
+        if href == "@audiences":
+            on = current in [k for _h, _l, k, _d, _i in AUDIENCES]
+            items = "\n".join(
+                f'              <a class="nav-menu-item" href="{h}"{" aria-current=\"page\"" if k == current else ""}>'
+                f'<span class="nav-menu-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></span>'
+                f'<span class="nav-menu-text"><strong>{l}</strong><small>{d}</small></span></a>'
+                for h, l, k, d, ico in AUDIENCES)
+            links.append(f"""          <div class="nav-menu">
+            <button type="button" class="nav-menu-btn{" is-current" if on else ""}" aria-expanded="false" aria-haspopup="true">{label}<svg class="nav-menu-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="nav-menu-panel">
+{items}
+            </div>
+          </div>""")
+            continue
         attr = ' aria-current="page"' if key and key == current else ""
         links.append(f'          <a href="{href}"{attr}>{label}</a>')
     nav = "\n".join(links)

@@ -33,6 +33,27 @@
     });
   }
 
+
+  // "Who it's for" dropdown: click / keyboard toggle (hover handled in CSS on desktop).
+  document.querySelectorAll(".nav-menu").forEach(function (menu) {
+    var btn = menu.querySelector(".nav-menu-btn");
+    if (!btn) return;
+    function set(open) {
+      menu.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", String(open));
+    }
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      set(!menu.classList.contains("is-open"));
+    });
+    document.addEventListener("click", function (e) {
+      if (!menu.contains(e.target)) set(false);
+    });
+    menu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { set(false); btn.focus(); }
+    });
+  });
+
   function onScroll() {
     header.classList.toggle("is-scrolled", window.scrollY > 8);
   }
