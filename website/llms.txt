@@ -3,6 +3,7 @@
 > Official site: https://www.notebooktools.com
 > Language: English (en-US, global audience)
 > Sitemap: https://www.notebooktools.com/sitemap.xml
+> Markdown versions: every page has a clean Markdown copy at the same path with .md (home: https://www.notebooktools.com/index.md, e.g. https://www.notebooktools.com/students.md, https://www.notebooktools.com/blog/what-is-notebooklm.md). Each HTML page links its copy with <link rel="alternate" type="text/markdown">.
 
 NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (YouTube, web, X, text, link extraction), a full notebooks hub (folders, pin, favorites), source management (dedupe, Drive refresh, bulk actions), Studio tools, cross-notebook podcast player, prompt library, and chat export. Independent product, not affiliated with Google.
 

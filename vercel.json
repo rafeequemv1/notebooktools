@@ -7,75 +7,173 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "notebooktools.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "notebooktools.com"
+        }
+      ],
       "destination": "https://www.notebooktools.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "notebooktools.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "notebooktools.vercel.app"
+        }
+      ],
       "destination": "https://www.notebooktools.com/:path*",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "youtube" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "youtube"
+        }
+      ],
       "destination": "/blog/category/youtube",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "notebooklm" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "notebooklm"
+        }
+      ],
       "destination": "/blog/category/notebooklm",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "product" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "product"
+        }
+      ],
       "destination": "/blog/category/product",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "comparisons" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "comparisons"
+        }
+      ],
       "destination": "/blog/category/comparisons",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "students" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "students"
+        }
+      ],
       "destination": "/blog/category/students",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "tutorials" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "tutorials"
+        }
+      ],
       "destination": "/blog/category/tutorials",
       "permanent": true
     },
     {
       "source": "/blog",
-      "has": [{ "type": "query", "key": "category", "value": "prompts" }],
+      "has": [
+        {
+          "type": "query",
+          "key": "category",
+          "value": "prompts"
+        }
+      ],
       "destination": "/blog/category/prompts",
       "permanent": true
     },
-    { "source": "/website", "destination": "/", "permanent": true },
-    { "source": "/website/", "destination": "/", "permanent": true },
-    { "source": "/website/:path*", "destination": "/:path*", "permanent": true },
-    { "source": "/what-is-notebooktools", "destination": "/blog/what-is-notebooktools", "permanent": true },
-    { "source": "/summarize-youtube-videos-notebooklm", "destination": "/blog/youtube-to-notebooklm", "permanent": true },
-    { "source": "/blog/summarize-youtube-videos-notebooklm", "destination": "/blog/youtube-to-notebooklm", "permanent": true }
+    {
+      "source": "/website",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/website/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/website/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/what-is-notebooktools",
+      "destination": "/blog/what-is-notebooktools",
+      "permanent": true
+    },
+    {
+      "source": "/summarize-youtube-videos-notebooklm",
+      "destination": "/blog/youtube-to-notebooklm",
+      "permanent": true
+    },
+    {
+      "source": "/blog/summarize-youtube-videos-notebooklm",
+      "destination": "/blog/youtube-to-notebooklm",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://piqo.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vgqfjwwnezwhzwfhpmkz.supabase.co https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://piqo.app; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; frame-ancestors 'none'; base-uri 'self';"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
         }
       ]
     }
