@@ -12,7 +12,7 @@
   const title = (params.get("title") || "Slide deck").replace(/[<>:"/\\|?*]+/g, "-").slice(0, 90);
   const authUser = params.get("authuser");
   if (title) document.title = `${title} · Slide editor · NotebookTools`;
-  if (!notebookId || !artifactId || !window.NTSlideEditor) return;
+  if (!notebookId || !window.NTSlideEditor) return;
 
   const editor = window.NTSlideEditor;
   const loader = editor.loader;
@@ -93,26 +93,87 @@
     return true;
   }
 
+  /** The way NotebookLM's own button works: its ⋮ menu → Download → PDF, picked up from Downloads. */
+  async function fromNotebookDownload() {
+    loader.text("Downloading through NotebookLM (⋮ → Download)…");
+    const r = await chrome.runtime.sendMessage({ type: "notebooktools-deck-via-notebook-download", notebookId, title: params.get("title") || "" });
+    if (!r?.ok || !r.data) throw Object.assign(new Error(r?.error || "Couldn't download the deck through NotebookLM."), { needPermission: !!r?.needPermission });
+    loader.text("Opening the slides…");
+    await editor.open([new File([base64Blob(r.data, "application/pdf")], `${title}.pdf`, { type: "application/pdf" })]);
+    return true;
+  }
+
+  const hasDownloadsPermission = () => chrome.permissions.contains({ permissions: ["downloads"] }).catch(() => false);
+
+  /** One button in the loader card: Chrome only asks for a permission after a click. */
+  function offerNotebookDownload(reason) {
+    loader.show(`Importing “${title}” from NotebookLM`);
+    loader.text(reason);
+    const card = document.querySelector(".se-loader-card");
+    card.querySelector(".se-loader-actions")?.remove();
+    document.querySelector("#seLoaderStrip")?.classList.remove("is-waiting"); // waiting on the person now, not loading
+    const actions = document.createElement("div");
+    actions.className = "se-loader-actions";
+    actions.innerHTML = '<button type="button" class="se-btn is-primary" data-go>Download it through NotebookLM</button><button type="button" class="se-btn" data-pick>Choose a PDF instead</button><p class="se-loader-hint">Opens the deck\u2019s \u22ee menu \u2192 Download in your notebook tab, the way NotebookLM does it. Chrome asks once to let NotebookTools pick up that download.</p>';
+    card.append(actions);
+    actions.querySelector("[data-go]").addEventListener("click", async () => {
+      const granted = (await hasDownloadsPermission()) || (await chrome.permissions.request({ permissions: ["downloads"] }).catch(() => false));
+      if (!granted) {
+        loader.text("Without that permission, download the PDF from the deck\u2019s \u22ee menu in NotebookLM, then choose it here.");
+        return;
+      }
+      actions.remove();
+      try {
+        await fromNotebookDownload();
+      } catch (error) {
+        fail(error);
+      }
+    });
+    actions.querySelector("[data-pick]").addEventListener("click", () => {
+      actions.remove();
+      loader.hide();
+      document.querySelector('[data-act="new"]')?.click();
+    });
+  }
+
+  function fail(error) {
+    document.querySelector(".se-loader-actions")?.remove();
+    loader.hide();
+    editor.status(error?.message || "Couldn't open the slide deck.", "error");
+  }
+
   loader.show(`Importing “${title}” from NotebookLM`);
   loader.text("Finding your slide deck…");
+  let reason = "";
   try {
-    let deck = await getDeck();
-    // Still generating: wait for it (up to about 5 minutes)
-    for (let tries = 0; deck.status === "generating" && tries < 30; tries += 1) {
-      loader.text("Still generating in NotebookLM. Checking again in 10 seconds…");
-      await sleep(10000);
-      deck = await getDeck();
+    if (artifactId) {
+      let deck = await getDeck();
+      // Still generating: wait for it (up to about 5 minutes)
+      for (let tries = 0; deck.status === "generating" && tries < 30; tries += 1) {
+        loader.text("Still generating in NotebookLM. Checking again in 10 seconds…");
+        await sleep(10000);
+        deck = await getDeck();
+      }
+      if (deck.status === "generating") throw new Error("This slide deck is still generating in NotebookLM. Try Edit slides again when it's finished.");
+      if (await fromPdf(deck)) return;
+      if (await fromImages(deck)) return;
+      reason = pdfError ? "NotebookLM didn\u2019t let us download the deck directly." : "NotebookLM didn\u2019t give a direct link to this deck.";
+    } else {
+      reason = "Couldn\u2019t look this deck up directly.";
     }
-    if (await fromPdf(deck)) return;
-    if (await fromImages(deck)) return;
-    if (pdfError) throw pdfError;
-    throw new Error(deck.status === "generating"
-      ? "This slide deck is still generating in NotebookLM. Try Edit slides again when it's finished."
-      : "Couldn't import this deck from NotebookLM. Download it as PDF in NotebookLM (⋮ → Download), then click Open and choose the file.");
   } catch (error) {
-    loader.hide();
-    editor.status(/HTTP 40[13]/.test(error.message)
-      ? "NotebookLM didn't let us download the deck. Keep the notebook open in a tab (same Google account), then click Edit slides again. Or download the PDF in NotebookLM (⋮ → Download) and click Open."
-      : error.message || "Couldn't open the slide deck.", "error");
+    if (/still generating/.test(error.message || "")) return fail(error);
+    reason = /HTTP 40[13]/.test(error.message || "") ? "NotebookLM didn\u2019t let us download the deck directly." : (error.message || "Couldn\u2019t download the deck directly.");
   }
+
+  // Direct download didn't work: NotebookLM's own Download, as its button does it
+  if (await hasDownloadsPermission()) {
+    try {
+      await fromNotebookDownload();
+      return;
+    } catch (error) {
+      if (!error.needPermission) return fail(error);
+    }
+  }
+  offerNotebookDownload(reason);
 })();

@@ -540,37 +540,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "notebooktools-fetch-via-notebook-tab") {
     void (async () => {
       try {
-        const tabs = await chrome.tabs.query({ url: ["https://notebook.google.com/*", "https://notebooklm.google.com/*"] });
-        const tab = tabs.find((t) => message.notebookId && String(t.url || "").includes(message.notebookId))
-          || tabs.find((t) => t.active)
-          || tabs[0];
+        const tab = await findNotebookTab(message.notebookId);
         if (!tab?.id) {
           sendResponse({ ok: false, error: "Open the notebook in a browser tab, then try again." });
           return;
         }
-        const [injection] = await chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          args: [String(message.url || "")],
-          func: async (url) => {
-            try {
-              const response = await fetch(url, { credentials: "include" });
-              if (!response.ok) return { ok: false, error: `HTTP ${response.status}` };
-              const blob = await response.blob();
-              const data = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
-                reader.onerror = () => reject(reader.error);
-                reader.readAsDataURL(blob);
-              });
-              return { ok: true, data, type: blob.type };
-            } catch (error) {
-              return { ok: false, error: String(error?.message || error) };
-            }
-          }
-        });
-        sendResponse(injection?.result || { ok: false, error: "No result from the notebook tab." });
+        sendResponse(await fetchInTab(tab.id, message.url));
       } catch (error) {
         sendResponse({ ok: false, error: error.message || "Couldn't use the notebook tab." });
+      }
+    })();
+    return true;
+  }
+
+  // The last resort, as NotebookLM's own button does it: open the deck's ⋮
+  // menu in the notebook tab, choose Download → PDF, pick up that download,
+  // read it through the tab, then take it back out of the Downloads folder.
+  // Needs the optional "downloads" permission (asked for by the editor).
+  if (message?.type === "notebooktools-deck-via-notebook-download") {
+    void (async () => {
+      try {
+        sendResponse(await deckViaNotebookDownload(message.notebookId, message.title));
+      } catch (error) {
+        sendResponse({ ok: false, error: error.message || "Couldn't download the deck through NotebookLM." });
       }
     })();
     return true;
@@ -713,3 +705,102 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     }
   }
 });
+
+
+/* ---------- Slide editor: getting a deck's file out of NotebookLM ---------- */
+
+async function findNotebookTab(notebookId) {
+  const tabs = await chrome.tabs.query({ url: ["https://notebook.google.com/*", "https://notebooklm.google.com/*"] });
+  return tabs.find((t) => notebookId && String(t.url || "").includes(notebookId))
+    || tabs.find((t) => t.active)
+    || tabs[0]
+    || null;
+}
+
+/** Fetch `url` inside the tab (its sign-in, its origin, blob: links too); base64 back. */
+async function fetchInTab(tabId, url) {
+  const [injection] = await chrome.scripting.executeScript({
+    target: { tabId },
+    args: [String(url || "")],
+    func: async (target) => {
+      try {
+        const response = await fetch(target, { credentials: "include" });
+        if (!response.ok) return { ok: false, error: `HTTP ${response.status}` };
+        const blob = await response.blob();
+        const data = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(blob);
+        });
+        return { ok: true, data, type: blob.type };
+      } catch (error) {
+        return { ok: false, error: String(error?.message || error) };
+      }
+    }
+  });
+  return injection?.result || { ok: false, error: "No result from the notebook tab." };
+}
+
+const NOTEBOOK_HOST = /^https:\/\/notebook(lm)?\.google\.com\//i;
+const isDeckDownload = (item) => /\.(pdf|pptx)$/i.test(item.filename || "") || /pdf|presentation/i.test(item.mime || "");
+const fromNotebookTab = (item) => NOTEBOOK_HOST.test(item.referrer || "") || NOTEBOOK_HOST.test(item.url || "") || /usercontent\.google\.com|googleusercontent\.com/i.test(item.finalUrl || item.url || "");
+
+/** The next finished deck download from NotebookLM, started after `since`. */
+function nextDeckDownload(since, timeoutMs) {
+  return new Promise((resolve) => {
+    const done = (item) => {
+      chrome.downloads.onChanged.removeListener(onChanged);
+      clearTimeout(timer);
+      resolve(item);
+    };
+    const onChanged = async (delta) => {
+      if (delta.state?.current !== "complete") return;
+      const [item] = await chrome.downloads.search({ id: delta.id });
+      if (item && Date.parse(item.startTime) >= since - 2000 && isDeckDownload(item) && fromNotebookTab(item)) done(item);
+    };
+    const timer = setTimeout(() => done(null), timeoutMs);
+    chrome.downloads.onChanged.addListener(onChanged);
+  });
+}
+
+async function deckViaNotebookDownload(notebookId, title) {
+  if (!chrome.downloads || !(await chrome.permissions.contains({ permissions: ["downloads"] }))) {
+    return { ok: false, needPermission: true, error: "NotebookTools needs permission to pick up the download." };
+  }
+  const tab = await findNotebookTab(notebookId);
+  if (!tab?.id) return { ok: false, error: "Open the notebook in a browser tab, then try again." };
+  const since = Date.now();
+  const download = nextDeckDownload(since, 90000);
+  const clicked = await chrome.tabs.sendMessage(tab.id, { type: "ntde-download-deck", title }).catch(() => null);
+  if (!clicked?.ok) {
+    return { ok: false, error: clicked?.error || "Reload the notebook tab (so NotebookTools can reach it), open the deck, then try again." };
+  }
+  const item = await download;
+  if (!item) return { ok: false, error: "The download didn't arrive. Download the PDF from the deck's ⋮ menu, then click Open in the editor." };
+  if (!/\.pdf$/i.test(item.filename || "") && !/pdf/i.test(item.mime || "")) {
+    return { ok: false, error: "NotebookLM gave a PowerPoint file, not a PDF. Download the deck as PDF, then click Open in the editor." };
+  }
+  const url = item.finalUrl || item.url;
+  let result = await fetchInTab(tab.id, url);
+  if (!result.ok && /^https?:/i.test(url)) {
+    try {
+      const response = await fetch(url, { credentials: "include" });
+      if (response.ok) {
+        const bytes = new Uint8Array(await response.arrayBuffer());
+        let binary = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        result = { ok: true, data: btoa(binary), type: response.headers.get("content-type") || "application/pdf" };
+      }
+    } catch (_error) {
+      /* keep the tab's answer */
+    }
+  }
+  if (result.ok) {
+    // The editor has the deck now; keep Downloads tidy
+    await chrome.downloads.removeFile(item.id).catch(() => undefined);
+    await chrome.downloads.erase({ id: item.id }).catch(() => undefined);
+    return { ...result, name: String(item.filename || "").split(/[\\/]/).pop() };
+  }
+  return { ok: false, error: `The deck was saved to Downloads (${String(item.filename || "").split(/[\\/]/).pop()}) but couldn't be read. Click Open in the editor and choose it.` };
+}

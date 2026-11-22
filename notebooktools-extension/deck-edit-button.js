@@ -1,24 +1,35 @@
 /* ==========================================================================
    "Edit slides" right on an open slide deck in Gemini Notebook.
 
-   NotebookLM shows an open deck twice over: in the Studio panel and in the
-   full-screen viewer. Both put a "View prompt and N sources" button under
-   the deck's title. We add an Edit slides button next to it, find which
-   deck is open by matching that title against the notebook's slide decks,
-   and open it in the NotebookTools slide editor (editable text, movable
-   pictures, PowerPoint download).
+   Found by what the person sees, never by Google's class names: the open
+   deck's "View prompt and N sources" button, the panel round it, and the
+   deck's ⋮ (More options) button. The Edit slides button goes in the deck's
+   own row of icons, just before ⋮, and shows as soon as a deck is open.
+   Which deck it is comes from the notebook's Studio list (matched by title);
+   if that list can't be read, the button still shows on a panel of slides.
+
+   It also answers "ntde-download-deck": open the deck's ⋮ menu and choose
+   Download → PDF, so NotebookLM itself downloads the deck with the page's
+   own sign-in (the editor's fallback when a direct download is refused).
    ========================================================================== */
 (function () {
   "use strict";
 
+  if (window.__ntDeckEditButton) return;
+  window.__ntDeckEditButton = true;
+
   const BTN_CLASS = "ntde-btn";
-  const CHIP_TEXT = /^\s*view prompt\b/i;
+  const CHIP_TEXT = /^\s*view prompt and \d+ sources?/i;
+  const MORE_TEXT = /^(more|more options|more actions|options)$/i;
   const CACHE_MS = 60000;
   const RETRY_MS = 15000;
 
-  let decks = { notebookId: "", list: [], at: 0, loading: null };
+  let decks = { notebookId: "", list: [], at: 0, loading: null, failed: false };
   let lastMiss = 0;
   let timer = 0;
+
+  const visible = (el) => !!el && el.getClientRects().length > 0;
+  const label = (el) => ((el.getAttribute && (el.getAttribute("aria-label") || el.getAttribute("title") || el.getAttribute("mattooltip"))) || el.textContent || "").trim();
 
   function notebookId() {
     return location.pathname.match(/\/notebook\/([^/?#]+)/i)?.[1] || "";
@@ -39,9 +50,8 @@
     return window.matchMedia?.("(prefers-color-scheme: dark)").matches || false;
   }
 
-  /** Every Studio item of this notebook, cached for a minute (non-decks too,
-   *  so an open audio overview is recognised without asking again). */
-  async function loadDecks(force = false) {
+  /* ---------- The notebook's Studio items (to know which deck is open) ---------- */
+  async function loadItems(force = false) {
     const id = notebookId();
     if (!id || !window.NotebookToolsNotebookLM?.listNotebookLmArtifacts) return [];
     const fresh = decks.notebookId === id && Date.now() - decks.at < CACHE_MS;
@@ -49,147 +59,170 @@
     if (decks.loading && decks.notebookId === id) return decks.loading;
     decks.notebookId = id;
     decks.loading = window.NotebookToolsNotebookLM.listNotebookLmArtifacts(id)
-      .catch(() => [])
-      .then((list) => {
-        decks = { notebookId: id, list, at: Date.now(), loading: null };
+      .then((list) => ({ list, failed: false }))
+      .catch(() => ({ list: [], failed: true }))
+      .then(({ list, failed }) => {
+        decks = { notebookId: id, list, at: Date.now(), loading: null, failed };
         return list;
       });
     return decks.loading;
   }
 
-  /** Text inside `container` that comes before `el` (the header above the chip). */
-  function textBefore(container, el) {
-    const range = document.createRange();
-    range.setStart(container, 0);
-    range.setEndBefore(el);
-    return norm(range.toString()).slice(-300);
-  }
-
-  /** The Studio item whose title sits just above this chip, in the same view. */
-  function deckForChip(chip, list, chips) {
-    if (!list.length) return null;
-    const byLength = [...list].sort((a, b) => b.title.length - a.title.length);
-    let node = chip.parentElement;
-    for (let depth = 0; node && depth < 6; depth += 1, node = node.parentElement) {
-      // Stop at a container that also holds another view's chip
-      if (chips.some((other) => other !== chip && node.contains(other))) break;
-      const text = textBefore(node, chip);
-      const hit = byLength.find((deck) => deck.title && text.includes(norm(deck.title)));
-      if (hit) return hit;
+  /* ---------- Finding the open deck on the page ---------- */
+  /** Every open deck view: { chip, panel, more, title }. */
+  function openDecks() {
+    const chips = [...document.querySelectorAll("button, a, [role='button']")]
+      .filter((b) => visible(b) && !b.closest(`.${BTN_CLASS}`) && CHIP_TEXT.test(label(b)));
+    const views = [];
+    for (const chip of chips) {
+      let panel = chip.parentElement;
+      for (let i = 0; panel && i < 6; i += 1, panel = panel.parentElement) {
+        if (chips.some((other) => other !== chip && panel.contains(other))) break;
+        const more = [...panel.querySelectorAll("button, [role='button']")]
+          .find((b) => b !== chip && visible(b) && MORE_TEXT.test(label(b)));
+        if (more) {
+          views.push({ chip, panel, more, title: deckTitle(panel, chip) });
+          break;
+        }
+      }
     }
-    return null;
+    return views;
   }
 
-  function findChips() {
-    return Array.from(document.querySelectorAll("button, a, [role='button']")).filter((el) => {
-      if (el.classList.contains(BTN_CLASS) || el.closest(`.${BTN_CLASS}`)) return false;
-      const text = el.textContent || "";
-      return text.length < 60 && CHIP_TEXT.test(text) && el.offsetParent !== null;
-    });
+  /** The title shown above the chip: a heading, else the text just before it. */
+  function deckTitle(panel, chip) {
+    const heading = panel.querySelector("h1, h2, h3, [role='heading']");
+    if (heading && heading.textContent.trim()) return heading.textContent.trim();
+    const range = document.createRange();
+    range.setStart(panel, 0);
+    range.setEndBefore(chip);
+    const lines = range.toString().split("\n").map((s) => s.trim()).filter(Boolean);
+    return lines[lines.length - 1] || "Slide deck";
   }
 
-  function makeButton(deck) {
+  /** Slides show as large pictures; reports and audio don't. */
+  function showsSlides(panel) {
+    return [...panel.querySelectorAll("img, canvas")].some((el) => (el.alt || "").length > 15 || el.naturalWidth > 600 || el.width > 600 || el.getBoundingClientRect().width > 280);
+  }
+
+  function itemFor(view, list) {
+    const title = norm(view.title);
+    const byLength = [...list].sort((a, b) => b.title.length - a.title.length);
+    return byLength.find((a) => norm(a.title) === title) || byLength.find((a) => a.title && title.includes(norm(a.title))) || null;
+  }
+
+  /* ---------- The button ---------- */
+  function makeButton() {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `${BTN_CLASS}${isDarkPage() ? " is-dark" : ""}`;
-    button.dataset.artifact = deck.id;
+    button.className = BTN_CLASS;
     button.title = "Edit text, move pictures and download PowerPoint (NotebookTools)";
+    button.setAttribute("aria-label", "Edit slides with NotebookTools");
     button.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="13" rx="2"/><path d="M8 21h8M12 17.5V21"/><path d="m9.5 13.5 4.8-4.8 1.6 1.6-4.8 4.8H9.5z"/></svg><span>Edit slides</span>`;
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       const authUser = window.NotebookToolsNotebookLM?.currentPageAuthUser?.() ?? new URLSearchParams(location.search).get("authuser");
+      const labelEl = button.querySelector("span");
       try {
         chrome.runtime.sendMessage({
           type: "notebooktools-open-slide-editor",
           notebookId: notebookId(),
-          artifactId: button.dataset.artifact,
-          title: button.dataset.title || deck.title,
+          artifactId: button.dataset.artifact || "",
+          title: button.dataset.title || "Slide deck",
           authUser
         });
-        const label = button.querySelector("span");
-        label.textContent = "Opening…";
-        window.setTimeout(() => { label.textContent = "Edit slides"; }, 2500);
+        labelEl.textContent = "Opening…";
+        window.setTimeout(() => { labelEl.textContent = "Edit slides"; }, 2500);
       } catch (_error) {
         // The extension was reloaded: this page needs a refresh to talk to it again
-        button.querySelector("span").textContent = "Reload page to edit";
+        labelEl.textContent = "Reload page to edit";
       }
     });
-    button.dataset.title = deck.title;
     return button;
-  }
-
-  /**
-   * Where the button goes: just left of the deck's first action button
-   * (the pencil in the Studio panel, Revise in the full-screen viewer), on
-   * the title's line. Found by position, so it works however the page nests
-   * its elements. Returns { header, before } or null.
-   */
-  function actionSlot(chip, chips) {
-    const chipTop = chip.getBoundingClientRect().top;
-    let header = chip.parentElement;
-    for (let depth = 0; header && depth < 7; depth += 1, header = header.parentElement) {
-      if (chips.some((other) => other !== chip && header.contains(other))) return null;
-      const hr = header.getBoundingClientRect();
-      const actions = Array.from(header.querySelectorAll("button, [role='button']")).filter((el) => {
-        if (el === chip || el.classList.contains(BTN_CLASS) || el.closest(`.${BTN_CLASS}`) || el.offsetParent === null) return false;
-        const r = el.getBoundingClientRect();
-        // Above the chip, on the right half of the header
-        return r.width > 0 && r.bottom <= chipTop + 4 && r.left > hr.left + hr.width * 0.4;
-      });
-      if (actions.length >= 2) {
-        const first = actions.reduce((a, b) => (b.getBoundingClientRect().left < a.getBoundingClientRect().left ? b : a));
-        // Step out of single-child wrappers (tooltip spans and the like)
-        let before = first;
-        while (before.parentElement && before.parentElement !== header && before.parentElement.children.length === 1) {
-          before = before.parentElement;
-        }
-        return { header, before };
-      }
-    }
-    return null;
   }
 
   async function scan() {
     if (!notebookId()) return;
-    const chips = findChips();
-    if (!chips.length) return;
-    let list = await loadDecks();
-    for (const chip of chips) {
-      const slot = actionSlot(chip, chips);
-      const scope = slot?.header || chip.parentElement;
-      const existing = scope?.querySelector(`.${BTN_CLASS}`);
-      let item = deckForChip(chip, list, chips);
-      if (!item && Date.now() - lastMiss > RETRY_MS) {
-        // Something just generated isn't in the cached list yet
-        lastMiss = Date.now();
-        list = await loadDecks(true);
-        item = deckForChip(chip, list, chips);
+    const views = openDecks();
+    if (!views.length) return;
+    let list = await loadItems();
+    for (const view of views) {
+      let item = itemFor(view, list);
+      if (!item && !decks.failed && Date.now() - lastMiss > RETRY_MS) {
+        lastMiss = Date.now(); // something just generated isn't in the cached list yet
+        list = await loadItems(true);
+        item = itemFor(view, list);
       }
-      const deck = item && item.typeCode === 8 && (!item.status || item.status === "ready") ? item : null;
-      if (!deck) {
+      const isDeck = item ? item.typeCode === 8 : showsSlides(view.panel);
+      const existing = view.panel.querySelector(`.${BTN_CLASS}`);
+      if (!isDeck) {
         existing?.remove(); // an audio overview, report or other non-deck item
         continue;
       }
-      if (existing) {
-        existing.dataset.artifact = deck.id;
-        existing.dataset.title = deck.title;
-        existing.classList.toggle("is-dark", isDarkPage());
-        // Move it if it isn't where it belongs (e.g. the page re-rendered)
-        if (slot && existing.nextElementSibling !== slot.before) {
-          slot.before.insertAdjacentElement("beforebegin", existing);
-          existing.classList.add("is-top");
+      const button = existing || makeButton();
+      button.dataset.artifact = item?.id || "";
+      button.dataset.title = item?.title || view.title;
+      button.classList.toggle("is-dark", isDarkPage());
+      // In the deck's row of icons, just before ⋮ (where it stays visible)
+      if (button.nextElementSibling !== view.more || button.parentElement !== view.more.parentElement) {
+        try {
+          view.more.parentElement.insertBefore(button, view.more);
+          button.classList.add("is-top");
+        } catch (_error) {
+          view.chip.insertAdjacentElement("afterend", button);
         }
-        continue;
-      }
-      const button = makeButton(deck);
-      if (slot) {
-        button.classList.add("is-top");
-        slot.before.insertAdjacentElement("beforebegin", button);
-      } else {
-        chip.insertAdjacentElement("afterend", button); // fallback: beside "View prompt"
       }
     }
+  }
+
+  /* ---------- Download through NotebookLM's own menu ---------- */
+  function waitFor(fn, ms) {
+    return new Promise((resolve) => {
+      const end = Date.now() + ms;
+      const tick = () => {
+        const value = fn();
+        if (value) resolve(value);
+        else if (Date.now() > end) resolve(null);
+        else setTimeout(tick, 80);
+      };
+      tick();
+    });
+  }
+
+  /** The deck's ⋮ menu, then Download (PDF when it asks which). True when a download was asked for. */
+  async function downloadDeck(title) {
+    const views = openDecks();
+    const view = views.find((v) => title && norm(v.title) === norm(title)) || views[0];
+    if (!view) return { ok: false, error: "Open the slide deck in NotebookLM (click it in Studio), then try again." };
+    const before = new Set(document.querySelectorAll("[role='menu'], [role='menuitem']"));
+    view.more.click();
+    const items = await waitFor(() => {
+      const found = [...document.querySelectorAll("[role='menuitem'], [role='menu'] button, .mat-mdc-menu-item")].filter((m) => visible(m) && !before.has(m));
+      return found.length ? found : null;
+    }, 2500);
+    if (!items) return { ok: false, error: "NotebookLM's menu didn't open." };
+    const pdf = items.find((m) => /download/i.test(label(m)) && /pdf/i.test(label(m)));
+    const download = pdf || items.find((m) => /download/i.test(label(m)));
+    if (!download) {
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      return { ok: false, error: "This deck's menu has no Download." };
+    }
+    download.click();
+    // Download with a choice of kinds (PDF, PowerPoint): the PDF
+    const sub = await waitFor(() => [...document.querySelectorAll("[role='menuitem'], [role='menu'] button")].find((m) => visible(m) && m !== download && /pdf/i.test(label(m))) || null, 1200);
+    if (sub) sub.click();
+    return { ok: true, title: view.title };
+  }
+
+  try {
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type !== "ntde-download-deck") return false;
+      downloadDeck(message.title).then(sendResponse, (error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+      return true;
+    });
+  } catch (_error) {
+    /* not running as an extension content script (tests) */
   }
 
   function schedule() {
@@ -204,5 +237,5 @@
   }).observe(document.documentElement, { childList: true, subtree: true });
   schedule();
 
-  window.NotebookToolsDeckEditButton = { scan, _deckForChip: deckForChip };
+  window.NotebookToolsDeckEditButton = { scan, openDecks, downloadDeck };
 })();
