@@ -38,3 +38,8 @@
   background: rgba(168, 199, 250, 0.2);
   border-color: rgba(168, 199, 250, 0.5);
 }
+
+/* In the action row (left of the pencil / Revise): always show the label */
+.ntde-btn.is-top { align-self: center; margin: 0 8px 0 0; }
+.ntde-btn > span { display: inline !important; visibility: visible !important; width: auto !important; }
+.ntde-btn > svg { display: inline-block !important; flex: none; }

@@ -119,13 +119,46 @@
     return button;
   }
 
+  /**
+   * Where the button goes: just left of the deck's first action button
+   * (the pencil in the Studio panel, Revise in the full-screen viewer), on
+   * the title's line. Found by position, so it works however the page nests
+   * its elements. Returns { header, before } or null.
+   */
+  function actionSlot(chip, chips) {
+    const chipTop = chip.getBoundingClientRect().top;
+    let header = chip.parentElement;
+    for (let depth = 0; header && depth < 7; depth += 1, header = header.parentElement) {
+      if (chips.some((other) => other !== chip && header.contains(other))) return null;
+      const hr = header.getBoundingClientRect();
+      const actions = Array.from(header.querySelectorAll("button, [role='button']")).filter((el) => {
+        if (el === chip || el.classList.contains(BTN_CLASS) || el.closest(`.${BTN_CLASS}`) || el.offsetParent === null) return false;
+        const r = el.getBoundingClientRect();
+        // Above the chip, on the right half of the header
+        return r.width > 0 && r.bottom <= chipTop + 4 && r.left > hr.left + hr.width * 0.4;
+      });
+      if (actions.length >= 2) {
+        const first = actions.reduce((a, b) => (b.getBoundingClientRect().left < a.getBoundingClientRect().left ? b : a));
+        // Step out of single-child wrappers (tooltip spans and the like)
+        let before = first;
+        while (before.parentElement && before.parentElement !== header && before.parentElement.children.length === 1) {
+          before = before.parentElement;
+        }
+        return { header, before };
+      }
+    }
+    return null;
+  }
+
   async function scan() {
     if (!notebookId()) return;
     const chips = findChips();
     if (!chips.length) return;
     let list = await loadDecks();
     for (const chip of chips) {
-      const existing = chip.parentElement?.querySelector(`:scope > .${BTN_CLASS}`);
+      const slot = actionSlot(chip, chips);
+      const scope = slot?.header || chip.parentElement;
+      const existing = scope?.querySelector(`.${BTN_CLASS}`);
       let item = deckForChip(chip, list, chips);
       if (!item && Date.now() - lastMiss > RETRY_MS) {
         // Something just generated isn't in the cached list yet
@@ -139,14 +172,23 @@
         continue;
       }
       if (existing) {
-        if (existing.dataset.artifact !== deck.id) {
-          existing.dataset.artifact = deck.id;
-          existing.dataset.title = deck.title;
-        }
+        existing.dataset.artifact = deck.id;
+        existing.dataset.title = deck.title;
         existing.classList.toggle("is-dark", isDarkPage());
+        // Move it if it isn't where it belongs (e.g. the page re-rendered)
+        if (slot && existing.nextElementSibling !== slot.before) {
+          slot.before.insertAdjacentElement("beforebegin", existing);
+          existing.classList.add("is-top");
+        }
         continue;
       }
-      chip.insertAdjacentElement("afterend", makeButton(deck));
+      const button = makeButton(deck);
+      if (slot) {
+        button.classList.add("is-top");
+        slot.before.insertAdjacentElement("beforebegin", button);
+      } else {
+        chip.insertAdjacentElement("afterend", button); // fallback: beside "View prompt"
+      }
     }
   }
 
