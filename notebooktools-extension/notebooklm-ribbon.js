@@ -478,6 +478,7 @@
           ${btn("studio-files", "studio", "Manage", "Search, open, download and delete this notebook's Studio files")}
           <button type="button" class="ntr-btn has-caret" data-ntr="create" title="Blog post, carousel or snapshot document from this notebook">${icon("plus")}<span class="ntr-label">Create</span>${icon("caret", 13)}</button>
         </div></div>
+        <div class="ntr-group" data-group="Filter"><div class="ntr-items" data-ntr-studiofilter></div></div>
       </div>`;
 
     ribbon.addEventListener("click", (event) => {
@@ -504,6 +505,7 @@
       layoutSegments(existing, row);
       fitRibbon(existing);
       window.NotebookToolsSourceFilter?.refresh();
+      window.NotebookToolsStudioFilter?.refresh();
       return;
     }
     existing?.remove();
@@ -514,6 +516,10 @@
     window.NotebookToolsSourceFilter?.attach(ribbon.querySelector("[data-ntr-typefilter]"), () => {
       const panelRow = findPanelRow();
       return panelRow ? findColumns(panelRow)?.sources || null : null;
+    });
+    window.NotebookToolsStudioFilter?.attach(ribbon.querySelector("[data-ntr-studiofilter]"), () => {
+      const panelRow = findPanelRow();
+      return panelRow ? findColumns(panelRow)?.studio || null : null;
     });
     layoutSegments(ribbon, row);
     fitRibbon(ribbon);

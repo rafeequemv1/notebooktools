@@ -2145,6 +2145,22 @@ async function listNotebookLmNotes(notebookId, options = {}) {
   return rows.map(mapNoteRecord).filter(Boolean).filter((note) => !note.isMindMap);
 }
 
+/** Mind maps in a notebook (stored as notes; shown in the Studio list). */
+async function listNotebookLmMindMaps(notebookId, options = {}) {
+  const targetNotebookId = String(notebookId || "").trim();
+  if (!targetNotebookId) throw new Error("Choose a notebook first.");
+  const tokens = await getNotebookLmTokens(options);
+  const response = await callNotebookLmRpc(
+    NOTEBOOKLM_RPC_IDS.getNotes,
+    [targetNotebookId, null, null, NOTEBOOKLM_LABEL_OPTS],
+    tokens,
+    { sourcePath: `/notebook/${targetNotebookId}` }
+  );
+  const data = response.rows?.[0]?.data;
+  const rows = Array.isArray(data?.[0]) ? data[0] : Array.isArray(data) ? data : [];
+  return rows.map(mapNoteRecord).filter(Boolean).filter((note) => note.isMindMap);
+}
+
 async function getNotebookLmArtifactHtml(notebookId, artifactId, options = {}) {
   const targetNotebookId = String(notebookId || "").trim();
   const targetArtifactId = String(artifactId || "").trim();
@@ -2585,6 +2601,7 @@ if (typeof window !== "undefined") {
     listNotebookLmArtifacts,
     listNotebookLmLabels,
     listNotebookLmNotes,
+    listNotebookLmMindMaps,
     listNotebookLmSources,
     parseSlideDeckArtifact,
     refreshNotebookLmSource,
