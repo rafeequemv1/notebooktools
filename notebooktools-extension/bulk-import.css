@@ -442,3 +442,13 @@
   font-size: 11px;
   margin-top: 0;
 }
+
+.bulk-paste-add {
+  margin-top: 6px;
+  width: 100%;
+}
+
+.bulk-secondary-btn.is-highlight {
+  border-color: var(--nt-accent);
+  box-shadow: 0 0 0 3px var(--nt-accent-soft);
+}

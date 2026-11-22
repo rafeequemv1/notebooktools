@@ -736,6 +736,29 @@ const NotebookToolsBulkImportUI = (() => {
       addPastedLinks();
     });
 
+    // A file picker closes the toolbar dropdown, so from there open the
+    // app in its own window first and pick the file there.
+    root.querySelector("#bulkCsvButton")?.addEventListener("click", async () => {
+      if (new URLSearchParams(location.search).get("popup") === "1") {
+        chrome.windows.create({ url: chrome.runtime.getURL("sidepanel.html?panel=bulk&csv=1"), type: "popup", width: 420, height: 720, focused: true });
+        window.close();
+        return;
+      }
+      const text = await NotebookToolsStore.pickTextFile();
+      if (!text) return;
+      const links = NotebookToolsStore.linksFromCsv(text);
+      if (!links) {
+        setStatus("No links found in that file.", { type: "error" });
+        return;
+      }
+      pasteInput.value = [pasteInput.value.trim(), links].filter(Boolean).join("\n");
+      await addPastedLinks();
+    });
+    if (new URLSearchParams(location.search).get("csv") === "1") {
+      setStatus("Click CSV file to choose your file.", { type: "success" });
+      root.querySelector("#bulkCsvButton")?.classList.add("is-highlight");
+    }
+
     root.querySelector("#bulkSelectAllButton")?.addEventListener("click", async () => {
       NotebookToolsBulkQueue.toggleAll(true);
       await NotebookToolsBulkQueue.persist();
@@ -811,8 +834,9 @@ const NotebookToolsBulkImportUI = (() => {
           <div class="bulk-action-row">
             <button type="button" class="bulk-secondary-btn" id="bulkExtractLinksButton">Extract from page</button>
             <button type="button" class="bulk-secondary-btn" id="bulkAddTabsButton">Open tabs</button>
-            <button type="button" class="bulk-secondary-btn" id="bulkAddPasteButton">Paste links</button>
+            <button type="button" class="bulk-secondary-btn" id="bulkCsvButton" title="Import every link in a CSV or text file">CSV file</button>
           </div>
+          <button type="button" class="bulk-secondary-btn bulk-paste-add" id="bulkAddPasteButton">Add pasted links</button>
           <textarea
             class="bulk-paste"
             id="bulkPasteInput"

@@ -182,6 +182,38 @@ function parseLinkList(text) {
   return results;
 }
 
+// Every http(s) link in a CSV (or any text) file: any column, quoted or
+// not, one or many per cell. Keeps file order, drops repeats.
+function linksFromCsv(text) {
+  const found = String(text || "").match(/https?:\/\/[^\s,;"'<>]+/gi) || [];
+  const urls = found.map((url) => {
+    let value = url.replace(/[.\]]+$/, "");
+    while (value.endsWith(")") && (value.match(/\(/g) || []).length < (value.match(/\)/g) || []).length) {
+      value = value.slice(0, -1);
+    }
+    return value;
+  });
+  return [...new Set(urls)].join("\n");
+}
+
+// Open a file picker for a CSV / TXT file and resolve with its text ("" if cancelled).
+function pickTextFile(accept = ".csv,.tsv,.txt,text/csv,text/plain") {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept;
+    input.style.display = "none";
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      input.remove();
+      resolve(file ? await file.text() : "");
+    });
+    input.addEventListener("cancel", () => { input.remove(); resolve(""); });
+    document.body.append(input);
+    input.click();
+  });
+}
+
 function queueItemKey(item) {
   return `${item.type}:${item.url}`;
 }
@@ -293,6 +325,8 @@ if (typeof window !== "undefined") {
     chunkItems,
     classifyImportUrl,
     parseLinkList,
+    linksFromCsv,
+    pickTextFile,
     queueItemKey,
     escapeHtml,
     notebookArtifactUrl

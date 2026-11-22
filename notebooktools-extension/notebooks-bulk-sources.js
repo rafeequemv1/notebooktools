@@ -171,6 +171,16 @@ const NotebookToolsSourcesBulk = (() => {
     document.querySelector("#srcBulkAddTabs")?.addEventListener("click", () => {
       void addFromOpenTabs();
     });
+    document.querySelector("#srcBulkAddCsv")?.addEventListener("click", async () => {
+      const text = await NotebookToolsStore.pickTextFile();
+      if (!text) return;
+      const links = NotebookToolsStore.linksFromCsv(text);
+      if (!links) return setStatus("No links found in that file.", "error");
+      const existing = new Set(String(pasteEl?.value || "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean));
+      const fresh = links.split("\n").filter((l) => !existing.has(l));
+      pasteEl.value = [...existing, ...fresh].join("\n");
+      setStatus(`Added ${fresh.length} link${fresh.length === 1 ? "" : "s"} from the file. Click Import.`, "");
+    });
     importEl?.addEventListener("click", () => {
       void runImport();
     });
