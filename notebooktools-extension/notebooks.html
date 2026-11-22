@@ -97,6 +97,7 @@
               <button type="button" class="nbx-bulk-btn" data-bulk="favorite">Favorite</button>
               <button type="button" class="nbx-bulk-btn" data-bulk="pin">Pin</button>
               <button type="button" class="nbx-bulk-btn" data-bulk="export">Export ZIP</button>
+              <button type="button" class="nbx-bulk-btn" data-bulk="compare">Compare / merge</button>
               <button type="button" class="nbx-bulk-btn is-danger" id="notebooksBulkDelete">Delete</button>
               <button type="button" class="nbx-bulk-btn is-ghost" data-bulk="clear">Clear</button>
             </div>
@@ -159,6 +160,7 @@
               <input type="search" id="sourcesSearchInput" class="src-search" placeholder="Search sources" autocomplete="off" aria-label="Search sources">
               <select id="sourcesTypeFilter" class="src-view-select src-type-filter" aria-label="Filter sources by type"><option value="all">All types</option></select>
               <button type="button" class="src-tool-btn" id="sourcesAddBulk">Add sources</button>
+              <button type="button" class="src-tool-btn" id="sourcesImportFromNotebook">From another notebook</button>
               <button type="button" class="src-tool-btn" id="sourcesCheckFreshness" hidden>Check updates</button>
               <button type="button" class="src-tool-btn" id="sourcesRefreshStale" hidden>Refresh stale</button>
               <button type="button" class="src-tool-btn" id="sourcesScanDuplicates" disabled>Scan duplicates</button>
@@ -342,6 +344,7 @@
     <script src="notebooks-notes.js"></script>
     <script src="notebooks-studio.js"></script>
     <script src="notebooks-podcast.js"></script>
+    <script src="notebooks-merge.js"></script>
     <script src="notebooks-detail.js"></script>
     <script src="notebooks.js"></script>
       <script src="dev-reload.js"></script>

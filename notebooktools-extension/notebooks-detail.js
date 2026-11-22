@@ -210,6 +210,16 @@ const NotebookToolsNotebookDetail = (() => {
       });
     });
 
+    document.querySelector("#sourcesImportFromNotebook")?.addEventListener("click", () => {
+      if (!notebook) return;
+      void NotebookToolsNotebookMerge.open({
+        notebooks: window.NotebookToolsNotebookList?.() || [notebook],
+        b: notebook.id,
+        fixedB: true,
+        authOptions,
+        onChanged: () => NotebookToolsSourcesPanel.open(notebook, { authOptions, onSourcesChanged })
+      });
+    });
     document.querySelector("#detailExportZip")?.addEventListener("click", () => {
       if (notebook) void NotebookToolsNotebookExport.openDialog([notebook], { authOptions });
     });

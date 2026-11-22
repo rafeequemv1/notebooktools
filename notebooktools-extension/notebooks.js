@@ -33,6 +33,7 @@ const notebooksListView = document.querySelector("#notebooksListView");
 const podcastView = document.querySelector("#podcastView");
 
 let notebooks = [];
+window.NotebookToolsNotebookList = () => notebooks;
 let folderState = { assignments: {}, folders: [], tags: [], tagAssignments: {}, pinned: [], favorites: [] };
 let activeTag = "all";
 let sortMode = "title";
@@ -1308,6 +1309,18 @@ async function runBulk(action, anchor) {
     return;
   }
   if (!ids.length) return;
+
+  if (action === "compare") {
+    const [a, b] = ids;
+    void NotebookToolsNotebookMerge.open({
+      notebooks,
+      a: a || "",
+      b: b || "",
+      authOptions: authUserOption(activeAccount),
+      onCreated: () => loadNotebooks({ force: true })
+    });
+    return;
+  }
 
   if (action === "export") {
     const chosen = notebooks.filter((item) => selectedNotebookIds.has(item.id));
