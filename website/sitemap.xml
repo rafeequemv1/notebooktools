@@ -587,7 +587,7 @@
   <!-- Free tools -->
   <url>
     <loc>https://www.notebooktools.com/tools</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools"/>
@@ -841,5 +841,53 @@
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools/notebooklm-prompts/infographic-key-stats"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.notebooktools.com/tools/notebooklm-prompts/infographic-key-stats"/>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/split-pdf-for-notebooklm</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/merge-pdf</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/pdf-to-text</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/pdf-page-word-counter</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/compress-pdf</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/extract-pdf-pages</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/image-to-text-ocr</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.notebooktools.com/tools/pdf-to-images</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

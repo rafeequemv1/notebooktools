@@ -5,7 +5,7 @@
 - Page: https://www.notebooktools.com/tools/notebooklm-prompts/audio-beginner
 - Fill the blanks interactively: https://www.notebooktools.com/tools/notebooklm-prompts#audio-beginner
 - Jobs: Summarize, Teach
-- Updated: 2026-11-21
+- Updated: 2026-11-22
 
 ## The prompt
 

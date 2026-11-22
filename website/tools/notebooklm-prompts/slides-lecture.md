@@ -5,7 +5,7 @@
 - Page: https://www.notebooktools.com/tools/notebooklm-prompts/slides-lecture
 - Fill the blanks interactively: https://www.notebooktools.com/tools/notebooklm-prompts#slides-lecture
 - Jobs: Teach
-- Updated: 2026-11-21
+- Updated: 2026-11-22
 
 ## The prompt
 

@@ -5,7 +5,7 @@
 - Page: https://www.notebooktools.com/tools/notebooklm-prompts/explain-like-a-tutor
 - Fill the blanks interactively: https://www.notebooktools.com/tools/notebooklm-prompts#explain-like-a-tutor
 - Jobs: Study, Teach
-- Updated: 2026-11-21
+- Updated: 2026-11-22
 
 ## The prompt
 

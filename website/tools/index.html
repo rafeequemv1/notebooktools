@@ -11,8 +11,8 @@
     <script defer data-site="bqtzsbfj" data-domain="notebooktools.com" src="https://piqo.app/piqo.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Free NotebookLM Tools: Prompts, Links, Splitter, Answers</title>
-    <meta name="description" content="Free browser tools for NotebookLM users: build prompts and slide styles, clean link lists, split long text under the 500,000-word limit, and clean copied answers. Nothing is uploaded.">
+    <title>Free NotebookLM &amp; PDF Tools: Split, Merge, OCR, Prompts</title>
+    <meta name="description" content="12 free browser tools for NotebookLM users: split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://www.notebooktools.com/tools">
     <link rel="alternate" hreflang="en" href="https://www.notebooktools.com/tools">
@@ -21,13 +21,13 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
     <meta property="og:locale" content="en_US">
-    <meta property="og:title" content="Free NotebookLM Tools: Prompts, Links, Splitter, Answers">
-    <meta property="og:description" content="Free browser tools for NotebookLM users: build prompts and slide styles, clean link lists, split long text under the 500,000-word limit, and clean copied answers. Nothing is uploaded.">
+    <meta property="og:title" content="Free NotebookLM &amp; PDF Tools: Split, Merge, OCR, Prompts">
+    <meta property="og:description" content="12 free browser tools for NotebookLM users: split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.">
     <meta property="og:url" content="https://www.notebooktools.com/tools">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Free NotebookLM Tools: Prompts, Links, Splitter, Answers">
-    <meta name="twitter:description" content="Free browser tools for NotebookLM users: build prompts and slide styles, clean link lists, split long text under the 500,000-word limit, and clean copied answers. Nothing is uploaded.">
+    <meta name="twitter:title" content="Free NotebookLM &amp; PDF Tools: Split, Merge, OCR, Prompts">
+    <meta name="twitter:description" content="12 free browser tools for NotebookLM users: split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.">
     <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <link rel="icon" href="/assets/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,8 +44,8 @@
       "@type": "CollectionPage",
       "name": "Free tools for NotebookLM",
       "url": "https://www.notebooktools.com/tools",
-      "description": "Free browser tools for NotebookLM users: build prompts and slide styles, clean link lists, split long text under the 500,000-word limit, and clean copied answers. Nothing is uploaded.",
-      "dateModified": "2026-11-21"
+      "description": "12 free browser tools for NotebookLM users: split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.",
+      "dateModified": "2026-11-22"
     },
     {
       "@type": "ItemList",
@@ -73,6 +73,54 @@
           "position": 4,
           "url": "https://www.notebooktools.com/tools/notebooklm-answer-cleaner",
           "name": "NotebookLM Answer Cleaner"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "url": "https://www.notebooktools.com/tools/split-pdf-for-notebooklm",
+          "name": "Split PDF for NotebookLM"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "url": "https://www.notebooktools.com/tools/merge-pdf",
+          "name": "Merge PDFs"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "url": "https://www.notebooktools.com/tools/pdf-to-text",
+          "name": "PDF to Text / Markdown"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "url": "https://www.notebooktools.com/tools/pdf-page-word-counter",
+          "name": "PDF Page & Word Counter"
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "url": "https://www.notebooktools.com/tools/compress-pdf",
+          "name": "Compress PDF"
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
+          "url": "https://www.notebooktools.com/tools/extract-pdf-pages",
+          "name": "Extract or Remove PDF Pages"
+        },
+        {
+          "@type": "ListItem",
+          "position": 11,
+          "url": "https://www.notebooktools.com/tools/image-to-text-ocr",
+          "name": "Image to Text (OCR)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 12,
+          "url": "https://www.notebooktools.com/tools/pdf-to-images",
+          "name": "PDF Slides to Images"
         }
       ]
     },
@@ -84,7 +132,15 @@
           "name": "Are these NotebookLM tools free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. All four are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded."
+            "text": "Yes. All twelve are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my PDFs uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The PDF tools use pdf-lib, pdf.js and Tesseract.js running in your browser tab. Files never leave your device, which also makes them fast for large files."
           }
         },
         {
@@ -161,40 +217,86 @@
       <section class="tools-hero">
         <p class="eyebrow">Free tools</p>
         <h1>Free tools for NotebookLM</h1>
-        <div class="post-answer"><p class="post-answer-label">Short answer</p><p>Four free tools for people who work in NotebookLM (now Gemini Notebook), all running in your browser with nothing uploaded: a prompt builder with 14 slide deck styles, a link list cleaner that counts against the 50-source limit, a text splitter for the 500,000-word-per-source limit, and an answer cleaner that strips citation numbers.</p></div>
+        <div class="post-answer"><p class="post-answer-label">Short answer</p><p>Twelve free tools for people who work in NotebookLM (now Gemini Notebook), all running in your browser with nothing uploaded. PDF and image tools get files ready for NotebookLM: split, merge, compress, extract pages, count words against the limits, convert PDF to text, read images with OCR, and turn slide decks into images. NotebookLM tools help inside it: a prompt library, a link cleaner, a text splitter and an answer cleaner.</p></div>
         <div class="tools-badges">
           <span class="tools-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Free, no sign-up</span>
           <span class="tools-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Runs in your browser. Nothing is uploaded.</span>
-          <span class="tools-badge">Updated <time datetime="2026-11-21">November 21, 2026</time></span>
+          <span class="tools-badge">Updated <time datetime="2026-11-22">November 22, 2026</time></span>
         </div>
       </section>
 
-      <div class="tools-grid">
+      <section class="tools-group" aria-labelledby="g-pdf">
+        <div class="tools-group-head"><h2 id="g-pdf">PDF &amp; image tools</h2><p>Get files ready for NotebookLM: under 200 MB and 500,000 words per source, 50 sources per notebook.</p></div>
+        <div class="tools-grid">
+        <a class="tool-card" href="/tools/split-pdf-for-notebooklm">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="M3 13h18" stroke-dasharray="2.5 2"/></svg></span>
+          <h3>Split PDF for NotebookLM</h3>
+          <p>Book or PDF too big for one source? Split it into equal parts, every N pages, by ranges or under a size limit.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/merge-pdf">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v9H4zM13 11h7v9h-7z"/><path d="M8 13v3a2 2 0 0 0 2 2h3M16 11V8a2 2 0 0 0-2-2h-3"/></svg></span>
+          <h3>Merge PDFs</h3>
+          <p>Combine lecture handouts, papers or scans (and images) into one PDF. One source instead of ten.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/pdf-to-text">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4M9 12h6M9 15h6M9 18h4"/></svg></span>
+          <h3>PDF to Text / Markdown</h3>
+          <p>Get clean text or Markdown from any PDF, with OCR for scanned pages. Fixes broken line wraps.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/pdf-page-word-counter">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="M9 17v-3M12 17v-6M15 17v-4"/></svg></span>
+          <h3>PDF Page &amp; Word Counter</h3>
+          <p>Will it fit in NotebookLM? Count pages, words and size for one PDF or a whole folder, against the limits.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/compress-pdf">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="m9.5 11 2.5 2.5 2.5-2.5M9.5 17.5 12 15l2.5 2.5"/></svg></span>
+          <h3>Compress PDF</h3>
+          <p>Shrink large or scanned PDFs so they upload. Keep text, or compress scans hard with a quality slider.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/extract-pdf-pages">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="7" height="9" rx="1"/><rect x="13.5" y="5" width="7" height="9" rx="1"/><path d="M7 17.5h10M7 20h6"/></svg></span>
+          <h3>Extract or Remove PDF Pages</h3>
+          <p>Keep only the chapters you need, or delete pages. Click thumbnails or type ranges like 12-40, 55.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/image-to-text-ocr">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 10h8M8 13h8M8 16h5"/></svg></span>
+          <h3>Image to Text (OCR)</h3>
+          <p>Photos of whiteboards, slides, handwritten notes or screenshots to editable text. Paste or drop.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a><a class="tool-card" href="/tools/pdf-to-images">
+          <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m20.5 16-5-5-8 8"/></svg></span>
+          <h3>PDF Slides to Images</h3>
+          <p>Turn a NotebookLM slide deck (or any PDF) into PNG or JPG images sized for LinkedIn and Instagram.</p>
+          <span class="tool-card-tag">Open tool →</span>
+        </a>
+        </div>
+      </section>
+<section class="tools-group" aria-labelledby="g-notebooklm">
+        <div class="tools-group-head"><h2 id="g-notebooklm">NotebookLM tools</h2><p>Prompts, links and answers for working inside NotebookLM.</p></div>
+        <div class="tools-grid">
         <a class="tool-card" href="/tools/notebooklm-prompts">
           <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"/><path d="M9 9h6M9 12h4"/></svg></span>
-          <h2>NotebookLM Prompt Library</h2>
+          <h3>NotebookLM Prompt Library</h3>
           <p>27 fill-in-the-blank prompts for chat, Audio and Video Overviews, slide decks, reports, flashcards, quizzes and infographics.</p>
           <span class="tool-card-tag">Open tool →</span>
-        </a>
-        <a class="tool-card" href="/tools/link-list-cleaner">
+        </a><a class="tool-card" href="/tools/link-list-cleaner">
           <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span>
-          <h2>Link List Cleaner</h2>
+          <h3>Link List Cleaner</h3>
           <p>Paste notes, a reading list or HTML. Get a clean list of unique links, ready to add to NotebookLM.</p>
           <span class="tool-card-tag">Open tool →</span>
-        </a>
-        <a class="tool-card" href="/tools/text-splitter">
+        </a><a class="tool-card" href="/tools/text-splitter">
           <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h7l4.5 4.5v12.5H7z"/><path d="M4 12h16" stroke-dasharray="2 2"/></svg></span>
-          <h2>Text Splitter for NotebookLM</h2>
+          <h3>Text Splitter for NotebookLM</h3>
           <p>Too long for one source? Split a transcript or book into parts that fit NotebookLM&#x27;s 500,000-word limit.</p>
           <span class="tool-card-tag">Open tool →</span>
-        </a>
-        <a class="tool-card" href="/tools/notebooklm-answer-cleaner">
+        </a><a class="tool-card" href="/tools/notebooklm-answer-cleaner">
           <span class="tool-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 10h16M4 14h12M4 18h8"/><path d="m16 16 4 4M20 16l-4 4"/></svg></span>
-          <h2>NotebookLM Answer Cleaner</h2>
+          <h3>NotebookLM Answer Cleaner</h3>
           <p>Copied an answer from NotebookLM? Strip the citation numbers and … markers. Get clean text or Markdown.</p>
           <span class="tool-card-tag">Open tool →</span>
         </a>
-      </div>
+        </div>
+      </section>
 
       <aside class="tool-cta" aria-label="NotebookTools Chrome extension">
         <p><strong>Do it inside NotebookLM.</strong> NotebookTools imports links, tabs, YouTube playlists and AI chats into any notebook in one click, and adds a source meter, slide style cards and chat export.</p>
@@ -203,7 +305,7 @@
 
       <article class="tools-copy">
         <h2 id="faq">FAQ</h2>
-        <h3>Are these NotebookLM tools free?</h3><p>Yes. All four are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded.</p><h3>Are these tools made by Google?</h3><p>No. NotebookTools is independent and not affiliated with Google. The tools work with NotebookLM (now Gemini Notebook) as it is today.</p><h3>What is the NotebookTools extension?</h3><p>A Chrome extension for NotebookLM: one-click imports from YouTube, web pages, X and AI chats are free; Pro ($49 once) adds a notebooks dashboard, source manager, slide style cards, chat export and more.</p>
+        <h3>Are these NotebookLM tools free?</h3><p>Yes. All twelve are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded.</p><h3>Are my PDFs uploaded to a server?</h3><p>No. The PDF tools use pdf-lib, pdf.js and Tesseract.js running in your browser tab. Files never leave your device, which also makes them fast for large files.</p><h3>Are these tools made by Google?</h3><p>No. NotebookTools is independent and not affiliated with Google. The tools work with NotebookLM (now Gemini Notebook) as it is today.</p><h3>What is the NotebookTools extension?</h3><p>A Chrome extension for NotebookLM: one-click imports from YouTube, web pages, X and AI chats are free; Pro ($49 once) adds a notebooks dashboard, source manager, slide style cards, chat export and more.</p>
         <p>Guides: <a href="/blog/what-is-notebooklm">What is NotebookLM?</a> · <a href="/blog/is-notebooklm-free">Is NotebookLM free?</a> · <a href="/blog/notebooklm-source-limits">Source limits</a> · <a href="/blog/notebooklm-prompts-for-studying">Prompts for studying</a>. Also available as <a href="/tools/index.md">Markdown</a>.</p>
       </article>
     </main>
@@ -240,11 +342,12 @@
           </nav>
           <nav class="footer-col" aria-label="Free tools">
             <h2>Free tools</h2>
+            <a href="/tools/split-pdf-for-notebooklm">Split PDF for NotebookLM</a>
+            <a href="/tools/merge-pdf">Merge PDFs</a>
+            <a href="/tools/pdf-to-text">PDF to text</a>
+            <a href="/tools/image-to-text-ocr">Image to text (OCR)</a>
             <a href="/tools/notebooklm-prompts">NotebookLM prompt library</a>
-            <a href="/tools/link-list-cleaner">Link list cleaner</a>
-            <a href="/tools/text-splitter">Text splitter</a>
-            <a href="/tools/notebooklm-answer-cleaner">Answer cleaner</a>
-            <a href="/tools">All free tools →</a>
+            <a href="/tools">All 12 free tools →</a>
           </nav>
           <nav class="footer-col" aria-label="Company">
             <h2>Company</h2>

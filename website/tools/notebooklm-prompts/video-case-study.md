@@ -5,7 +5,7 @@
 - Page: https://www.notebooktools.com/tools/notebooklm-prompts/video-case-study
 - Fill the blanks interactively: https://www.notebooktools.com/tools/notebooklm-prompts#video-case-study
 - Jobs: Work, Research
-- Updated: 2026-11-21
+- Updated: 2026-11-22
 
 ## The prompt
 

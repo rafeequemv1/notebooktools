@@ -5,7 +5,7 @@
 - Tool: https://www.notebooktools.com/tools/link-list-cleaner
 - Price: free, no sign-up
 - Privacy: runs in your browser; nothing is uploaded
-- Updated: 2026-11-21
+- Updated: 2026-11-22
 
 ## How to use it
 

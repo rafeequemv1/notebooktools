@@ -5,7 +5,7 @@
 - Page: https://www.notebooktools.com/tools/notebooklm-prompts/quiz-exam-style
 - Fill the blanks interactively: https://www.notebooktools.com/tools/notebooklm-prompts#quiz-exam-style
 - Jobs: Study
-- Updated: 2026-11-21
+- Updated: 2026-11-22
 
 ## The prompt
 

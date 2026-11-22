@@ -20,8 +20,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "website"
 OUT = SITE / "tools"
 BASE = "https://www.notebooktools.com"
-UPDATED = "2026-11-21"
-UPDATED_LABEL = "November 21, 2026"
+UPDATED = "2026-11-22"
+UPDATED_LABEL = "November 22, 2026"
 CHROME_STORE = (
     "https://chromewebstore.google.com/detail/"
     "notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj"
@@ -32,6 +32,14 @@ ICONS = {
     "links": '<path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/>',
     "split": '<path d="M7 3.5h7l4.5 4.5v12.5H7z"/><path d="M4 12h16" stroke-dasharray="2 2"/>',
     "clean": '<path d="M4 6h10M4 10h16M4 14h12M4 18h8"/><path d="m16 16 4 4M20 16l-4 4"/>',
+    "pdfsplit": '<path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="M3 13h18" stroke-dasharray="2.5 2"/>',
+    "pdfmerge": '<path d="M4 4h7v9H4zM13 11h7v9h-7z"/><path d="M8 13v3a2 2 0 0 0 2 2h3M16 11V8a2 2 0 0 0-2-2h-3"/>',
+    "pdftext": '<path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4M9 12h6M9 15h6M9 18h4"/>',
+    "count": '<path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="M9 17v-3M12 17v-6M15 17v-4"/>',
+    "compress": '<path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="m9.5 11 2.5 2.5 2.5-2.5M9.5 17.5 12 15l2.5 2.5"/>',
+    "pages": '<rect x="3.5" y="5" width="7" height="9" rx="1"/><rect x="13.5" y="5" width="7" height="9" rx="1"/><path d="M7 17.5h10M7 20h6"/>',
+    "ocr": '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 10h8M8 13h8M8 16h5"/>',
+    "images": '<rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m20.5 16-5-5-8 8"/>',
 }
 
 LOCK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
@@ -51,6 +59,7 @@ def icon(name: str, size: int = 22) -> str:
 TOOLS = [
     {
         "slug": "notebooklm-prompts",
+        "group": "notebooklm",
         "icon": "prompt",
         "name": "NotebookLM Prompt Library",
         "card": "27 fill-in-the-blank prompts for chat, Audio and Video Overviews, slide decks, reports, flashcards, quizzes and infographics.",
@@ -79,6 +88,7 @@ TOOLS = [
     },
     {
         "slug": "link-list-cleaner",
+        "group": "notebooklm",
         "icon": "links",
         "name": "Link List Cleaner",
         "card": "Paste notes, a reading list or HTML. Get a clean list of unique links, ready to add to NotebookLM.",
@@ -121,6 +131,7 @@ TOOLS = [
     },
     {
         "slug": "text-splitter",
+        "group": "notebooklm",
         "icon": "split",
         "name": "Text Splitter for NotebookLM",
         "card": "Too long for one source? Split a transcript or book into parts that fit NotebookLM's 500,000-word limit.",
@@ -162,6 +173,7 @@ TOOLS = [
     },
     {
         "slug": "notebooklm-answer-cleaner",
+        "group": "notebooklm",
         "icon": "clean",
         "name": "NotebookLM Answer Cleaner",
         "card": "Copied an answer from NotebookLM? Strip the citation numbers and … markers. Get clean text or Markdown.",
@@ -201,14 +213,355 @@ TOOLS = [
         "links": [("/blog/export-notebooklm-to-pdf", "Export NotebookLM to PDF, Word or Markdown"), ("/features/chat-export", "Chat export for NotebookLM"), ("/blog/what-is-notebooklm", "What is NotebookLM?"), ("/blog/notebooklm-privacy", "NotebookLM privacy")],
         "cta": "<strong>Export answers already clean.</strong> NotebookTools saves the last answer or the whole chat as PDF, Word or Markdown in one click (Pro).",
     },
+    # ---------------- PDF & image tools (pdf-kit.js) ----------------
+    {
+        "slug": "split-pdf-for-notebooklm",
+        "group": "pdf",
+        "icon": "pdfsplit",
+        "name": "Split PDF for NotebookLM",
+        "card": "Book or PDF too big for one source? Split it into equal parts, every N pages, by ranges or under a size limit.",
+        "title": "Split PDF for NotebookLM: Fit the 200 MB / 500,000-Word Limit",
+        "description": "Free PDF splitter for NotebookLM: split a large PDF into equal parts, every N pages, custom ranges or parts under a size limit, then download each part or a ZIP. Runs in your browser; nothing is uploaded.",
+        "h1": "Split PDF for NotebookLM",
+        "answer": "NotebookLM accepts up to 200 MB or 500,000 words per source, so large textbooks and scanned books often fail to upload. Drop the PDF here and split it into equal parts, every N pages, by page ranges (one part per line) or into parts under a size you choose. Each part downloads as its own PDF, or all at once as a ZIP, ready to add as separate sources. The file never leaves your browser.",
+        "script": "pdf-split.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="splitDrop"></div>
+        <div class="pdf-file" id="splitFile" hidden></div>
+        <div id="splitOptions" hidden>
+          <div class="tool-field"><span class="tool-label">Split</span>
+            <div class="pdf-seg" role="radiogroup" aria-label="How to split">
+              <label><input type="radio" name="splitMode" value="parts" checked>Into equal parts</label>
+              <label><input type="radio" name="splitMode" value="every">Every N pages</label>
+              <label><input type="radio" name="splitMode" value="ranges">By page ranges</label>
+              <label><input type="radio" name="splitMode" value="size">Under a size</label>
+            </div></div>
+          <div class="pdf-options">
+            <div class="tool-field" data-split-mode="parts"><label for="splitParts">Number of parts</label><input type="number" id="splitParts" min="2" max="200" value="2"></div>
+            <div class="tool-field" data-split-mode="every" hidden><label for="splitEvery">Pages per part</label><input type="number" id="splitEvery" min="1" value="50"></div>
+            <div class="tool-field" data-split-mode="ranges" hidden><label for="splitRanges">One part per line</label><textarea id="splitRanges" rows="3" placeholder="1-120&#10;121-250&#10;251-"></textarea></div>
+            <div class="tool-field" data-split-mode="size" hidden><label for="splitSize">Max size per part (MB)</label><input type="number" id="splitSize" min="1" value="190"></div>
+          </div>
+          <div class="pdf-run"><button type="button" class="tool-btn is-primary" id="splitRun">Split PDF</button></div>
+        </div>
+        <div class="pdf-bar" id="splitBar" hidden><span></span></div>
+        <p class="pdf-status" id="splitStatus" hidden></p>
+        <div class="pdf-results" id="splitResults"></div>""",
+        "steps": [
+            "Drop your PDF in the box, or click Choose a file.",
+            "Pick how to split: into equal parts, every N pages, by page ranges, or under a size limit (190 MB keeps each part under NotebookLM's 200 MB cap).",
+            "Click Split PDF.",
+            "Download each part, or all of them as a ZIP, and add each part to your notebook as its own source.",
+        ],
+        "faq": [
+            ("What is the maximum PDF size for NotebookLM?", "Each source can be up to 200 MB or 500,000 words, on every plan. Split anything larger into parts."),
+            ("How many parts should I split a book into?", "Split by chapters if you can (By page ranges), so each source stays on one topic and citations are easier to follow. Otherwise, equal parts under 200 MB work."),
+            ("Does splitting lose quality?", "No. Pages are copied as they are, with their text, images and fonts; nothing is re-compressed."),
+            ("Is my PDF uploaded?", "No. The PDF is read and split in your browser with pdf-lib. Nothing is sent to a server."),
+        ],
+        "links": [("/tools/pdf-page-word-counter", "Will my PDF fit? Page & word counter"), ("/tools/compress-pdf", "Compress PDF"), ("/blog/notebooklm-source-limits", "NotebookLM source limits"), ("/tools/text-splitter", "Text splitter for long text")],
+        "cta": "<strong>Add all parts to one notebook in one go.</strong> With NotebookTools, bulk import adds every part, link or tab to the notebook you pick, and shows the source meter as you go.",
+    },
+    {
+        "slug": "merge-pdf",
+        "group": "pdf",
+        "icon": "pdfmerge",
+        "name": "Merge PDFs",
+        "card": "Combine lecture handouts, papers or scans (and images) into one PDF. One source instead of ten.",
+        "title": "Merge PDF Files Free (In Your Browser) for NotebookLM",
+        "description": "Free PDF merger: combine several PDFs and images into one file, in the order you choose. Save NotebookLM source slots. Runs in your browser; nothing is uploaded.",
+        "h1": "Merge PDFs",
+        "answer": "Drop two or more PDFs (or JPG and PNG images), put them in order with the arrows, and click Merge to download one combined PDF. In NotebookLM every file is one source and the free plan allows 50 per notebook, so merging related handouts or chapters saves slots. Everything happens in your browser.",
+        "script": "pdf-merge.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="mergeDrop"></div>
+        <div class="pdf-list" id="mergeList"></div>
+        <div class="pdf-run" id="mergeRunRow" hidden><button type="button" class="tool-btn is-primary" id="mergeRun">Merge and download</button></div>
+        <div class="pdf-bar" id="mergeBar" hidden><span></span></div>
+        <p class="pdf-status" id="mergeStatus" hidden></p>""",
+        "steps": [
+            "Drop the PDFs (and any JPG or PNG images) you want to combine.",
+            "Use the arrows to put them in order; remove any with ×.",
+            "Click Merge and download.",
+            "Add the merged PDF to NotebookLM as one source.",
+        ],
+        "faq": [
+            ("Should I merge PDFs before adding them to NotebookLM?", "Merge files that belong together (one course's handouts, one report's appendices) to save source slots. Keep unrelated papers separate: citations then point to the right document."),
+            ("Is there a size limit?", "Your browser's memory is the only limit here. NotebookLM accepts up to 200 MB or 500,000 words per source, so check the merged file with the page & word counter."),
+            ("Can I merge images too?", "Yes. JPG and PNG images become full-size pages in the merged PDF."),
+            ("Are my files uploaded?", "No. Merging happens in your browser with pdf-lib."),
+        ],
+        "links": [("/tools/split-pdf-for-notebooklm", "Split PDF for NotebookLM"), ("/tools/pdf-page-word-counter", "PDF page & word counter"), ("/features/notebooks-hub", "Organise notebooks with folders and tags"), ("/blog/notebooklm-source-limits", "NotebookLM source limits")],
+        "cta": "<strong>Or keep them separate and organised.</strong> NotebookTools adds folders, tags and a notebooks table to NotebookLM, plus bulk import and a source meter.",
+    },
+    {
+        "slug": "pdf-to-text",
+        "group": "pdf",
+        "icon": "pdftext",
+        "name": "PDF to Text / Markdown",
+        "card": "Get clean text or Markdown from any PDF, with OCR for scanned pages. Fixes broken line wraps.",
+        "title": "PDF to Text or Markdown Converter (Free, with OCR)",
+        "description": "Free PDF to text and Markdown converter: extract clean text from any PDF, join broken line wraps, add page markers, and read scanned pages with OCR. Runs in your browser; nothing is uploaded.",
+        "h1": "PDF to Text / Markdown",
+        "answer": "Drop a PDF to pull out its text, with lines that were wrapped mid-sentence joined back up. Choose plain text or Markdown (headings and bullet lists detected), optionally mark where each page starts, and turn on OCR to read scanned pages that have no text layer. Copy the result or download a .txt or .md file to add to NotebookLM as a clean text source.",
+        "script": "pdf-to-text.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="ptDrop"></div>
+        <div class="pdf-file" id="ptFile" hidden></div>
+        <div id="ptOptions" hidden>
+          <div class="pdf-options">
+            <div class="tool-field"><label for="ptFormat">Output</label><select id="ptFormat"><option value="md">Markdown (.md)</option><option value="txt">Plain text (.txt)</option></select></div>
+          </div>
+          <div class="tool-checks">
+            <label><input type="checkbox" id="ptJoin" checked> Join broken line wraps</label>
+            <label><input type="checkbox" id="ptMarkers"> Mark each page</label>
+            <label><input type="checkbox" id="ptOcr"> OCR scanned pages (slower)</label>
+          </div>
+          <span id="ptRun" hidden></span>
+        </div>
+        <div class="pdf-bar" id="ptBar" hidden><span></span></div>
+        <p class="pdf-status" id="ptStatus" hidden></p>
+        <textarea id="ptOutput" class="is-output pdf-output" readonly aria-label="Extracted text" placeholder="The text appears here."></textarea>
+        <div class="tool-actions"><button type="button" class="tool-btn is-primary" id="ptCopy" disabled>Copy</button><button type="button" class="tool-btn" id="ptDownload" disabled>Download</button></div>""",
+        "steps": [
+            "Drop a PDF in the box.",
+            "Choose Markdown or plain text. Keep \"Join broken line wraps\" on for readable paragraphs.",
+            "If some pages are scanned, turn on OCR scanned pages.",
+            "Copy the text or download it, then add it to NotebookLM (Copied text, or upload the .md/.txt file).",
+        ],
+        "faq": [
+            ("Why convert a PDF to text before adding it to NotebookLM?", "NotebookLM reads PDFs directly, but multi-column layouts, headers and footers and scans can confuse it. A clean text or Markdown version often gives more accurate answers and citations."),
+            ("Can it read scanned PDFs?", "Yes. Turn on OCR scanned pages: pages without a text layer are read with Tesseract OCR in your browser (English). Check names and numbers afterwards."),
+            ("Does it keep tables and formatting?", "It keeps paragraphs, and detects headings and bullet lists for Markdown. Complex tables come out as text in reading order."),
+            ("Is my PDF uploaded?", "No. pdf.js and Tesseract run in your browser; nothing is sent anywhere."),
+        ],
+        "links": [("/tools/image-to-text-ocr", "Image to text (OCR)"), ("/tools/text-splitter", "Text splitter for NotebookLM"), ("/tools/notebooklm-answer-cleaner", "NotebookLM answer cleaner"), ("/blog/best-ways-import-content-notebooklm", "Ways to import content into NotebookLM")],
+        "cta": "<strong>Send text straight to a notebook.</strong> NotebookTools adds any page, highlighted text, YouTube video or AI chat to NotebookLM in one click. Free.",
+    },
+    {
+        "slug": "pdf-page-word-counter",
+        "group": "pdf",
+        "icon": "count",
+        "name": "PDF Page & Word Counter",
+        "card": "Will it fit in NotebookLM? Count pages, words and size for one PDF or a whole folder, against the limits.",
+        "title": "PDF Word & Page Counter: Will It Fit in NotebookLM?",
+        "description": "Free PDF word counter and page counter: check one or many PDFs against NotebookLM's limits (500,000 words and 200 MB per source, 50 sources per notebook). Runs in your browser.",
+        "h1": "PDF Page & Word Counter",
+        "answer": "Drop one PDF or a whole batch. The counter reads every page in your browser and shows pages, words and size per file, then checks them against NotebookLM's limits: 500,000 words or 200 MB per source, and 50 sources per notebook on the free plan. It also flags files that look scanned.",
+        "script": "pdf-counter.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="pcDrop"></div>
+        <p class="pdf-status" id="pcStatus" hidden></p>
+        <div id="pcResult" hidden>
+          <div class="pdf-meter" id="pcMeters"></div>
+          <div id="pcVerdict"></div>
+          <div class="pdf-list" id="pcList"></div>
+          <div class="pdf-run"><button type="button" class="tool-btn" id="pcClear">Clear</button></div>
+        </div>""",
+        "steps": [
+            "Drop one or more PDFs.",
+            "Wait while each file's pages are read and counted.",
+            "Check the meters: words and size of the largest file, and the number of files against 50 sources.",
+            "Follow the suggestion: split files that are too big, or merge or spread files across notebooks.",
+        ],
+        "faq": [
+            ("How many words can a NotebookLM source have?", "Up to 500,000 words, and up to 200 MB, per source on every plan."),
+            ("How many PDFs can I add to one notebook?", "50 sources on the free plan, 100 on Google AI Plus, 300 on Google AI Pro, and more on Ultra. Each PDF is one source."),
+            ("Why does a PDF show 0 words?", "It's probably scanned: the pages are images with no text layer. NotebookLM can still read many scans, but converting with OCR first gives more reliable answers."),
+            ("Are my files uploaded?", "No. Counting happens in your browser with pdf.js."),
+        ],
+        "links": [("/tools/split-pdf-for-notebooklm", "Split PDF for NotebookLM"), ("/tools/merge-pdf", "Merge PDFs"), ("/blog/notebooklm-source-limits", "NotebookLM source limits"), ("/blog/notebooklm-pricing-plans", "NotebookLM plans and limits")],
+        "cta": "<strong>See limits as you import.</strong> NotebookTools shows a source meter on every notebook and warns before you hit 50. Free.",
+    },
+    {
+        "slug": "compress-pdf",
+        "group": "pdf",
+        "icon": "compress",
+        "name": "Compress PDF",
+        "card": "Shrink large or scanned PDFs so they upload. Keep text, or compress scans hard with a quality slider.",
+        "title": "Compress PDF Free in Your Browser (for NotebookLM Uploads)",
+        "description": "Free PDF compressor: re-save PDFs compactly without losing text, or compress scanned and image-heavy PDFs as JPEG pages at the quality you pick. Runs in your browser; nothing is uploaded.",
+        "h1": "Compress PDF",
+        "answer": "Drop a PDF and pick a mode. Keep text re-saves the file more compactly without changing anything you can see (small savings, text stays selectable). Scanned redraws each page as a JPEG at the quality you choose, which shrinks scans and photo-heavy PDFs a lot, but turns text into an image. Use it to get files under NotebookLM's 200 MB per source.",
+        "script": "pdf-compress.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="cpDrop"></div>
+        <div class="pdf-file" id="cpFile" hidden></div>
+        <div id="cpOptions" hidden>
+          <div class="tool-field"><span class="tool-label">Mode</span>
+            <div class="pdf-seg" role="radiogroup" aria-label="Compression mode">
+              <label><input type="radio" name="cpMode" value="lossless" checked>Keep text (lossless)</label>
+              <label><input type="radio" name="cpMode" value="scan">Scanned / image-heavy</label>
+            </div></div>
+          <div class="pdf-options" id="cpQualityWrap" hidden>
+            <div class="tool-field"><label for="cpQuality">Quality</label><select id="cpQuality"><option value="0.75:150">Balanced (150 dpi)</option><option value="0.85:200">High (200 dpi)</option><option value="0.6:110">Smallest (110 dpi)</option></select></div>
+          </div>
+          <div class="pdf-run"><button type="button" class="tool-btn is-primary" id="cpRun">Compress</button></div>
+        </div>
+        <div class="pdf-bar" id="cpBar" hidden><span></span></div>
+        <p class="pdf-status" id="cpStatus" hidden></p>
+        <div class="pdf-results" id="cpResults"></div>""",
+        "steps": [
+            "Drop the PDF.",
+            "Choose Keep text for normal documents, or Scanned / image-heavy for scans and photo PDFs (pick a quality).",
+            "Click Compress and compare the before and after size.",
+            "Download the smaller PDF and add it to NotebookLM.",
+        ],
+        "faq": [
+            ("Why won't my PDF upload to NotebookLM?", "The most common reasons are size (over 200 MB per source), a password, or a damaged file. Compress or split large files; remove the password before uploading."),
+            ("Will compressing hurt NotebookLM's answers?", "Keep text mode changes nothing NotebookLM reads. Scanned mode turns pages into images, so NotebookLM has to read them like a scan; use it for files that are scans already."),
+            ("How much smaller will it get?", "Scanned PDFs often shrink by half or more at Balanced quality. Text-only PDFs are usually compact already, so Keep text saves less."),
+            ("Is my PDF uploaded?", "No. Compression runs in your browser with pdf.js and pdf-lib."),
+        ],
+        "links": [("/tools/split-pdf-for-notebooklm", "Split PDF for NotebookLM"), ("/tools/pdf-page-word-counter", "PDF page & word counter"), ("/blog/notebooklm-not-working", "NotebookLM upload errors and fixes"), ("/tools/pdf-to-text", "PDF to text with OCR")],
+        "cta": "<strong>Then import it in one click.</strong> NotebookTools adds files, pages, videos and AI chats to any notebook, and imports links and tabs in bulk. Free.",
+    },
+    {
+        "slug": "extract-pdf-pages",
+        "group": "pdf",
+        "icon": "pages",
+        "name": "Extract or Remove PDF Pages",
+        "card": "Keep only the chapters you need, or delete pages. Click thumbnails or type ranges like 12-40, 55.",
+        "title": "Extract or Delete PDF Pages Free (Click Thumbnails)",
+        "description": "Free tool to extract or remove pages from a PDF: click page thumbnails or type ranges, then save a new PDF with only those pages or without them. Runs in your browser; nothing is uploaded.",
+        "h1": "Extract or Remove PDF Pages",
+        "answer": "Drop a PDF to see every page as a thumbnail. Click pages (or type ranges like 12-40, 55) and choose Extract to save only those pages, or Remove to save the PDF without them. Giving NotebookLM only the chapters you need keeps its answers on topic and the source small.",
+        "script": "pdf-pages.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="pagesDrop"></div>
+        <div class="pdf-file" id="pagesFile" hidden></div>
+        <div id="pagesOptions" hidden>
+          <div class="pdf-options">
+            <div class="tool-field"><span class="tool-label">Do</span>
+              <div class="pdf-seg" role="radiogroup" aria-label="Extract or remove">
+                <label><input type="radio" name="pagesMode" value="keep" checked>Extract picked pages</label>
+                <label><input type="radio" name="pagesMode" value="remove">Remove picked pages</label>
+              </div></div>
+            <div class="tool-field"><label for="pagesRanges">Pages</label><input type="text" id="pagesRanges" placeholder="e.g. 1-12, 20, 31-"></div>
+          </div>
+          <div class="pdf-run"><button type="button" class="tool-btn is-primary" id="pagesRun" disabled>Extract pages</button><button type="button" class="tool-btn" id="pagesAll">Select all</button><button type="button" class="tool-btn" id="pagesNone">Clear</button><span class="tool-stats" id="pagesCount"></span></div>
+        </div>
+        <p class="pdf-status" id="pagesStatus" hidden></p>
+        <div class="pdf-thumbs" id="pagesThumbs"></div>""",
+        "steps": [
+            "Drop the PDF; page thumbnails appear.",
+            "Click the pages you want, or type ranges such as 1-12, 20, 31-.",
+            "Choose Extract picked pages or Remove picked pages.",
+            "Save the new PDF and add it to NotebookLM.",
+        ],
+        "faq": [
+            ("Why give NotebookLM only some pages?", "Answers and summaries stay focused on what you're studying, citations are easier to check, and smaller sources leave room under the size limits."),
+            ("Can I type page numbers instead of clicking?", "Yes. Use commas and ranges: 1-12, 20, 31- (31 to the end)."),
+            ("Does it keep the text selectable?", "Yes. Pages are copied as they are."),
+            ("Is my PDF uploaded?", "No. Everything happens in your browser."),
+        ],
+        "links": [("/tools/split-pdf-for-notebooklm", "Split PDF for NotebookLM"), ("/tools/merge-pdf", "Merge PDFs"), ("/blog/how-to-use-notebooklm-to-study", "How to study with NotebookLM"), ("/features/manage-sources", "Manage NotebookLM sources")],
+        "cta": "<strong>See which chapters you already added.</strong> NotebookTools compares two notebooks side by side, finds duplicate sources and copies sources between notebooks (Pro).",
+    },
+    {
+        "slug": "image-to-text-ocr",
+        "group": "pdf",
+        "icon": "ocr",
+        "name": "Image to Text (OCR)",
+        "card": "Photos of whiteboards, slides, handwritten notes or screenshots to editable text. Paste or drop.",
+        "title": "Image to Text (OCR) Free in Your Browser: Photos, Screenshots",
+        "description": "Free OCR image to text converter: turn photos of whiteboards, slides, book pages and screenshots into editable text. Paste or drop several images. Runs in your browser with Tesseract; nothing is uploaded.",
+        "h1": "Image to Text (OCR)",
+        "answer": "Drop or paste photos of whiteboards, lecture slides, book pages, receipts or screenshots, and the text is read out with OCR (Tesseract, English) right in your browser. Several images become one document with a heading per image. Copy it or download a Markdown file to add to NotebookLM as a text source.",
+        "script": "image-ocr.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="ocrDrop"></div>
+        <p class="pdf-status" id="ocrStatus" hidden></p>
+        <div id="ocrResult" hidden>
+          <textarea id="ocrOutput" class="is-output pdf-output" aria-label="Recognised text"></textarea>
+          <div class="tool-actions"><button type="button" class="tool-btn is-primary" id="ocrCopy" disabled>Copy</button><button type="button" class="tool-btn" id="ocrDownload" disabled>Download .md</button><button type="button" class="tool-btn" id="ocrClear">Clear</button></div>
+        </div>""",
+        "steps": [
+            "Drop one or more images, or paste a screenshot with Ctrl+V (Cmd+V on Mac).",
+            "Wait while each image is read. The first run loads the text reader (about 8 MB, then cached).",
+            "Fix anything misread directly in the text box.",
+            "Copy the text or download it, then add it to NotebookLM as a source.",
+        ],
+        "faq": [
+            ("Does it read handwriting?", "Neat print works best. Joined-up handwriting is often misread; check the text before you rely on it."),
+            ("Which languages does it support?", "English. Other Latin-script text is often readable but less accurate."),
+            ("NotebookLM accepts images; why convert them?", "Text sources are searchable, quotable and easy to correct. For notes and whiteboards, clean text usually gives NotebookLM more reliable answers."),
+            ("Are my images uploaded?", "No. OCR runs in your browser with Tesseract.js; images never leave your device."),
+        ],
+        "links": [("/tools/pdf-to-text", "PDF to text with OCR"), ("/features/snapshots", "Snapshots to NotebookLM"), ("/blog/how-to-use-notebooklm-to-study", "How to study with NotebookLM"), ("/tools/text-splitter", "Text splitter")],
+        "cta": "<strong>Capture screens straight into a notebook.</strong> NotebookTools Snapshots grabs any part of a page and sends it to NotebookLM, or writes a step-by-step guide from your screenshots (Pro).",
+    },
+    {
+        "slug": "pdf-to-images",
+        "group": "pdf",
+        "icon": "images",
+        "name": "PDF Slides to Images",
+        "card": "Turn a NotebookLM slide deck (or any PDF) into PNG or JPG images sized for LinkedIn and Instagram.",
+        "title": "PDF to PNG/JPG: NotebookLM Slide Deck to Images (Free)",
+        "description": "Free PDF to image converter: turn every page of a NotebookLM slide deck or any PDF into PNG or JPG images at full resolution or sized for LinkedIn and Instagram. Download one or all as a ZIP. Runs in your browser.",
+        "h1": "PDF Slides to Images",
+        "answer": "Download your slide deck from NotebookLM as a PDF, drop it here, and every page becomes a PNG or JPG image: full resolution, or 1080 or 1200 px wide for LinkedIn and Instagram posts. Pick pages if you only need some, then download one image or all of them as a ZIP. Nothing is uploaded.",
+        "script": "pdf-to-images.js",
+        "extra_scripts": ["pdf-kit.js"],
+        "stack": True,
+        "app": """
+        <div id="piDrop"></div>
+        <div class="pdf-file" id="piFile" hidden></div>
+        <div id="piOptions" hidden>
+          <div class="pdf-options">
+            <div class="tool-field"><label for="piFormat">Format</label><select id="piFormat"><option value="png">PNG (sharp text)</option><option value="jpg">JPG (smaller)</option></select></div>
+            <div class="tool-field"><label for="piWidth">Size</label><select id="piWidth"><option value="1080">1080 px wide (Instagram)</option><option value="1200">1200 px wide (LinkedIn)</option><option value="1920">1920 px wide (Full HD)</option><option value="0">2× original</option></select></div>
+            <div class="tool-field"><label for="piPages">Pages (optional)</label><input type="text" id="piPages" placeholder="All, or e.g. 1-5, 8"></div>
+          </div>
+          <div class="pdf-run"><button type="button" class="tool-btn is-primary" id="piRun">Convert to images</button></div>
+        </div>
+        <div class="pdf-bar" id="piBar" hidden><span></span></div>
+        <p class="pdf-status" id="piStatus" hidden></p>
+        <div class="pdf-run" id="piZipRow" hidden><button type="button" class="tool-btn is-primary" id="piZip">Download all (.zip)</button></div>
+        <div class="pdf-thumbs" id="piThumbs"></div>""",
+        "steps": [
+            "In NotebookLM, open your slide deck in Studio and download it as a PDF.",
+            "Drop the PDF here.",
+            "Choose PNG or JPG, a size (1080 px for Instagram, 1200 px for LinkedIn) and, optionally, which pages.",
+            "Click Convert, then download single images or all of them as a ZIP.",
+        ],
+        "faq": [
+            ("How do I download a NotebookLM slide deck?", "Open the slide deck in the Studio panel and use its download option to save it as a PDF (or PowerPoint)."),
+            ("Which size is best for LinkedIn and Instagram?", "1080 px wide suits Instagram; 1200 px suits LinkedIn. For a swipeable LinkedIn carousel, post the PDF itself as a document."),
+            ("PNG or JPG?", "PNG keeps text and lines crisp; JPG files are smaller, good for photo-heavy slides."),
+            ("Is my deck uploaded?", "No. Pages are rendered in your browser with pdf.js."),
+        ],
+        "links": [("/notebooklm-slide-styles", "NotebookLM slide deck styles"), ("/blog/notebooklm-slide-prompts", "NotebookLM slide prompts"), ("/tools/notebooklm-prompts", "NotebookLM prompt library"), ("/tools/merge-pdf", "Merge PDFs")],
+        "cta": "<strong>Make a LinkedIn or Instagram carousel from a deck.</strong> NotebookTools turns any NotebookLM slide deck into a carousel with your handle, page numbers and a swipe hint, right inside NotebookLM (Pro).",
+    },
 ]
 
+
 HUB = {
-    "title": "Free NotebookLM Tools: Prompts, Links, Splitter, Answers",
-    "description": "Free browser tools for NotebookLM users: build prompts and slide styles, clean link lists, split long text under the 500,000-word limit, and clean copied answers. Nothing is uploaded.",
+    "title": "Free NotebookLM & PDF Tools: Split, Merge, OCR, Prompts",
+    "description": "12 free browser tools for NotebookLM users: split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.",
     "h1": "Free tools for NotebookLM",
-    "answer": "Four free tools for people who work in NotebookLM (now Gemini Notebook), all running in your browser with nothing uploaded: a prompt builder with 14 slide deck styles, a link list cleaner that counts against the 50-source limit, a text splitter for the 500,000-word-per-source limit, and an answer cleaner that strips citation numbers.",
+    "answer": "Twelve free tools for people who work in NotebookLM (now Gemini Notebook), all running in your browser with nothing uploaded. PDF and image tools get files ready for NotebookLM: split, merge, compress, extract pages, count words against the limits, convert PDF to text, read images with OCR, and turn slide decks into images. NotebookLM tools help inside it: a prompt library, a link cleaner, a text splitter and an answer cleaner.",
 }
+
+GROUPS = [
+    ("pdf", "PDF & image tools", "Get files ready for NotebookLM: under 200 MB and 500,000 words per source, 50 sources per notebook."),
+    ("notebooklm", "NotebookLM tools", "Prompts, links and answers for working inside NotebookLM."),
+]
 
 
 # ---------------------------------------------------------------------------
@@ -287,7 +640,9 @@ def faq_schema(faq):
 
 def other_tools(slug: str) -> str:
     cards = []
-    for t in TOOLS:
+    group = next((t.get("group") for t in TOOLS if t["slug"] == slug), None)
+    ordered = [t for t in TOOLS if t.get("group") == group] + [t for t in TOOLS if t.get("group") != group]
+    for t in ordered[:7]:
         if t["slug"] == slug:
             continue
         cards.append(f"""<a class="tool-card" href="/tools/{t['slug']}">
@@ -314,7 +669,7 @@ def tool_page(t: dict) -> str:
     if t.get("raw_app"):
         app_html = t["raw_app"]
     else:
-        app_html = '<section class="tool-app" aria-label="' + E(t["name"]) + '">' + t["app"] + "\n      </section>"
+        app_html = '<section class="tool-app' + (" is-stack" if t.get("stack") else "") + '" aria-label="' + E(t["name"]) + '">' + t["app"] + "\n      </section>"
     steps = "".join(f"<li>{E(s)}</li>" for s in t["steps"])
     faq = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in t["faq"])
     links = "".join(f'<li><a href="{h}">{E(l)}</a></li>' for h, l in t["links"])
@@ -363,7 +718,8 @@ def tool_page(t: dict) -> str:
 def hub_page() -> str:
     path = "/tools"
     faq = [
-        ("Are these NotebookLM tools free?", "Yes. All four are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded."),
+        ("Are these NotebookLM tools free?", "Yes. All twelve are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded."),
+        ("Are my PDFs uploaded to a server?", "No. The PDF tools use pdf-lib, pdf.js and Tesseract.js running in your browser tab. Files never leave your device, which also makes them fast for large files."),
         ("Are these tools made by Google?", "No. NotebookTools is independent and not affiliated with Google. The tools work with NotebookLM (now Gemini Notebook) as it is today."),
         ("What is the NotebookTools extension?", "A Chrome extension for NotebookLM: one-click imports from YouTube, web pages, X and AI chats are free; Pro ($49 once) adds a notebooks dashboard, source manager, slide style cards, chat export and more."),
     ]
@@ -374,12 +730,21 @@ def hub_page() -> str:
         faq_schema(faq),
         breadcrumb([("Home", "/"), ("Free tools", path)]),
     ]}
-    cards = "\n        ".join(f"""<a class="tool-card" href="/tools/{t['slug']}">
+    def card(t):
+        return f"""<a class="tool-card" href="/tools/{t['slug']}">
           <span class="tool-card-icon">{icon(t['icon'])}</span>
-          <h2>{E(t['name'])}</h2>
+          <h3>{E(t['name'])}</h3>
           <p>{E(t['card'])}</p>
           <span class="tool-card-tag">Open tool →</span>
-        </a>""" for t in TOOLS)
+        </a>"""
+    cards = "\n".join(
+        f"""<section class="tools-group" aria-labelledby="g-{key}">
+        <div class="tools-group-head"><h2 id="g-{key}">{E(label)}</h2><p>{E(note)}</p></div>
+        <div class="tools-grid">
+        {"".join(card(t) for t in TOOLS if t.get("group") == key)}
+        </div>
+      </section>"""
+        for key, label, note in GROUPS)
     faq_html = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in faq)
     return f"""{head(HUB['title'], HUB['description'], path, schema)}
   <body>
@@ -393,9 +758,7 @@ def hub_page() -> str:
         {BADGES}
       </section>
 
-      <div class="tools-grid">
-        {cards}
-      </div>
+      {cards}
 
       {cta("<strong>Do it inside NotebookLM.</strong> NotebookTools imports links, tabs, YouTube playlists and AI chats into any notebook in one click, and adds a source meter, slide style cards and chat export.")}
 
