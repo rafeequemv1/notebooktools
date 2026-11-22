@@ -378,6 +378,12 @@ window.NTSlides = (() => {
     sg.stroke = strokeRatio(img, box, st.bg, sg.h) * sg.h;
     sg.weight = sg.stroke / strokeNorm(sg.h); // ~0.8–1.0 regular, higher when bold (depends on the font)
     sg.serif = serifScore(img, words.length ? words : sg.words, st.bg);
+    // Share of the line's letters in words that lean (per word, so a line with one
+    // italic title in it stays upright)
+    const longWords = (words.length ? words : sg.words).filter((w) => (w.text.match(/\p{L}/gu) || []).length >= 4);
+    const leaning = longWords.filter((w) => slantOf(img, [w], st.bg) >= 4);
+    const chars = (list) => list.reduce((n, w) => n + w.text.length, 0);
+    sg.italicShare = longWords.length ? chars(leaning) / chars(longWords) : 0;
     sg.label = null;
     if (hasLabel) {
       const lb = boxOf(words.slice(0, colon + 1));
@@ -439,6 +445,41 @@ window.NTSlides = (() => {
     const foot = Math.max(at(bottom), at(bottom - 1));
     const stems = (at(mid - 1) + at(mid) + at(mid + 1)) / 3;
     return stems ? foot / stems : 0;
+  }
+
+  // Letter slant in degrees: shear the line's ink back by each angle and see which
+  // makes the vertical strokes line up into the sharpest columns. ~0 upright,
+  // ~10-15 italic. Measured on letters only (digits and symbols vary).
+  function slantOf(img, words, bg) {
+    const { data, width, height } = img;
+    const letters = words.filter((w) => /\p{L}{2}/u.test(w.text));
+    if (!letters.length) return 0;
+    const box = boxOf(letters);
+    const x0 = Math.max(0, Math.round(box.x0)), x1 = Math.min(width, Math.round(box.x1));
+    const y0 = Math.max(0, Math.round(box.y0)), y1 = Math.min(height, Math.round(box.y1));
+    const w = x1 - x0, h = y1 - y0;
+    if (w < 30 || h < 12) return 0;
+    // Left edges of strokes only (where ink starts): stems line up far more clearly
+    // than filled letter shapes
+    const ink = [];
+    const isInk = (x, y) => { const i = (y * width + x) * 4; return Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 200; };
+    for (const wd of letters) {
+      const xa = Math.max(1, Math.round(wd.bbox.x0)), xb = Math.min(width, Math.round(wd.bbox.x1));
+      for (let y = y0; y < y1; y += 1) for (let x = xa; x < xb; x += 1) if (isInk(x, y) && !isInk(x - 1, y)) ink.push(x - x0, y - y0);
+    }
+    if (ink.length < 30) return 0;
+    const sharp = (deg) => {
+      const t = Math.tan((deg * Math.PI) / 180);
+      const cols = new Float32Array(w + h);
+      for (let j = 0; j < ink.length; j += 2) cols[Math.round(ink[j] + (ink[j + 1] - h) * t + h * 0.5)] += 1;
+      let sq = 0;
+      for (const v of cols) sq += v * v;
+      return sq;
+    };
+    let best = 0, bestVal = -1;
+    for (let deg = -6; deg <= 24; deg += 1) { const v = sharp(deg); if (v > bestVal) { bestVal = v; best = deg; } }
+    // Lean only counts if it sharpens the strokes clearly over upright
+    return bestVal > sharp(0) * 1.05 ? best : 0;
   }
 
   // Stroke thickness of the text in a box, as a share of the font size:
@@ -936,7 +977,8 @@ window.NTSlides = (() => {
         lineHeight: Math.round(lineHeight * 100) / 100,
         color: style.color,
         bold: font.bold,
-        italic: false,
+        // Italic when most of the paragraph's letters lean clearly
+        italic: group.reduce((n, g) => n + g.italicShare * g.text.length, 0) > group.reduce((n, g) => n + g.text.length, 0) * 0.6,
         align,
         fontFamily: font.family,
         _lines: group.map((g) => ({ w: g.x1 - g.x0 })),
@@ -1850,5 +1892,5 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { layoutLines, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { layoutLines, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
