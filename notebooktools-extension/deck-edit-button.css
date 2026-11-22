@@ -1,0 +1,40 @@
+/* "Edit slides" next to "View prompt and N sources" on an open slide deck */
+.ntde-btn {
+  align-items: center;
+  background: #e8f0fe;
+  border: 1px solid rgba(11, 87, 208, 0.22);
+  border-radius: 999px;
+  color: #0b57d0;
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font: 500 14px/1 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 7px;
+  height: 32px;
+  margin-left: 8px;
+  padding: 0 14px 0 11px;
+  transition: background 0.15s, border-color 0.15s;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.ntde-btn:hover {
+  background: #d3e3fd;
+  border-color: rgba(11, 87, 208, 0.4);
+}
+
+.ntde-btn:focus-visible {
+  outline: 2px solid #0b57d0;
+  outline-offset: 2px;
+}
+
+.ntde-btn.is-dark {
+  background: rgba(168, 199, 250, 0.12);
+  border-color: rgba(168, 199, 250, 0.28);
+  color: #a8c7fa;
+}
+
+.ntde-btn.is-dark:hover {
+  background: rgba(168, 199, 250, 0.2);
+  border-color: rgba(168, 199, 250, 0.5);
+}
