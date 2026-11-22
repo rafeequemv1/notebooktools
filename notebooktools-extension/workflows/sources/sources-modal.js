@@ -13,10 +13,13 @@
     String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
   function isDarkPage() {
-    const bg = getComputedStyle(document.body).backgroundColor.match(/\d+(\.\d+)?/g);
-    if (!bg) return false;
-    const [r, g, b] = bg.map(Number);
-    return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.45;
+    for (const node of [document.body, document.documentElement]) {
+      const bg = node && getComputedStyle(node).backgroundColor.match(/\d+(\.\d+)?/g);
+      if (!bg || Number(bg[3] ?? 1) === 0) continue;
+      const [r, g, b] = bg.map(Number);
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.45;
+    }
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches || false;
   }
 
   function client() {

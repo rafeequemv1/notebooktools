@@ -332,3 +332,128 @@
 .nts-list .nts-row:has(.nts-ficon) {
   min-height: 52px;
 }
+
+/* ==========================================================================
+   Minimal look, matching the topbar menus, Blog panel and Carousel dialog:
+   same palette, soft filled fields, flat rows, one filled action.
+   (Shared by Manage sources and Manage Studio files.)
+   ========================================================================== */
+.nts-backdrop {
+  --nts-panel: #f3f6fb;
+  --nts-line: rgba(31, 31, 31, 0.1);
+  --nts-hover: rgba(11, 87, 208, 0.07);
+  background: rgba(15, 20, 30, 0.36);
+}
+
+.nts-backdrop.is-dark {
+  --nts-bg: #232427;
+  --nts-panel: #2c2d31;
+  --nts-line: rgba(255, 255, 255, 0.1);
+  --nts-hover: rgba(138, 180, 248, 0.1);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.nts-dialog {
+  border: 1px solid var(--nts-line);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+}
+
+.nts-backdrop.is-dark .nts-dialog {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+.nts-head {
+  padding: 18px 20px 12px;
+}
+
+.nts-head h2 {
+  font-size: 18px;
+}
+
+.nts-close:hover {
+  background: var(--nts-hover);
+}
+
+.nts-body {
+  padding: 14px 20px 8px;
+}
+
+.nts-select,
+.nts-input {
+  background-color: var(--nts-panel);
+  border: 1px solid transparent;
+  font-size: 13.5px;
+}
+
+.nts-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  padding-right: 34px;
+}
+
+.nts-select option {
+  background: var(--nts-bg);
+  color: var(--nts-ink);
+}
+
+.nts-select:focus,
+.nts-input:focus {
+  border-color: var(--nts-accent);
+  outline: none;
+}
+
+.nts-row:hover {
+  background: var(--nts-hover);
+}
+
+.nts-row-head {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nts-row-head:hover {
+  background: transparent;
+}
+
+.nts-type {
+  background: var(--nts-panel);
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.nts-tag {
+  background: color-mix(in srgb, var(--nts-danger) 12%, transparent);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.nts-foot {
+  padding: 12px 20px;
+}
+
+.nts-btn {
+  height: 36px;
+}
+
+.nts-btn:hover:not(:disabled) {
+  background: var(--nts-hover);
+}
+
+.nts-btn.is-danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--nts-danger) 10%, transparent);
+}
+
+.nts-btn.is-danger.is-confirm,
+.nts-btn.is-danger.is-confirm:hover:not(:disabled) {
+  background: var(--nts-danger);
+}
+
+.nts-link:hover {
+  background: var(--nts-hover);
+}
