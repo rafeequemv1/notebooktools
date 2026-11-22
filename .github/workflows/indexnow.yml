@@ -1,0 +1,87 @@
+# Tell Bing and the other IndexNow engines which pages changed, right after
+# Vercel finishes a production deploy (Vercel reports each deploy back to
+# GitHub as a deployment status). Run it by hand from the Actions tab to send
+# the whole sitemap.
+name: IndexNow
+
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Send every URL in the sitemap (otherwise only pages changed in the last commit)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  deployments: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Find the previous production deploy
+        id: range
+        if: github.event_name == 'deployment_status'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CURRENT_ID: ${{ github.event.deployment.id }}
+          CURRENT_SHA: ${{ github.event.deployment.sha }}
+        run: |
+          base=""
+          # Newest first; take the last deploy before this one that succeeded
+          for row in $(gh api "repos/$REPO/deployments?environment=Production&per_page=30" \
+              --jq '.[] | "\(.id),\(.sha)"'); do
+            id="${row%%,*}"; sha="${row#*,}"
+            [ "$id" = "$CURRENT_ID" ] && continue
+            [ "$sha" = "$CURRENT_SHA" ] && continue
+            state=$(gh api "repos/$REPO/deployments/$id/statuses?per_page=1" --jq '.[0].state // ""')
+            if [ "$state" = "success" ] && git merge-base --is-ancestor "$sha" "$CURRENT_SHA" 2>/dev/null; then
+              base="$sha"; break
+            fi
+          done
+          if [ -z "$base" ]; then
+            base=$(git rev-parse "$CURRENT_SHA~1")
+            echo "No earlier production deploy found; comparing with the previous commit."
+          fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "Comparing $base..$CURRENT_SHA"
+
+      - name: Wait until the deploy is live
+        run: |
+          for i in $(seq 1 12); do
+            if curl -fsS "https://www.notebooktools.com/aabefd4272bd49cd96a4d875dfc44010.txt" | grep -qx "aabefd4272bd49cd96a4d875dfc44010"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "The IndexNow key file is not reachable yet."
+
+      - name: Send changed pages to IndexNow
+        if: github.event_name == 'deployment_status'
+        run: python3 scripts/indexnow.py --changed "${{ steps.range.outputs.base }}" "${{ github.event.deployment.sha }}"
+
+      - name: Send pages to IndexNow (manual run)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ inputs.all }}" = "true" ]; then
+            python3 scripts/indexnow.py
+          else
+            python3 scripts/indexnow.py --changed HEAD~1 HEAD
+          fi

@@ -203,6 +203,6 @@ Done in code (branch `feat/growth-week1`):
 - 10 new posts: youtube-to-notebooklm (replaces summarize-youtube-videos-notebooklm, 301), notebooklm-prompts-for-studying, notebooklm-chrome-extensions, export-notebooklm-to-pdf, notebooklm-mind-map, notebooklm-video-overview, notebooklm-mcp, notebooklm-not-working, what-is-gemini-notebook, notebooklm-updates.
 - Spanish and German pricing and limits pages; install CTAs on all 6 localized free pages.
 - Extension 0.12.1: onboarding checklist, review ask after 5 imports, Pro hint after 3 bulk runs, Google Docs import relabelled.
-- IndexNow key + `scripts/indexnow.py`; `notebooktools.vercel.app` redirects to www.
+- IndexNow key + `scripts/indexnow.py`, sent automatically after every production deploy by `.github/workflows/indexnow.yml` (only the pages that changed); full sitemap sent once on 2026-11-22 (HTTP 202). `notebooktools.vercel.app` redirects to www.
 
-Still for you: connect Bing/Dodo/Supabase in Piqo, verify the Dodo webhook, submit the extension, run `python3 scripts/indexnow.py` after deploy, distribution (§8), and the original data post (§7, week 6), which needs real aggregated data.
+Still for you: connect Bing/Dodo/Supabase in Piqo, verify the Dodo webhook, submit the extension, distribution (§8), and the original data post (§7, week 6), which needs real aggregated data.
