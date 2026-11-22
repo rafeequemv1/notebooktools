@@ -124,8 +124,9 @@
     if (!slot || !slot.isConnected) return;
     const list = counts();
     if (type !== "all" && !list.some(([t]) => t === type)) type = "all";
-    const typeLabel = type === "all" ? "All types" : (TYPE_LABEL[type] || type);
-    const sortLabel = (SORTS.find(([k]) => k === sort) || SORTS[0])[1];
+    // Short names so they fit the narrow Studio bar (the menus say it in full)
+    const typeLabel = type === "all" ? "Type" : type;
+    const sortLabel = { newest: "Sort", oldest: "Oldest", type: "By type" }[sort] || "Sort";
     slot.innerHTML = `
       <button type="button" class="ntr-btn has-caret ntr-sf${type !== "all" ? " is-on" : ""}" data-sf="type" title="Show one type of Studio file"${items.length ? "" : " disabled"}>
         ${type === "all" ? svg("all") : svg(type, 16, tint(type))}<span class="ntr-label">${esc(typeLabel)}</span>${svg("caret", 13)}

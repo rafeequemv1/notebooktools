@@ -70,9 +70,19 @@
 
   /* ---------- Finding the open deck on the page ---------- */
   /** Every open deck view: { chip, panel, more, title }. */
-  function openDecks() {
+  function findChips() {
     let chips = [...document.querySelectorAll("button, a, [role='button']")]
       .filter((b) => visible(b) && !b.closest(`.${BTN_CLASS}`) && CHIP_TEXT.test(label(b)));
+    if (!chips.length) {
+      // Not a real button (a clickable chip made of plain elements): any short text that says it
+      chips = [...document.querySelectorAll("span, div, mat-chip, [jsaction]")]
+        .filter((el) => el.textContent.length < 60 && CHIP_TEXT.test(el.textContent) && visible(el) && !el.closest(`.${BTN_CLASS}`));
+    }
+    return chips;
+  }
+
+  function openDecks() {
+    let chips = findChips();
     // A chip can match twice (a button and an element inside it): keep the outer one
     chips = chips.filter((c) => !chips.some((o) => o !== c && o.contains(c)));
     const views = [];
@@ -122,6 +132,7 @@
       event.stopPropagation();
       const authUser = window.NotebookToolsNotebookLM?.currentPageAuthUser?.() ?? new URLSearchParams(location.search).get("authuser");
       const labelEl = button.querySelector("span");
+      const original = labelEl.dataset.text || (labelEl.dataset.text = labelEl.textContent);
       try {
         chrome.runtime.sendMessage({
           type: "notebooktools-open-slide-editor",
@@ -131,7 +142,7 @@
           authUser
         });
         labelEl.textContent = "Opening…";
-        window.setTimeout(() => { labelEl.textContent = "Edit slides"; }, 2500);
+        window.setTimeout(() => { labelEl.textContent = original; }, 2500);
       } catch (_error) {
         // The extension was reloaded: this page needs a refresh to talk to it again
         labelEl.textContent = "Reload page to edit";
@@ -160,12 +171,19 @@
   async function scan() {
     if (!notebookId()) return;
     const views = openDecks();
-    if (!views.length) {
-      const chip = [...document.querySelectorAll("button, a, [role='button']")].find((b) => visible(b) && CHIP_TEXT.test(label(b)));
-      log(chip ? "found the deck's \"View prompt\" button but no ⋮ (More options) button near it" : "no open deck on the page");
-      return;
+    // A deck open but no ⋮ found near it: put the button right after "View prompt"
+    const loose = views.length ? [] : findChips().filter((c) => !findChips().some((o) => o !== c && o.contains(c)));
+    for (const chip of loose) {
+      let panel = chip.parentElement;
+      for (let i = 0; panel && i < 4 && norm(panel.textContent).length < 120; i += 1) panel = panel.parentElement;
+      views.push({ chip, panel: panel || chip.parentElement, more: null, title: deckTitle(panel || chip.parentElement, chip) });
     }
     let list = await itemsNow();
+    if (list) placeRowButtons(list, views);
+    if (!views.length) {
+      log("no open deck on the page");
+      return;
+    }
     for (const view of views) {
       let item = list ? itemFor(view, list) : null;
       if (list && !item && !decks.failed && Date.now() - lastMiss > RETRY_MS) {
@@ -188,7 +206,9 @@
       // In the deck's row of icons, just before ⋮ (where it stays visible).
       // Only moved when it's missing from that row, so it never fights other
       // add-ons' icons or NotebookLM's own redraws (no flicker).
-      if (!button.isConnected || button.parentElement !== view.more.parentElement) {
+      if (!view.more) {
+        if (!button.isConnected) view.chip.insertAdjacentElement("afterend", button);
+      } else if (!button.isConnected || button.parentElement !== view.more.parentElement) {
         try {
           view.more.parentElement.insertBefore(button, view.more);
           placed.set(button, view.more);
@@ -199,6 +219,52 @@
       }
       log(`button on "${button.dataset.title}"${item ? ` (deck ${item.id})` : list ? " (not matched in the Studio list)" : " (Studio list still loading)"}`);
     }
+  }
+
+  /* ---------- An Edit button on each slide deck in the Studio list ---------- */
+  // A row is the smallest box round the deck's title that holds exactly one
+  // ⋮ (More options) button. The open deck's own header is left alone.
+  function placeRowButtons(list, views) {
+    const deckTitles = new Map(list.filter((a) => a.typeCode === 8 && a.title).map((a) => [norm(a.title), a]));
+    if (!deckTitles.size) return;
+    const skip = new Set(views.map((v) => v.more).filter(Boolean));
+    for (const more of document.querySelectorAll("button, [role='button']")) {
+      if (skip.has(more) || !MORE_TEXT.test(label(more)) || !visible(more)) continue;
+      if (more.closest("#notebooktools-ribbon, .ntr-menu")) continue;
+      let row = null;
+      let item = null;
+      for (let node = more.parentElement, i = 0; node && i < 6; i += 1, node = node.parentElement) {
+        const mores = [...node.querySelectorAll("button, [role='button']")].filter((b) => MORE_TEXT.test(label(b)));
+        if (mores.length > 1 || node.textContent.length > 400) break; // climbed past this item
+        item = rowDeck(node, deckTitles);
+        if (item) { row = node; break; }
+      }
+      if (!row) continue;
+      if (findChips().some((c) => row.contains(c))) continue; // the open deck's header
+      const holder = more.parentElement;
+      let button = holder.querySelector(`:scope > .${BTN_CLASS}`);
+      if (!button) {
+        button = makeButton();
+        button.classList.add("is-row");
+        button.querySelector("span").textContent = "Edit";
+        holder.insertBefore(button, more);
+        placed.set(button, more);
+      }
+      button.dataset.artifact = item.id || "";
+      button.dataset.title = item.title;
+      button.classList.toggle("is-dark", isDarkPage());
+    }
+  }
+
+  /** The deck whose title is one of this row's own lines of text. */
+  function rowDeck(row, deckTitles) {
+    const walker = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
+    for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+      if (text.parentElement?.closest(`.${BTN_CLASS}`)) continue;
+      const hit = deckTitles.get(norm(text.nodeValue));
+      if (hit) return hit;
+    }
+    return null;
   }
 
   /* ---------- Download through NotebookLM's own menu ---------- */
@@ -298,7 +364,7 @@
           restores = restores.filter((t) => now - t < 1000);
           if (restores.length >= 20) continue;
           restores.push(now);
-          more.parentElement.insertBefore(button, more);
+          if (more.parentElement) more.parentElement.insertBefore(button, more);
         }
       }
     }

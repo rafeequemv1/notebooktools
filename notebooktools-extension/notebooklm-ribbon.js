@@ -129,9 +129,9 @@
     }
   }
 
-  // Shrink in steps until everything fits: group names, then secondary
-  // labels, then icons only.
-  const FIT_LEVELS = ["fit-1", "fit-2", "fit-3", "fit-4"];
+  // Shrink in steps until everything fits: group names, tighter spacing,
+  // secondary labels, the ▾ carets, and only then icons without names.
+  const FIT_LEVELS = ["fit-1", "fit-tight", "fit-2", "fit-3", "fit-4"];
 
   function fitRibbon(ribbon) {
     if (!ribbon) return;

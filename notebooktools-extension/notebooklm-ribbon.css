@@ -227,6 +227,21 @@
   display: none;
 }
 
+/* Tighter spacing before any name is dropped */
+.ntr-seg.fit-tight .ntr-group {
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.ntr-seg.fit-tight .ntr-btn:not(.ntr-icon) {
+  gap: 4px;
+  padding: 0 6px;
+}
+
+.ntr-seg.fit-3 .ntr-btn.has-caret > svg:last-child {
+  display: none;
+}
+
 .ntr-seg.fit-2 .is-secondary .ntr-label,
 .ntr-seg.fit-3 .is-secondary .ntr-label,
 .ntr-seg.fit-3 .is-tertiary .ntr-label,
