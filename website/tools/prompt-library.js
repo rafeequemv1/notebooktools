@@ -49,18 +49,25 @@
 
   /* ---------- Shell ---------- */
   root.innerHTML = `
-    <div class="pl-top">
-      <label class="pl-search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg>
-        <input type="search" id="plSearch" placeholder="Search ${data.prompts.length} prompts: exam, debate, pitch deck…" aria-label="Search prompts">
-        <kbd>/</kbd>
-      </label>
-      <div class="pl-dock" role="tablist" aria-label="Where the prompt goes" id="plDock"></div>
-      <div class="pl-jobs" id="plJobs" aria-label="Job"></div>
-    </div>
-    <div class="pl-body">
-      <div class="pl-grid" id="plGrid" aria-live="polite"></div>
-      <aside class="pl-bench" id="plBench" aria-label="Prompt"></aside>
+    <div class="pl-layout">
+      <nav class="pl-nav" aria-label="Where the prompt goes">
+        <p class="pl-nav-label">Where it goes</p>
+        <div class="pl-dock" role="tablist" aria-orientation="vertical" id="plDock"></div>
+      </nav>
+      <div class="pl-main">
+        <div class="pl-top">
+          <label class="pl-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg>
+            <input type="search" id="plSearch" placeholder="Search ${data.prompts.length} prompts: exam, debate, pitch deck…" aria-label="Search prompts">
+            <kbd>/</kbd>
+          </label>
+          <div class="pl-jobs" id="plJobs" aria-label="Job"></div>
+        </div>
+        <div class="pl-body">
+          <div class="pl-grid" id="plGrid" aria-live="polite"></div>
+          <aside class="pl-bench" id="plBench" aria-label="Prompt"></aside>
+        </div>
+      </div>
     </div>`;
 
   function renderDock() {
@@ -68,7 +75,7 @@
     const tabs = [["all", { label: "All", color: "#1f1f1f" }], ...Object.entries(D)];
     $("#plDock").innerHTML = tabs.map(([k, d]) => `
       <button type="button" role="tab" class="pl-tab${state.dest === k ? " is-on" : ""}" data-dest="${k}" aria-selected="${state.dest === k}" style="--c:${d.color}">
-        <span class="pl-tab-icon">${svg(k)}</span>${esc(d.label)}<span class="pl-tab-n">${count(k)}</span>
+        <span class="pl-tab-icon">${svg(k)}</span><span class="pl-tab-label">${esc(d.label)}</span><span class="pl-tab-n">${count(k)}</span>
       </button>`).join("");
     $("#plJobs").innerHTML = ["all", ...data.jobs].map((j) => `<button type="button" class="pl-job${state.job === j ? " is-on" : ""}" data-job="${esc(j)}">${j === "all" ? "Any job" : esc(j)}</button>`).join("");
   }
@@ -221,3 +228,14 @@
 
   render();
 })();
+
+// Up/Down arrows move through the destination list (it's a vertical tablist).
+document.addEventListener("keydown", (event) => {
+  const tab = event.target.closest?.("#plDock .pl-tab");
+  if (!tab || !["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"].includes(event.key)) return;
+  const tabs = [...document.querySelectorAll("#plDock .pl-tab")];
+  const next = tabs[(tabs.indexOf(tab) + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length];
+  event.preventDefault();
+  next.click();
+  document.querySelector(`#plDock .pl-tab[data-dest="${next.dataset.dest}"]`)?.focus();
+});
