@@ -1,8 +1,9 @@
 /* ==========================================================================
    Type filter and sort for NotebookLM's own Studio list (free). Two small
    dropdowns in the ribbon's Studio bar. Types come from the notebook's
-   Studio items (plus its mind maps); rows in the page's Studio panel are
-   matched by their title. Nothing is deleted or moved in NotebookLM: other
+   Studio items (plus its mind maps), and the sort groups rows by file type
+   in the order of NotebookLM's Studio buttons. Each row's file type comes
+   from NotebookLM's own list (the title is only used to find the row). Nothing is deleted or moved in NotebookLM: other
    types are hidden, and sorting only changes the visual order (CSS order).
    ========================================================================== */
 (function () {
@@ -14,9 +15,14 @@
   const SORTS = [
     ["newest", "Newest first"],
     ["oldest", "Oldest first"],
-    ["az", "Name A–Z"],
-    ["type", "By type"]
+    ["type", "By file type"]
   ];
+  // File types in the order of NotebookLM's Studio buttons
+  const TYPE_ORDER = ["Audio", "Slide deck", "Video", "Mind map", "Report", "Quiz", "Infographic", "Data table"];
+  const typeRank = (t) => {
+    const i = TYPE_ORDER.indexOf(t);
+    return i === -1 ? TYPE_ORDER.length : i;
+  };
   const TYPE_LABEL = { Audio: "Audio Overview", Video: "Video Overview", Report: "Report", Quiz: "Quiz & flashcards", Infographic: "Infographic", "Slide deck": "Slide deck", "Data table": "Data table", "Mind map": "Mind map" };
 
   let slot = null;
@@ -84,7 +90,7 @@
   function counts() {
     const map = new Map();
     items.forEach((i) => map.set(i.type, (map.get(i.type) || 0) + 1));
-    return [...map.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    return [...map.entries()].sort((a, b) => typeRank(a[0]) - typeRank(b[0]) || a[0].localeCompare(b[0]));
   }
 
   function render() {
@@ -99,7 +105,7 @@
           ${list.map(([t, n]) => `<option value="${esc(t)}"${type === t ? " selected" : ""}>${esc(TYPE_LABEL[t] || t)} (${n})</option>`).join("")}
         </select>
       </label>
-      <label class="ntr-typefilter${sort !== "newest" ? " is-on" : ""}" title="Sort the Studio list">
+      <label class="ntr-typefilter${sort !== "newest" ? " is-on" : ""}" title="Sort the Studio list by date or by file type">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5"/></svg>
         <select data-ntr-studio-sort aria-label="Sort Studio files"${items.length ? "" : " disabled"}>
           ${SORTS.map(([k, name]) => `<option value="${k}"${sort === k ? " selected" : ""}>${name}</option>`).join("")}
@@ -187,8 +193,7 @@
       const { common, entries } = found;
       const indexed = list.map((row, i) => ({ entry: entries[i], info: rows.get(row), i }));
       if (sort === "oldest") indexed.reverse();
-      if (sort === "az") indexed.sort((a, b) => a.info.title.localeCompare(b.info.title));
-      if (sort === "type") indexed.sort((a, b) => a.info.type.localeCompare(b.info.type) || a.i - b.i);
+      if (sort === "type") indexed.sort((a, b) => typeRank(a.info.type) - typeRank(b.info.type) || a.i - b.i);
       const display = getComputedStyle(common).display;
       if (!/flex|grid/.test(display)) {
         flexParent = { el: common, display: common.style.display, direction: common.style.flexDirection };
