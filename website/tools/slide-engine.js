@@ -71,8 +71,8 @@ window.NTSlides = (() => {
 
   // Font size that makes a line as wide as it is on the slide.
   const measureCtx = document.createElement("canvas").getContext("2d");
-  function sizeFromWidth(text, width, bold) {
-    measureCtx.font = `${bold ? 700 : 400} 100px Arial, sans-serif`;
+  function sizeFromWidth(text, width, bold, family = "Arial") {
+    measureCtx.font = `${bold ? 700 : 400} 100px ${family === "Georgia" ? "Georgia, serif" : "Arial, sans-serif"}`;
     const w = measureCtx.measureText(text).width;
     return w > 0 ? (width / w) * 100 : 0;
   }
@@ -136,61 +136,252 @@ window.NTSlides = (() => {
     return { color: hex(...color), bg, inkRatio: total ? count / total : 0 };
   }
 
-  // Paint out text: each pixel in a box becomes a blend of the nearest
-  // pixels outside the box (left/right and top/bottom), skipping other text.
+  // Paint out text. For each box, take the typical (median) colour of thin
+  // strips just outside each side, ignoring stray text pixels, and blend
+  // them across the box. Smooth on flat and gradient backgrounds.
   function paintOut(ctx, boxes, w, h) {
     if (!boxes.length) return;
     const img = ctx.getImageData(0, 0, w, h);
     const src = new Uint8ClampedArray(img.data);
-    const mask = new Uint8Array(w * h);
-    boxes.forEach((b) => {
-      for (let y = Math.max(0, b.y0); y < Math.min(h, b.y1); y += 1) mask.fill(1, y * w + Math.max(0, b.x0), y * w + Math.min(w, b.x1));
-    });
-    const sample = (x, y) => {
-      let r = 0, g = 0, bl = 0, n = 0;
-      for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
-        const xx = Math.min(w - 1, Math.max(0, x + dx)), yy = Math.min(h - 1, Math.max(0, y + dy));
-        if (mask[yy * w + xx]) continue;
-        const i = (yy * w + xx) * 4;
-        r += src[i]; g += src[i + 1]; bl += src[i + 2]; n += 1;
-      }
-      return n ? [r / n, g / n, bl / n] : null;
-    };
-    const walk = (x, y, dx, dy) => {
-      for (let k = 0; k < 120; k += 1) {
-        if (x < 0 || y < 0 || x >= w || y >= h) return null;
-        if (!mask[y * w + x]) return { c: sample(x, y), d: k + 1 };
-        x += dx; y += dy;
-      }
-      return null;
-    };
     const out = img.data;
-    boxes.forEach((b) => {
-      for (let y = Math.max(0, b.y0); y < Math.min(h, b.y1); y += 1) {
-        for (let x = Math.max(0, b.x0); x < Math.min(w, b.x1); x += 1) {
-          const picks = [walk(x - 1, y, -1, 0), walk(x + 1, y, 1, 0), walk(x, y - 1, 0, -1), walk(x, y + 1, 0, 1)].filter((p) => p && p.c);
-          if (!picks.length) continue;
-          let r = 0, g = 0, bl = 0, wt = 0;
-          picks.forEach((p) => { const k = 1 / (p.d * p.d); r += p.c[0] * k; g += p.c[1] * k; bl += p.c[2] * k; wt += k; });
+    let ref = null; // background colour of the current box
+    const stripMedian = (x0, y0, x1, y1) => {
+      const px = [];
+      for (let y = Math.max(0, y0); y < Math.min(h, y1); y += 1) for (let x = Math.max(0, x0); x < Math.min(w, x1); x += 2) {
+        const i = (y * w + x) * 4;
+        px.push([src[i], src[i + 1], src[i + 2]]);
+      }
+      if (!px.length) return null;
+      if (ref) {
+        // Keep only pixels close to the background (drops anti-aliased text edges).
+        const keep = px.filter((p) => Math.abs(p[0] - ref[0]) + Math.abs(p[1] - ref[1]) + Math.abs(p[2] - ref[2]) < 60);
+        if (keep.length < px.length * 0.25) return null;
+        return [0, 1, 2].map((c) => median(keep.map((p) => p[c])));
+      }
+      const lum = px.map((p) => 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2]);
+      const med = median(lum);
+      const keep = px.filter((_p, k) => Math.abs(lum[k] - med) < 30);
+      return [0, 1, 2].map((c) => median((keep.length ? keep : px).map((p) => p[c])));
+    };
+    for (const b of boxes) {
+      const x0 = Math.max(0, Math.round(b.x0)), x1 = Math.min(w, Math.round(b.x1));
+      const y0 = Math.max(0, Math.round(b.y0)), y1 = Math.min(h, Math.round(b.y1));
+      if (x1 <= x0 || y1 <= y0) continue;
+      // Sample a few points along each side so gradients along the box are kept.
+      const cols = Math.max(2, Math.min(12, Math.round((x1 - x0) / 80)));
+      const rows = Math.max(2, Math.min(6, Math.round((y1 - y0) / 60)));
+      ref = null;
+      const fallback = b.bg || stripMedian(x0 - 8, y0 - 8, x1 + 8, y1 + 8) || [255, 255, 255];
+      ref = b.bg || null;
+      // A strip that looks more like the text colour than the background is text: use the background.
+      const near = (c) => {
+        if (!c) return fallback;
+        if (!b.ink) return c;
+        const dInk = Math.abs(c[0] - b.ink[0]) + Math.abs(c[1] - b.ink[1]) + Math.abs(c[2] - b.ink[2]);
+        const dBg = Math.abs(c[0] - fallback[0]) + Math.abs(c[1] - fallback[1]) + Math.abs(c[2] - fallback[2]);
+        return dInk < dBg * 0.8 ? fallback : c;
+      };
+      const top = [], bottom = [], left = [], right = [];
+      for (let k = 0; k < cols; k += 1) {
+        const a = x0 + ((x1 - x0) * k) / cols, z = x0 + ((x1 - x0) * (k + 1)) / cols;
+        top.push(near(stripMedian(Math.round(a), y0 - 6, Math.round(z), y0 - 1)));
+        bottom.push(near(stripMedian(Math.round(a), y1 + 1, Math.round(z), y1 + 6)));
+      }
+      for (let k = 0; k < rows; k += 1) {
+        const a = y0 + ((y1 - y0) * k) / rows, z = y0 + ((y1 - y0) * (k + 1)) / rows;
+        left.push(near(stripMedian(x0 - 6, Math.round(a), x0 - 1, Math.round(z))));
+        right.push(near(stripMedian(x1 + 1, Math.round(a), x1 + 6, Math.round(z))));
+      }
+      const at = (arr, t) => {
+        const f = Math.min(arr.length - 1, Math.max(0, t * arr.length - 0.5));
+        const i = Math.floor(f), j = Math.min(arr.length - 1, i + 1), u = f - i;
+        return [0, 1, 2].map((c) => arr[i][c] * (1 - u) + arr[j][c] * u);
+      };
+      for (let y = y0; y < y1; y += 1) {
+        const ty = (y - y0 + 0.5) / (y1 - y0);
+        const l = at(left, ty), r = at(right, ty);
+        for (let x = x0; x < x1; x += 1) {
+          const tx = (x - x0 + 0.5) / (x1 - x0);
+          const t = at(top, tx), bt = at(bottom, tx);
           const i = (y * w + x) * 4;
-          out[i] = r / wt; out[i + 1] = g / wt; out[i + 2] = bl / wt;
+          for (let c = 0; c < 3; c += 1) {
+            const v = t[c] * (1 - ty) + bt[c] * ty;
+            const hz = l[c] * (1 - tx) + r[c] * tx;
+            out[i + c] = (v + hz) / 2;
+          }
         }
       }
-    });
+    }
     ctx.putImageData(img, 0, 0);
-    // Soften the patches a little so they don't show as flat rectangles.
-    ctx.save();
-    ctx.filter = "blur(2px)";
-    boxes.forEach((b) => {
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
-      ctx.clip();
-      ctx.drawImage(ctx.canvas, 0, 0);
-      ctx.restore();
-    });
-    ctx.restore();
   }
+
+  /* --- Segments: OCR lines split at big gaps, junk words dropped --- */
+  const BULLET_RE = /^(?:[»«•·●▪◦*®©¢]|eo|[eoc](?=\s+[A-Z]))\s*/;
+  function plausible(word) {
+    const w = word.replace(/^[("'“‘\[]+|[)"'”’\].,:;!?]+$/g, "");
+    if (!w) return false;
+    if (/^\d+([.,:/-]\d+)*%?$/.test(w)) return true; // numbers, dates, 10:30, 50%
+    if (/^[\p{L}][\p{L}'’\-]*$/u.test(w)) {
+      if (w.length === 1) return /^[aAI]$/.test(w);
+      if (w.length >= 3 && !/[aeiouyAEIOUYÀ-ɏ]/.test(w)) return /^[A-Z]{2,6}$/.test(w); // acronyms only
+      return !/(.)\1\1/.test(w);
+    }
+    return /^[\p{L}\p{N}][\p{L}\p{N}'’\-./()]*$/u.test(w) && /[\p{L}]{2}/u.test(w);
+  }
+
+  function segmentsOf(blocks, img) {
+    const segs = [];
+    for (const block of blocks) for (const para of block.paragraphs || []) for (const line of para.lines || []) {
+      const words = (line.words || []).filter((w) => w.text && w.text.trim()).sort((a, b) => a.bbox.x0 - b.bbox.x0);
+      if (!words.length) continue;
+      const h = median(words.map((w) => w.bbox.y1 - w.bbox.y0));
+      let cur = [];
+      // Trim symbols / badge numbers at the ends (keeps icons and badges in the picture).
+      const junkEnd = (w) => /^[|@©®°~_=+*<>\\/()\[\]{}#•»«·.,:;-]*\d?[|@©®°~_=+*<>\\/()\[\]{}#.,:;-]*$/.test(w.text.trim()) && !/^\d{2,}/.test(w.text.trim());
+      const flush = () => {
+        const weak = (w) => ((w.confidence ?? 100) < 55 && w.text.trim().length <= 3)
+          || (img && w.text.trim().length <= 3 && !/^[aAI]$/.test(w.text.trim()) && ringBusy(img, w.bbox, 3) > 0.35)
+          || (w.text.trim().length === 1 && !/^[aAI•»«¢&]$/.test(w.text.trim()));
+        while (cur.length && (junkEnd(cur[0]) || weak(cur[0])) && !/^[•»«¢]$/.test(cur[0].text.trim())) cur.shift();
+        while (cur.length && (junkEnd(cur[cur.length - 1]) || weak(cur[cur.length - 1]))) cur.pop();
+        if (cur.length) segs.push(cur);
+        cur = [];
+      };
+      words.forEach((w, i) => {
+        if (/^[|¦]+$/.test(w.text.trim())) { flush(); return; } // diagram lines read as "|"
+        if (i && w.bbox.x0 - words[i - 1].bbox.x1 > Math.max(12, h * 1.1)) flush();
+        cur.push(w);
+      });
+      flush();
+    }
+    return segs.map((ws) => {
+      const text = ws.map((w) => w.text).join(" ").replace(/\s+/g, " ").trim().replace(BULLET_RE, (m) => (m.trim() ? "• " : ""));
+      const real = ws.filter((w) => plausible(w.text));
+      const conf = ws.reduce((n, w) => n + (w.confidence ?? 0), 0) / ws.length;
+      return {
+        words: ws,
+        text,
+        conf,
+        quality: real.reduce((n, w) => n + w.text.length, 0) / Math.max(1, ws.reduce((n, w) => n + w.text.length, 0)),
+        h: 0, // set below from width
+        tx0: 0,
+        x0: Math.min(...ws.map((w) => w.bbox.x0)), x1: Math.max(...ws.map((w) => w.bbox.x1)),
+        y0: Math.min(...ws.map((w) => w.bbox.y0)), y1: Math.max(...ws.map((w) => w.bbox.y1))
+      };
+    }).map((sg) => {
+      // Comparable "size" for every line: the font size its width implies (letter-independent).
+      const body = sg.text.replace(/^•\s*/, "");
+      const first = sg.words.find((w) => !/^[•»«¢©]$/.test(w.text.trim()) && !/^eo$/.test(w.text.trim()));
+      sg.tx0 = sg.text.startsWith("•") && first ? first.bbox.x0 : sg.x0;
+      const fromWidth = body.length >= 6 ? sizeFromWidth(body, sg.x1 - sg.tx0, false, "Arial") : 0;
+      const fromHeight = (sg.y1 - sg.y0) * 0.78;
+      sg.h = fromWidth && fromWidth < fromHeight * 1.8 && fromWidth > fromHeight * 0.45 ? fromWidth : fromHeight;
+      return sg;
+    });
+  }
+
+  // Share of the pixels around a box that differ from the typical
+  // background: high = the text sits on a picture. Robust to a few
+  // neighbouring text pixels (tight line spacing).
+  function ringBusy(img, b, pad) {
+    const { data, width, height } = img;
+    const lums = [];
+    const add = (x, y) => { if (x >= 0 && y >= 0 && x < width && y < height) { const i = (y * width + x) * 4; lums.push(0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]); } };
+    for (let x = b.x0 - pad; x <= b.x1 + pad; x += 2) { add(x, b.y0 - pad); add(x, b.y1 + pad); }
+    for (let y = b.y0 - pad; y <= b.y1 + pad; y += 2) { add(b.x0 - pad, y); add(b.x1 + pad, y); add(b.x0 - pad - 4, y); add(b.x1 + pad + 4, y); }
+    if (!lums.length) return 0;
+    const med = median(lums);
+    return lums.filter((v) => Math.abs(v - med) > 40).length / lums.length;
+  }
+
+  // Luminance standard deviation around a box (large = photo / strong gradient behind it).
+  function ringSpread(img, b, pad) {
+    const { data, width, height } = img;
+    const lums = [];
+    const add = (x, y) => { if (x >= 0 && y >= 0 && x < width && y < height) { const i = (y * width + x) * 4; lums.push(0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]); } };
+    for (let x = b.x0 - pad; x <= b.x1 + pad; x += 3) { add(x, b.y0 - pad); add(x, b.y1 + pad); }
+    for (let y = b.y0 - pad; y <= b.y1 + pad; y += 3) { add(b.x0 - pad, y); add(b.x1 + pad, y); }
+    if (lums.length < 4) return 0;
+    const mean = lums.reduce((a, v) => a + v, 0) / lums.length;
+    return Math.sqrt(lums.reduce((a, v) => a + (v - mean) ** 2, 0) / lums.length);
+  }
+
+  // Group segments into paragraphs: same left edge (or centre), similar size, close lines.
+  function groupSegments(segs) {
+    const groups = [];
+    for (const seg of [...segs].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0)) {
+      const h = seg.h;
+      const cx = (seg.x0 + seg.x1) / 2;
+      const g = groups.find((gr) => {
+        const last = gr[gr.length - 1];
+        const lh = last.h;
+        if (Math.max(h, lh) / Math.max(1, Math.min(h, lh)) > 1.28) return false;
+        const gap = seg.y0 - last.y1;
+        // Lines in a paragraph sit close; a half-line gap or a bullet starts a new paragraph.
+        if (gap < -lh * 0.35 || gap > Math.max(h, lh) * 0.5) return false;
+        if (/^•/.test(seg.text)) return false;
+        const left = Math.abs(seg.tx0 - last.tx0) < Math.max(h, lh) * 0.9;
+        const centre = Math.abs(cx - (last.x0 + last.x1) / 2) < Math.max(h, lh) * 0.9;
+        const overlap = Math.min(seg.x1, last.x1) - Math.max(seg.x0, last.x0) > 0;
+        return overlap && (left || centre);
+      });
+      if (g) g.push(seg); else groups.push([seg]);
+    }
+    return groups;
+  }
+
+  // Pick font family + weight by drawing the line and comparing with the original pixels.
+  const FONT_CANDIDATES = [["Arial", false], ["Arial", true], ["Georgia", false], ["Georgia", true]];
+  function matchFont(img, seg, bg) {
+    const w = Math.max(1, Math.round(seg.x1 - seg.x0));
+    const h = Math.max(1, Math.round(seg.y1 - seg.y0));
+    if (w * h > 400000 || seg.text.length < 3) return null;
+    const { data, width } = img;
+    const ink = new Uint8Array(w * h);
+    let inkCount = 0;
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+      const i = ((seg.y0 + y) * width + (seg.x0 + x)) * 4;
+      if (Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 150) { ink[y * w + x] = 1; inkCount += 1; }
+    }
+    if (!inkCount) return null;
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const cx = c.getContext("2d", { willReadFrequently: true });
+    const text = seg.text.replace(/^•\s*/, "");
+    let best = null;
+    const scores = {};
+    for (const [family, bold] of FONT_CANDIDATES) {
+      const size = sizeFromWidth(text, w - (seg.text.startsWith("•") ? h * 0.9 : 0), bold, family);
+      if (!size) continue;
+      cx.clearRect(0, 0, w, h);
+      cx.fillStyle = "#000";
+      cx.font = `${bold ? 700 : 400} ${size}px ${family === "Georgia" ? "Georgia, serif" : "Arial, sans-serif"}`;
+      cx.textBaseline = "alphabetic";
+      const m = cx.measureText(text);
+      const asc = m.actualBoundingBoxAscent || size * 0.75;
+      const desc = m.actualBoundingBoxDescent || size * 0.2;
+      const top = (h - (asc + desc)) / 2 + asc;
+      cx.fillText(text, w - m.width, top);
+      const d = cx.getImageData(0, 0, w, h).data;
+      let both = 0, either = 0;
+      for (let k = 0; k < w * h; k += 1) {
+        const r = d[k * 4 + 3] > 110 ? 1 : 0;
+        if (r && ink[k]) both += 1;
+        if (r || ink[k]) either += 1;
+      }
+      const score = either ? both / either : 0;
+      scores[`${family}${bold ? "B" : ""}`] = score;
+      if (!best || score > best.score) best = { family, bold, size, score };
+    }
+    if (best) {
+      // Weight margin within the winning family: bold only when it fits clearly better.
+      best.boldMargin = (scores[`${best.family}B`] || 0) - (scores[best.family] || 0);
+    }
+    return best;
+  }
+
+  const longest0 = (group) => [...group].sort((a, b) => b.text.length - a.text.length)[0];
 
   async function analyze(slide, onProgress = () => {}) {
     slide.status = "working";
@@ -201,57 +392,150 @@ window.NTSlides = (() => {
     const img = octx.getImageData(0, 0, slide.w, slide.h);
     const elements = [];
     const boxes = [];
-    for (const block of blocks) {
-      for (const para of block.paragraphs || []) {
-        for (const group of groupLines(para)) {
-          const text = group.map(lineText).join("\n").trim();
-          const conf = median(group.map((l) => l.confidence ?? 100));
-          if (!text || conf < 45 || text.replace(/[^\p{L}\p{N}]/gu, "").length < 1) continue;
-          const x0 = Math.min(...group.map((l) => l.bbox.x0));
-          const y0 = Math.min(...group.map((l) => l.bbox.y0));
-          const x1 = Math.max(...group.map((l) => l.bbox.x1));
-          const y1 = Math.max(...group.map((l) => l.bbox.y1));
-          // Skip "text" that covers most of the slide (usually a picture).
-          if ((x1 - x0) * (y1 - y0) > slide.w * slide.h * 0.5) continue;
-          const lineH = median(group.map((l) => l.bbox.y1 - l.bbox.y0));
-          const style = sampleStyle(img, { x0, y0, x1, y1 });
-          const bold = style.inkRatio > 0.3;
-          // Size from the width of the longer lines (more reliable than height), checked against height.
-          const bySize = group.filter((l) => lineText(l).length >= 4).map((l) => sizeFromWidth(lineText(l), l.bbox.x1 - l.bbox.x0, bold)).filter(Boolean);
-          let fontSize = bySize.length ? median(bySize) : lineH * 0.8;
-          if (fontSize > lineH * 1.6 || fontSize < lineH * 0.5) fontSize = lineH * 0.8;
-          fontSize = Math.max(8, Math.round(fontSize));
-          const pitch = group.length > 1 ? (group[group.length - 1].bbox.y0 - group[0].bbox.y0) / (group.length - 1) : fontSize * 1.2;
-          const lineHeight = Math.max(1, Math.min(1.9, pitch / fontSize));
-          const lefts = group.map((l) => l.bbox.x0);
-          const centres = group.map((l) => (l.bbox.x0 + l.bbox.x1) / 2);
-          const spread = (a) => Math.max(...a) - Math.min(...a);
-          let align = "left";
-          if (group.length > 1 && spread(lefts) > fontSize * 0.6 && spread(centres) < fontSize * 0.6) align = "center";
-          else if (group.length === 1 && Math.abs((x0 + x1) / 2 - slide.w / 2) < slide.w * 0.02 && x0 > slide.w * 0.15) align = "center";
-          const pad = Math.max(4, Math.round(fontSize * 0.18));
-          boxes.push({ x0: x0 - pad, y0: y0 - pad, x1: x1 + pad, y1: y1 + pad });
-          const boxW = (x1 - x0) * 1.06 + fontSize * 0.6;
-          const boxH = group.length * fontSize * lineHeight;
-          elements.push({
-            id: id(),
-            type: "text",
-            x: align === "center" ? (x0 + x1) / 2 - boxW / 2 : x0 - fontSize * 0.05,
-            y: y0 - (fontSize * lineHeight - lineH) / 2 - fontSize * 0.05,
-            w: Math.min(boxW, slide.w - Math.max(0, x0)),
-            h: boxH,
-            text,
-            fontSize,
-            lineHeight: Math.round(lineHeight * 100) / 100,
-            color: style.color,
-            bold,
-            italic: false,
-            align,
-            fontFamily: "Arial"
-          });
+
+    // 1. Keep real text: confident, plausible words, on a calm background.
+    const dropped = [];
+    const segs = segmentsOf(blocks, img).filter((sg) => {
+      const h = sg.y1 - sg.y0;
+      const letters = sg.text.replace(/[^\p{L}\p{N}]/gu, "").length;
+      const why = letters < 2 || h < 8 ? "tiny"
+        : /notebook\s?lm/i.test(sg.text) && sg.y0 > slide.h * 0.85 && sg.text.length < 20 ? "watermark"
+        : sg.conf < 60 ? `conf ${Math.round(sg.conf)}`
+        : sg.quality < (sg.conf >= 80 ? 0.5 : 0.7) ? `quality ${sg.quality.toFixed(2)}`
+        : letters <= 3 && sg.conf < 80 ? "short"
+        : (sg.text.match(/\d/g) || []).length > (sg.text.match(/\p{L}/gu) || []).length * 1.5 && !/\p{L}{4,}/u.test(sg.text) ? "numbers (chart)"
+        : ringBusy(img, sg, Math.max(3, Math.round(h * 0.2))) > 0.3 ? "busy background" : "";
+      if (why) dropped.push(`${why}: ${sg.text}`);
+      return !why;
+    });
+    // Drop overlapping duplicate readings, keeping the more confident one.
+    const kept = [];
+    for (const sg of [...segs].sort((a, b) => b.conf * b.text.length - a.conf * a.text.length)) {
+      const area = (sg.x1 - sg.x0) * (sg.y1 - sg.y0);
+      const clash = kept.some((k) => {
+        const ix = Math.max(0, Math.min(k.x1, sg.x1) - Math.max(k.x0, sg.x0));
+        const iy = Math.max(0, Math.min(k.y1, sg.y1) - Math.max(k.y0, sg.y0));
+        return ix * iy > area * 0.3;
+      });
+      if (clash) dropped.push(`overlap: ${sg.text}`); else kept.push(sg);
+    }
+    segs.length = 0;
+    segs.push(...kept);
+    slide.debugDropped = dropped;
+
+
+    // 2. Paragraphs, style, boxes.
+    const groupsFound = groupSegments(segs);
+
+    for (const group of groupsFound) {
+      const x0 = Math.min(...group.map((g) => g.x0));
+      const y0 = Math.min(...group.map((g) => g.y0));
+      const x1 = Math.max(...group.map((g) => g.x1));
+      const y1 = Math.max(...group.map((g) => g.y1));
+      // Text over a photo or strong gradient: keep it in the picture (removing it would leave patches).
+      if (ringSpread(img, { x0, y0, x1, y1 }, 10) > 45) continue;
+      const lineH = median(group.map((g) => g.h));
+      const style = sampleStyle(img, { x0, y0, x1, y1 });
+      // Match the font on lines without a "Label:" lead-in (labels are often bold/grey).
+      const plain = group.filter((g) => !/^[^:]{2,30}:\s/.test(g.text) && g.text.length >= 6);
+      const probe = (plain.length ? plain : group).slice().sort((a, b) => b.text.length - a.text.length).slice(0, 2);
+      const votes = probe.map((g) => matchFont(img, g, style.bg)).filter(Boolean);
+      const margin = votes.length ? votes.reduce((a, v) => a + (v.boldMargin || 0), 0) / votes.length : 0;
+      const font = votes.length
+        ? { family: votes.filter((v) => v.family === "Georgia").length > votes.length / 2 ? "Georgia" : votes[0].family, bold: margin > 0.13, size: votes[0].size }
+        : { family: "Arial", bold: false, size: lineH * 0.8 };
+      // Size: median of width-fitted sizes for the longer lines, in the matched font.
+      const sizes = group.filter((g) => g.text.length >= 6).map((g) => sizeFromWidth(g.text.replace(/^•\s*/, ""), g.x1 - g.x0 - (g.text.startsWith("•") ? lineH * 0.9 : 0), font.bold, font.family)).filter(Boolean);
+      let fontSize = sizes.length ? median(sizes) : font.size;
+      if (!(fontSize > lineH * 0.55 && fontSize < lineH * 1.7)) fontSize = lineH * 0.8;
+      fontSize = Math.max(8, Math.round(fontSize));
+      const pitch = group.length > 1 ? (group[group.length - 1].y0 - group[0].y0) / (group.length - 1) : fontSize * 1.2;
+      const lineHeight = Math.max(1, Math.min(1.9, pitch / fontSize));
+      const lefts = group.map((g) => g.x0);
+      const centres = group.map((g) => (g.x0 + g.x1) / 2);
+      const spread = (a) => Math.max(...a) - Math.min(...a);
+      let align = "left";
+      if (group.length > 1 && spread(lefts) > fontSize * 0.6 && spread(centres) < fontSize * 0.8) align = "center";
+      else if (group.length === 1 && Math.abs((x0 + x1) / 2 - slide.w / 2) < slide.w * 0.03 && x0 > slide.w * 0.12) align = "center";
+      // "Label:" lead-ins (NotebookLM style): keep their own colour/weight.
+      let label = null;
+      const lab = group.find((g) => /^(?:•\s*)?[^:]{2,40}:\s/.test(g.text));
+      if (lab) {
+        const n = lab.text.replace(/^•\s*/, "").split(":")[0].split(/\s+/).length;
+        const lw = lab.words.filter((w) => w.text.trim() && !/^[•»«]$/.test(w.text)).slice(0, n);
+        if (lw.length) {
+          const lb = { x0: Math.min(...lw.map((w) => w.bbox.x0)), y0: Math.min(...lw.map((w) => w.bbox.y0)), x1: Math.max(...lw.map((w) => w.bbox.x1)), y1: Math.max(...lw.map((w) => w.bbox.y1)) };
+          const ls = sampleStyle(img, lb);
+          const hexToRgb = (hx) => [1, 3, 5].map((k) => parseInt(hx.slice(k, k + 2), 16));
+          const differs = dist(hexToRgb(ls.color), hexToRgb(style.color)) > 45;
+          const lf = matchFont(img, { ...lb, text: lw.map((w) => w.text).join(" ") }, style.bg);
+          const lbold = differs || (lf ? (lf.boldMargin || 0) > 0.05 : ls.inkRatio > style.inkRatio * 1.25);
+          if (differs || lbold !== font.bold) label = { color: differs ? ls.color : style.color, bold: lbold };
         }
       }
+      const pad = Math.max(4, Math.round(fontSize * 0.2));
+      const inkRgb = [1, 3, 5].map((k) => parseInt(style.color.slice(k, k + 2), 16));
+      group.forEach((g) => boxes.push({ x0: g.x0 - pad, y0: g.y0 - pad, x1: g.x1 + pad, y1: g.y1 + pad, bg: style.bg, ink: inkRgb }));
+      // Box wide enough for the longest line in our font, so it doesn't re-wrap.
+      measureCtx.font = `${font.bold ? 700 : 400} ${fontSize}px ${font.family === "Georgia" ? "Georgia, serif" : "Arial, sans-serif"}`;
+      const textW = Math.max(...group.map((g) => measureCtx.measureText(g.text).width));
+      const boxW = Math.min(slide.w - Math.max(0, x0 - 4), Math.max(x1 - x0, textW) * 1.04 + 6);
+      elements.push({
+        id: id(),
+        type: "text",
+        x: align === "center" ? (x0 + x1) / 2 - boxW / 2 : x0 - 2,
+        y: y0 - (fontSize * lineHeight - lineH) / 2 - fontSize * 0.04,
+        w: boxW,
+        h: group.length * fontSize * lineHeight,
+        text: group.map((g) => g.text).join("\n"),
+        fontSize,
+        lineHeight: Math.round(lineHeight * 100) / 100,
+        color: style.color,
+        bold: font.bold,
+        italic: false,
+        align,
+        fontFamily: font.family,
+        _lines: group.map((g) => ({ w: g.x1 - g.x0 })),
+        _lineH: lineH,
+        ...(label ? { labelColor: label.color, labelBold: label.bold } : {})
+      });
     }
+    // Headings (much larger than the body text, or big text near the top) are bold.
+    const bodySize = median(elements.map((e) => e.fontSize));
+    const isHeading = (e) => e.fontSize >= Math.max(44, bodySize * 1.4) || (e.y < slide.h * 0.22 && e.fontSize >= bodySize * 1.25 && e.fontSize >= 36);
+    // Paragraphs of similar size on one slide share a font: use the majority family and weight.
+    // Only multi-line paragraphs take part; titles and short labels keep their own font.
+    const body = elements.filter((e) => !isHeading(e) && e.text.includes("\n"));
+    body.forEach((e) => {
+      const peers = body.filter((o) => Math.abs(o.fontSize - e.fontSize) <= e.fontSize * 0.25);
+      if (peers.length < 2) return;
+      const weight = (pred) => peers.filter(pred).reduce((n, o) => n + o.text.length, 0);
+      const total = weight(() => true);
+      e.fontFamily = weight((o) => o.fontFamily === "Georgia") > total / 2 ? "Georgia" : "Arial";
+      e.bold = weight((o) => o.bold) > total * 0.8;
+    });
+    // Then re-fit size and box width to the final font so nothing re-wraps.
+    elements.forEach((e) => {
+      if (isHeading(e)) e.bold = true;
+      const lines = e.text.split("\n");
+      const fam = e.fontFamily === "Georgia" ? "Georgia, serif" : "Arial, sans-serif";
+      const fit = e._lines.map((ln, i) => sizeFromWidth((lines[i] || "").replace(/^•\s*/, ""), ln.w - (lines[i]?.startsWith("•") ? e._lineH * 0.9 : 0), e.bold, e.fontFamily)).filter((v, i) => v && (lines[i] || "").length >= 6);
+      if (fit.length) {
+        const size = Math.round(median(fit));
+        if (size > e._lineH * 0.55 && size < e._lineH * 1.7) {
+          e.h = (e.h / e.fontSize) * size;
+          e.fontSize = size;
+        }
+      }
+      measureCtx.font = `${e.bold ? 700 : 400} ${e.fontSize}px ${fam}`;
+      const need = Math.max(...lines.map((ln) => measureCtx.measureText(ln).width)) * 1.04 + 6;
+      if (need > e.w) {
+        if (e.align === "center") e.x -= (need - e.w) / 2;
+        e.w = Math.min(slide.w - Math.max(0, e.x), need);
+      }
+      delete e._lines;
+      delete e._lineH;
+    });
     const clean = document.createElement("canvas");
     clean.width = slide.w;
     clean.height = slide.h;
@@ -307,6 +591,13 @@ window.NTSlides = (() => {
     return out;
   }
 
+  // "Label: rest" → [{text, label:true}, {text}] when the element styles labels.
+  const LABEL_RE = /^((?:•\s*)?[^:\n]{2,40}:)(\s.*)$/;
+  function lineRuns(el, line) {
+    const m = el.labelColor ? line.match(LABEL_RE) : null;
+    return m ? [{ text: m[1], label: true }, { text: m[2] }] : [{ text: line }];
+  }
+
   function drawSlide(ctx, slide, scale = 1, options = {}) {
     const w = slide.w * scale;
     const h = slide.h * scale;
@@ -340,7 +631,26 @@ window.NTSlides = (() => {
         const lh = el.fontSize * el.lineHeight * scale;
         const lines = wrapLines(el.text, el.w * scale, (s) => ctx.measureText(s).width);
         const x = el.align === "center" ? (el.x + el.w / 2) * scale : el.align === "right" ? (el.x + el.w) * scale : el.x * scale;
-        lines.forEach((line, i) => ctx.fillText(line, x, el.y * scale + lh * i + lh / 2));
+        lines.forEach((line, i) => {
+          const y = el.y * scale + lh * i + lh / 2;
+          const runs = lineRuns(el, line);
+          if (runs.length === 1) return ctx.fillText(line, x, y);
+          // Two runs: measure the whole line to place it, then draw each run.
+          const fontFor = (r) => fontString({ ...el, bold: r.label ? el.labelBold : el.bold }, scale);
+          const widths = runs.map((r) => { ctx.font = fontFor(r); return ctx.measureText(r.text).width; });
+          const total = widths.reduce((a, b) => a + b, 0);
+          let cx = el.align === "center" ? x - total / 2 : el.align === "right" ? x - total : x;
+          ctx.textAlign = "left";
+          runs.forEach((r, k) => {
+            ctx.font = fontFor(r);
+            ctx.fillStyle = r.label ? el.labelColor : el.color;
+            ctx.fillText(r.text, cx, y);
+            cx += widths[k];
+          });
+          ctx.textAlign = el.align === "center" ? "center" : el.align === "right" ? "right" : "left";
+          ctx.font = fontString(el, scale);
+          ctx.fillStyle = el.color;
+        });
       }
       ctx.restore();
     }
@@ -387,7 +697,13 @@ window.NTSlides = (() => {
       for (const el of slide.elements) {
         const box = { x: el.x * k, y: el.y * k, w: el.w * k, h: el.h * k };
         if (el.type === "text") {
-          s.addText(el.text, {
+          const runs = el.labelColor
+            ? String(el.text).split("\n").flatMap((line, i, all) => lineRuns(el, line).map((r, k, arr) => ({
+                text: r.text,
+                options: { ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}), ...(k === arr.length - 1 && i < all.length - 1 ? { breakLine: true } : {}) }
+              })))
+            : el.text;
+          s.addText(runs, {
             ...box,
             fontFace: el.fontFamily,
             fontSize: Math.max(1, Math.round(el.fontSize * k * 72 * 10) / 10),
@@ -464,11 +780,17 @@ window.NTSlides = (() => {
           const size = el.fontSize * k;
           const lh = size * el.lineHeight;
           const lines = wrapLines(safe(font, el.text), el.w * k, (s) => font.widthOfTextAtSize(s, size));
+          const labelFont = el.labelColor ? await pick({ ...el, bold: el.labelBold }) : font;
           lines.forEach((line, n) => {
-            const tw = font.widthOfTextAtSize(line, size);
-            const x = el.align === "center" ? el.x * k + (el.w * k - tw) / 2 : el.align === "right" ? (el.x + el.w) * k - tw : el.x * k;
+            const runs = lineRuns(el, line).map((r) => ({ ...r, f: r.label ? labelFont : font }));
+            const widths = runs.map((r) => r.f.widthOfTextAtSize(r.text, size));
+            const tw = widths.reduce((a, b) => a + b, 0);
+            let x = el.align === "center" ? el.x * k + (el.w * k - tw) / 2 : el.align === "right" ? (el.x + el.w) * k - tw : el.x * k;
             const baseline = ph - (el.y * k + lh * n + lh / 2 + size * 0.35);
-            page.drawText(line, { x, y: baseline, size, font, color: rgbOf(el.color), opacity: op });
+            runs.forEach((r, i) => {
+              page.drawText(r.text, { x, y: baseline, size, font: r.f, color: rgbOf(r.label ? el.labelColor : el.color), opacity: op });
+              x += widths[i];
+            });
           });
         }
       }
@@ -489,5 +811,5 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { lineRuns, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();

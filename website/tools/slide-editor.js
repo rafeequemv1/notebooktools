@@ -295,7 +295,7 @@
     node.dataset.id = el.id;
     applyBox(node, el);
     if (el.type === "text") {
-      node.textContent = el.text;
+      setText(node, el);
       applyText(node, el);
     } else if (el.type === "rect" || el.type === "ellipse") {
       node.style.background = el.fill;
@@ -317,6 +317,17 @@
       });
     }
     return node;
+  }
+
+  // Text with "Label:" runs in their own colour/weight (NotebookLM style).
+  function setText(node, el) {
+    if (!el.labelColor) {
+      node.textContent = el.text;
+      return;
+    }
+    node.innerHTML = String(el.text).split("\n").map((line) => S.lineRuns(el, line).map((r) => r.label
+      ? `<span style="color:${el.labelColor};font-weight:${el.labelBold ? 700 : 400}">${esc(r.text)}</span>`
+      : esc(r.text)).join("")).join("\n");
   }
 
   function applyBox(node, el) {
@@ -433,8 +444,9 @@
       applyBox(node, el);
       if (el.type === "text") {
         if (editing !== el.id && "text" in props) {
-          const tn = [...node.childNodes].find((c) => c.nodeType === 3);
-          tn ? (tn.nodeValue = el.text) : node.prepend(document.createTextNode(el.text));
+          const handles = [...node.querySelectorAll(".se-handle")];
+          setText(node, el);
+          handles.forEach((h) => node.append(h));
         }
         applyText(node, el);
         fitTextHeight(el, node);
