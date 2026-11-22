@@ -49,7 +49,7 @@
       id: prompt.id,
       title: prompt.title,
       prompt: prompt.prompt,
-      group: "Templates"
+      group: "Slide deck styles"
     }));
   }
 
@@ -176,25 +176,38 @@
       selectedIndex = 0;
     }
 
-    menu.innerHTML = items
+    let lastGroup = "";
+    const rows = items
       .map((item, index) => {
         const active = index === selectedIndex ? " is-active" : "";
-        const snippet = item.prompt.slice(0, 72) + (item.prompt.length > 72 ? "…" : "");
+        const snippet = item.prompt.slice(0, 90) + (item.prompt.length > 90 ? "…" : "");
+        const heading = item.group !== lastGroup
+          ? `<p class="notebooktools-prompt-slash-group">${escapeHtml(item.group)}</p>`
+          : "";
+        lastGroup = item.group;
 
-        return `
+        return `${heading}
           <button type="button" class="notebooktools-prompt-slash-item${active}" data-index="${index}">
             <span class="notebooktools-prompt-slash-title">${escapeHtml(item.title)}</span>
-            <span class="notebooktools-prompt-slash-meta">${escapeHtml(item.group)}</span>
             <span class="notebooktools-prompt-slash-snippet">${escapeHtml(snippet)}</span>
           </button>
         `;
       })
       .join("");
 
+    menu.innerHTML = `
+      <div class="notebooktools-prompt-slash-head">
+        <span class="notebooktools-prompt-slash-heading">Prompt library</span>
+        <span class="notebooktools-prompt-slash-query">${context.query ? `“${escapeHtml(context.query)}”` : "Type to filter"}</span>
+      </div>
+      <div class="notebooktools-prompt-slash-list">${rows}</div>
+      <div class="notebooktools-prompt-slash-foot"><kbd>↑</kbd><kbd>↓</kbd> move <kbd>Enter</kbd> insert <kbd>Esc</kbd> close</div>`;
+
     menu.hidden = false;
     activeInput = input;
     slashContext = context;
     positionMenu(input);
+    menu.querySelector(".notebooktools-prompt-slash-item.is-active")?.scrollIntoView({ block: "nearest" });
 
     menu.querySelectorAll("[data-index]").forEach((button) => {
       button.addEventListener("mousedown", (event) => {
