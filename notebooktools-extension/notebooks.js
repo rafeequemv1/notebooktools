@@ -703,10 +703,24 @@ function setListScreen(screen) {
     NotebookToolsStudioLibrary.close();
   }
 
+  if (screen !== "allsources") {
+    NotebookToolsSourcesLibrary.close();
+  }
+
   if (isNotebooks) {
     NotebookToolsPodcast.close();
     renderAll();
     updateNotebookBulkUi();
+    return;
+  }
+
+  if (screen === "allsources") {
+    NotebookToolsPodcast.close();
+    void NotebookToolsSourcesLibrary.open({
+      notebooks,
+      authOptions: authUserOption(activeAccount),
+      onOpenNotebook: (notebook) => openNotebookInApp(notebook, "sources")
+    });
     return;
   }
 

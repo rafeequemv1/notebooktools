@@ -38,6 +38,7 @@
 
       <nav class="app-tabs" id="appTabs" role="tablist" aria-label="Notebook sections">
         <button type="button" class="app-tab is-active" data-app-tab="notebooks" role="tab">Notebooks</button>
+        <button type="button" class="app-tab" data-app-tab="allsources" role="tab">Sources</button>
         <button type="button" class="app-tab" data-app-tab="library" role="tab">Studio</button>
         <button type="button" class="app-tab" data-app-tab="podcast" role="tab">Podcast</button>
         <button type="button" class="app-tab" data-app-tab="sources" role="tab" hidden>Sources</button>
@@ -112,6 +113,7 @@
         </div>
       </div>
 
+      <section class="studio-library" id="sourcesLibraryView" hidden aria-label="All sources"></section>
       <section class="studio-library" id="studioLibraryView" hidden aria-label="All Studio files"></section>
 
       <section class="podcast-view" id="podcastView" hidden>
@@ -352,6 +354,7 @@
     <script src="notebooks-studio.js"></script>
     <script src="notebooks-podcast.js"></script>
     <script src="notebooks-studio-library.js"></script>
+    <script src="notebooks-sources-library.js"></script>
     <script src="notebooks-merge.js"></script>
     <script src="source-notes.js"></script>
     <script src="notebooks-detail.js"></script>

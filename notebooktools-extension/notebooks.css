@@ -4041,3 +4041,17 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .stl-open { align-items: center; border-radius: 50%; color: var(--nt-muted); display: inline-flex; height: 28px; justify-content: center; margin-left: 2px; vertical-align: middle; width: 28px; }
 .stl-open:hover { background: var(--nt-line-soft); color: var(--nt-ink); }
 .stl-check { accent-color: var(--nt-accent); height: 15px; width: 15px; }
+
+/* Sources tab (notebooks-sources-library.js); shares the .stl- styles */
+.sl-table .stl-col-nb { width: 28%; }
+.sl-table .sl-col-type { width: 110px; }
+.sl-table .sl-col-act { text-align: right; white-space: nowrap; width: 84px; }
+.sl-name { display: flex; flex-direction: column; min-width: 0; }
+.sl-host { color: var(--nt-subtle); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sl-type { align-items: center; color: var(--nt-muted); display: inline-flex; font-size: 12.5px; gap: 6px; }
+.sl-dot { border-radius: 50%; display: inline-block; flex: none; height: 8px; width: 8px; }
+.sl-in { background: var(--nt-accent-soft); border-radius: 999px; color: var(--nt-accent); font-size: 11px; font-weight: 600; margin-left: 6px; padding: 1px 6px; vertical-align: middle; }
+.sl-table td:nth-child(3) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sl-table mark { background: color-mix(in srgb, #fdd663 55%, transparent); border-radius: 2px; color: inherit; padding: 0 1px; }
+.sl-copy-to { background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-ink); font: inherit; font-size: 12.5px; height: 30px; max-width: 220px; padding: 0 10px; }
+.sl-dupe-chip { border-style: dashed; }
