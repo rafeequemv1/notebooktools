@@ -222,6 +222,30 @@ const NotebookToolsSnapshotCapture = {
     return tab;
   },
 
+  /** Scripts not yet on the tab (loading snapshot-store.js twice would throw). */
+  async missingScripts(tabId, files) {
+    const [probe] = await chrome.scripting.executeScript({
+      target: { tabId },
+      func: () => ({ store: !!window.NotebookToolsSnapshotStore, review: !!window.NotebookToolsSnapshotReview })
+    });
+    const has = probe?.result || {};
+    return files.filter((file) => !(file === "snapshot-store.js" && has.store) && !(file === "snapshot-review.js" && has.review));
+  },
+
+  /** The continuous capture bar (and the review box it opens) on a tab. */
+  async injectContinuous(tabId) {
+    const files = await this.missingScripts(tabId, ["snapshot-store.js", "snapshot-review.js", "snapshot-continuous.js"]);
+    await chrome.scripting.insertCSS({ target: { tabId }, files: ["snapshot-continuous.css", "snapshot-review.css"] });
+    await chrome.scripting.executeScript({ target: { tabId }, files });
+  },
+
+  async openReviewOnTab(tabId) {
+    const files = await this.missingScripts(tabId, ["snapshot-store.js", "snapshot-review.js"]);
+    await chrome.scripting.insertCSS({ target: { tabId }, files: ["snapshot-review.css"] });
+    if (files.length) await chrome.scripting.executeScript({ target: { tabId }, files });
+    await chrome.scripting.executeScript({ target: { tabId }, func: () => window.NotebookToolsSnapshotReview?.open() });
+  },
+
   async saveSnapshotFromTab(tab, dataUrl, extra = {}) {
     const snapshot = {
       id: NotebookToolsSnapshotStore.createId(),

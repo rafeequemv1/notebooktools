@@ -1,7 +1,7 @@
 const NotebookToolsSnapshotStore = {
   STORAGE_KEY: "notebooktoolsSnapshots",
   SESSIONS_KEY: "notebooktoolsSnapshotSessionsByNotebook",
-  MAX_SNAPSHOTS: 24,
+  MAX_SNAPSHOTS: 60,
 
   createId() {
     return `snap_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -33,7 +33,8 @@ const NotebookToolsSnapshotStore = {
   },
 
   async saveAll(snapshots) {
-    const next = (snapshots || []).slice(0, this.MAX_SNAPSHOTS);
+    // Over the limit: keep the newest (a new capture is never the one dropped)
+    const next = (snapshots || []).slice(-this.MAX_SNAPSHOTS);
     await chrome.storage.local.set({ [this.STORAGE_KEY]: next });
     return next;
   },

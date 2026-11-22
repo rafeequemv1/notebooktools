@@ -334,7 +334,7 @@
     const items = [
       ["blog", "doc", "Blog post", "with slide images"],
       ["carousel", "carousel", "Carousel", "from a slide deck"],
-      ["snapdoc", "camera", "Snapshot doc", "from your screenshots"],
+      ["snapdoc", "camera", "Snapshots", "capture, review, write"],
       ["editdeck", "studio", "Edit a slide deck", "editable text, PowerPoint"]
     ].map(([value, ic, label, hint]) => `<button type="button" class="ntr-menu-item" data-value="${value}">${icon(ic, 15)}<span>${esc(label)} <small class="ntr-menu-hint">${esc(hint)}</small></span></button>`).join("");
     openMenu(anchor, `<p class="ntr-menu-title">Create from this notebook</p>${items}`, (value) => {

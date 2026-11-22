@@ -241,14 +241,19 @@
       }
       if (!row) continue;
       if (findChips().some((c) => row.contains(c))) continue; // the open deck's header
-      const holder = more.parentElement;
-      let button = holder.querySelector(`:scope > .${BTN_CLASS}`);
+      // Beside ⋮'s own box (a direct child of the row), never inside it:
+      // that box is sized for ⋮ alone, and the button would push ⋮ out of view
+      let slot = more;
+      while (slot.parentElement && slot.parentElement !== row) slot = slot.parentElement;
+      let button = row.querySelector(`.${BTN_CLASS}`);
       if (!button) {
         button = makeButton();
         button.classList.add("is-row");
         button.querySelector("span").textContent = "Edit";
-        holder.insertBefore(button, more);
-        placed.set(button, more);
+      }
+      if (button.nextElementSibling !== slot) {
+        slot.parentElement.insertBefore(button, slot);
+        placed.set(button, slot);
       }
       button.dataset.artifact = item.id || "";
       button.dataset.title = item.title;

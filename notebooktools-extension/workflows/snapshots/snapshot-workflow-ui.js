@@ -12,6 +12,7 @@
   let lastCompletedArticle = null;
   let isCompleteState = false;
   let session = null;
+  let allShots = []; // every captured snapshot (the review box shows them all)
   let pendingRunStarted = false;
   let chatWatcherTimer = 0;
   let chatWatcherObserver = null;
@@ -532,6 +533,7 @@
   async function resolveSession() {
     const notebookId = getNotebookId();
     const localSnapshots = (await NotebookToolsSnapshotStore.list()).filter((item) => item?.dataUrl);
+    allShots = localSnapshots;
     const stored = notebookId ? await NotebookToolsSnapshotStore.getSession(notebookId) : null;
 
     if (stored?.snapshots?.length) {
@@ -720,23 +722,76 @@
   }
 
   function renderSessionSummary() {
-    const summary = getMenu()?.querySelector(".notebooktools-snapshot-workflow-summary");
+    const menu = getMenu();
+    const summary = menu?.querySelector(".notebooktools-snapshot-workflow-summary");
 
     if (!summary) {
       return;
     }
 
-    if (!session?.snapshots?.length) {
-      summary.textContent =
-        "Capture screens from the NotebookTools menu (Snapshots), then turn them into an article with the images inline.";
+    const shots = allShots.length ? allShots : session?.snapshots || [];
+    const strip = menu.querySelector(".nsw-strip");
+    const review = menu.querySelector(".nsw-review");
+    menu.classList.toggle("is-empty", !shots.length);
+
+    if (review) {
+      review.textContent = shots.length ? `Review ${shots.length}` : "Review";
+    }
+
+    if (strip) {
+      const extra = shots.length - 4;
+      strip.hidden = !shots.length;
+      strip.innerHTML = shots
+        .slice(0, 4)
+        .map((shot) => `<img src="${shot.dataUrl}" alt="">`)
+        .join("") + (extra > 0 ? `<span>+${extra}</span>` : "");
+    }
+
+    if (!shots.length) {
+      summary.hidden = false;
+      summary.textContent = "Capture screens, then turn them into an article with the images inline.";
       return;
     }
 
-    const uploaded = session.sourceIds?.length ? "images in notebook" : "will upload images on first run";
-    const pending = session.pendingRun ? " · auto-start pending" : "";
-    const waiting = session.awaitingDoc ? " · waiting for reply" : "";
-    const ready = session.docReady ? " · DOC ready" : "";
-    summary.textContent = `${session.snapshots.length} snapshot${session.snapshots.length === 1 ? "" : "s"} · ${uploaded}${pending}${waiting}${ready} · ${session.pageTitle || "Captured screens"}`;
+    const parts = [];
+    parts.push(session?.sourceIds?.length ? `${session.snapshots.length} in this notebook` : "not in this notebook yet");
+    if (session?.pendingRun) parts.push("starting soon");
+    if (session?.awaitingDoc) parts.push("waiting for the reply");
+    if (session?.docReady) parts.push("DOC ready");
+    summary.textContent = parts.join(" · ");
+    summary.hidden = !parts.length;
+  }
+
+  const MENU_ICONS = {
+    stack: '<rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/>',
+    crop: '<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>',
+    doc: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+    steps: '<path d="M4 6h4v4H4zM4 14h4v4H4zM12 8h8M12 16h8"/>',
+    chat: '<path d="M4 5h16v11H9l-5 4z"/>',
+    download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'
+  };
+
+  function menuItem(action, iconName, label, hint = "") {
+    return `<button type="button" class="notebooktools-snapshot-workflow-option" data-action="${action}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${MENU_ICONS[iconName]}</svg><span>${label}${hint ? ` <small>${hint}</small>` : ""}</span></button>`;
+  }
+
+  async function startCapture(type) {
+    closeMenu();
+    try {
+      const response = await chrome.runtime.sendMessage({
+        type: type === "continuous" ? "notebooktools-snapshot-continuous-start" : "notebooktools-ribbon-snapshot"
+      });
+      if (response?.upgrade && window.NotebookToolsPlan) window.NotebookToolsPlan.showUpgrade(response.upgrade);
+      else if (!response?.ok) showToast(response?.error || "Couldn't start capturing.", true);
+    } catch (_error) {
+      showToast("Reload this page to use snapshots.", true);
+    }
+  }
+
+  function openReview() {
+    closeMenu();
+    window.NotebookToolsSnapshotReview?.open();
   }
 
   function createMenuPortal() {
@@ -745,12 +800,21 @@
     menu.className = "notebooktools-snapshot-workflow-menu";
     menu.innerHTML = `
       <div class="notebooktools-snapshot-workflow-form">
+        <div class="nsw-head">
+          <span class="nsw-title">Snapshots</span>
+          <button type="button" class="nsw-review" data-action="review">Review</button>
+        </div>
+        <button type="button" class="nsw-strip" data-action="review" title="Review, crop or delete snapshots"></button>
         <p class="notebooktools-snapshot-workflow-summary"></p>
-        <button type="button" class="notebooktools-snapshot-workflow-option is-primary" data-action="auto">Write article from snapshots</button>
-        <button type="button" class="notebooktools-snapshot-workflow-option" data-action="discuss">Discuss snapshots</button>
-        <button type="button" class="notebooktools-snapshot-workflow-option" data-action="blog">Create blog with images</button>
-        <button type="button" class="notebooktools-snapshot-workflow-option" data-action="guide">Create web app tutorial</button>
-        <button type="button" class="notebooktools-snapshot-workflow-option secondary" data-action="build">Build DOC from current chat</button>
+        <p class="nsw-label">Capture</p>
+        ${menuItem("continuous", "stack", "Capture continuously", "screen after screen, any tab")}
+        ${menuItem("area", "crop", "Capture an area", "of this page, with notes")}
+        <p class="nsw-label nsw-create">Create from snapshots</p>
+        ${menuItem("auto", "doc", "Write article", "images placed inline")}
+        ${menuItem("blog", "image", "Blog post with images")}
+        ${menuItem("guide", "steps", "Web app tutorial", "step by step")}
+        ${menuItem("discuss", "chat", "Discuss in chat")}
+        ${menuItem("build", "download", "Build DOC from chat", "after NotebookLM replies")}
       </div>
       <div class="notebooktools-snapshot-workflow-progress" hidden>
         <p class="notebooktools-snapshot-workflow-ready-banner" hidden>DOC ready</p>
@@ -779,6 +843,9 @@
       downloads.append(button);
     }
 
+    menu.querySelectorAll('[data-action="review"]').forEach((el) => el.addEventListener("click", openReview));
+    menu.querySelector('[data-action="continuous"]')?.addEventListener("click", () => void startCapture("continuous"));
+    menu.querySelector('[data-action="area"]')?.addEventListener("click", () => void startCapture("area"));
     menu.querySelector('[data-action="auto"]')?.addEventListener("click", () => {
       void runFullAuto();
     });

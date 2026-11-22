@@ -281,6 +281,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message?.type === "notebooktools-snapshot-continuous-start") {
+    void (async () => {
+      try {
+        if (!(await NotebookToolsPlan.can("snapshots"))) {
+          sendResponse({ ok: false, upgrade: "snapshots" });
+          return;
+        }
+        const tab = message.tabId
+          ? await chrome.tabs.get(Number(message.tabId))
+          : sender.tab || (await NotebookToolsSnapshotCapture.resolveTargetTab());
+        await startContinuous(tab, sender.tab && isNotebookUrl(sender.tab.url) ? sender.tab.id : null);
+        sendResponse({ ok: true });
+      } catch (error) {
+        sendResponse({ ok: false, error: error.message || "Couldn't start capturing." });
+      }
+    })();
+    return true;
+  }
+
+  if (message?.type === "notebooktools-snapshot-continuous-done") {
+    void (async () => {
+      await finishContinuous(sender.tab).catch((error) => console.warn("NotebookTools: continuous capture", error));
+      sendResponse({ ok: true });
+    })();
+    return true;
+  }
+
   if (message?.type === "notebooktools-ribbon-snapshot") {
     void (async () => {
       try {
@@ -599,6 +626,57 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return false;
 });
 
+/* ---------- Continuous capture ----------
+   One session at a time. The bar follows the active tab; Done goes back to
+   the notebook it was started from and opens the review box there. */
+const CONTINUOUS_KEY = "notebooktoolsContinuousCapture";
+
+function isNotebookUrl(url = "") {
+  return /^https:\/\/notebook(lm)?\.google\.com\//i.test(String(url));
+}
+
+async function continuousState() {
+  const stored = await chrome.storage.session.get(CONTINUOUS_KEY).catch(() => ({}));
+  return stored[CONTINUOUS_KEY] || null;
+}
+
+async function startContinuous(tab, notebookTabId) {
+  if (!tab?.id) throw new Error("No tab to capture.");
+  if (!NotebookToolsSnapshotCapture.isCapturableUrl(tab.url)) throw new Error("This page can't be captured. Switch to a website tab.");
+  await chrome.storage.session.set({ [CONTINUOUS_KEY]: { active: true, notebookTabId: notebookTabId || null, startedAt: Date.now() } });
+  await NotebookToolsSnapshotCapture.injectContinuous(tab.id);
+}
+
+async function followContinuous(tabId) {
+  const state = await continuousState();
+  if (!state?.active) return;
+  const tab = await chrome.tabs.get(tabId).catch(() => null);
+  if (!tab?.active || !NotebookToolsSnapshotCapture.isCapturableUrl(tab.url)) return;
+  await NotebookToolsSnapshotCapture.injectContinuous(tab.id).catch(() => {});
+}
+
+async function finishContinuous(fromTab) {
+  const state = await continuousState();
+  await chrome.storage.session.remove(CONTINUOUS_KEY);
+  const tabs = await chrome.tabs.query({});
+  await Promise.all(tabs.map((t) => chrome.tabs.sendMessage(t.id, { type: "ntcc-stop" }).catch(() => {})));
+  const notebookTab = state?.notebookTabId ? await chrome.tabs.get(state.notebookTabId).catch(() => null) : null;
+  if (notebookTab) {
+    await chrome.tabs.update(notebookTab.id, { active: true });
+    await chrome.windows.update(notebookTab.windowId, { focused: true }).catch(() => {});
+    const opened = await chrome.tabs.sendMessage(notebookTab.id, { type: "ntsr-open-review" }).catch(() => null);
+    if (opened?.ok) return;
+    await NotebookToolsSnapshotCapture.openReviewOnTab(notebookTab.id);
+    return;
+  }
+  if (fromTab?.id) await NotebookToolsSnapshotCapture.openReviewOnTab(fromTab.id);
+}
+
+chrome.tabs.onActivated.addListener(({ tabId }) => void followContinuous(tabId));
+chrome.tabs.onUpdated.addListener((tabId, info) => {
+  if (info.status === "complete") void followContinuous(tabId);
+});
+
 async function startSnapshotCapture(tab) {
   if (!tab?.id) {
     throw new Error("No active tab to capture.");
@@ -614,6 +692,12 @@ chrome.commands.onCommand.addListener(async (command) => {
   if (command === "capture-snapshot") {
     try {
       const tab = await NotebookToolsSnapshotCapture.resolveTargetTab();
+      // During continuous capture the shortcut drags an area on the bar's tab
+      if ((await continuousState())?.active && tab?.id) {
+        await NotebookToolsSnapshotCapture.injectContinuous(tab.id);
+        await chrome.tabs.sendMessage(tab.id, { type: "ntcc-area" });
+        return;
+      }
       await runPro("snapshots", tab, () => startSnapshotCapture(tab, true));
     } catch (error) {
       console.error("NotebookTools snapshot shortcut failed:", error);
