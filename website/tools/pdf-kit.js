@@ -419,6 +419,47 @@ window.NTPdf = (() => {
     return new File([blob], "whiteboard-notes.png", { type: "image/png" });
   }
 
+  // Slides drawn as flat images (gradients, titles, bullets), like a NotebookLM deck.
+  async function imageDeckPdf() {
+    const { PDFDocument } = await pdfLib();
+    const doc = await PDFDocument.create();
+    const slides = [
+      { bg: ["#0b3d91", "#1a73e8"], ink: "#ffffff", kicker: "STUDY GUIDE", title: "How Sleep Builds Memory", body: ["What happens to what you learn after the lights go out"] },
+      { bg: ["#fdf6e3", "#f3e5c0"], ink: "#2b2b2b", kicker: "STAGE 1", title: "Deep sleep replays the day", body: ["The hippocampus replays new memories", "Traces move into long-term storage", "Strongest in the first half of the night"] },
+      { bg: ["#1e1b2e", "#3b2f63"], ink: "#f1ecff", kicker: "STAGE 2", title: "REM links old and new", body: ["Connects new memories to what you know", "Linked to creative problem solving", "Longer periods towards morning"] },
+      { bg: ["#e8f5e9", "#c8e6c9"], ink: "#1b4332", kicker: "EVIDENCE", title: "Naps count too", body: ["A 90 minute nap improved recall by about 20%", "Compared with staying awake"] },
+      { bg: ["#fff3e0", "#ffd8a8"], ink: "#5c2c00", kicker: "TAKEAWAY", title: "Study with sleep in mind", body: ["Review shortly before bed", "Review again the next day", "Protect regular bedtimes"] }
+    ];
+    for (const s of slides) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1600;
+      canvas.height = 900;
+      const ctx = canvas.getContext("2d");
+      const g = ctx.createLinearGradient(0, 0, 1600, 900);
+      g.addColorStop(0, s.bg[0]);
+      g.addColorStop(1, s.bg[1]);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 1600, 900);
+      ctx.globalAlpha = 0.12;
+      ctx.fillStyle = s.ink;
+      ctx.beginPath();
+      ctx.arc(1380, 160, 260, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = s.ink;
+      ctx.font = "600 30px Arial, sans-serif";
+      ctx.fillText(s.kicker, 110, 230);
+      ctx.font = "bold 84px Arial, sans-serif";
+      ctx.fillText(s.title, 110, 340);
+      ctx.font = "44px Arial, sans-serif";
+      s.body.forEach((line, i) => ctx.fillText(s.body.length > 1 ? `•  ${line}` : line, 110, 470 + i * 78));
+      const png = new Uint8Array(await (await canvasBlob(canvas, "image/png")).arrayBuffer());
+      const img = await doc.embedPng(png);
+      doc.addPage([960, 540]).drawImage(img, { x: 0, y: 0, width: 960, height: 540 });
+    }
+    return doc.save();
+  }
+
   const pdfFile = (bytes, name) => new File([bytes], name, { type: "application/pdf" });
 
   async function sample(kind) {
@@ -447,6 +488,7 @@ window.NTPdf = (() => {
     }
     if (kind === "slides") return [pdfFile(await slidesPdf(), "how-sleep-builds-memory-slides.pdf")];
     if (kind === "image") return [await whiteboardImage()];
+    if (kind === "deck") return [pdfFile(await imageDeckPdf(), "notebooklm-style-slide-deck.pdf")];
     return [];
   }
 
@@ -477,11 +519,19 @@ window.NTPdf = (() => {
     return String(data.text || "").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   }
 
+  // OCR with positions: Tesseract blocks → paragraphs → lines → words (bbox in image px).
+  async function ocrBlocks(image, onProgress = () => {}) {
+    ocrProgress = onProgress;
+    const worker = await ocrWorker();
+    const { data } = await worker.recognize(image, {}, { blocks: true, text: true });
+    return data.blocks || [];
+  }
+
   // NotebookLM limits, for the "will it fit" messages.
   const LIMITS = { words: 500000, bytes: 200 * 1024 * 1024, sources: 50 };
 
   return {
     pdfLib, pdfjs, openPdfjs, openPdfLib, bytesOf, fmtBytes, baseName, saveBlob, pdfBlob,
-    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, sample, LIMITS
+    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, sample, LIMITS
   };
 })();

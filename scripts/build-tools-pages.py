@@ -39,6 +39,7 @@ ICONS = {
     "compress": '<path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4"/><path d="m9.5 11 2.5 2.5 2.5-2.5M9.5 17.5 12 15l2.5 2.5"/>',
     "pages": '<rect x="3.5" y="5" width="7" height="9" rx="1"/><rect x="13.5" y="5" width="7" height="9" rx="1"/><path d="M7 17.5h10M7 20h6"/>',
     "ocr": '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 10h8M8 13h8M8 16h5"/>',
+    "slides": '<rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8 20h8M12 16.5V20"/><path d="M7 9h6M7 12h4"/><path d="m15.5 9.5 2 2-3 3h-2v-2z"/>',
     "images": '<rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m20.5 16-5-5-8 8"/>',
 }
 
@@ -212,6 +213,39 @@ TOOLS = [
         ],
         "links": [("/blog/export-notebooklm-to-pdf", "Export NotebookLM to PDF, Word or Markdown"), ("/features/chat-export", "Chat export for NotebookLM"), ("/blog/what-is-notebooklm", "What is NotebookLM?"), ("/blog/notebooklm-privacy", "NotebookLM privacy")],
         "cta": "<strong>Export answers already clean.</strong> NotebookTools saves the last answer or the whole chat as PDF, Word or Markdown in one click (Pro).",
+    },
+    # ---------------- Slide editor ----------------
+    {
+        "slug": "edit-notebooklm-slides",
+        "group": "pdf",
+        "icon": "slides",
+        "name": "NotebookLM Slide Editor (PDF to PPTX)",
+        "card": "Make a NotebookLM slide deck editable: OCR turns the text into real text boxes. Edit, present, download PowerPoint.",
+        "title": "Edit NotebookLM Slides: Slide Deck PDF to Editable PowerPoint (Free)",
+        "description": "Free NotebookLM slide editor: open a slide deck PDF, OCR turns the text on each slide into editable text boxes, edit text, colours and shapes, then download an editable PowerPoint (PPTX), PDF or PNG. Runs in your browser; nothing is uploaded.",
+        "h1": "Edit NotebookLM Slides (PDF to PowerPoint)",
+        "answer": "NotebookLM slide decks download as pictures of slides, so you can't change a word. Open the deck PDF here: each slide is read with OCR, the original text is painted out, and real text boxes are put back in the same places. Click to select, double-click to type, drag to move, change fonts and colours, add text, shapes and images, and present. Then download an editable PowerPoint (.pptx) that opens in PowerPoint, Keynote and Google Slides, a PDF with real text, or PNG images. Everything runs in your browser.",
+        "script": "slide-editor.js",
+        "extra_scripts": ["pdf-kit.js", "slide-engine.js"],
+        "raw_app": '<section class="se-app" id="seApp" aria-label="NotebookLM slide editor"><p class="tool-empty">Loading the editor…</p></section>',
+        "steps": [
+            "In NotebookLM, open your slide deck in Studio and download it as a PDF.",
+            "Drop the PDF here (or click Try with a sample file). Keep \"Make the text editable\" on.",
+            "Wait a few seconds per slide while the text is read. Slides that are ready can be edited straight away.",
+            "Double-click any text to change it. Drag to move, use the handles to resize, and use the panel on the right for font, size, colour and alignment.",
+            "Add text, shapes or images from the toolbar, compare with the original, or press Present.",
+            "Click Download PowerPoint for an editable .pptx (or choose PDF or PNG from the arrow menu).",
+        ],
+        "faq": [
+            ("Can you edit NotebookLM slide decks?", "Not inside NotebookLM: its slide decks are generated as images, so the text can't be changed. This editor reads the text with OCR and turns it into real text boxes you can edit."),
+            ("How do I convert NotebookLM slides to PowerPoint?", "Download the slide deck as a PDF from NotebookLM's Studio panel, open it here and click Download PowerPoint. Each slide keeps its design as the background, and the text comes back as editable text boxes."),
+            ("Will it look exactly like the original?", "Close, not identical. Fonts are matched to the nearest common font, and the area behind the old text is filled from the surrounding colours: clean on flat or gradient backgrounds, but busy photos can show faint marks. Use Original to compare, and fix anything in the editor."),
+            ("What about charts and diagrams?", "Text inside charts, diagrams and pictures is usually left as part of the image so the graphic stays intact. You can add your own text boxes on top."),
+            ("Does it work in Google Slides?", "Yes. In Google Slides choose File → Import slides (or open the .pptx from Drive); the text boxes stay editable."),
+            ("Is my deck uploaded?", "No. pdf.js, Tesseract OCR, pdf-lib and PptxGenJS all run in your browser. The deck never leaves your device."),
+        ],
+        "links": [("/tools/pdf-to-images", "PDF slides to images"), ("/notebooklm-slide-styles", "NotebookLM slide deck styles"), ("/blog/notebooklm-slide-prompts", "NotebookLM slide prompts"), ("/tools/notebooklm-prompts", "NotebookLM prompt library")],
+        "cta": "<strong>Get better slides from NotebookLM in the first place.</strong> NotebookTools adds 14 slide style cards to NotebookLM's slide deck dialog and turns any deck into a LinkedIn or Instagram carousel (Pro).",
     },
     # ---------------- PDF & image tools (pdf-kit.js) ----------------
     {
@@ -552,10 +586,10 @@ TOOLS = [
 
 
 HUB = {
-    "title": "Free NotebookLM & PDF Tools: Split, Merge, OCR, Prompts",
-    "description": "12 free browser tools for NotebookLM users: split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.",
+    "title": "Free NotebookLM & PDF Tools: Slide Editor, Split, Merge, OCR",
+    "description": "13 free browser tools for NotebookLM users: edit NotebookLM slides and export PowerPoint, split, merge, compress and count PDFs, PDF to text, OCR, slides to images, a prompt library, link cleaner, text splitter and answer cleaner. Nothing is uploaded.",
     "h1": "Free tools for NotebookLM",
-    "answer": "Twelve free tools for people who work in NotebookLM (now Gemini Notebook), all running in your browser with nothing uploaded. PDF and image tools get files ready for NotebookLM: split, merge, compress, extract pages, count words against the limits, convert PDF to text, read images with OCR, and turn slide decks into images. NotebookLM tools help inside it: a prompt library, a link cleaner, a text splitter and an answer cleaner.",
+    "answer": "Thirteen free tools for people who work in NotebookLM (now Gemini Notebook), all running in your browser with nothing uploaded. A slide editor turns NotebookLM slide decks into editable PowerPoint files. PDF and image tools get files ready for NotebookLM: split, merge, compress, extract pages, count words against the limits, convert PDF to text, read images with OCR, and turn slide decks into images. NotebookLM tools help inside it: a prompt library, a link cleaner, a text splitter and an answer cleaner.",
 }
 
 GROUPS = [
@@ -718,7 +752,7 @@ def tool_page(t: dict) -> str:
 def hub_page() -> str:
     path = "/tools"
     faq = [
-        ("Are these NotebookLM tools free?", "Yes. All twelve are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded."),
+        ("Are these NotebookLM tools free?", "Yes. All thirteen are free with no sign-up, and they run in your browser, so nothing you paste or open is uploaded."),
         ("Are my PDFs uploaded to a server?", "No. The PDF tools use pdf-lib, pdf.js and Tesseract.js running in your browser tab. Files never leave your device, which also makes them fast for large files."),
         ("Are these tools made by Google?", "No. NotebookTools is independent and not affiliated with Google. The tools work with NotebookLM (now Gemini Notebook) as it is today."),
         ("What is the NotebookTools extension?", "A Chrome extension for NotebookLM: one-click imports from YouTube, web pages, X and AI chats are free; Pro ($49 once) adds a notebooks dashboard, source manager, slide style cards, chat export and more."),
