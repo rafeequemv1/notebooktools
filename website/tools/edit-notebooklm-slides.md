@@ -1,6 +1,6 @@
 # Edit NotebookLM Slides (PDF to PowerPoint)
 
-> NotebookLM slide decks download as pictures of slides, so you can't change a word. Open the deck PDF here: each slide is read with OCR, the original text is painted out, and real text boxes are put back in the same places. Click to select, double-click to type, drag to move, change fonts and colours, add text, shapes and images, and present. Then download an editable PowerPoint (.pptx) that opens in PowerPoint, Keynote and Google Slides, a PDF with real text, or PNG images. Everything runs in your browser.
+> NotebookLM slide decks download as pictures of slides, so you can't change a word. Open the deck PDF here: each slide is read with OCR, the original text is painted out, and real text boxes are put back in the same places, in matching fonts and colours. Pictures, icons and divider lines become separate objects you can move, resize or delete. Click to select, double-click to type, drag to move, change fonts and colours, add text, shapes and images, and present. Then download an editable PowerPoint (.pptx) that opens in PowerPoint, Keynote and Google Slides, a PDF with real text, or PNG images. Everything runs in your browser.
 
 - Tool: https://www.notebooktools.com/tools/edit-notebooklm-slides
 - Price: free, no sign-up
@@ -33,6 +33,10 @@ Close, not identical. Fonts are matched to the nearest common font, and the area
 ### What about charts and diagrams?
 
 Text inside charts, diagrams and pictures is usually left as part of the image so the graphic stays intact. You can add your own text boxes on top.
+
+### Can I move or delete the pictures on a slide?
+
+Yes, on slides with a plain background (most NotebookLM decks). Illustrations, photos and icons become separate pictures with a transparent background, and solid lines and bars become shapes, so you can drag, resize or delete them; they export to PowerPoint as separate objects. Slides with a full-bleed photo or strong gradient behind everything keep a single background picture.
 
 ### Does it work in Google Slides?
 

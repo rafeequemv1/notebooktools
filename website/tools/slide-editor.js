@@ -27,6 +27,7 @@
     <div class="se-start" id="seStart">
       <div id="seDrop"></div>
       <label class="se-ocr-opt"><input type="checkbox" id="seOcr" checked> Make the text editable (reads slides with OCR, English)</label>
+      <label class="se-ocr-opt"><input type="checkbox" id="seObjects" checked> Separate pictures and shapes so you can move, resize or delete them</label>
       <ul class="se-points">
         <li><b>Edit text</b> right on the slide: click, double-click to type, drag to move.</li>
         <li><b>Download PowerPoint</b> with real text boxes. Opens in PowerPoint, Keynote and Google Slides.</li>
@@ -150,6 +151,7 @@
 
   async function openFiles(files) {
     const ocr = $("#seOcr").checked;
+    const objectsOn = $("#seObjects").checked;
     deck.slides = [];
     history = [];
     future = [];
@@ -193,7 +195,7 @@
         } else {
           showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length}`);
           try {
-            await S.analyze(s, (p) => showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length} · ${Math.round(p * 100)}%`));
+            await S.analyze(s, (p) => showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length} · ${Math.round(p * 100)}%`), { objects: objectsOn });
           } catch (_error) {
             S.skipAnalysis(s);
             s.status = "error";
@@ -207,7 +209,9 @@
         if (i === deck.slides.length - 1) {
           showProgress("");
           const failed = deck.slides.filter((x) => x.status === "error").length;
-          status(ocr ? `Ready. ${deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.type === "text").length, 0)} text boxes found${failed ? `; ${failed} slide${failed === 1 ? "" : "s"} couldn't be read` : ""}. Double-click any text to edit it.` : "Ready.", "ok");
+          const textCount = deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.type === "text").length, 0);
+          const objCount = deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.detected).length, 0);
+          status(ocr ? `Ready. ${textCount} text boxes${objCount ? ` and ${objCount} pictures and shapes` : ""} found${failed ? `; ${failed} slide${failed === 1 ? "" : "s"} couldn't be read` : ""}. Double-click any text to edit it; drag pictures to move them.` : "Ready.", "ok");
         }
       });
     });
@@ -430,7 +434,7 @@
         ${el.type === "rect" ? `<div class="se-field"><span>Corner radius</span><input type="range" min="0" max="120" value="${el.radius || 0}" data-prop="radius"></div>` : ""}
         ${common}`;
     } else {
-      box.innerHTML = `<p class="se-label">Image</p>${common}`;
+      box.innerHTML = `<p class="se-label">${el.detected ? "Picture from the slide" : "Image"}</p>${el.detected ? '<p class="se-hint">Drag to move, use the handles to resize (hold Shift to keep its shape), or press Delete to remove it.</p>' : ""}${common}`;
     }
   }
 
@@ -558,7 +562,7 @@
       renderAll();
       queue = queue.then(async () => {
         showProgress("Reading text on this slide…");
-        try { await S.analyze(s, (p) => showProgress(`Reading text… ${Math.round(p * 100)}%`)); } catch (_e) { S.skipAnalysis(s); s.status = "error"; }
+        try { await S.analyze(s, (p) => showProgress(`Reading text… ${Math.round(p * 100)}%`), { objects: $("#seObjects").checked }); } catch (_e) { S.skipAnalysis(s); s.status = "error"; }
         showProgress("");
         if (deck.slides.includes(s)) { renderThumb(deck.slides.indexOf(s)); if (slide() === s) { renderStage(); renderProps(); } }
       });
