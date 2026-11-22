@@ -125,3 +125,116 @@
 .snapshots-status {
   min-height: 1.25rem;
 }
+
+/* ==========================================================================
+   Minimal look on the popup's own theme tokens (works in White, Dark and
+   Midnight blue): soft cards, filled fields, quiet buttons.
+   ========================================================================== */
+.snapshots-capture-row {
+  align-items: center;
+  grid-template-columns: 1fr 1fr auto;
+}
+
+.snapshots-capture-row .button {
+  border-radius: 999px;
+  min-height: 38px;
+}
+
+.snapshots-empty {
+  color: var(--nt-muted);
+}
+
+.snapshots-grid {
+  max-height: 340px;
+}
+
+.snapshot-card {
+  background: var(--nt-line-soft);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  gap: 6px;
+  padding: 6px 6px 8px;
+}
+
+.snapshot-card img {
+  background: var(--nt-surface);
+  border-radius: 8px;
+}
+
+.snapshot-card-title {
+  color: var(--nt-ink);
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  padding: 0 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.snapshot-field-label {
+  color: var(--nt-subtle);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 0 2px;
+}
+
+.snapshot-action-type {
+  background: var(--nt-accent-soft);
+  color: var(--nt-accent);
+  font-weight: 600;
+}
+
+.snapshot-card .snapshot-card-action,
+.snapshot-card .snapshot-card-caption {
+  background: var(--nt-surface);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--nt-ink);
+  font-size: 12px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0 8px;
+}
+
+.snapshot-card .snapshot-card-action:focus,
+.snapshot-card .snapshot-card-caption:focus {
+  border-color: var(--nt-accent);
+  outline: none;
+}
+
+.snapshot-card-tools {
+  gap: 4px;
+}
+
+.snapshot-card-tools .button.compact {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  color: var(--nt-muted);
+  font-size: 12px;
+  font-weight: 500;
+  min-height: 28px;
+  padding: 0 6px;
+}
+
+.snapshot-card-tools .button.compact:hover {
+  background: var(--nt-surface);
+  color: var(--nt-ink);
+}
+
+.snapshot-card-tools .snapshot-remove-btn:hover {
+  color: var(--nt-danger);
+}
+
+.snapshots-output-type label {
+  color: var(--nt-muted);
+  font-size: 11.5px;
+}
+
+.snapshots-output-type select,
+.snapshots-guide-fields input,
+.snapshots-guide-fields textarea {
+  background-color: var(--nt-line-soft);
+  border-color: transparent;
+}
