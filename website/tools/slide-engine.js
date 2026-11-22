@@ -58,6 +58,7 @@ window.NTSlides = (() => {
     slide.clean = canvas;
     slide.bgMode = "color";
     slide.bgColor = color;
+    delete slide._map;
     slide.status = "done";
     return slide;
   }
@@ -390,12 +391,16 @@ window.NTSlides = (() => {
     const h = sg.y1 - sg.y0;
     const reach = Math.max(6, Math.round(h * 0.7));
     const bg = sg.bg || [255, 255, 255];
+    const ink0 = sg.color ? rgbOf(sg.color) : null;
     const inkShare = (xa, xb) => {
       let ink = 0, all = 0;
       for (let y = Math.max(0, sg.y0 + 2); y < Math.min(height, sg.y1 - 2); y += 1) for (let x = Math.max(0, xa); x < Math.min(width, xb); x += 1) {
         const i = (y * width + x) * 4;
         all += 1;
-        if (Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 160) ink += 1;
+        const offBg = Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 160;
+        // Only ink in the text's own colour: a cut-off letter, not a neighbouring picture
+        const likeText = !ink0 || Math.abs(data[i] - ink0[0]) + Math.abs(data[i + 1] - ink0[1]) + Math.abs(data[i + 2] - ink0[2]) < 120;
+        if (offBg && likeText) ink += 1;
       }
       return all ? ink / all : 0;
     };
@@ -550,6 +555,102 @@ window.NTSlides = (() => {
     return best;
   }
 
+  /* Text the page pass never saw: labels inside boxes and on pictures, white text
+     on colour. A second pass in sparse-text mode on a contrast map of the slide
+     (each pixel's difference from its local background, drawn as dark on white),
+     so any colour of text on any background reads as dark ink. New lines that
+     don't overlap what was already found are added. */
+  function contrastMap(slide) {
+    const W = slide.w, H = slide.h;
+    const src = slide.original.getContext("2d", { willReadFrequently: true }).getImageData(0, 0, W, H);
+    const d = src.data;
+    // Local background: median of a 7x7 neighbourhood on a 1/6 copy (a ~42 px window).
+    // Text covers less than half of any such window, so the median is the background,
+    // and it follows shape edges instead of smearing dark halos around them.
+    const k = 6, R = 3, sw = Math.ceil(W / k), sh = Math.ceil(H / k);
+    const small = new Uint8ClampedArray(sw * sh * 3);
+    for (let y = 0; y < sh; y += 1) for (let x = 0; x < sw; x += 1) {
+      const i = (Math.min(H - 1, y * k + 2) * W + Math.min(W - 1, x * k + 2)) * 4;
+      const o = (y * sw + x) * 3;
+      small[o] = d[i]; small[o + 1] = d[i + 1]; small[o + 2] = d[i + 2];
+    }
+    const med = new Uint8ClampedArray(sw * sh * 3);
+    const win = new Array((2 * R + 1) ** 2);
+    for (let y = 0; y < sh; y += 1) for (let x = 0; x < sw; x += 1) for (let c = 0; c < 3; c += 1) {
+      let n = 0;
+      for (let dy = -R; dy <= R; dy += 1) for (let dx = -R; dx <= R; dx += 1) {
+        const yy = Math.min(sh - 1, Math.max(0, y + dy)), xx = Math.min(sw - 1, Math.max(0, x + dx));
+        win[n++] = small[(yy * sw + xx) * 3 + c];
+      }
+      win.length = n;
+      win.sort((a, b) => a - b);
+      med[(y * sw + x) * 3 + c] = win[n >> 1];
+    }
+    for (let y = 0; y < H; y += 1) {
+      const sy = Math.min(sh - 1, Math.floor(y / k));
+      for (let x = 0; x < W; x += 1) {
+        const i = (y * W + x) * 4, m = (sy * sw + Math.min(sw - 1, Math.floor(x / k))) * 3;
+        const diff = Math.abs(d[i] - med[m]) + Math.abs(d[i + 1] - med[m + 1]) + Math.abs(d[i + 2] - med[m + 2]);
+        const v = Math.max(0, 255 - diff * 1.6);
+        d[i] = d[i + 1] = d[i + 2] = v;
+      }
+    }
+    // Erase long straight lines (box borders, rules, axes): the OCR's layout step
+    // treats a bordered box as a picture and skips the words inside it
+    const L = 56;
+    const dark = (i) => d[i * 4] < 140;
+    const clearRun = (from, to, step) => { for (let i = from; i <= to; i += step) { const j = i * 4; d[j] = d[j + 1] = d[j + 2] = 255; } };
+    for (let y = 0; y < H; y += 1) {
+      let start = -1;
+      for (let x = 0; x <= W; x += 1) {
+        const on = x < W && (dark(y * W + x) || (y > 0 && dark((y - 1) * W + x) && dark((y + 1 < H ? y + 1 : y) * W + x)));
+        if (on && start < 0) start = x;
+        if (!on && start >= 0) { if (x - start >= L) clearRun(y * W + start, y * W + x - 1, 1); start = -1; }
+      }
+    }
+    for (let x = 0; x < W; x += 1) {
+      let start = -1;
+      for (let y = 0; y <= H; y += 1) {
+        const on = y < H && dark(y * W + x);
+        if (on && start < 0) start = y;
+        if (!on && start >= 0) { if (y - start >= L) clearRun(start * W + x, (y - 1) * W + x, W); start = -1; }
+      }
+    }
+    const out = document.createElement("canvas");
+    out.width = W;
+    out.height = H;
+    out.getContext("2d").putImageData(src, 0, 0);
+    return out;
+  }
+
+  async function addSparseText(slide, segs, img, onProgress) {
+    if (typeof P.ocrSparse !== "function") return;
+    let blocks;
+    try {
+      slide._map = contrastMap(slide); // kept for re-reading fragments, dropped after analysis
+      blocks = await P.ocrSparse(slide._map);
+    } catch (_error) {
+      return;
+    }
+    const found = segmentsOf(blocks, img);
+    for (const sg of found) {
+      if ((sg.conf < 70) || sg.quality < 0.7 || (sg.text.match(/\p{L}|\d/gu) || []).length < 2) continue;
+      const area = Math.max(1, (sg.x1 - sg.x0) * (sg.y1 - sg.y0));
+      const clash = segs.some((k) => {
+        const ix = Math.max(0, Math.min(k.x1, sg.x1) - Math.max(k.x0, sg.x0));
+        const iy = Math.max(0, Math.min(k.y1, sg.y1) - Math.max(k.y0, sg.y0));
+        return ix * iy > area * 0.2;
+      });
+      if (!clash) { sg.sparse = true; segs.push(sg); continue; }
+      // A fuller reading of a line the first pass only got part of
+      // ("Conduction Band" for "onduction Band", "G peak" for "peak")
+      const part = segs.find((k) => sg.text.length > k.text.length && sg.text.toLowerCase().endsWith(k.text.toLowerCase().replace(/^•\s*/, "")) && sg.text.length - k.text.length <= 3
+        && Math.min(k.x1, sg.x1) - Math.max(k.x0, sg.x0) > (k.x1 - k.x0) * 0.6 && Math.abs((k.y0 + k.y1) / 2 - (sg.y0 + sg.y1) / 2) < (k.y1 - k.y0) * 0.6);
+      if (part && /^[\p{Lu}\d]/u.test(sg.text)) Object.assign(part, sg, { sparse: true });
+    }
+    void onProgress;
+  }
+
   /* Lines the page pass wasn't sure of ("[ion through" for "matter through"):
      read each again on its own, enlarged 2x, as a single line, and keep the
      better reading. Chart numbers and specks are left alone. */
@@ -559,34 +660,58 @@ window.NTSlides = (() => {
       .filter((sg) => (sg.conf < 82 || sg.quality < 0.85) && (sg.text.match(/\p{L}/gu) || []).length >= 4 && sg.y1 - sg.y0 >= 10 && sg.x1 - sg.x0 < slide.w * 0.9)
       .sort((a, b) => a.conf - b.conf)
       .slice(0, 14);
-    for (const sg of unsure) {
-      const pad = Math.round((sg.y1 - sg.y0) * 0.35);
-      const x0 = Math.max(0, sg.x0 - pad), y0 = Math.max(0, sg.y0 - pad);
-      const w = Math.min(slide.w, sg.x1 + pad) - x0, h = Math.min(slide.h, sg.y1 + pad) - y0;
+    // Lines that start in lowercase with nothing above them may have lost a first
+    // letter that touches a drawing ("onduction Band"): look a bit further left
+    const fragments = segs.filter((sg) => /^[a-z]/.test(sg.text) && !unsure.includes(sg)
+      && !segs.some((o) => o !== sg && o.y1 <= sg.y0 + 2 && o.y1 > sg.y0 - (sg.y1 - sg.y0) * 1.8 && Math.min(o.x1, sg.x1) > Math.max(o.x0, sg.x0)));
+    // Read a crop of the slide (or of the contrast map) as one line, mapped back to slide pixels
+    const readCrop = async (src, x0, y0, w, h, scale) => {
       const crop = document.createElement("canvas");
-      crop.width = w * 2;
-      crop.height = h * 2;
+      crop.width = Math.round(w * scale);
+      crop.height = Math.round(h * scale);
       const cx = crop.getContext("2d");
       cx.imageSmoothingQuality = "high";
-      cx.drawImage(slide.original, x0, y0, w, h, 0, 0, w * 2, h * 2);
-      let blocks;
-      try {
-        blocks = await P.ocrLine(crop);
-      } catch (_error) {
-        return;
-      }
+      cx.drawImage(src, x0, y0, w, h, 0, 0, crop.width, crop.height);
+      const blocks = await P.ocrLine(crop);
       const words = [];
       for (const b of blocks) for (const pa of b.paragraphs || []) for (const l of pa.lines || []) for (const wd of l.words || []) {
         if (!wd.text || !wd.text.trim()) continue;
         // Whole pixels: the colour and stroke samplers index the image with these
-        words.push({ ...wd, bbox: { x0: Math.round(x0 + wd.bbox.x0 / 2), y0: Math.round(y0 + wd.bbox.y0 / 2), x1: Math.round(x0 + wd.bbox.x1 / 2), y1: Math.round(y0 + wd.bbox.y1 / 2) } });
+        words.push({ ...wd, bbox: { x0: Math.round(x0 + wd.bbox.x0 / scale), y0: Math.round(y0 + wd.bbox.y0 / scale), x1: Math.round(x0 + wd.bbox.x1 / scale), y1: Math.round(y0 + wd.bbox.y1 / scale) } });
       }
-      if (!words.length) continue;
-      const again = segmentsOf([{ paragraphs: [{ lines: [{ words }] }] }], null)[0];
-      if (!again) continue;
-      // Better only if clearly more confident and at least as word-like, and about as long
-      const lenOk = again.text.length >= sg.text.length * 0.6 && again.text.length <= sg.text.length * 1.6 + 4;
-      if (lenOk && again.conf > sg.conf + 4 && again.quality >= sg.quality) Object.assign(sg, again);
+      return words.length ? segmentsOf([{ paragraphs: [{ lines: [{ words }] }] }], null)[0] || null : null;
+    };
+    const box = (sg, leftBy) => {
+      const pad = Math.round((sg.y1 - sg.y0) * 0.35);
+      const x0 = Math.max(0, sg.x0 - pad - leftBy), y0 = Math.max(0, sg.y0 - pad);
+      return [x0, y0, Math.min(slide.w, sg.x1 + pad) - x0, Math.min(slide.h, sg.y1 + pad) - y0];
+    };
+    try {
+      for (const sg of unsure) {
+        const again = await readCrop(slide.original, ...box(sg, 0), 2);
+        if (!again) continue;
+        // Better only if clearly more confident and at least as word-like, and about as long
+        const lenOk = again.text.length >= sg.text.length * 0.6 && again.text.length <= sg.text.length * 1.6 + 4;
+        if (lenOk && again.conf > sg.conf + 4 && again.quality >= sg.quality) Object.assign(sg, again);
+      }
+      // A recovered first letter: the same text with a capital in front
+      for (const sg of fragments.slice(0, 6)) {
+        const h = sg.y1 - sg.y0;
+        let done = false;
+        for (const leftBy of [0.8, 1.2, 1.6]) {
+          for (const scale of [2, 3]) {
+            const again = await readCrop(slide._map || slide.original, ...box(sg, Math.round(h * leftBy)), scale);
+            if (again && /^[A-Z0-9]/.test(again.text) && again.text.toLowerCase().endsWith(sg.text.toLowerCase()) && again.text.length - sg.text.length <= 2 && again.conf >= 65) {
+              Object.assign(sg, again);
+              done = true;
+              break;
+            }
+          }
+          if (done) break;
+        }
+      }
+    } catch (_error) {
+      /* OCR worker unavailable: keep the first reading */
     }
   }
 
@@ -606,13 +731,15 @@ window.NTSlides = (() => {
     // 1. Keep real text: confident, plausible words, on a calm background.
     const dropped = [];
     const allSegs = segmentsOf(blocks, img);
+    await addSparseText(slide, allSegs, img, onProgress);
     // Chart ticks: numbers lined up in a row or column with even steps (0 100 200,
     // 500 1000 1500), or tiny numbers. A row of years ("2012 2015 2019") or a
     // lone figure is real text.
     const numeric = (sg) => (sg.text.match(/\d/g) || []).length > (sg.text.match(/\p{L}/gu) || []).length * 1.5 && !/\p{L}{4,}/u.test(sg.text);
     const textSize = median(allSegs.filter((sg) => sg.text.length >= 12).map((sg) => sg.h)) || 30;
     const ticks = new Set();
-    const nums = allSegs.filter(numeric).map((sg) => ({ sg, v: parseFloat(sg.text.replace(/[^\d.\-−]/g, "").replace("−", "-")) })).filter((n) => Number.isFinite(n.v));
+    // "01 02 03" step badges are labels, not a scale
+    const nums = allSegs.filter((sg) => numeric(sg) && !/^0\d/.test(sg.text.trim())).map((sg) => ({ sg, v: parseFloat(sg.text.replace(/[^\d.\-−]/g, "").replace("−", "-")) })).filter((n) => Number.isFinite(n.v));
     const evenRun = (list) => {
       for (let i = 0; i + 2 < list.length; i += 1) {
         const d1 = list[i + 1].v - list[i].v, d2 = list[i + 2].v - list[i + 1].v;
@@ -628,7 +755,7 @@ window.NTSlides = (() => {
       const col = nums.filter((o) => Math.abs(o.sg.x1 - n.sg.x1) < h || Math.abs((o.sg.x0 + o.sg.x1) / 2 - (n.sg.x0 + n.sg.x1) / 2) < h).sort((a, b) => a.sg.y0 - b.sg.y0);
       if ((row.length >= 3 && evenRun(row)) || (col.length >= 3 && evenRun(col))) ticks.add(n.sg);
     }
-    const isTick = (sg) => numeric(sg) && (ticks.has(sg) || (sg.y1 - sg.y0) / 0.72 < textSize * 0.8);
+    const isTick = (sg) => numeric(sg) && (ticks.has(sg) || ((sg.y1 - sg.y0) / 0.72 < textSize * 0.6 && !/\p{L}/u.test(sg.text)));
     // Chart evidence: numbers (axis ticks, values), read before any re-reading.
     // Letters from drawings ("OH", "HO" on a molecule) don't count.
     const chartish = allSegs.filter((sg) => {
@@ -645,7 +772,7 @@ window.NTSlides = (() => {
         : sg.quality < (sg.conf >= 80 ? 0.5 : 0.7) ? `quality ${sg.quality.toFixed(2)}`
         : letters <= 3 && sg.conf < 80 ? "short"
         : isTick(sg) ? "numbers (chart)"
-        : ringBusy(img, sg, Math.max(3, Math.round(h * 0.2))) > 0.3 ? "busy background" : "";
+        : Math.min(...[0.12, 0.2, 0.35].map((f) => ringBusy(img, sg, Math.max(3, Math.round(h * f))))) > 0.3 ? "busy background" : "";
       if (why) dropped.push(`${why}: ${sg.text}`);
       return !why;
     });
@@ -750,13 +877,14 @@ window.NTSlides = (() => {
       }
       const pad = Math.max(4, Math.round(fontSize * 0.2));
       const inkRgb = [1, 3, 5].map((k) => parseInt(style.color.slice(k, k + 2), 16));
-      group.forEach((g) => { converted.add(g); boxes.push({ x0: g.x0 - pad, y0: g.y0 - pad, x1: g.x1 + pad, y1: g.y1 + pad, bg: style.bg, ink: inkRgb, seg: g }); });
+      const elId = id();
+      group.forEach((g) => { converted.add(g); boxes.push({ x0: g.x0 - pad, y0: g.y0 - pad, x1: g.x1 + pad, y1: g.y1 + pad, bg: style.bg, ink: inkRgb, seg: g, elId }); });
       // Box wide enough for the longest line in our font, so it doesn't re-wrap.
       measureCtx.font = `${font.bold ? 700 : 400} ${fontSize}px ${font.family === "Georgia" ? "Georgia, serif" : "Arial, sans-serif"}`;
       const textW = Math.max(...group.map((g) => measureCtx.measureText(g.text).width));
       const boxW = Math.min(slide.w - Math.max(0, x0 - 4), Math.max(x1 - x0, textW) * 1.04 + 6);
       elements.push({
-        id: id(),
+        id: elId,
         type: "text",
         x: align === "center" ? (x0 + x1) / 2 - boxW / 2 : x0 - 2,
         y: y0 - (fontSize * lineHeight - lineH) / 2 - fontSize * 0.04,
@@ -821,10 +949,19 @@ window.NTSlides = (() => {
     for (const b of boxes) {
       for (const o of allSegs) {
         if (converted.has(o) || o.x1 < b.x0 || o.x0 > b.x1) continue;
+        // Only real text left in the picture is protected, not OCR noise read off a drawing
+        if (o.conf < 60 || o.quality < 0.5 || o.text.replace(/[^\p{L}\p{N}]/gu, "").length < 3) continue;
         const below = (o.y0 + o.y1) / 2 > (b.seg.y0 + b.seg.y1) / 2;
         if (below && o.y0 < b.y1) b.y1 = Math.max(b.seg.y0 + 2, o.y0 - 1);
         if (!below && o.y1 > b.y0) b.y0 = Math.min(b.seg.y1 - 2, o.y1 + 1);
       }
+    }
+    // Cleaning that would have to stop inside a line's own letters leaves half-erased
+    // ghosts: keep that paragraph in the picture instead
+    const ghosts = new Set(boxes.filter((b) => b.y1 < b.seg.y1 - 2 || b.y0 > b.seg.y0 + 2).map((b) => b.elId));
+    if (ghosts.size) {
+      for (let i = elements.length - 1; i >= 0; i -= 1) if (ghosts.has(elements[i].id)) { dropped.push(`would leave a ghost: ${elements[i].text.split("\n")[0]}`); elements.splice(i, 1); }
+      for (let i = boxes.length - 1; i >= 0; i -= 1) if (ghosts.has(boxes[i].elId)) boxes.splice(i, 1);
     }
     const clean = document.createElement("canvas");
     clean.width = slide.w;
@@ -1448,5 +1585,5 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();

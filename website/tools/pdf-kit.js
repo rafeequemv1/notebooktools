@@ -540,23 +540,31 @@ window.NTPdf = (() => {
         workerBlobURL: false,
         gzip: true
       });
-      await worker.setParameters({ tessedit_pageseg_mode: "7" });
       return worker;
     })();
     return lineWorkerPromise;
   }
 
-  async function ocrLine(image) {
+  // One line at a time (mode 7), or sparse text anywhere on the page (mode 11:
+  // labels scattered over figures). Calls are sequential, so one worker serves both.
+  let lineMode = "";
+  async function recognizeIn(mode, image) {
     const worker = await lineWorker();
+    if (lineMode !== mode) {
+      await worker.setParameters({ tessedit_pageseg_mode: mode });
+      lineMode = mode;
+    }
     const { data } = await worker.recognize(image, {}, { blocks: true, text: true });
     return data.blocks || [];
   }
+  const ocrLine = (image) => recognizeIn("7", image);
+  const ocrSparse = (image) => recognizeIn("11", image);
 
   // NotebookLM limits, for the "will it fit" messages.
   const LIMITS = { words: 500000, bytes: 200 * 1024 * 1024, sources: 50 };
 
   return {
     pdfLib, pdfjs, openPdfjs, openPdfLib, bytesOf, fmtBytes, baseName, saveBlob, pdfBlob,
-    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, ocrLine, sample, LIMITS
+    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, ocrLine, ocrSparse, sample, LIMITS
   };
 })();
