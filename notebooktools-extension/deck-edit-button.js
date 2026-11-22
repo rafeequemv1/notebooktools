@@ -98,7 +98,7 @@
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const authUser = new URLSearchParams(location.search).get("authuser");
+      const authUser = window.NotebookToolsNotebookLM?.currentPageAuthUser?.() ?? new URLSearchParams(location.search).get("authuser");
       try {
         chrome.runtime.sendMessage({
           type: "notebooktools-open-slide-editor",

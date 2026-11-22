@@ -203,7 +203,7 @@
         event.preventDefault();
         event.stopPropagation();
         const item = state.items.find((a) => a.id === edit.dataset.edit);
-        const authUser = new URLSearchParams(location.search).get("authuser");
+        const authUser = window.NotebookToolsNotebookLM?.currentPageAuthUser?.() ?? new URLSearchParams(location.search).get("authuser");
         chrome.runtime.sendMessage({ type: "notebooktools-open-slide-editor", notebookId: state.notebookId, artifactId: item?.id, title: item?.title, authUser });
         state.note = "Opening the slide editor in a new tab…";
         render();

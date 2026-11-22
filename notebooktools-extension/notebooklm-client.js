@@ -207,7 +207,35 @@ function extractNotebookLmAuthUserFromUrl(url) {
   }
 }
 
+/**
+ * On a Gemini Notebook page, the Google account that page is signed in as
+ * ("authuser" in the address, or /u/N/), so calls made from the page use the
+ * same account. Remembered for the tab in case the address later drops it.
+ */
+function currentPageAuthUser() {
+  if (typeof location === "undefined" || !/^notebook(?:lm)?\.google\.com$/i.test(location.hostname || "")) {
+    return null;
+  }
+  const fromUrl = extractNotebookLmAuthUserFromUrl(location.href)
+    ?? normalizeNotebookLmAuthUser((location.pathname.match(/^\/u\/(\d+)(?:\/|$)/) || [])[1]);
+  try {
+    if (fromUrl !== null) {
+      sessionStorage.setItem("notebooktoolsPageAuthUser", fromUrl);
+      return fromUrl;
+    }
+    return normalizeNotebookLmAuthUser(sessionStorage.getItem("notebooktoolsPageAuthUser"));
+  } catch (_error) {
+    return fromUrl;
+  }
+}
+
 async function detectNotebookLmAuthUser() {
+  // Called from a notebook page: that page's account wins over the saved one
+  const pageAuthUser = currentPageAuthUser();
+  if (pageAuthUser !== null) {
+    return pageAuthUser;
+  }
+
   if (chrome?.storage?.local) {
     const stored = await chrome.storage.local.get("notebooktoolsAuthUser");
 
@@ -2531,6 +2559,7 @@ async function waitForNotebookLmArtifactReady(notebookId, artifactId, options = 
 if (typeof window !== "undefined") {
   window.NotebookToolsNotebookLM = {
     getOrigin: () => notebookLmOrigin,
+    currentPageAuthUser,
     isNotebookLmHost,
     NOTEBOOK_SOURCE_LIMIT,
     REFRESHABLE_SOURCE_TYPE_CODES,
@@ -2570,4 +2599,6 @@ if (typeof window !== "undefined") {
     waitForWebSourceReady,
     waitForYoutubeSourceReady
   };
+  // Note the page's account right away, before the address can lose it
+  currentPageAuthUser();
 }
