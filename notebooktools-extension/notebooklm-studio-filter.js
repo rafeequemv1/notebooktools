@@ -25,6 +25,33 @@
   };
   const TYPE_LABEL = { Audio: "Audio Overview", Video: "Video Overview", Report: "Report", Quiz: "Quiz & flashcards", Infographic: "Infographic", "Slide deck": "Slide deck", "Data table": "Data table", "Mind map": "Mind map" };
 
+  const ICON = {
+    all: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+    Audio: '<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/>',
+    "Slide deck": '<rect x="3" y="5" width="18" height="14" rx="2"/><rect x="7" y="8.5" width="10" height="7" rx="1"/>',
+    Video: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/>',
+    "Mind map": '<circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h4m0 0V7.5A1.5 1.5 0 0 1 12.5 6H17M11 12v4.5a1.5 1.5 0 0 0 1.5 1.5H17"/>',
+    Report: '<path d="M7 3.5h7l4.5 4.5v12.5H7z"/><path d="M14 3.5V8h4.5M9.5 12.5h6M9.5 16h4"/>',
+    Quiz: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .8-1 1.5V14M12 17h.01"/>',
+    Infographic: '<path d="M5 20V10M12 20V4M19 20v-7"/>',
+    "Data table": '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M3.5 14.5h17M9.5 9.5v10"/>',
+    newest: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    oldest: '<path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/><path d="M12 8v4l3 2"/>',
+    type: '<path d="M12 3.5 7.5 11h9z"/><circle cx="17" cy="17" r="3.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/>',
+    sort: '<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5"/>',
+    caret: '<path d="m7 10 5 5 5-5"/>'
+  };
+  // Studio tile colours (dark page, light page)
+  const TINT = {
+    Audio: ["#a8c7fa", "#0b57d0"], "Slide deck": ["#f7a1c4", "#c2185b"], Video: ["#81c995", "#188038"],
+    "Mind map": ["#d7aefb", "#8430ce"], Report: ["#f6aea9", "#c5221f"], Quiz: ["#a8c7fa", "#1a73e8"],
+    Infographic: ["#fdd663", "#b06000"], "Data table": ["#78d9ec", "#007b83"]
+  };
+  const svg = (name, size = 16, color = "") =>
+    `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${color ? ` style="color:${color}"` : ""}>${ICON[name] || ICON.Report}</svg>`;
+  const isDark = () => document.getElementById("notebooktools-ribbon")?.classList.contains("is-dark") ?? window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  const tint = (t) => (TINT[t] ? TINT[t][isDark() ? 0 : 1] : "");
+
   let slot = null;
   let getColumn = () => null;
   let notebookId = "";
@@ -97,21 +124,60 @@
     if (!slot || !slot.isConnected) return;
     const list = counts();
     if (type !== "all" && !list.some(([t]) => t === type)) type = "all";
+    const typeLabel = type === "all" ? "All types" : (TYPE_LABEL[type] || type);
+    const sortLabel = (SORTS.find(([k]) => k === sort) || SORTS[0])[1];
     slot.innerHTML = `
-      <label class="ntr-typefilter${type !== "all" ? " is-on" : ""}" title="Show only one type of Studio file">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6 7.5V19l-4-2v-4.5L4 5Z"/></svg>
-        <select data-ntr-studio-type aria-label="Filter Studio files by type"${items.length ? "" : " disabled"}>
-          <option value="all">${items.length ? `All types (${items.length})` : "Type"}</option>
-          ${list.map(([t, n]) => `<option value="${esc(t)}"${type === t ? " selected" : ""}>${esc(TYPE_LABEL[t] || t)} (${n})</option>`).join("")}
-        </select>
-      </label>
-      <label class="ntr-typefilter${sort !== "newest" ? " is-on" : ""}" title="Sort the Studio list by date or by file type">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5"/></svg>
-        <select data-ntr-studio-sort aria-label="Sort Studio files"${items.length ? "" : " disabled"}>
-          ${SORTS.map(([k, name]) => `<option value="${k}"${sort === k ? " selected" : ""}>${name}</option>`).join("")}
-        </select>
-      </label>`;
+      <button type="button" class="ntr-btn has-caret ntr-sf${type !== "all" ? " is-on" : ""}" data-sf="type" title="Show one type of Studio file"${items.length ? "" : " disabled"}>
+        ${type === "all" ? svg("all") : svg(type, 16, tint(type))}<span class="ntr-label">${esc(typeLabel)}</span>${svg("caret", 13)}
+      </button>
+      <button type="button" class="ntr-btn has-caret ntr-sf${sort !== "newest" ? " is-on" : ""}" data-sf="sort" title="Sort the Studio list by date or by file type"${items.length ? "" : " disabled"}>
+        ${svg("sort")}<span class="ntr-label">${esc(sortLabel)}</span>${svg("caret", 13)}
+      </button>`;
   }
+
+  /* ---------- Menus, in the ribbon's own style ---------- */
+  function closeMenu() {
+    document.querySelector(".ntr-menu.ntr-sf-menu")?.remove();
+  }
+
+  function openMenu(anchor, which) {
+    closeMenu();
+    const menu = document.createElement("div");
+    menu.className = `ntr-menu ntr-sf-menu${isDark() ? " is-dark" : ""}`;
+    menu.setAttribute("role", "menu");
+    const item = (value, icon, text, active, extra = "") =>
+      `<button type="button" role="menuitemradio" aria-checked="${active}" class="ntr-menu-item${active ? " is-active" : ""}" data-value="${esc(value)}">${icon}<span>${esc(text)}</span>${extra}${active ? '<b class="ntr-check">✓</b>' : ""}</button>`;
+    if (which === "type") {
+      menu.innerHTML = `<p class="ntr-menu-title">Show</p>`
+        + item("all", svg("all", 16), "All types", type === "all", `<em class="ntr-sf-count">${items.length}</em>`)
+        + counts().map(([t, n]) => item(t, svg(t, 16, tint(t)), TYPE_LABEL[t] || t, type === t, `<em class="ntr-sf-count">${n}</em>`)).join("");
+    } else {
+      menu.innerHTML = `<p class="ntr-menu-title">Sort by</p>` + SORTS.map(([k, name]) => item(k, svg(k, 16), name, sort === k)).join("");
+    }
+    document.body.append(menu);
+    const r = anchor.getBoundingClientRect();
+    menu.style.left = `${Math.max(8, Math.min(r.left, window.innerWidth - menu.offsetWidth - 8))}px`;
+    menu.style.top = `${r.bottom + 6}px`;
+    menu.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const choice = event.target.closest("[data-value]");
+      if (!choice) return;
+      if (which === "type") type = choice.dataset.value;
+      else sort = choice.dataset.value;
+      closeMenu();
+      remember();
+      render();
+      apply();
+    });
+  }
+
+  document.addEventListener("mousedown", (event) => {
+    const menu = document.querySelector(".ntr-menu.ntr-sf-menu");
+    if (menu && !menu.contains(event.target) && !event.target.closest?.("[data-sf]")) closeMenu();
+  }, true);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
+  });
 
   /* ---------- Rows in the page's Studio panel ---------- */
   const moreButtons = (el) => [...el.querySelectorAll("button, [role='button']")].filter((b) => MORE_TEXT.test(label(b)));
@@ -237,13 +303,13 @@
   function attach(slotElement, columnGetter) {
     slot = slotElement;
     getColumn = columnGetter || (() => null);
-    slot.addEventListener("change", (event) => {
-      if (event.target.matches("[data-ntr-studio-type]")) type = event.target.value;
-      else if (event.target.matches("[data-ntr-studio-sort]")) sort = event.target.value;
-      else return;
-      remember();
-      render();
-      apply();
+    slot.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-sf]");
+      if (!button || button.disabled) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (document.querySelector(".ntr-menu.ntr-sf-menu")) return closeMenu();
+      openMenu(button, button.dataset.sf);
     });
     render();
     loadItems();

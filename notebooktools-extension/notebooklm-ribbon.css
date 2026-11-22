@@ -637,3 +637,34 @@
 .ntr-seg[data-seg="studio"] .ntr-spacer {
   flex: 1 1 auto;
 }
+
+/* Studio list: type filter and sort, as ribbon buttons with ribbon menus */
+.ntr-btn.ntr-sf.is-on {
+  background: var(--ntr-hover);
+  color: var(--ntr-accent);
+}
+
+.ntr-btn.ntr-sf.is-on > svg:first-child:not([style]) {
+  color: var(--ntr-accent);
+}
+
+.ntr-btn.ntr-sf:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.ntr-sf-menu .ntr-menu-item {
+  min-height: 34px;
+}
+
+.ntr-sf-count {
+  color: var(--ntr-muted);
+  font-size: 12px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  margin-left: 8px;
+}
+
+.ntr-sf-menu .ntr-check {
+  margin-left: 6px;
+}

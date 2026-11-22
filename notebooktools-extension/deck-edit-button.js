@@ -191,6 +191,7 @@
       if (!button.isConnected || button.parentElement !== view.more.parentElement) {
         try {
           view.more.parentElement.insertBefore(button, view.more);
+          placed.set(button, view.more);
           button.classList.add("is-top");
         } catch (_error) {
           view.chip.insertAdjacentElement("afterend", button);
@@ -273,9 +274,41 @@
     timer = window.setTimeout(() => void scan(), 300);
   }
 
+  // Where each button belongs (its deck's ⋮), to put it straight back when
+  // NotebookLM redraws the header and drops it: done in the observer, before
+  // the next paint, so it never visibly disappears (no flicker).
+  const placed = new Map();
+  let restores = [];
+
+  function restoreDropped(mutations) {
+    for (const m of mutations) {
+      for (const node of m.removedNodes) {
+        if (node.nodeType !== 1) continue;
+        const buttons = node.classList?.contains(BTN_CLASS) ? [node] : [...node.querySelectorAll?.(`.${BTN_CLASS}`) || []];
+        for (const button of buttons) {
+          const more = placed.get(button);
+          if (button.isConnected) continue;
+          if (!more?.isConnected) {
+            placed.delete(button);
+            void scan(); // the whole row was rebuilt: place it again right away
+            continue;
+          }
+          // At most 20 a second, in case something keeps removing it
+          const now = Date.now();
+          restores = restores.filter((t) => now - t < 1000);
+          if (restores.length >= 20) continue;
+          restores.push(now);
+          more.parentElement.insertBefore(button, more);
+        }
+      }
+    }
+  }
+
   new MutationObserver((mutations) => {
-    // Ignore our own insertions and our label changing
-    const ours = (m) => m.target.closest?.(`.${BTN_CLASS}`) || [...m.addedNodes, ...m.removedNodes].every((n) => n.nodeType === 1 && n.classList?.contains(BTN_CLASS));
+    restoreDropped(mutations);
+    // Ignore only our own insertions and our label changing; a removal always rescans
+    const ours = (m) => m.target.closest?.(`.${BTN_CLASS}`)
+      || (m.removedNodes.length === 0 && [...m.addedNodes].every((n) => n.nodeType === 1 && n.classList?.contains(BTN_CLASS)));
     if (mutations.every(ours)) return;
     schedule();
   }).observe(document.documentElement, { childList: true, subtree: true });
