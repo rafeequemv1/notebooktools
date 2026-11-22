@@ -57,10 +57,10 @@ const NotebookToolsNotebookDetail = (() => {
     document.querySelectorAll("[data-app-tab]").forEach((button) => {
       const name = button.dataset.appTab;
 
-      if (name === "podcast") {
+      if (name === "podcast" || name === "library") {
         button.hidden = !listMode;
         button.disabled = false;
-        button.classList.toggle("is-active", listMode && listTab === "podcast");
+        button.classList.toggle("is-active", listMode && listTab === name);
         return;
       }
 
@@ -190,6 +190,15 @@ const NotebookToolsNotebookDetail = (() => {
         if (nextTab === "notebooks") {
           close();
           onListTabChange?.("notebooks");
+          return;
+        }
+
+        if (nextTab === "library") {
+          if (notebook) {
+            close();
+          }
+
+          onListTabChange?.("library");
           return;
         }
 

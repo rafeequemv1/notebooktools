@@ -3995,3 +3995,49 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .nbx-table.hide-tags .nbx-col-tags,
 .nbx-table.hide-folder .nbx-col-folder,
 .nbx-table.hide-studio .nbx-col-studio { display: none; }
+
+/* ==========================================================================
+   Studio tab: every Studio file across notebooks (notebooks-studio-library.js)
+   ========================================================================== */
+.studio-library { display: flex; flex-direction: column; gap: 14px; padding-bottom: 60px; }
+.studio-library[hidden] { display: none !important; }
+.stl-head { align-items: flex-start; display: flex; gap: 16px; justify-content: space-between; }
+.stl-sub { color: var(--nt-muted); font-size: 13px; margin: 4px 0 0; }
+.stl-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+.stl-search { align-items: center; background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-muted); display: flex; flex: 1; gap: 8px; min-width: 240px; padding: 0 14px; }
+.stl-search:focus-within { border-color: var(--nt-accent); }
+.stl-search input { background: transparent; border: 0; color: var(--nt-ink); flex: 1; font: inherit; font-size: 13.5px; height: 38px; min-width: 0; outline: none; }
+.stl-tools select { background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-ink); font: inherit; font-size: 13px; height: 38px; max-width: 260px; padding: 0 12px; }
+.stl-types { display: flex; flex-wrap: wrap; gap: 6px; }
+.stl-type { align-items: center; background: transparent; border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-muted); cursor: pointer; display: inline-flex; font: inherit; font-size: 12.5px; font-weight: 500; gap: 6px; height: 32px; padding: 0 12px 0 10px; }
+.stl-type b { color: var(--nt-subtle); font-weight: 500; }
+.stl-type:hover { color: var(--nt-ink); }
+.stl-type.is-on { background: var(--nt-accent-soft); border-color: transparent; color: var(--nt-accent); }
+.stl-type.is-on b { color: var(--nt-accent); }
+.stl-ico { align-items: center; color: var(--fc); display: inline-flex; flex: none; }
+:root:not([data-theme="dark"]) .stl-ico { color: color-mix(in srgb, var(--fc) 80%, #000); }
+.stl-bulk { align-items: center; background: var(--nt-accent-soft); border-radius: 12px; display: flex; flex-wrap: wrap; font-size: 13px; gap: 8px; padding: 6px 8px 6px 14px; }
+.stl-bulk[hidden] { display: none; }
+.stl-bulk span { color: var(--nt-accent); font-weight: 500; margin-right: 6px; }
+.stl-status { color: var(--nt-muted); font-size: 13px; margin: 0; }
+.stl-status[hidden] { display: none; }
+.stl-empty { align-items: center; border: 1px dashed var(--nt-line); border-radius: 16px; color: var(--nt-muted); display: flex; flex-direction: column; font-size: 14px; gap: 12px; padding: 40px 20px; text-align: center; }
+.stl-empty p { margin: 0; max-width: 520px; }
+.stl-table td { vertical-align: middle; }
+.stl-name { align-items: center; display: flex; gap: 10px; min-width: 0; }
+.stl-title { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stl-badge { background: var(--nt-line-soft); border-radius: 999px; color: var(--nt-muted); flex: none; font-size: 11px; padding: 2px 8px; }
+.stl-nb { background: transparent; border: 0; color: var(--nt-muted); cursor: pointer; font: inherit; font-size: 13px; max-width: 260px; overflow: hidden; padding: 0; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+.stl-nb:hover { color: var(--nt-accent); text-decoration: underline; }
+.stl-meta { color: var(--nt-muted); font-size: 12.5px; white-space: nowrap; }
+.stl-table .nbx-col-check { width: 44px; }
+.stl-table .stl-col-nb { width: 26%; }
+.stl-table .stl-col-type { width: 14%; }
+.stl-col-dl { text-align: right; white-space: nowrap; width: 190px; }
+.stl-table td:nth-child(3) { overflow: hidden; }
+.stl-dl { background: transparent; border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-ink); cursor: pointer; font: inherit; font-size: 12px; font-weight: 500; height: 28px; margin-left: 4px; padding: 0 12px; }
+.stl-dl:hover:not(:disabled) { border-color: var(--nt-accent); color: var(--nt-accent); }
+.stl-dl:disabled { cursor: default; opacity: 0.4; }
+.stl-open { align-items: center; border-radius: 50%; color: var(--nt-muted); display: inline-flex; height: 28px; justify-content: center; margin-left: 2px; vertical-align: middle; width: 28px; }
+.stl-open:hover { background: var(--nt-line-soft); color: var(--nt-ink); }
+.stl-check { accent-color: var(--nt-accent); height: 15px; width: 15px; }

@@ -694,15 +694,29 @@ function setListScreen(screen) {
   }
 
   if (podcastView) {
-    podcastView.hidden = isNotebooks;
+    podcastView.hidden = screen !== "podcast";
   }
 
   NotebookToolsNotebookDetail.setListTab(screen);
+
+  if (screen !== "library") {
+    NotebookToolsStudioLibrary.close();
+  }
 
   if (isNotebooks) {
     NotebookToolsPodcast.close();
     renderAll();
     updateNotebookBulkUi();
+    return;
+  }
+
+  if (screen === "library") {
+    NotebookToolsPodcast.close();
+    void NotebookToolsStudioLibrary.open({
+      notebooks,
+      authOptions: authUserOption(activeAccount),
+      onOpenNotebook: (notebook) => openNotebookInApp(notebook, "studio")
+    });
     return;
   }
 
