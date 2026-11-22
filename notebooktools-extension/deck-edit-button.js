@@ -71,17 +71,20 @@
   /* ---------- Finding the open deck on the page ---------- */
   /** Every open deck view: { chip, panel, more, title }. */
   function openDecks() {
-    const chips = [...document.querySelectorAll("button, a, [role='button']")]
+    let chips = [...document.querySelectorAll("button, a, [role='button']")]
       .filter((b) => visible(b) && !b.closest(`.${BTN_CLASS}`) && CHIP_TEXT.test(label(b)));
+    // A chip can match twice (a button and an element inside it): keep the outer one
+    chips = chips.filter((c) => !chips.some((o) => o !== c && o.contains(c)));
     const views = [];
     for (const chip of chips) {
       let panel = chip.parentElement;
       for (let i = 0; panel && i < 6; i += 1, panel = panel.parentElement) {
+        // Stop at a container that holds another deck view's chip
         if (chips.some((other) => other !== chip && panel.contains(other))) break;
         const more = [...panel.querySelectorAll("button, [role='button']")]
-          .find((b) => b !== chip && visible(b) && MORE_TEXT.test(label(b)));
+          .find((b) => b !== chip && !chip.contains(b) && visible(b) && MORE_TEXT.test(label(b)));
         if (more) {
-          views.push({ chip, panel, more, title: deckTitle(panel, chip) });
+          if (!views.some((v) => v.panel === panel)) views.push({ chip, panel, more, title: deckTitle(panel, chip) });
           break;
         }
       }
@@ -98,11 +101,6 @@
     range.setEndBefore(chip);
     const lines = range.toString().split("\n").map((s) => s.trim()).filter(Boolean);
     return lines[lines.length - 1] || "Slide deck";
-  }
-
-  /** Slides show as large pictures; reports and audio don't. */
-  function showsSlides(panel) {
-    return [...panel.querySelectorAll("img, canvas")].some((el) => (el.alt || "").length > 15 || el.naturalWidth > 600 || el.width > 600 || el.getBoundingClientRect().width > 280);
   }
 
   function itemFor(view, list) {
@@ -142,22 +140,45 @@
     return button;
   }
 
+  let lastLog = "";
+  function log(message) {
+    if (message === lastLog) return;
+    lastLog = message;
+    console.debug(`[NotebookTools] Edit slides: ${message}`);
+  }
+
+  /** The list if it's ready (or arrives within 0.6 s); otherwise null and a rescan once it's in. */
+  async function itemsNow() {
+    const id = notebookId();
+    if (decks.notebookId === id && Date.now() - decks.at < CACHE_MS) return decks.list;
+    const pending = loadItems();
+    const quick = await Promise.race([pending, new Promise((resolve) => setTimeout(() => resolve(null), 600))]);
+    if (quick === null) pending.then(() => schedule());
+    return quick;
+  }
+
   async function scan() {
     if (!notebookId()) return;
     const views = openDecks();
-    if (!views.length) return;
-    let list = await loadItems();
+    if (!views.length) {
+      const chip = [...document.querySelectorAll("button, a, [role='button']")].find((b) => visible(b) && CHIP_TEXT.test(label(b)));
+      log(chip ? "found the deck's \"View prompt\" button but no ⋮ (More options) button near it" : "no open deck on the page");
+      return;
+    }
+    let list = await itemsNow();
     for (const view of views) {
-      let item = itemFor(view, list);
-      if (!item && !decks.failed && Date.now() - lastMiss > RETRY_MS) {
+      let item = list ? itemFor(view, list) : null;
+      if (list && !item && !decks.failed && Date.now() - lastMiss > RETRY_MS) {
         lastMiss = Date.now(); // something just generated isn't in the cached list yet
         list = await loadItems(true);
         item = itemFor(view, list);
       }
-      const isDeck = item ? item.typeCode === 8 : showsSlides(view.panel);
+      // Hide only when the Studio list says it's something else (audio, report…)
+      const isDeck = item ? item.typeCode === 8 : true;
       const existing = view.panel.querySelector(`.${BTN_CLASS}`);
       if (!isDeck) {
-        existing?.remove(); // an audio overview, report or other non-deck item
+        existing?.remove();
+        log(`"${view.title}" is not a slide deck (Studio type ${item.typeCode})`);
         continue;
       }
       const button = existing || makeButton();
@@ -173,6 +194,7 @@
           view.chip.insertAdjacentElement("afterend", button);
         }
       }
+      log(`button on "${button.dataset.title}"${item ? ` (deck ${item.id})` : list ? " (not matched in the Studio list)" : " (Studio list still loading)"}`);
     }
   }
 
