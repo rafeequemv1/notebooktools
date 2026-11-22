@@ -59,6 +59,7 @@ window.NTSlides = (() => {
     slide.bgMode = "color";
     slide.bgColor = color;
     delete slide._map;
+    delete slide._painted;
     slide.status = "done";
     return slide;
   }
@@ -969,6 +970,7 @@ window.NTSlides = (() => {
     const cctx = clean.getContext("2d", { willReadFrequently: true });
     cctx.drawImage(slide.original, 0, 0);
     paintOut(cctx, boxes, slide.w, slide.h);
+    slide._painted = boxes; // where text was removed (pictures stay see-through there)
     slide.clean = clean;
     slide.elements = [...elements, ...added];
     if (options.objects !== false) {
@@ -993,73 +995,135 @@ window.NTSlides = (() => {
   // transparent background, then clears them from the background image.
   function detectObjects(slide) {
     const W0 = slide.w, H0 = slide.h;
-    const k = 4; // work at 1/4 size
-    const sw = Math.ceil(W0 / k), sh = Math.ceil(H0 / k);
+    const cctx = slide.clean.getContext("2d", { willReadFrequently: true });
+    const full = cctx.getImageData(0, 0, W0, H0);
+    const fd = full.data;
+
+    // Work at half size to find where pictures are.
+    const k = 2, sw = Math.ceil(W0 / k), sh = Math.ceil(H0 / k);
     const small = document.createElement("canvas");
     small.width = sw;
     small.height = sh;
-    const sctx = small.getContext("2d", { willReadFrequently: true });
-    sctx.drawImage(slide.clean, 0, 0, sw, sh);
-    const sd = sctx.getImageData(0, 0, sw, sh).data;
-    const px = (x, y) => { const i = (y * sw + x) * 4; return [sd[i], sd[i + 1], sd[i + 2]]; };
+    const sx = small.getContext("2d", { willReadFrequently: true });
+    sx.drawImage(slide.clean, 0, 0, sw, sh);
+    const sd = sx.getImageData(0, 0, sw, sh).data;
 
-    // 1. Background: most common border colour; must cover most of the border.
-    const border = [];
-    for (let x = 0; x < sw; x += 2) { border.push(px(x, 1), px(x, sh - 2)); }
-    for (let y = 0; y < sh; y += 2) { border.push(px(1, y), px(sw - 2, y)); }
-    const bins = new Map();
-    border.forEach((c) => { const key = c.map((v) => v >> 4).join(","); bins.set(key, (bins.get(key) || 0) + 1); });
-    const topKey = [...bins.entries()].sort((a, b) => b[1] - a[1])[0][0];
-    const inBin = border.filter((c) => c.map((v) => v >> 4).join(",") === topKey);
-    const bg = [0, 1, 2].map((ch) => median(inBin.map((c) => c[ch])));
-    const near = (c, t) => Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]) < t;
-    if (border.filter((c) => near(c, 45)).length < border.length * 0.6) return { objects: [], skipped: "background not plain" };
-
-    // 2. Foreground mask, dilated so parts of one illustration join up.
-    const mask = new Uint8Array(sw * sh);
-    for (let y = 0; y < sh; y += 1) for (let x = 0; x < sw; x += 1) if (!near(px(x, y), 40)) mask[y * sw + x] = 1;
-    const grown = new Uint8Array(sw * sh);
-    const R = 3;
-    for (let y = 0; y < sh; y += 1) for (let x = 0; x < sw; x += 1) {
-      if (!mask[y * sw + x]) continue;
-      for (let dy = -R; dy <= R; dy += 1) for (let dx = -R; dx <= R; dx += 1) {
-        const xx = x + dx, yy = y + dy;
-        if (xx >= 0 && yy >= 0 && xx < sw && yy < sh) grown[yy * sw + xx] = 1;
-      }
+    // 1. Busy pixels: edges and texture. Smooth gradients and the flat inside of
+    //    boxes and cards are never busy, so they stay in the background.
+    const busy = new Uint8Array(sw * sh);
+    for (let y = 1; y < sh - 1; y += 1) for (let x = 1; x < sw - 1; x += 1) {
+      const i = (y * sw + x) * 4, l = i - 4, r = i + 4, u = i - sw * 4, dn = i + sw * 4;
+      const g = Math.abs(sd[r] - sd[l]) + Math.abs(sd[r + 1] - sd[l + 1]) + Math.abs(sd[r + 2] - sd[l + 2])
+        + Math.abs(sd[dn] - sd[u]) + Math.abs(sd[dn + 1] - sd[u + 1]) + Math.abs(sd[dn + 2] - sd[u + 2]);
+      if (g > 48) busy[y * sw + x] = 1;
     }
 
-    // 3. Connected components → boxes.
+    // 2. Connected groups of busy pixels (8-connected), then sorted: box outlines,
+    //    straight lines and lone thin strokes stay in the background; anything else
+    //    is (part of) a picture. Lines attached to a drawing (chart axes, a leader
+    //    line touching a diagram) belong to that drawing.
     const seen = new Uint8Array(sw * sh);
-    let boxes = [];
+    const parts = [];
     const stack = [];
-    for (let i = 0; i < sw * sh; i += 1) {
-      if (!grown[i] || seen[i]) continue;
-      let x0 = sw, y0 = sh, x1 = 0, y1 = 0, count = 0;
-      stack.push(i);
-      seen[i] = 1;
+    const pix = [];
+    for (let i0 = 0; i0 < sw * sh; i0 += 1) {
+      if (!busy[i0] || seen[i0]) continue;
+      let x0 = sw, y0 = sh, x1 = 0, y1 = 0, n = 0, mx = 0, my = 0, mxx = 0, myy = 0, mxy = 0;
+      pix.length = 0;
+      stack.push(i0);
+      seen[i0] = 1;
       while (stack.length) {
         const j = stack.pop();
+        pix.push(j);
         const x = j % sw, y = (j / sw) | 0;
-        if (mask[j]) count += 1;
+        n += 1; mx += x; my += y; mxx += x * x; myy += y * y; mxy += x * y;
         if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
-        for (const n of [j - 1, j + 1, j - sw, j + sw]) {
-          if (n < 0 || n >= sw * sh || seen[n] || !grown[n]) continue;
-          if ((n === j - 1 && x === 0) || (n === j + 1 && x === sw - 1)) continue;
-          seen[n] = 1;
-          stack.push(n);
+        for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+          const xx = x + dx, yy = y + dy;
+          if ((dx || dy) && xx >= 0 && yy >= 0 && xx < sw && yy < sh) {
+            const q = yy * sw + xx;
+            if (busy[q] && !seen[q]) { seen[q] = 1; stack.push(q); }
+          }
         }
       }
-      if (count < 12) continue; // specks
-      boxes.push({ x0: Math.max(0, x0 - 1), y0: Math.max(0, y0 - 1), x1: Math.min(sw - 1, x1 + 1), y1: Math.min(sh - 1, y1 + 1), count });
+      const w = x1 - x0 + 1, h = y1 - y0 + 1, ext = Math.max(w, h);
+      if (n < 60 && ext < 20) continue; // specks
+      if (Math.min(w, h) <= 5) continue; // a straight line: rule, border, band edge
+      // A box or card: its pixels all sit along its own edges
+      const rim = Math.max(6, Math.round(Math.min(w, h) * 0.06));
+      let onRim = 0;
+      for (const j of pix) { const x = j % sw, y = (j / sw) | 0; if (x - x0 < rim || x1 - x < rim || y - y0 < rim || y1 - y < rim) onRim += 1; }
+      if (w >= 30 && h >= 16 && onRim / n > 0.85) continue;
+      // A lone thin stroke (a diagonal leader line, an arrow) stays in the background
+      const cx = mx / n, cy = my / n;
+      const vxx = mxx / n - cx * cx, vyy = myy / n - cy * cy, vxy = mxy / n - cx * cy;
+      const tr = vxx + vyy, det = vxx * vyy - vxy * vxy;
+      const l1 = tr / 2 + Math.sqrt(Math.max(0, tr * tr / 4 - det)), l2 = Math.max(0.01, tr / 2 - Math.sqrt(Math.max(0, tr * tr / 4 - det)));
+      if (l1 / l2 > 60 && n / ext < 6) continue;
+      // An arrow or connector: long and thin with a small head, mostly empty
+      if (Math.max(w, h) >= 3 * Math.min(w, h) && Math.min(w, h) <= 22 && n / (w * h) < 0.35) continue;
+      parts.push({ x0, y0, x1, y1, n });
     }
-    // Merge overlapping boxes.
+    let boxes = parts.map((b) => ({ ...b }));
+
+    // Solid shapes: strong-coloured flat fills whose edges are all straight (bars).
+    // One alone is decoration (stays in the background, like boxes); three or more
+    // alike in a row or column are a chart and become one picture.
+    const solids = [];
+    {
+      const done = new Uint8Array(sw * sh);
+      const col = (j) => [sd[j * 4], sd[j * 4 + 1], sd[j * 4 + 2]];
+      const bgc = [0, 1, 2].map((c) => median([0, sw - 1, (sh - 1) * sw, sh * sw - 1, sw >> 1, (sh >> 1) * sw].map((j) => sd[j * 4 + c])));
+      for (let i0 = 0; i0 < sw * sh; i0 += 7) {
+        if (busy[i0] || done[i0]) continue;
+        const c0 = col(i0);
+        if (Math.abs(c0[0] - bgc[0]) + Math.abs(c0[1] - bgc[1]) + Math.abs(c0[2] - bgc[2]) < 150) continue;
+        let x0 = sw, y0 = sh, x1 = 0, y1 = 0, n = 0;
+        stack.push(i0);
+        done[i0] = 1;
+        while (stack.length) {
+          const j = stack.pop();
+          const x = j % sw, y = (j / sw) | 0;
+          n += 1;
+          if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+          for (const q of [j - 1, j + 1, j - sw, j + sw]) {
+            if (q < 0 || q >= sw * sh || done[q] || busy[q] === 1) continue;
+            const c = col(q);
+            if (Math.abs(c[0] - c0[0]) + Math.abs(c[1] - c0[1]) + Math.abs(c[2] - c0[2]) > 30) continue;
+            done[q] = 1;
+            stack.push(q);
+          }
+        }
+        const w = x1 - x0 + 1, h = y1 - y0 + 1;
+        if (n > w * h * 0.85 && w * h > 60 && w * h < sw * sh * 0.25) solids.push({ x0, y0, x1, y1, n, c: c0 });
+      }
+    }
+    const alike = (a, b) => Math.abs(a.c[0] - b.c[0]) + Math.abs(a.c[1] - b.c[1]) + Math.abs(a.c[2] - b.c[2]) < 40;
+    // Bars of a chart sit close together: gaps under ~2.5 bar widths (icons that
+    // happen to share a colour are far apart)
+    const rowOf = (a) => {
+      const horiz = solids.filter((b) => alike(a, b) && Math.abs(b.y1 - a.y1) <= 3).sort((p, q) => p.x0 - q.x0);
+      const vert = solids.filter((b) => alike(a, b) && Math.abs(b.x0 - a.x0) <= 3).sort((p, q) => p.y0 - q.y0);
+      const close = (list, gapOf, sizeOf) => list.length >= 3 && list.slice(1).every((b, i) => gapOf(list[i], b) <= 2.5 * (sizeOf(list[i]) + sizeOf(b)) / 2);
+      if (close(horiz, (p, q) => q.x0 - p.x1, (b) => b.x1 - b.x0 + 1)) return horiz;
+      if (close(vert, (p, q) => q.y0 - p.y1, (b) => b.y1 - b.y0 + 1)) return vert;
+      return [];
+    };
+    for (const a of solids) {
+      const row = rowOf(a);
+      if (row.length >= 3) boxes.push({ x0: Math.min(...row.map((b) => b.x0)), y0: Math.min(...row.map((b) => b.y0)), x1: Math.max(...row.map((b) => b.x1)), y1: Math.max(...row.map((b) => b.y1)), n: row.reduce((t, b) => t + b.n, 0) });
+    }
+
+    // 4. Parts close together are one picture (text is already gone, so labels
+    //    don't glue pictures together).
+    const GAP = 14;
     let merged = true;
     while (merged) {
       merged = false;
       for (let a = 0; a < boxes.length && !merged; a += 1) for (let b = a + 1; b < boxes.length && !merged; b += 1) {
         const A = boxes[a], B = boxes[b];
-        if (A.x0 <= B.x1 + 1 && B.x0 <= A.x1 + 1 && A.y0 <= B.y1 + 1 && B.y0 <= A.y1 + 1) {
-          boxes[a] = { x0: Math.min(A.x0, B.x0), y0: Math.min(A.y0, B.y0), x1: Math.max(A.x1, B.x1), y1: Math.max(A.y1, B.y1), count: A.count + B.count };
+        if (A.x0 <= B.x1 + GAP && B.x0 <= A.x1 + GAP && A.y0 <= B.y1 + GAP && B.y0 <= A.y1 + GAP) {
+          boxes[a] = { x0: Math.min(A.x0, B.x0), y0: Math.min(A.y0, B.y0), x1: Math.max(A.x1, B.x1), y1: Math.max(A.y1, B.y1), n: A.n + B.n };
           boxes.splice(b, 1);
           merged = true;
         }
@@ -1067,73 +1131,197 @@ window.NTSlides = (() => {
     }
     const slideArea = sw * sh;
     boxes = boxes.filter((b) => {
-      const area = (b.x1 - b.x0 + 1) * (b.y1 - b.y0 + 1);
-      return area < slideArea * 0.85 && (area > slideArea * 0.0012 || b.x1 - b.x0 > sw * 0.1 || b.y1 - b.y0 > sh * 0.1);
+      const w = b.x1 - b.x0 + 1, h = b.y1 - b.y0 + 1;
+      // Big enough to be a picture, not the whole slide (a full-slide photo stays the background)
+      return w * h < slideArea * 0.8 && w * h > slideArea * 0.002 && Math.max(w, h) >= 24 && b.n / (w * h) > 0.02;
     });
     if (!boxes.length) return { objects: [] };
 
-    // 4. Classify at full resolution, cut out, clear from the background.
-    const cctx = slide.clean.getContext("2d", { willReadFrequently: true });
-    const full = cctx.getImageData(0, 0, W0, H0);
-    const fd = full.data;
+    // 5. Cut each picture out against what's behind it, with soft transparent
+    //    edges, and fill the hole it leaves. On the slide's own background that's a
+    //    smooth surface fitted to the whole background (a gradient); inside a card
+    //    it's the card, measured just around the picture.
     const objects = [];
-    const isFg = (i) => Math.abs(fd[i] - bg[0]) + Math.abs(fd[i + 1] - bg[1]) + Math.abs(fd[i + 2] - bg[2]) >= 40;
+    const src = new Uint8ClampedArray(fd);
+    const painted = slide._painted || [];
+    const inPic = (x, y) => boxes.some((b) => x >= b.x0 - 4 && x <= b.x1 + 4 && y >= b.y0 - 4 && y <= b.y1 + 4);
+    const fit = fitBackground(sd, busy, sw, sh, inPic);
     for (const b of boxes) {
-      // Tighten to the real pixels (the coarse box includes dilation padding).
-      let tx0 = W0, ty0 = H0, tx1 = -1, ty1 = -1;
-      const bx0 = Math.max(0, b.x0 * k - 4), by0 = Math.max(0, b.y0 * k - 4);
-      const bx1 = Math.min(W0, (b.x1 + 1) * k + 4), by1 = Math.min(H0, (b.y1 + 1) * k + 4);
-      for (let y = by0; y < by1; y += 1) for (let x = bx0; x < bx1; x += 1) {
-        if (!isFg((y * W0 + x) * 4)) continue;
-        if (x < tx0) tx0 = x; if (x > tx1) tx1 = x; if (y < ty0) ty0 = y; if (y > ty1) ty1 = y;
+      const X0 = Math.max(0, b.x0 * k - 6), Y0 = Math.max(0, b.y0 * k - 6);
+      const X1 = Math.min(W0, (b.x1 + 1) * k + 6), Y1 = Math.min(H0, (b.y1 + 1) * k + 6);
+      const w = X1 - X0, h = Y1 - Y0;
+      if (w < 8 || h < 8) continue;
+      let surf = localSurface(src, W0, H0, X0, Y0, X1, Y1);
+      if (fit && surroundMatches(fit, src, W0, H0, X0, Y0, X1, Y1, k)) surf = fit.over(X0, Y0, w, h, k);
+      const cut = new ImageData(w, h);
+      let tx0 = w, ty0 = h, tx1 = -1, ty1 = -1;
+      for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+        const i = ((Y0 + y) * W0 + (X0 + x)) * 4, o = (y * w + x) * 4, s3 = (y * w + x) * 3;
+        const bgc = [surf[s3], surf[s3 + 1], surf[s3 + 2]];
+        const c = [src[i], src[i + 1], src[i + 2]];
+        let d = Math.abs(c[0] - bgc[0]) + Math.abs(c[1] - bgc[1]) + Math.abs(c[2] - bgc[2]);
+        // Where a label was removed, only clearly drawn pixels belong to the picture
+        if (d < 50 && painted.some((p) => X0 + x >= p.x0 && X0 + x < p.x1 && Y0 + y >= p.y0 && Y0 + y < p.y1)) d = 0;
+        const a = d <= 18 ? 0 : d >= 60 ? 1 : (d - 18) / 42;
+        // Edge pixels: take the background's share out of the colour (no fringe on a new background)
+        for (let ch = 0; ch < 3; ch += 1) cut.data[o + ch] = a > 0 && a < 1 ? Math.max(0, Math.min(255, (c[ch] - (1 - a) * bgc[ch]) / a)) : c[ch];
+        cut.data[o + 3] = Math.round(a * 255);
+        if (a > 0) {
+          if (x < tx0) tx0 = x; if (x > tx1) tx1 = x; if (y < ty0) ty0 = y; if (y > ty1) ty1 = y;
+          // The background behind the picture becomes its surroundings
+          for (let ch = 0; ch < 3; ch += 1) fd[i + ch] = bgc[ch];
+        }
       }
       if (tx1 < 0) continue;
-      const X0 = Math.max(0, tx0 - 2), Y0 = Math.max(0, ty0 - 2);
-      const X1 = Math.min(W0, tx1 + 3), Y1 = Math.min(H0, ty1 + 3);
-      const w = X1 - X0, h = Y1 - Y0;
-      if (w < 3 || h < 3) continue;
-      let fg = 0, core = 0, sr = 0, sg2 = 0, sb = 0, sq = 0;
-      const cut = new ImageData(w, h);
-      for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
-        const i = ((Y0 + y) * W0 + (X0 + x)) * 4, o = (y * w + x) * 4;
-        const c = [fd[i], fd[i + 1], fd[i + 2]];
-        const d = Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]);
-        cut.data[o] = c[0]; cut.data[o + 1] = c[1]; cut.data[o + 2] = c[2];
-        // Soft edge: background → transparent, anti-aliased rim → partial.
-        cut.data[o + 3] = d < 24 ? 0 : d > 70 ? 255 : Math.round(((d - 24) / 46) * 255);
-        if (d >= 40) fg += 1;
-        if (d >= 90) { core += 1; sr += c[0]; sg2 += c[1]; sb += c[2]; sq += lum(c) ** 2; } // colour stats on core pixels (not anti-aliased edges)
+      // A single flat one-colour shape (a badge circle, a plain card) is decoration:
+      // it stays in the background
+      if (flatShape(cut, w, h)) {
+        for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+          const i = ((Y0 + y) * W0 + (X0 + x)) * 4;
+          for (let c = 0; c < 3; c += 1) fd[i + c] = src[i + c];
+        }
+        continue;
       }
-      if (!fg) continue;
-      const n = Math.max(1, core);
-      const mean = [sr / n, sg2 / n, sb / n];
-      const lumStd = core ? Math.sqrt(Math.max(0, sq / n - lum(mean) ** 2)) : 99;
-      const fill = fg / Math.max(1, (w - 4) * (h - 4));
-      const color = hex(...mean);
-      let obj;
-      const thin = Math.min(w, h) <= 12 && Math.max(w, h) >= 30;
-      if ((thin && lumStd < 32) || (lumStd < 14 && fill > 0.88)) {
-        obj = { type: "rect", fill: color, radius: 0 };
-      } else if (lumStd < 14 && fill > 0.68 && fill < 0.84 && Math.abs(w - h) < Math.max(w, h) * 0.15) {
-        obj = { type: "ellipse", fill: color };
-      } else {
-        const c = document.createElement("canvas");
-        c.width = w;
-        c.height = h;
-        c.getContext("2d").putImageData(cut, 0, 0);
-        obj = { type: "image", src: c.toDataURL("image/png") };
-      }
-      objects.push({ id: id(), ...obj, x: X0, y: Y0, w, h, opacity: 1, detected: true });
-      // Clear it from the background so moving it leaves no ghost.
-      for (let y = Y0; y < Y1; y += 1) for (let x = X0; x < X1; x += 1) {
-        const i = (y * W0 + x) * 4;
-        fd[i] = bg[0]; fd[i + 1] = bg[1]; fd[i + 2] = bg[2];
-      }
+      const cw = tx1 - tx0 + 1, ch2 = ty1 - ty0 + 1;
+      const canvas = document.createElement("canvas");
+      canvas.width = cw;
+      canvas.height = ch2;
+      canvas.getContext("2d").putImageData(cut, -tx0, -ty0, tx0, ty0, cw, ch2);
+      objects.push({ id: id(), type: "image", src: canvas.toDataURL("image/png"), x: X0 + tx0, y: Y0 + ty0, w: cw, h: ch2, opacity: 1, detected: true });
     }
     cctx.putImageData(full, 0, 0);
-    // Big things behind small ones.
+    // Big pictures behind small ones
     objects.sort((a, b) => b.w * b.h - a.w * a.h);
-    return { objects, bg: hex(...bg) };
+    return { objects };
+  }
+
+  // Smooth background model: per colour channel, a quadratic surface in x and y
+  // fitted to calm background pixels (robustly: twice, dropping poor fits). Null
+  // when the background isn't smooth (photos, split panels fit poorly).
+  function fitBackground(sd, busy, sw, sh, inPic) {
+    let pts = [];
+    for (let y = 2; y < sh - 2; y += 4) for (let x = 2; x < sw - 2; x += 4) {
+      if (busy[y * sw + x] || inPic(x, y)) continue;
+      const i = (y * sw + x) * 4;
+      pts.push([x / sw, y / sh, sd[i], sd[i + 1], sd[i + 2]]);
+    }
+    if (pts.length < 60) return null;
+    const basis = (u, v) => [1, u, v, u * u, u * v, v * v];
+    const solve = (list) => [2, 3, 4].map((ch) => {
+      const A = Array.from({ length: 6 }, () => new Array(6).fill(0)), bv = new Array(6).fill(0);
+      for (const p of list) { const f = basis(p[0], p[1]); for (let r = 0; r < 6; r += 1) { bv[r] += f[r] * p[ch]; for (let c = 0; c < 6; c += 1) A[r][c] += f[r] * f[c]; } }
+      for (let r = 0; r < 6; r += 1) A[r][r] += 1e-6;
+      // Gaussian elimination
+      for (let c = 0; c < 6; c += 1) {
+        let piv = c;
+        for (let r = c + 1; r < 6; r += 1) if (Math.abs(A[r][c]) > Math.abs(A[piv][c])) piv = r;
+        [A[c], A[piv]] = [A[piv], A[c]]; [bv[c], bv[piv]] = [bv[piv], bv[c]];
+        for (let r = 0; r < 6; r += 1) if (r !== c) { const f = A[r][c] / A[c][c]; for (let q = c; q < 6; q += 1) A[r][q] -= f * A[c][q]; bv[r] -= f * bv[c]; }
+      }
+      return bv.map((v, r) => v / A[r][r]);
+    });
+    const at = (co, u, v) => co.map((cf) => basis(u, v).reduce((t, f, j) => t + f * cf[j], 0));
+    let co = solve(pts);
+    for (let it = 0; it < 2; it += 1) {
+      const keep = pts.filter((p) => { const c = at(co, p[0], p[1]); return Math.abs(c[0] - p[2]) + Math.abs(c[1] - p[3]) + Math.abs(c[2] - p[4]) < 30; });
+      if (keep.length < pts.length * 0.6) return null; // not one smooth background
+      pts = keep;
+      co = solve(pts);
+    }
+    return {
+      at: (u, v) => at(co, u, v),
+      // rgb triples over a box given in full-size pixels (k = full / half scale)
+      over(X0, Y0, w, h, k) {
+        const out = new Float32Array(w * h * 3);
+        for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+          const c = at(co, (X0 + x) / k / sw, (Y0 + y) / k / sh);
+          out.set(c, (y * w + x) * 3);
+        }
+        return out;
+      }
+    };
+  }
+
+  // Does the area just around a box look like the fitted background (not a card)?
+  function surroundMatches(fit, d, W, H, X0, Y0, X1, Y1, k) {
+    let n = 0, near = 0;
+    const test = (x, y) => {
+      if (x < 0 || y < 0 || x >= W || y >= H) return;
+      const i = (y * W + x) * 4;
+      const c = fit.at(x / k / Math.ceil(W / k), y / k / Math.ceil(H / k));
+      n += 1;
+      if (Math.abs(c[0] - d[i]) + Math.abs(c[1] - d[i + 1]) + Math.abs(c[2] - d[i + 2]) < 24) near += 1;
+    };
+    for (let x = X0; x < X1; x += 6) { test(x, Y0 - 4); test(x, Y1 + 3); }
+    for (let y = Y0; y < Y1; y += 6) { test(X0 - 4, y); test(X1 + 3, y); }
+    return n > 0 && near / n > 0.7;
+  }
+
+  // Mostly one colour (ignoring soft edges and a little text inside): a plain shape.
+  function flatShape(cut, w, h) {
+    const d = cut.data;
+    const bins = new Map();
+    let solid = 0;
+    for (let i = 0; i < w * h; i += 1) {
+      if (d[i * 4 + 3] < 250) continue;
+      solid += 1;
+      const key = ((d[i * 4] >> 4) << 8) | ((d[i * 4 + 1] >> 4) << 4) | (d[i * 4 + 2] >> 4);
+      bins.set(key, (bins.get(key) || 0) + 1);
+    }
+    if (solid < 50) return true;
+    const top = Math.max(...bins.values());
+    return top / solid > 0.97;
+  }
+
+  // Background colour across a box, from thin strips just outside each side
+  // (typical colour of each stretch, so a gradient or a card is followed), blended
+  // across the box. Returns rgb triples, row by row.
+  function localSurface(d, W, H, X0, Y0, X1, Y1) {
+    const w = X1 - X0, h = Y1 - Y0;
+    const strip = (xa, ya, xb, yb) => {
+      const px = [];
+      for (let y = Math.max(0, ya); y < Math.min(H, yb); y += 1) for (let x = Math.max(0, xa); x < Math.min(W, xb); x += 2) {
+        const i = (y * W + x) * 4;
+        px.push([d[i], d[i + 1], d[i + 2]]);
+      }
+      if (!px.length) return null;
+      const lums = px.map((p) => p[0] * 0.2126 + p[1] * 0.7152 + p[2] * 0.0722);
+      const m = median(lums);
+      const keep = px.filter((_p, j) => Math.abs(lums[j] - m) < 25);
+      return [0, 1, 2].map((c) => median((keep.length ? keep : px).map((p) => p[c])));
+    };
+    const cols = Math.max(2, Math.min(16, Math.round(w / 60))), rows = Math.max(2, Math.min(10, Math.round(h / 60)));
+    const sides = { top: [], bottom: [], left: [], right: [] };
+    for (let j = 0; j < cols; j += 1) {
+      const a = X0 + Math.round((w * j) / cols), z = X0 + Math.round((w * (j + 1)) / cols);
+      sides.top.push(strip(a, Y0 - 5, z, Y0));
+      sides.bottom.push(strip(a, Y1, z, Y1 + 5));
+    }
+    for (let j = 0; j < rows; j += 1) {
+      const a = Y0 + Math.round((h * j) / rows), z = Y0 + Math.round((h * (j + 1)) / rows);
+      sides.left.push(strip(X0 - 5, a, X0, z));
+      sides.right.push(strip(X1, a, X1 + 5, z));
+    }
+    // Missing sides (picture at the slide edge) borrow from the others
+    const all = [...sides.top, ...sides.bottom, ...sides.left, ...sides.right].filter(Boolean);
+    const fallback = all.length ? [0, 1, 2].map((c) => median(all.map((p) => p[c]))) : [255, 255, 255];
+    for (const key of Object.keys(sides)) sides[key] = sides[key].map((p) => p || fallback);
+    const at = (arr, t) => {
+      const f = Math.min(arr.length - 1, Math.max(0, t * arr.length - 0.5));
+      const i = Math.floor(f), j = Math.min(arr.length - 1, i + 1), u = f - i;
+      return [0, 1, 2].map((c) => arr[i][c] * (1 - u) + arr[j][c] * u);
+    };
+    const out = new Float32Array(w * h * 3);
+    for (let y = 0; y < h; y += 1) {
+      const ty = (y + 0.5) / h;
+      const l = at(sides.left, ty), r = at(sides.right, ty);
+      for (let x = 0; x < w; x += 1) {
+        const tx = (x + 0.5) / w;
+        const t = at(sides.top, tx), bt = at(sides.bottom, tx);
+        for (let c = 0; c < 3; c += 1) out[(y * w + x) * 3 + c] = ((t[c] * (1 - ty) + bt[c] * ty) + (l[c] * (1 - tx) + r[c] * tx)) / 2;
+      }
+    }
+    return out;
   }
 
   // Keep the original image as background with no text boxes.
