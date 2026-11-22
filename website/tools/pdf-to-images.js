@@ -7,7 +7,7 @@
   let bytes = null;
   let total = 0;
 
-  P.dropZone($("#piDrop"), { label: "Drop a slide deck PDF" }, async ([f]) => {
+  P.dropZone($("#piDrop"), { label: "Drop a slide deck PDF", sample: "slides" }, async ([f]) => {
     file = f;
     bytes = await P.bytesOf(f);
     try {

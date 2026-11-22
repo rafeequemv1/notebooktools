@@ -4,7 +4,7 @@
   const $ = (s) => document.querySelector(s);
   let rows = [];
 
-  P.dropZone($("#pcDrop"), { label: "Drop PDFs to check", multiple: true }, async (files) => {
+  P.dropZone($("#pcDrop"), { label: "Drop PDFs to check", sample: "batch", multiple: true }, async (files) => {
     for (const f of files) {
       const row = { name: f.name, size: f.size, pages: 0, words: 0, scanned: 0, error: "" };
       rows.push(row);

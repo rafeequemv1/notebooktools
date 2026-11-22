@@ -27,7 +27,7 @@
     $("#ocrCopy").disabled = $("#ocrDownload").disabled = !n;
   }
 
-  P.dropZone($("#ocrDrop"), { label: "Drop images or screenshots", hint: "paste with Ctrl+V, or", multiple: true, accept: "image/*" }, handle);
+  P.dropZone($("#ocrDrop"), { label: "Drop images or screenshots", sample: "image", hint: "paste with Ctrl+V, or", multiple: true, accept: "image/*" }, handle);
   document.addEventListener("paste", (event) => {
     const files = [...(event.clipboardData?.files || [])].filter((f) => /^image\//.test(f.type));
     if (files.length) handle(files);

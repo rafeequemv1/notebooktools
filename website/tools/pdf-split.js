@@ -8,7 +8,7 @@
   let doc = null;
   let total = 0;
 
-  P.dropZone($("#splitDrop"), { label: "Drop a PDF to split" }, async ([f]) => {
+  P.dropZone($("#splitDrop"), { label: "Drop a PDF to split", sample: "book" }, async ([f]) => {
     P.status($("#splitStatus"), "Reading…");
     try {
       file = f;

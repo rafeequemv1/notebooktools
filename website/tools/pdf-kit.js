@@ -85,9 +85,21 @@ window.NTPdf = (() => {
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
       <p class="pdf-drop-title">${options.label || "Drop a PDF here"}</p>
       <p class="pdf-drop-hint">${options.hint || "or"} <button type="button" class="tool-btn is-primary pdf-drop-btn">Choose ${options.multiple ? "files" : "a file"}</button></p>
+      ${options.sample ? `<button type="button" class="pdf-sample-btn">Try with a sample ${options.multiple ? "set" : "file"}</button>` : ""}
       <p class="pdf-drop-private">Stays on your device. Nothing is uploaded.</p>`;
     el.append(input);
     el.querySelector(".pdf-drop-btn").addEventListener("click", () => input.click());
+    el.querySelector(".pdf-sample-btn")?.addEventListener("click", async (event) => {
+      const btn = event.currentTarget;
+      btn.disabled = true;
+      btn.textContent = "Making the sample…";
+      try {
+        onFiles(await sample(options.sample));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = `Try with a sample ${options.multiple ? "set" : "file"}`;
+      }
+    });
     input.addEventListener("change", () => {
       if (input.files.length) onFiles([...input.files]);
       input.value = "";
@@ -251,6 +263,193 @@ window.NTPdf = (() => {
     el.querySelector("span").style.width = `${Math.round((done / Math.max(1, total)) * 100)}%`;
   }
 
+
+  /* ---------- Sample files (made in the browser, nothing downloaded) ---------- */
+  const SAMPLE_TEXT = [
+    "Sleep is not a pause in learning; it is part of it. During the day the hippocampus stores new experiences quickly but fragilely. At night, those traces are replayed and gradually moved into the neocortex, where they last.",
+    "Deep, slow-wave sleep dominates the first half of the night. Studies that wake people during this stage show weaker recall the next morning, especially for facts and word lists.",
+    "REM sleep, which grows longer towards morning, seems to link new memories to older ones. People woken from REM are more likely to find creative solutions to puzzles they practised the day before.",
+    "A short nap can help too. In one well-known study, a 90 minute afternoon nap improved recall of new facts by about 20 percent compared with staying awake.",
+    "Timing matters. Reviewing material shortly before sleep, and again the next day, tends to beat cramming the same hours into one evening. This is the spacing effect working together with sleep.",
+    "Caffeine late in the day, alcohol and irregular bedtimes all fragment sleep. The cost is not only tiredness: fragmented nights reduce the time spent in the stages that consolidate memory."
+  ];
+
+  function wrap(text, font, size, width) {
+    const lines = [];
+    let line = "";
+    for (const word of text.split(/\s+/)) {
+      const next = line ? `${line} ${word}` : word;
+      if (font.widthOfTextAtSize(next, size) > width && line) {
+        lines.push(line);
+        line = word;
+      } else line = next;
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  async function textPdf(title, chapters, pagesPerChapter = 2) {
+    const { PDFDocument, StandardFonts, rgb } = await pdfLib();
+    const doc = await PDFDocument.create();
+    doc.setTitle(title);
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+    let n = 0;
+    for (let c = 0; c < chapters.length; c += 1) {
+      for (let k = 0; k < pagesPerChapter; k += 1) {
+        n += 1;
+        const page = doc.addPage([612, 792]);
+        let y = 720;
+        if (k === 0) {
+          page.drawText(`Chapter ${c + 1}`, { x: 72, y, size: 12, font: bold, color: rgb(0.04, 0.34, 0.82) });
+          y -= 30;
+          page.drawText(chapters[c], { x: 72, y, size: 24, font: bold });
+          y -= 36;
+        }
+        for (let p = 0; p < 4 && y > 110; p += 1) {
+          for (const line of wrap(SAMPLE_TEXT[(c + k + p) % SAMPLE_TEXT.length], font, 11.5, 468)) {
+            page.drawText(line, { x: 72, y, size: 11.5, font, color: rgb(0.15, 0.15, 0.15) });
+            y -= 17;
+          }
+          y -= 12;
+        }
+        page.drawText(`${title} · ${n}`, { x: 72, y: 40, size: 9, font, color: rgb(0.5, 0.5, 0.5) });
+      }
+    }
+    return doc.save();
+  }
+
+  // A page that looks photographed: off-white, slightly rotated, a little noise.
+  function scanCanvas(lines, heading) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1275;
+    canvas.height = 1650;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#f4f1ea";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(-0.006);
+    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+    ctx.fillStyle = "#1d1d1d";
+    ctx.font = "bold 46px Georgia, serif";
+    ctx.fillText(heading, 120, 190);
+    ctx.font = "30px Georgia, serif";
+    let y = 280;
+    for (const para of lines) {
+      let line = "";
+      for (const word of para.split(" ")) {
+        const next = line ? `${line} ${word}` : word;
+        if (ctx.measureText(next).width > 1030) {
+          ctx.fillText(line, 120, y);
+          y += 46;
+          line = word;
+        } else line = next;
+      }
+      ctx.fillText(line, 120, y);
+      y += 74;
+    }
+    ctx.restore();
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const d = (Math.random() - 0.5) * 18;
+      img.data[i] += d; img.data[i + 1] += d; img.data[i + 2] += d;
+    }
+    ctx.putImageData(img, 0, 0);
+    return canvas;
+  }
+
+  async function scanPdf(pages = 3) {
+    const { PDFDocument } = await pdfLib();
+    const doc = await PDFDocument.create();
+    for (let i = 0; i < pages; i += 1) {
+      const canvas = scanCanvas(SAMPLE_TEXT.slice(i, i + 3), `Scanned notes, page ${i + 1}`);
+      const png = new Uint8Array(await (await canvasBlob(canvas, "image/png")).arrayBuffer());
+      const img = await doc.embedPng(png);
+      doc.addPage([612, 792]).drawImage(img, { x: 0, y: 0, width: 612, height: 792 });
+    }
+    return doc.save();
+  }
+
+  async function slidesPdf() {
+    const { PDFDocument, StandardFonts, rgb } = await pdfLib();
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+    const slides = [
+      ["How sleep builds memory", "A 6-slide summary"],
+      ["Deep sleep", "Replays the day and moves memories into long-term storage"],
+      ["REM sleep", "Links new memories to what you already know"],
+      ["Naps count", "A 90 minute nap improved recall by about 20%"],
+      ["Spacing works", "Review before sleep, then again the next day"],
+      ["Protect your nights", "Less late caffeine, alcohol and irregular bedtimes"]
+    ];
+    const colors = [[0.04, 0.34, 0.82], [0.1, 0.5, 0.33], [0.55, 0.27, 0.76], [0.92, 0.45, 0.05], [0.8, 0.15, 0.3], [0.12, 0.12, 0.14]];
+    slides.forEach(([title, sub], i) => {
+      const page = doc.addPage([960, 540]);
+      const [r, g, b] = colors[i];
+      page.drawRectangle({ x: 0, y: 0, width: 960, height: 540, color: rgb(r, g, b) });
+      page.drawRectangle({ x: 64, y: 400, width: 70, height: 8, color: rgb(1, 1, 1) });
+      page.drawText(title, { x: 64, y: 300, size: 54, font: bold, color: rgb(1, 1, 1) });
+      wrap(sub, font, 26, 820).forEach((line, k) => page.drawText(line, { x: 64, y: 240 - k * 34, size: 26, font, color: rgb(1, 1, 1) }));
+      page.drawText(`${i + 1} / ${slides.length}`, { x: 860, y: 40, size: 16, font, color: rgb(1, 1, 1) });
+    });
+    return doc.save();
+  }
+
+  async function whiteboardImage() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1400;
+    canvas.height = 820;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fbfbf8";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#c9c9c4";
+    ctx.lineWidth = 10;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    ctx.fillStyle = "#1a3d8f";
+    ctx.font = "bold 64px Arial, sans-serif";
+    ctx.fillText("Sleep and memory: key points", 90, 150);
+    ctx.font = "44px Arial, sans-serif";
+    ["1. Deep sleep moves memories into long-term storage", "2. REM sleep links new and old memories", "3. A 90 minute nap improves recall", "4. Review before bed, then again tomorrow"].forEach((t, i) => {
+      ctx.fillStyle = i % 2 ? "#b3261e" : "#1d1d1d";
+      ctx.fillText(t, 90, 280 + i * 110);
+    });
+    const blob = await canvasBlob(canvas, "image/png");
+    return new File([blob], "whiteboard-notes.png", { type: "image/png" });
+  }
+
+  const pdfFile = (bytes, name) => new File([bytes], name, { type: "application/pdf" });
+
+  async function sample(kind) {
+    const chapters = ["Why we sleep", "Deep sleep and facts", "REM and connections", "The power of naps", "Spacing and review", "Habits that protect sleep", "Sleep across a lifetime", "What we still don't know", "Studying with sleep in mind", "Summary and checklist", "Further reading", "Glossary"];
+    if (kind === "book") return [pdfFile(await textPdf("Sleep and Memory (sample textbook)", chapters, 2), "sleep-and-memory-textbook.pdf")];
+    if (kind === "handouts") {
+      return Promise.all(["Lecture 1 - Why we sleep", "Lecture 2 - Deep sleep", "Lecture 3 - REM sleep"].map(async (t, i) =>
+        pdfFile(await textPdf(t, [t.split(" - ")[1]], 2 + (i % 2)), `${t.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.pdf`)));
+    }
+    if (kind === "mixed") {
+      const { PDFDocument } = await pdfLib();
+      const out = await PDFDocument.create();
+      for (const bytes of [await textPdf("Sleep and Memory (sample)", chapters.slice(0, 2), 1), await scanPdf(1)]) {
+        const src = await PDFDocument.load(bytes);
+        (await out.copyPages(src, src.getPageIndices())).forEach((p) => out.addPage(p));
+      }
+      return [pdfFile(await out.save(), "sleep-notes-with-scanned-page.pdf")];
+    }
+    if (kind === "scan") return [pdfFile(await scanPdf(3), "scanned-lecture-notes.pdf")];
+    if (kind === "batch") {
+      return [
+        pdfFile(await textPdf("Sleep and Memory (sample textbook)", chapters, 2), "sleep-and-memory-textbook.pdf"),
+        pdfFile(await textPdf("Lecture 1 - Why we sleep", ["Why we sleep"], 2), "lecture-1.pdf"),
+        pdfFile(await scanPdf(2), "scanned-notes.pdf")
+      ];
+    }
+    if (kind === "slides") return [pdfFile(await slidesPdf(), "how-sleep-builds-memory-slides.pdf")];
+    if (kind === "image") return [await whiteboardImage()];
+    return [];
+  }
+
   /* ---------- OCR (Tesseract.js, English, self-hosted) ---------- */
   let workerPromise = null;
   let ocrProgress = () => {};
@@ -283,6 +482,6 @@ window.NTPdf = (() => {
 
   return {
     pdfLib, pdfjs, openPdfjs, openPdfLib, bytesOf, fmtBytes, baseName, saveBlob, pdfBlob,
-    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, LIMITS
+    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, sample, LIMITS
   };
 })();

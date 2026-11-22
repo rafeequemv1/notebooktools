@@ -7,7 +7,7 @@
   let bytes = null;
   let result = "";
 
-  P.dropZone($("#ptDrop"), { label: "Drop a PDF to get its text" }, async ([f]) => {
+  P.dropZone($("#ptDrop"), { label: "Drop a PDF to get its text", sample: "mixed" }, async ([f]) => {
     file = f;
     bytes = await P.bytesOf(f);
     $("#ptFile").hidden = false;

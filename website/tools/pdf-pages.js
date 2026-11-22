@@ -8,7 +8,7 @@
   let total = 0;
   let picked = new Set();
 
-  P.dropZone($("#pagesDrop"), { label: "Drop a PDF to pick pages" }, async ([f]) => {
+  P.dropZone($("#pagesDrop"), { label: "Drop a PDF to pick pages", sample: "book" }, async ([f]) => {
     file = f;
     picked = new Set();
     $("#pagesThumbs").innerHTML = "";

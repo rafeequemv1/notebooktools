@@ -109,5 +109,32 @@
     split();
   });
   [input, title, custom].forEach((el) => el.addEventListener("input", split));
+
+  // Sample: a long lecture transcript (~120,000 words) split into 50,000-word parts.
+  $("#tsSample")?.addEventListener("click", () => {
+    const paras = [
+      "Today we're looking at how sleep turns the day's experiences into lasting memories. The hippocampus stores new information quickly, but those traces are fragile until sleep replays them.",
+      "During deep, slow-wave sleep the brain replays recent events and gradually moves them into the neocortex. When people are woken during this stage, their recall the next morning is noticeably weaker.",
+      "REM sleep grows longer towards the morning. It seems to connect new memories with older ones, which is why people sometimes wake with a fresh idea about a problem they practised the day before.",
+      "Let's talk about naps. In one study, a 90 minute afternoon nap improved recall of new facts by about twenty percent compared with staying awake for the same time.",
+      "For studying, timing matters. Review shortly before sleep, then again the next day. Spreading the same hours across several days beats cramming them into one evening.",
+      "Questions from the audience: does caffeine undo all of this? Late caffeine shortens deep sleep, so the honest answer is that it doesn't undo it, but it does take a bite out of it."
+    ];
+    const out = [];
+    let words = 0;
+    for (let lecture = 1; words < 120000; lecture += 1) {
+      out.push(`Lecture ${lecture}: Sleep and memory, part ${lecture}`);
+      for (let i = 0; i < 40; i += 1) {
+        const p = paras[(lecture + i) % paras.length];
+        out.push(p);
+        words += p.split(/\s+/).length;
+      }
+    }
+    input.value = out.join("\n\n");
+    title.value = "Sleep and memory lectures";
+    size.value = "50000";
+    custom.hidden = true;
+    split();
+  });
   split();
 })();

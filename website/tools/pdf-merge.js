@@ -4,7 +4,7 @@
   const $ = (s) => document.querySelector(s);
   let items = []; // { file, pages }
 
-  P.dropZone($("#mergeDrop"), { label: "Drop PDFs to merge", multiple: true, accept: ".pdf,application/pdf,image/png,image/jpeg" }, async (files) => {
+  P.dropZone($("#mergeDrop"), { label: "Drop PDFs to merge", sample: "handouts", multiple: true, accept: ".pdf,application/pdf,image/png,image/jpeg" }, async (files) => {
     for (const f of files) {
       let pages = 1;
       if (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)) {

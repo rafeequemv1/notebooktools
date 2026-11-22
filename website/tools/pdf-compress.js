@@ -7,7 +7,7 @@
   let file = null;
   let bytes = null;
 
-  P.dropZone($("#cpDrop"), { label: "Drop a PDF to compress" }, async ([f]) => {
+  P.dropZone($("#cpDrop"), { label: "Drop a PDF to compress", sample: "scan" }, async ([f]) => {
     file = f;
     bytes = await P.bytesOf(f);
     $("#cpFile").hidden = false;

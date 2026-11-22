@@ -142,7 +142,7 @@ TOOLS = [
         "script": "text-splitter.js",
         "app": """
       <div class="tool-pane">
-        <div class="tool-pane-head"><h2>Your text</h2><span class="tool-stats" id="tsStats"></span></div>
+        <div class="tool-pane-head"><h2>Your text</h2><span class="tool-stats" id="tsStats"></span><button type="button" class="tool-btn" id="tsSample">Try a sample</button></div>
         <textarea id="tsInput" placeholder="Paste a long transcript, book or notes…" aria-label="Text to split"></textarea>
         <div class="tool-row">
           <div class="tool-field"><label for="tsTitle">Title</label><input type="text" id="tsTitle" placeholder="e.g. Lecture transcripts" maxlength="80"></div>

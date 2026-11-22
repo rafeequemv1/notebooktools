@@ -1171,3 +1171,10 @@
   .pl-nav .pl-tab.is-on::before { display: none; }
   .pl-main .pl-grid { grid-template-columns: 1fr; }
 }
+
+.pdf-sample-btn { background: transparent; border: 0; color: var(--accent); cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 500; margin-top: 2px; padding: 4px 8px; text-decoration: underline; text-underline-offset: 3px; }
+.pdf-sample-btn:hover { text-decoration-thickness: 2px; }
+.pdf-sample-btn:disabled { color: var(--muted); cursor: wait; text-decoration: none; }
+
+/* Elements marked hidden stay hidden even when a class sets display */
+.tool-app [hidden] { display: none !important; }
