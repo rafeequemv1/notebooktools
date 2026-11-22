@@ -530,14 +530,25 @@
   }
 
   // Text with "Label:" runs in their own colour/weight (NotebookLM style).
+  // Paragraphs as blocks (editing reads them back with innerText, one per line);
+  // a bulleted paragraph wraps under its text with a hanging indent.
+  const bulletCtx = document.createElement("canvas").getContext("2d");
   function setText(txt, el) {
-    if (!el.labelColor) {
+    const paras = String(el.text).split("\n");
+    const bullets = paras.some((p) => /^•\s/.test(p));
+    if (!el.labelColor && !bullets) {
       txt.textContent = el.text;
       return;
     }
-    txt.innerHTML = String(el.text).split("\n").map((line) => S.lineRuns(el, line).map((r) => r.label
-      ? `<span style="color:${el.labelColor};font-weight:${el.labelBold ? 700 : 400}">${esc(r.text)}</span>`
-      : esc(r.text)).join("")).join("\n");
+    bulletCtx.font = `${el.bold ? 700 : 400} 100px ${S.cssFamily(el.fontFamily)}`;
+    const em = (bulletCtx.measureText("• ").width / 100).toFixed(3);
+    txt.innerHTML = paras.map((para) => {
+      const inner = (el.labelColor ? S.lineRuns(el, para) : [{ text: para }]).map((r) => r.label
+        ? `<span style="color:${el.labelColor};font-weight:${el.labelBold ? 700 : 400}">${esc(r.text)}</span>`
+        : esc(r.text)).join("");
+      const hang = /^•\s/.test(para) ? ` style="padding-left:${em}em;text-indent:-${em}em"` : "";
+      return `<div${hang}>${inner || "<br>"}</div>`;
+    }).join("");
   }
 
   function applyBox(node, el) {

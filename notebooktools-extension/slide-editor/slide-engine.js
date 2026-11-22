@@ -716,6 +716,46 @@ window.NTSlides = (() => {
     }
   }
 
+  /* Real paragraphs: a box's lines are joined into paragraphs so the text re-wraps
+     when edited, and the box width is chosen so the lines still break exactly where
+     they did on the slide: wide enough for every line, too narrow for the next word.
+     When no width does both, the box keeps its line breaks. */
+  function makeParagraphs(e, lines, measure) {
+    if (lines.length < 2) return;
+    const lw = lines.map((ln) => measure(ln));
+    const maxW = Math.max(...lw);
+    const paras = [];
+    let cur = [];
+    lines.forEach((ln, i) => {
+      const prev = lines[i - 1];
+      const fresh = i === 0
+        || /^(•\s|\d{1,2}[.)]\s)/.test(ln) // bullet or numbered item
+        || (lw[i - 1] < maxW * 0.75 && /[.!?:"”)]$/.test(prev)) // previous sentence ended short
+        || lw[i - 1] < maxW * 0.6 // previous line much shorter than the box
+        || (/[.!?]$/.test(prev) && LABEL_RE.test(ln)); // a new "Label:" item
+      if (fresh && cur.length) { paras.push(cur); cur = []; }
+      cur.push(i);
+    });
+    paras.push(cur);
+    if (paras.every((p) => p.length === 1)) return;
+    const indent = measure("• ");
+    let lo = 0, hi = Infinity;
+    for (const p of paras) {
+      const bullet = /^•\s/.test(lines[p[0]]);
+      p.forEach((li, j) => {
+        const ind = bullet && j > 0 ? indent : 0;
+        lo = Math.max(lo, lw[li] + ind);
+        if (j < p.length - 1) hi = Math.min(hi, measure(`${lines[li]} ${lines[p[j + 1]].split(/\s+/)[0]}`) + ind);
+      });
+    }
+    if (!(hi - lo > 3)) return;
+    const join = (p) => p.map((li) => lines[li]).reduce((acc, ln) => (acc.endsWith("-") && /^[a-z]/.test(ln) ? acc + ln : `${acc} ${ln}`));
+    const width = lo + (hi - lo) * 0.4;
+    if (e.align === "center") e.x += (e.w - width) / 2;
+    e.w = width;
+    e.text = paras.map(join).join("\n");
+  }
+
   const longest0 = (group) => [...group].sort((a, b) => b.text.length - a.text.length)[0];
 
   async function analyze(slide, onProgress = () => {}, options = {}) {
@@ -942,6 +982,7 @@ window.NTSlides = (() => {
         if (e.align === "center") e.x -= (need - e.w) / 2;
         e.w = Math.min(slide.w - Math.max(0, e.x), need);
       }
+      makeParagraphs(e, lines, (t) => measureCtx.measureText(t).width);
       delete e._lines;
       delete e._lineH;
       delete e._serifAvg;
@@ -1351,6 +1392,30 @@ window.NTSlides = (() => {
   }
 
   // Word-wrap text to a width with a measure function. Keeps explicit line breaks.
+  // Lines as drawn: paragraphs wrapped to the box width. A bulleted paragraph
+  // ("• …") keeps its wrapped lines under the text, not under the bullet.
+  // Each line: { text, indent, first } (first = first line of its paragraph).
+  function layoutLines(text, maxWidth, measure) {
+    const out = [];
+    for (const para of String(text).split("\n")) {
+      const bullet = /^•\s/.test(para);
+      const indent = bullet ? measure("• ") : 0;
+      let line = "";
+      let first = true;
+      for (const word of para.split(/(\s+)/)) {
+        const next = line + word;
+        const room = maxWidth - (first ? 0 : indent);
+        if (measure(next.trimEnd()) > room && line.trim()) {
+          out.push({ text: line.trimEnd(), indent: first ? 0 : indent, first });
+          line = word.trimStart();
+          first = false;
+        } else line = next;
+      }
+      out.push({ text: line.trimEnd(), indent: first ? 0 : indent, first });
+    }
+    return out;
+  }
+
   function wrapLines(text, maxWidth, measure) {
     const out = [];
     for (const para of String(text).split("\n")) {
@@ -1471,18 +1536,19 @@ window.NTSlides = (() => {
         ctx.fillStyle = el.color;
         ctx.textBaseline = "middle";
         const lh = el.fontSize * el.lineHeight * scale;
-        const lines = wrapLines(el.text, bw, (t) => ctx.measureText(t).width);
+        const laid = layoutLines(el.text, bw, (t) => ctx.measureText(t).width);
+        const lines = laid.map((l) => l.text);
         const textH = lines.length * lh;
         const top = el.valign === "middle" ? y + (bh - textH) / 2 : el.valign === "bottom" ? y + bh - textH : y;
         const fontFor = (r) => fontString({ ...el, bold: r.label ? el.labelBold : el.bold }, scale);
         lines.forEach((line, i) => {
           const ly = top + lh * i + lh / 2;
-          const runs = lineRuns(el, line);
+          const runs = laid[i].first ? lineRuns(el, line) : [{ text: line }];
           const widths = runs.map((r) => { ctx.font = fontFor(r); return ctx.measureText(r.text).width; });
           const total = widths.reduce((s2, v) => s2 + v, 0);
-          let cx = el.align === "center" ? x + (bw - total) / 2 : el.align === "right" ? x + bw - total : x;
+          let cx = el.align === "center" ? x + (bw - total) / 2 : el.align === "right" ? x + bw - total : x + laid[i].indent;
           // Justify: spread words of full lines (not the last line of a paragraph).
-          const justify = el.align === "justify" && runs.length === 1 && i < lines.length - 1 && line.includes(" ") && !el.text.split("\n").includes(line);
+          const justify = el.align === "justify" && runs.length === 1 && i < lines.length - 1 && line.includes(" ") && laid[i + 1] && !laid[i + 1].first;
           ctx.textAlign = "left";
           if (justify) {
             ctx.font = fontFor(runs[0]);
@@ -1628,13 +1694,24 @@ window.NTSlides = (() => {
         const transparency = Math.round((1 - (el.opacity ?? 1)) * 100);
         const outline = el.stroke && el.strokeWidth ? { line: { color: noHash(el.stroke), width: pt(el.strokeWidth) } } : { line: { type: "none" } };
         if (el.type === "text") {
-          const runs = el.labelColor
-            ? String(el.text).split("\n").flatMap((line, li, all) => lineRuns(el, line).map((r, ri, arr) => ({
-                text: r.text,
-                options: { ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}), ...(ri === arr.length - 1 && li < all.length - 1 ? { breakLine: true } : {}) }
-              })))
-            : el.text;
           const sizePt = Math.max(1, Math.round(el.fontSize * k * 72 * 10) / 10);
+          // One PowerPoint paragraph per paragraph; "• " becomes a real bullet with a
+          // hanging indent; "Label:" lead-ins keep their colour and weight
+          measureCtx.font = fontString(el, 1);
+          const bulletPt = Math.round(measureCtx.measureText("• ").width * k * 72 * 10) / 10;
+          const runs = String(el.text).split("\n").flatMap((para, li, all) => {
+            const bullet = /^•\s/.test(para);
+            const body = bullet ? para.replace(/^•\s*/, "") : para;
+            const parts = el.labelColor ? lineRuns(el, body) : [{ text: body }];
+            return parts.map((r, ri, arr) => ({
+              text: r.text,
+              options: {
+                ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}),
+                ...(bullet ? { bullet: { indent: bulletPt } } : {}),
+                ...(ri === arr.length - 1 && li < all.length - 1 ? { breakLine: true } : {})
+              }
+            }));
+          });
           s.addText(runs, {
             ...box,
             fontFace: el.fontFamily,
@@ -1741,13 +1818,13 @@ window.NTSlides = (() => {
           const font = await pick(el);
           const size = el.fontSize * k;
           const lh = size * el.lineHeight;
-          const lines = wrapLines(safe(font, el.text), el.w * k, (s) => font.widthOfTextAtSize(s, size));
+          const laid = layoutLines(safe(font, el.text), el.w * k, (s) => font.widthOfTextAtSize(s, size));
           const labelFont = el.labelColor ? await pick({ ...el, bold: el.labelBold }) : font;
-          lines.forEach((line, n) => {
-            const runs = lineRuns(el, line).map((r) => ({ ...r, f: r.label ? labelFont : font }));
+          laid.forEach(({ text: line, indent, first }, n) => {
+            const runs = (first ? lineRuns(el, line) : [{ text: line }]).map((r) => ({ ...r, f: r.label ? labelFont : font }));
             const widths = runs.map((r) => r.f.widthOfTextAtSize(r.text, size));
             const tw = widths.reduce((a, b) => a + b, 0);
-            let x = el.align === "center" ? el.x * k + (el.w * k - tw) / 2 : el.align === "right" ? (el.x + el.w) * k - tw : el.x * k;
+            let x = el.align === "center" ? el.x * k + (el.w * k - tw) / 2 : el.align === "right" ? (el.x + el.w) * k - tw : el.x * k + indent;
             const baseline = ph - (el.y * k + lh * n + lh / 2 + size * 0.35);
             runs.forEach((r, i) => {
               page.drawText(r.text, { x, y: baseline, size, font: r.f, color: rgbOf(r.label ? el.labelColor : el.color), opacity: op });
@@ -1773,5 +1850,5 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { layoutLines, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
