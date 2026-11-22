@@ -3,7 +3,7 @@
    PDFs, pdf.js reads and renders them, Tesseract.js does OCR; all three are
    served from /tools/vendor/. */
 window.NTPdf = (() => {
-  const VENDOR = "/tools/vendor";
+  const VENDOR = window.NT_VENDOR || "/tools/vendor";
   let pdfLibPromise = null;
   let pdfjsPromise = null;
 

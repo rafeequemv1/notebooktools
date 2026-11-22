@@ -1,0 +1,17 @@
+/* Page chrome for the extension's slide editor (tokens the shared tools.css expects). */
+:root {
+  --bg: #ffffff; --bg-soft: #f3f6fb; --line: rgba(31, 31, 31, 0.12); --ink: #1f1f1f; --muted: #5f6368; --subtle: #80868b;
+  --accent: #0b57d0; --accent-soft: #e8f0fe;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: #0f1115; color: #e8eaed; display: flex; flex-direction: column; font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; }
+.sep-head { align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; flex: none; gap: 14px; height: 48px; padding: 0 16px; }
+.sep-brand { align-items: center; color: #e8eaed; display: inline-flex; font-size: 14px; font-weight: 500; gap: 8px; text-decoration: none; }
+.sep-title { color: #9aa0a6; font-size: 14px; }
+.sep-note { color: #80868b; font-size: 12px; margin-left: auto; }
+.sep-main { display: flex; flex: 1; flex-direction: column; min-height: 0; padding: 0; }
+.sep-main .se-app { border: 0; border-radius: 0; display: flex; flex: 1; flex-direction: column; min-height: 0; }
+.sep-main .se-start { background: #f6f8fc; color: var(--ink); margin: 40px auto; max-width: 760px; width: calc(100% - 32px); border-radius: 20px; }
+.sep-main .se-editor { flex: 1; height: auto; min-height: 0; }
+.sep-main .se-app.is-full .se-editor { height: 100vh; }

@@ -264,7 +264,7 @@
               <td><button type="button" class="stl-nb" data-open-nb="${esc(a.notebookId)}" title="Open this notebook">${esc(a.notebookTitle)}</button></td>
               <td class="stl-meta">${esc(a.type)}${a.duration ? ` · ${esc(a.duration)}` : ""}</td>
               <td class="stl-col-dl">
-                ${a.type === "Slide deck" ? `<button type="button" class="stl-dl" data-dl="${esc(a.id)}" data-format="pdf">PDF</button><button type="button" class="stl-dl" data-dl="${esc(a.id)}" data-format="pptx">PPTX</button>` : `<button type="button" class="stl-dl" data-dl="${esc(a.id)}"${a.status && a.status !== "ready" ? " disabled" : ""}>Download</button>`}
+                ${a.type === "Slide deck" ? `<button type="button" class="stl-dl stl-edit" data-edit="${esc(a.id)}" title="Edit in the NotebookTools slide editor: editable text and pictures, export PowerPoint">Edit</button><button type="button" class="stl-dl" data-dl="${esc(a.id)}" data-format="pdf">PDF</button><button type="button" class="stl-dl" data-dl="${esc(a.id)}" data-format="pptx">PPTX</button>` : `<button type="button" class="stl-dl" data-dl="${esc(a.id)}"${a.status && a.status !== "ready" ? " disabled" : ""}>Download</button>`}
                 <a class="stl-open" href="${notebookUrl(a.notebookId)}" target="_blank" rel="noopener noreferrer" title="Open in NotebookLM" aria-label="Open in NotebookLM"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg></a>
               </td>
             </tr>`).join("")}</tbody>
@@ -285,6 +285,14 @@
       if (t.dataset.stl === "scan") return void scan();
       if (t.dataset.type) { state.type = t.dataset.type; return render(); }
       if (t.dataset.openNb) { const nb = ctx.notebooks.find((n) => n.id === t.dataset.openNb); if (nb) ctx.onOpenNotebook?.(nb); return; }
+      if (t.dataset.edit) {
+        const item = state.items.find((a) => a.id === t.dataset.edit);
+        if (!item) return;
+        const params = new URLSearchParams({ notebook: item.notebookId, artifact: item.id, title: item.title });
+        if (ctx.authOptions?.authUser) params.set("authuser", ctx.authOptions.authUser);
+        chrome.tabs.create({ url: chrome.runtime.getURL(`slide-editor.html?${params}`) });
+        return;
+      }
       if (t.dataset.dl) { const item = state.items.find((a) => a.id === t.dataset.dl); if (item) void downloadOne(item, t.dataset.format); return; }
       if (t.dataset.stl === "clear") { state.selected = new Set(); return render(); }
       const chosen = () => state.items.filter((a) => state.selected.has(a.id));

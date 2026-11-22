@@ -457,3 +457,7 @@
 .nts-link:hover {
   background: var(--nts-hover);
 }
+
+.nts-edit { background: var(--nts-accent); border-color: var(--nts-accent); color: var(--nts-bg); cursor: pointer; font-family: inherit; }
+.nts-edit:hover { filter: brightness(1.08); background: var(--nts-accent); }
+.nts-backdrop.is-dark .nts-edit { color: #062e6f; }

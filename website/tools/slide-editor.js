@@ -217,6 +217,16 @@
     });
   }
 
+  // Let a host page (the extension) open a deck directly.
+  window.NTSlideEditor = {
+    open: (files) => openFiles(files),
+    status: (msg, type) => {
+      $("#seStart").hidden = true;
+      $("#seEditor").hidden = false;
+      status(msg, type);
+    }
+  };
+
   function showProgress(text) {
     const chip = $("#seProgress");
     chip.hidden = !text;

@@ -4055,3 +4055,7 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .sl-table mark { background: color-mix(in srgb, #fdd663 55%, transparent); border-radius: 2px; color: inherit; padding: 0 1px; }
 .sl-copy-to { background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-ink); font: inherit; font-size: 12.5px; height: 30px; max-width: 220px; padding: 0 10px; }
 .sl-dupe-chip { border-style: dashed; }
+
+.stl-dl.stl-edit { background: var(--nt-accent); border-color: var(--nt-accent); color: var(--nt-surface); }
+.stl-dl.stl-edit:hover { color: var(--nt-surface); filter: brightness(1.08); }
+.stl-col-dl { width: 250px; }

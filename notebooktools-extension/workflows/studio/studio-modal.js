@@ -119,6 +119,7 @@
                 <span class="nts-title" title="${esc(a.title)}">${esc(a.title)}</span>
                 <span class="nts-meta">${[a.type, a.duration, status].filter(Boolean).map(esc).join(" · ")}</span>
               </span>
+              ${a.type === "Slide deck" && (!a.status || a.status === "ready") ? `<button type="button" class="nts-link nts-edit" data-edit="${esc(a.id)}" data-stop title="Open in the NotebookTools slide editor: editable text, export PowerPoint">Edit</button>` : ""}
               ${link ? `<a class="nts-link" href="${esc(link)}" target="_blank" rel="noopener noreferrer" data-stop>${a.downloadUrl ? "Download" : "Open"}</a>` : ""}
             </label>`;
           }).join("")}
@@ -168,10 +169,10 @@
     }
   }
 
-  function open(notebookId) {
+  function open(notebookId, options = {}) {
     if (!notebookId || !client()) return;
     close();
-    state = { notebookId, items: [], selected: new Set(), type: "all", query: "", loading: true, error: "", note: "", working: "", confirmDelete: false, changed: false };
+    state = { notebookId, items: [], selected: new Set(), type: options.type || "all", query: "", loading: true, error: "", note: "", working: "", confirmDelete: false, changed: false };
 
     root = document.createElement("div");
     root.className = `nts-backdrop${isDarkPage() ? " is-dark" : ""}`;
@@ -197,6 +198,17 @@
     document.body.append(root);
 
     root.addEventListener("click", (event) => {
+      const edit = event.target.closest("[data-edit]");
+      if (edit) {
+        event.preventDefault();
+        event.stopPropagation();
+        const item = state.items.find((a) => a.id === edit.dataset.edit);
+        const authUser = new URLSearchParams(location.search).get("authuser");
+        chrome.runtime.sendMessage({ type: "notebooktools-open-slide-editor", notebookId: state.notebookId, artifactId: item?.id, title: item?.title, authUser });
+        state.note = "Opening the slide editor in a new tab…";
+        render();
+        return;
+      }
       if (event.target.closest("[data-stop]")) {
         event.stopPropagation();
         return;

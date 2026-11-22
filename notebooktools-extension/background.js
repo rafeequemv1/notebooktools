@@ -247,6 +247,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message?.type === "notebooktools-open-slide-editor") {
+    void (async () => {
+      const params = new URLSearchParams({ notebook: message.notebookId || "", artifact: message.artifactId || "", title: message.title || "Slide deck" });
+      let authUser = message.authUser;
+      if (authUser === undefined || authUser === null || authUser === "") {
+        const stored = await chrome.storage.local.get("notebooktoolsAuthUser");
+        authUser = stored.notebooktoolsAuthUser;
+      }
+      if (authUser !== undefined && authUser !== null && authUser !== "") params.set("authuser", String(authUser));
+      chrome.tabs.create({ url: chrome.runtime.getURL(`slide-editor.html?${params}`) });
+      sendResponse({ ok: true });
+    })();
+    return true;
+  }
+
   if (message?.type === "notebooktools-ribbon-open-hub") {
     const params = new URLSearchParams();
 

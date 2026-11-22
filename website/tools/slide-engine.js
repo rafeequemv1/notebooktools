@@ -830,7 +830,7 @@ window.NTSlides = (() => {
   function pptxLib() {
     pptxPromise ||= new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = "/tools/vendor/pptxgenjs/pptxgen.bundle.js";
+      s.src = `${window.NT_VENDOR || "/tools/vendor"}/pptxgenjs/pptxgen.bundle.js`;
       s.onload = () => resolve(window.PptxGenJS);
       s.onerror = () => reject(new Error("Could not load the PowerPoint exporter."));
       document.head.append(s);

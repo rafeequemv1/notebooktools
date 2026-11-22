@@ -334,7 +334,8 @@
     const items = [
       ["blog", "doc", "Blog post", "with slide images"],
       ["carousel", "carousel", "Carousel", "from a slide deck"],
-      ["snapdoc", "camera", "Snapshot doc", "from your screenshots"]
+      ["snapdoc", "camera", "Snapshot doc", "from your screenshots"],
+      ["editdeck", "studio", "Edit a slide deck", "editable text, PowerPoint"]
     ].map(([value, ic, label, hint]) => `<button type="button" class="ntr-menu-item" data-value="${value}">${icon(ic, 15)}<span>${esc(label)} <small class="ntr-menu-hint">${esc(hint)}</small></span></button>`).join("");
     openMenu(anchor, `<p class="ntr-menu-title">Create from this notebook</p>${items}`, (value) => {
       closeMenu();
@@ -389,6 +390,7 @@
     "studio-files": "studio-files",
     blog: "blog-maker",
     carousel: "carousel-maker",
+    editdeck: "studio-files",
     snapdoc: "snapshots",
     prompts: "prompt-library",
     hub: "notebooks-hub",
@@ -419,6 +421,8 @@
         return window.NotebookToolsStudioModal.open(notebookId());
       case "create": return createMenu(button, ribbon);
       case "blog": return clickWorkflow(".notebooktools-blog-workflow-btn", "Blog workflow", button);
+      case "editdeck":
+        return window.NotebookToolsStudioModal?.open(notebookId(), { type: "Slide deck" });
       case "carousel":
         if (!window.NotebookToolsCarousel) return toast("Carousel is still loading. Try again in a moment.", true);
         return window.NotebookToolsCarousel.open(notebookId());
