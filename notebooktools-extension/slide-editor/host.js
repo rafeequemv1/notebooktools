@@ -23,11 +23,43 @@
     return window.NotebookToolsNotebookLM.getNotebookLmSlideDeck(notebookId, artifactId, options);
   }
 
-  async function download(url) {
-    const response = await fetch(url, { credentials: "include" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.blob();
+  /** Google's file servers pick the signed-in account from ?authuser=N (default: the first account). */
+  function withAccount(url) {
+    if (authUser === null || authUser === "") return url;
+    try {
+      const u = new URL(url);
+      if (/(^|\.)(googleusercontent\.com|google\.com|ggpht\.com)$/i.test(u.hostname) && !u.searchParams.has("authuser")) {
+        u.searchParams.set("authuser", authUser);
+      }
+      return u.toString();
+    } catch (_error) {
+      return url;
+    }
   }
+
+  function base64Blob(data, type) {
+    const bytes = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
+    return new Blob([bytes], { type: type || "application/octet-stream" });
+  }
+
+  /** Direct with the account, direct as given, then through the notebook tab. */
+  async function download(url) {
+    let lastError = null;
+    for (const attempt of [withAccount(url), url].filter((v, i, list) => list.indexOf(v) === i)) {
+      try {
+        const response = await fetch(attempt, { credentials: "include" });
+        if (response.ok) return await response.blob();
+        lastError = new Error(`HTTP ${response.status}`);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    const viaTab = await chrome.runtime.sendMessage({ type: "notebooktools-fetch-via-notebook-tab", url: withAccount(url), notebookId });
+    if (viaTab?.ok && viaTab.data) return base64Blob(viaTab.data, viaTab.type);
+    throw new Error(viaTab?.error || lastError?.message || "Download failed");
+  }
+
+  let pdfError = null;
 
   async function fromPdf(deck) {
     if (!deck.pdfUrl) return false;
@@ -38,7 +70,8 @@
       loader.text("Opening the slides…");
       await editor.open([new File([blob], `${title}.pdf`, { type: "application/pdf" })]);
       return true;
-    } catch (_error) {
+    } catch (error) {
+      pdfError = error;
       return false; // fall back to the slide pictures
     }
   }
@@ -72,13 +105,14 @@
     }
     if (await fromPdf(deck)) return;
     if (await fromImages(deck)) return;
+    if (pdfError) throw pdfError;
     throw new Error(deck.status === "generating"
       ? "This slide deck is still generating in NotebookLM. Try Edit slides again when it's finished."
       : "Couldn't import this deck from NotebookLM. Download it as PDF in NotebookLM (⋮ → Download), then click Open and choose the file.");
   } catch (error) {
     loader.hide();
     editor.status(/HTTP 40[13]/.test(error.message)
-      ? "NotebookLM didn't let us download the deck. Open NotebookLM in this browser with the same account, then try again."
+      ? "NotebookLM didn't let us download the deck. Keep the notebook open in a tab (same Google account), then click Edit slides again. Or download the PDF in NotebookLM (⋮ → Download) and click Open."
       : error.message || "Couldn't open the slide deck.", "error");
   }
 })();

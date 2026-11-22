@@ -534,6 +534,48 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  // Download a file through the open notebook tab, so it goes out with that
+  // page's sign-in and origin, the way NotebookLM itself fetches it. Used by
+  // the slide editor when a direct download is refused.
+  if (message?.type === "notebooktools-fetch-via-notebook-tab") {
+    void (async () => {
+      try {
+        const tabs = await chrome.tabs.query({ url: ["https://notebook.google.com/*", "https://notebooklm.google.com/*"] });
+        const tab = tabs.find((t) => message.notebookId && String(t.url || "").includes(message.notebookId))
+          || tabs.find((t) => t.active)
+          || tabs[0];
+        if (!tab?.id) {
+          sendResponse({ ok: false, error: "Open the notebook in a browser tab, then try again." });
+          return;
+        }
+        const [injection] = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          args: [String(message.url || "")],
+          func: async (url) => {
+            try {
+              const response = await fetch(url, { credentials: "include" });
+              if (!response.ok) return { ok: false, error: `HTTP ${response.status}` };
+              const blob = await response.blob();
+              const data = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(blob);
+              });
+              return { ok: true, data, type: blob.type };
+            } catch (error) {
+              return { ok: false, error: String(error?.message || error) };
+            }
+          }
+        });
+        sendResponse(injection?.result || { ok: false, error: "No result from the notebook tab." });
+      } catch (error) {
+        sendResponse({ ok: false, error: error.message || "Couldn't use the notebook tab." });
+      }
+    })();
+    return true;
+  }
+
   if (message?.type === "notebooktools-fetch-media") {
     void (async () => {
       try {
