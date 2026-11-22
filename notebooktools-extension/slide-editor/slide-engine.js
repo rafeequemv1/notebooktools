@@ -759,6 +759,33 @@ window.NTSlides = (() => {
     return m ? [{ text: m[1], label: true }, { text: m[2] }] : [{ text: line }];
   }
 
+  /* ---------- Shapes as paths (shared by canvas drawing) ---------- */
+  function shapePath(ctx, el, x, y, w, h) {
+    ctx.beginPath();
+    if (el.type === "rect") {
+      const r = Math.min((el.radius || 0) * (w / el.w || 1), w / 2, h / 2);
+      if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h);
+    } else if (el.type === "ellipse") {
+      ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2);
+    } else if (el.type === "triangle") {
+      ctx.moveTo(x + w / 2, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+    }
+  }
+
+  // Line endpoints inside its box: flip = rising line (bottom-left → top-right).
+  function lineEnds(el, x, y, w, h) {
+    return el.flip ? [x, y + h, x + w, y] : [x, y, x + w, y + h];
+  }
+
+  /**
+   * Draw a slide. options:
+   *  original: draw the untouched page image
+   *  hidden:   Set of element ids not to draw (animations not played yet)
+   *  anim:     { id, type, p } element currently animating, p = 0..1
+   */
   function drawSlide(ctx, slide, scale = 1, options = {}) {
     const w = slide.w * scale;
     const h = slide.h * scale;
@@ -773,43 +800,98 @@ window.NTSlides = (() => {
       ctx.drawImage(slide.clean || slide.original, 0, 0, w, h);
     }
     for (const el of slide.elements) {
+      if (options.hidden?.has(el.id)) continue;
+      const x = el.x * scale, y = el.y * scale, bw = el.w * scale, bh = el.h * scale;
       ctx.save();
       ctx.globalAlpha = el.opacity ?? 1;
-      if (el.type === "rect" || el.type === "ellipse") {
-        ctx.fillStyle = el.fill;
+      // Entrance animation in progress.
+      const a = options.anim && options.anim.id === el.id ? options.anim : null;
+      if (a) {
+        const p = Math.max(0, Math.min(1, a.p));
+        const ease = 1 - (1 - p) ** 3;
+        if (a.type === "fade") ctx.globalAlpha *= ease;
+        if (a.type === "fly") { ctx.globalAlpha *= Math.min(1, p * 2); ctx.translate(0, (1 - ease) * h * 0.35); }
+        if (a.type === "rise") { ctx.globalAlpha *= ease; ctx.translate(0, (1 - ease) * h * 0.06); }
+        if (a.type === "zoom") { ctx.globalAlpha *= ease; ctx.translate(x + bw / 2, y + bh / 2); ctx.scale(0.3 + 0.7 * ease, 0.3 + 0.7 * ease); ctx.translate(-(x + bw / 2), -(y + bh / 2)); }
+        if (a.type === "wipe") { ctx.beginPath(); ctx.rect(x - 4, y - 4, (bw + 8) * ease, bh + 8); ctx.clip(); }
+      }
+      if (el.rotate) {
+        ctx.translate(x + bw / 2, y + bh / 2);
+        ctx.rotate((el.rotate * Math.PI) / 180);
+        ctx.translate(-(x + bw / 2), -(y + bh / 2));
+      }
+      if (el.type === "rect" || el.type === "ellipse" || el.type === "triangle") {
+        shapePath(ctx, el, x, y, bw, bh);
+        if (el.fill && el.fill !== "none") { ctx.fillStyle = el.fill; ctx.fill(); }
+        if (el.stroke && el.strokeWidth) { ctx.strokeStyle = el.stroke; ctx.lineWidth = el.strokeWidth * scale; ctx.stroke(); }
+      } else if (el.type === "line") {
+        const [x1, y1, x2, y2] = lineEnds(el, x, y, bw, bh);
+        const lw = Math.max(1, (el.strokeWidth || 4) * scale);
+        ctx.strokeStyle = el.stroke || "#1f1f1f";
+        ctx.fillStyle = el.stroke || "#1f1f1f";
+        ctx.lineWidth = lw;
+        ctx.lineCap = "round";
+        const ang = Math.atan2(y2 - y1, x2 - x1);
+        const head = el.arrow ? Math.max(lw * 3.5, 10 * scale) : 0;
         ctx.beginPath();
-        if (el.type === "rect") ctx.roundRect ? ctx.roundRect(el.x * scale, el.y * scale, el.w * scale, el.h * scale, (el.radius || 0) * scale) : ctx.rect(el.x * scale, el.y * scale, el.w * scale, el.h * scale);
-        else ctx.ellipse((el.x + el.w / 2) * scale, (el.y + el.h / 2) * scale, (el.w / 2) * scale, (el.h / 2) * scale, 0, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2 - Math.cos(ang) * head * 0.8, y2 - Math.sin(ang) * head * 0.8);
+        ctx.stroke();
+        if (el.arrow) {
+          ctx.beginPath();
+          ctx.moveTo(x2, y2);
+          ctx.lineTo(x2 - head * Math.cos(ang - 0.45), y2 - head * Math.sin(ang - 0.45));
+          ctx.lineTo(x2 - head * Math.cos(ang + 0.45), y2 - head * Math.sin(ang + 0.45));
+          ctx.closePath();
+          ctx.fill();
+        }
       } else if (el.type === "image") {
         const img = imageFor(el.src);
-        if (img.complete && img.naturalWidth) ctx.drawImage(img, el.x * scale, el.y * scale, el.w * scale, el.h * scale);
+        if (img.complete && img.naturalWidth) ctx.drawImage(img, x, y, bw, bh);
+        if (el.stroke && el.strokeWidth) { ctx.strokeStyle = el.stroke; ctx.lineWidth = el.strokeWidth * scale; ctx.strokeRect(x, y, bw, bh); }
       } else if (el.type === "text") {
+        if (el.highlight) { ctx.fillStyle = el.highlight; ctx.fillRect(x, y, bw, bh); }
+        if (el.stroke && el.strokeWidth) { ctx.strokeStyle = el.stroke; ctx.lineWidth = el.strokeWidth * scale; ctx.strokeRect(x, y, bw, bh); }
         ctx.font = fontString(el, scale);
         ctx.fillStyle = el.color;
         ctx.textBaseline = "middle";
-        ctx.textAlign = el.align === "center" ? "center" : el.align === "right" ? "right" : "left";
         const lh = el.fontSize * el.lineHeight * scale;
-        const lines = wrapLines(el.text, el.w * scale, (s) => ctx.measureText(s).width);
-        const x = el.align === "center" ? (el.x + el.w / 2) * scale : el.align === "right" ? (el.x + el.w) * scale : el.x * scale;
+        const lines = wrapLines(el.text, bw, (t) => ctx.measureText(t).width);
+        const textH = lines.length * lh;
+        const top = el.valign === "middle" ? y + (bh - textH) / 2 : el.valign === "bottom" ? y + bh - textH : y;
+        const fontFor = (r) => fontString({ ...el, bold: r.label ? el.labelBold : el.bold }, scale);
         lines.forEach((line, i) => {
-          const y = el.y * scale + lh * i + lh / 2;
+          const ly = top + lh * i + lh / 2;
           const runs = lineRuns(el, line);
-          if (runs.length === 1) return ctx.fillText(line, x, y);
-          // Two runs: measure the whole line to place it, then draw each run.
-          const fontFor = (r) => fontString({ ...el, bold: r.label ? el.labelBold : el.bold }, scale);
           const widths = runs.map((r) => { ctx.font = fontFor(r); return ctx.measureText(r.text).width; });
-          const total = widths.reduce((a, b) => a + b, 0);
-          let cx = el.align === "center" ? x - total / 2 : el.align === "right" ? x - total : x;
+          const total = widths.reduce((s2, v) => s2 + v, 0);
+          let cx = el.align === "center" ? x + (bw - total) / 2 : el.align === "right" ? x + bw - total : x;
+          // Justify: spread words of full lines (not the last line of a paragraph).
+          const justify = el.align === "justify" && runs.length === 1 && i < lines.length - 1 && line.includes(" ") && !el.text.split("\n").includes(line);
           ctx.textAlign = "left";
-          runs.forEach((r, k) => {
-            ctx.font = fontFor(r);
-            ctx.fillStyle = r.label ? el.labelColor : el.color;
-            ctx.fillText(r.text, cx, y);
-            cx += widths[k];
-          });
-          ctx.textAlign = el.align === "center" ? "center" : el.align === "right" ? "right" : "left";
-          ctx.font = fontString(el, scale);
+          if (justify) {
+            ctx.font = fontFor(runs[0]);
+            const words = line.split(" ");
+            const ww = words.map((wd) => ctx.measureText(wd).width);
+            const gap = (bw - ww.reduce((s2, v) => s2 + v, 0)) / (words.length - 1);
+            let wx = x;
+            words.forEach((wd, k2) => { ctx.fillText(wd, wx, ly); wx += ww[k2] + gap; });
+          } else {
+            runs.forEach((r, k2) => {
+              ctx.font = fontFor(r);
+              ctx.fillStyle = r.label ? el.labelColor : el.color;
+              ctx.fillText(r.text, cx, ly);
+              cx += widths[k2];
+            });
+          }
+          if (el.underline || el.strike) {
+            const startX = justify ? x : (el.align === "center" ? x + (bw - total) / 2 : el.align === "right" ? x + bw - total : x);
+            const lineW = justify ? bw : total;
+            ctx.fillStyle = el.color;
+            const t = Math.max(1, el.fontSize * scale * 0.06);
+            if (el.underline) ctx.fillRect(startX, ly + el.fontSize * scale * 0.42, lineW, t);
+            if (el.strike) ctx.fillRect(startX, ly + el.fontSize * scale * 0.02, lineW, t);
+          }
           ctx.fillStyle = el.color;
         });
       }
@@ -841,12 +923,83 @@ window.NTSlides = (() => {
   const noHash = (c) => String(c || "#000000").replace("#", "").slice(0, 6).toUpperCase();
   const bareData = (url) => url.replace(/^data:/, "");
 
+  // Slide transitions written into the PowerPoint (PresentationML, p: namespace).
+  const TRANSITION_XML = {
+    fade: "<p:fade/>",
+    push: '<p:push dir="u"/>',
+    wipe: '<p:wipe dir="r"/>',
+    split: '<p:split orient="horz" dir="out"/>',
+    cover: '<p:cover dir="l"/>',
+    uncover: '<p:pull dir="l"/>',
+    cut: "<p:cut/>",
+    bars: '<p:randomBar dir="vert"/>',
+    dissolve: "<p:dissolve/>",
+    circle: "<p:circle/>",
+    zoom: '<p:zoom dir="in"/>'
+  };
+
+  // One click-triggered entrance effect for shape id `spid`. ids: counter object.
+  function entranceXml(type, spid, ids, durMs) {
+    const n = () => (ids.v += 1);
+    const set = `<p:set><p:cBhvr><p:cTn id="${n()}" dur="1" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst></p:cTn><p:tgtEl><p:spTgt spid="${spid}"/></p:tgtEl><p:attrNameLst><p:attrName>style.visibility</p:attrName></p:attrNameLst></p:cBhvr><p:to><p:strVal val="visible"/></p:to></p:set>`;
+    const effect = (filter) => `<p:animEffect transition="in" filter="${filter}"><p:cBhvr><p:cTn id="${n()}" dur="${durMs}"/><p:tgtEl><p:spTgt spid="${spid}"/></p:tgtEl></p:cBhvr></p:animEffect>`;
+    const move = (attr, from) => `<p:anim calcmode="lin" valueType="num"><p:cBhvr additive="base"><p:cTn id="${n()}" dur="${durMs}" fill="hold"/><p:tgtEl><p:spTgt spid="${spid}"/></p:tgtEl><p:attrNameLst><p:attrName>${attr}</p:attrName></p:attrNameLst></p:cBhvr><p:tavLst><p:tav tm="0"><p:val><p:strVal val="${from}"/></p:val></p:tav><p:tav tm="100000"><p:val><p:strVal val="#${attr}"/></p:val></p:tav></p:tavLst></p:anim>`;
+    const preset = { appear: [1, 0], fade: [10, 0], fly: [2, 4], rise: [42, 0], zoom: [53, 16], wipe: [22, 8] }[type] || [10, 0];
+    let body = set;
+    if (type === "fade") body += effect("fade");
+    if (type === "wipe") body += effect("wipe(left)");
+    if (type === "fly") body += move("ppt_y", "#ppt_y+1");
+    if (type === "rise") body += effect("fade") + move("ppt_y", "#ppt_y+.1");
+    if (type === "zoom") body += effect("fade") + `<p:animScale><p:cBhvr><p:cTn id="${n()}" dur="${durMs}" fill="hold"/><p:tgtEl><p:spTgt spid="${spid}"/></p:tgtEl></p:cBhvr><p:by x="100000" y="100000"/><p:from x="30000" y="30000"/><p:to x="100000" y="100000"/></p:animScale>`;
+    const outer = n(), mid = n(), inner = n();
+    return `<p:par><p:cTn id="${outer}" fill="hold"><p:stCondLst><p:cond delay="indefinite"/></p:stCondLst><p:childTnLst><p:par><p:cTn id="${mid}" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst><p:par><p:cTn id="${inner}" presetID="${preset[0]}" presetClass="entr" presetSubtype="${preset[1]}" fill="hold" nodeType="clickEffect"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst>${body}</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn></p:par>`;
+  }
+
+  // Add transitions and animations to the slide XML files of a pptx.
+  async function addMotion(buffer, deck) {
+    const JSZip = window.JSZip;
+    if (!JSZip) return new Blob([buffer]);
+    const zip = await JSZip.loadAsync(buffer);
+    for (let i = 0; i < deck.slides.length; i += 1) {
+      const slide = deck.slides[i];
+      const path = `ppt/slides/slide${i + 1}.xml`;
+      const file = zip.file(path);
+      if (!file) continue;
+      let xml = await file.async("string");
+      let extra = "";
+      const tr = slide.transition;
+      if (tr && tr.type && tr.type !== "none" && TRANSITION_XML[tr.type]) {
+        const spd = (tr.dur || 0.7) <= 0.5 ? "fast" : (tr.dur || 0.7) >= 1.2 ? "slow" : "med";
+        extra += `<p:transition spd="${spd}">${TRANSITION_XML[tr.type]}</p:transition>`;
+      }
+      const animated = slide.elements.filter((e) => e.anim && e.anim.type && e.anim.type !== "none").sort((a, b) => (a.anim.order || 0) - (b.anim.order || 0));
+      if (animated.length) {
+        const ids = { v: 2 };
+        const clicks = [];
+        for (const el of animated) {
+          const m = xml.match(new RegExp(`<p:cNvPr id="(\\d+)" name="${el.id}"`));
+          if (m) clicks.push(entranceXml(el.anim.type, m[1], ids, Math.round((el.anim.dur || 0.5) * 1000)));
+        }
+        if (clicks.length) {
+          extra += `<p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst><p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>${clicks.join("")}</p:childTnLst></p:cTn><p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst><p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq></p:childTnLst></p:cTn></p:par></p:tnLst></p:timing>`;
+        }
+      }
+      if (!extra) continue;
+      // Order in <p:sld>: cSld, clrMapOvr, transition, timing, extLst.
+      if (xml.includes("</p:clrMapOvr>")) xml = xml.replace("</p:clrMapOvr>", `</p:clrMapOvr>${extra}`);
+      else xml = xml.replace("</p:cSld>", `</p:cSld>${extra}`);
+      zip.file(path, xml);
+    }
+    return zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.presentationml.presentation" });
+  }
+
   async function exportPptx(deck, filename, onProgress = () => {}) {
     const PptxGenJS = await pptxLib();
     const pptx = new PptxGenJS();
     const widthIn = 13.333;
     const first = deck.slides[0];
     const k = widthIn / first.w; // inches per editor px
+    const pt = (px) => Math.max(0.25, Math.round(px * k * 72 * 10) / 10);
     pptx.defineLayout({ name: "NT", width: widthIn, height: first.h * k });
     pptx.layout = "NT";
     pptx.title = deck.title || "Slides";
@@ -856,12 +1009,14 @@ window.NTSlides = (() => {
       if (slide.bgMode === "color") s.background = { color: noHash(slide.bgColor) };
       else s.background = { data: bareData((slide.clean || slide.original).toDataURL("image/jpeg", 0.9)) };
       for (const el of slide.elements) {
-        const box = { x: el.x * k, y: el.y * k, w: el.w * k, h: el.h * k };
+        const box = { x: el.x * k, y: el.y * k, w: el.w * k, h: el.h * k, objectName: el.id, ...(el.rotate ? { rotate: el.rotate } : {}) };
+        const transparency = Math.round((1 - (el.opacity ?? 1)) * 100);
+        const outline = el.stroke && el.strokeWidth ? { line: { color: noHash(el.stroke), width: pt(el.strokeWidth) } } : { line: { type: "none" } };
         if (el.type === "text") {
           const runs = el.labelColor
-            ? String(el.text).split("\n").flatMap((line, i, all) => lineRuns(el, line).map((r, k, arr) => ({
+            ? String(el.text).split("\n").flatMap((line, li, all) => lineRuns(el, line).map((r, ri, arr) => ({
                 text: r.text,
-                options: { ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}), ...(k === arr.length - 1 && i < all.length - 1 ? { breakLine: true } : {}) }
+                options: { ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}), ...(ri === arr.length - 1 && li < all.length - 1 ? { breakLine: true } : {}) }
               })))
             : el.text;
           s.addText(runs, {
@@ -871,28 +1026,42 @@ window.NTSlides = (() => {
             color: noHash(el.color),
             bold: Boolean(el.bold),
             italic: Boolean(el.italic),
+            ...(el.underline ? { underline: { style: "sng" } } : {}),
+            ...(el.strike ? { strike: "sngStrike" } : {}),
+            ...(el.highlight ? { fill: { color: noHash(el.highlight) } } : {}),
+            ...(el.stroke && el.strokeWidth ? outline : {}),
             align: el.align || "left",
-            valign: "top",
+            valign: el.valign || "top",
             margin: 0,
             lineSpacingMultiple: el.lineHeight || 1.2,
             fit: "none",
-            transparency: Math.round((1 - (el.opacity ?? 1)) * 100)
+            transparency
           });
-        } else if (el.type === "rect" || el.type === "ellipse") {
-          s.addShape(el.type === "rect" ? (el.radius ? pptx.ShapeType.roundRect : pptx.ShapeType.rect) : pptx.ShapeType.ellipse, {
+        } else if (el.type === "rect" || el.type === "ellipse" || el.type === "triangle") {
+          const shape = el.type === "rect" ? (el.radius ? pptx.ShapeType.roundRect : pptx.ShapeType.rect) : el.type === "ellipse" ? pptx.ShapeType.ellipse : pptx.ShapeType.triangle;
+          s.addShape(shape, {
             ...box,
-            fill: { color: noHash(el.fill), transparency: Math.round((1 - (el.opacity ?? 1)) * 100) },
-            line: { type: "none" },
-            ...(el.radius ? { rectRadius: Math.min(0.5, el.radius / Math.min(el.w, el.h)) } : {})
+            fill: el.fill && el.fill !== "none" ? { color: noHash(el.fill), transparency } : { type: "none" },
+            ...outline,
+            ...(el.type === "rect" && el.radius ? { rectRadius: Math.min(0.5, el.radius / Math.min(el.w, el.h)) } : {})
+          });
+        } else if (el.type === "line") {
+          s.addShape(pptx.ShapeType.line, {
+            ...box,
+            ...(el.flip ? { flipV: true } : {}),
+            line: { color: noHash(el.stroke || "#1f1f1f"), width: pt(el.strokeWidth || 4), transparency, ...(el.arrow ? { endArrowType: "triangle" } : {}) }
           });
         } else if (el.type === "image") {
-          s.addImage({ ...box, data: bareData(el.src) });
+          s.addImage({ ...box, data: bareData(el.src), transparency });
         }
       }
       if (slide.notes) s.addNotes(slide.notes);
     });
     onProgress(deck.slides.length, deck.slides.length);
-    await pptx.writeFile({ fileName: filename });
+    const hasMotion = deck.slides.some((sl) => (sl.transition && sl.transition.type && sl.transition.type !== "none") || sl.elements.some((e) => e.anim && e.anim.type && e.anim.type !== "none"));
+    if (!hasMotion) return pptx.writeFile({ fileName: filename });
+    const buffer = await pptx.write({ outputType: "arraybuffer" });
+    P.saveBlob(await addMotion(buffer, deck), filename);
   }
 
   async function exportPdf(deck, filename, onProgress = () => {}) {
@@ -930,13 +1099,25 @@ window.NTSlides = (() => {
       }
       for (const el of slide.elements) {
         const op = el.opacity ?? 1;
-        if (el.type === "rect") page.drawRectangle({ x: el.x * k, y: ph - (el.y + el.h) * k, width: el.w * k, height: el.h * k, color: rgbOf(el.fill), opacity: op });
-        else if (el.type === "ellipse") page.drawEllipse({ x: (el.x + el.w / 2) * k, y: ph - (el.y + el.h / 2) * k, xScale: (el.w / 2) * k, yScale: (el.h / 2) * k, color: rgbOf(el.fill), opacity: op });
+        const fillOpt = el.fill && el.fill !== "none" ? { color: rgbOf(el.fill), opacity: op } : {};
+        const strokeOpt = el.stroke && el.strokeWidth ? { borderColor: rgbOf(el.stroke), borderWidth: el.strokeWidth * k, borderOpacity: op } : {};
+        if (el.type === "rect") page.drawRectangle({ x: el.x * k, y: ph - (el.y + el.h) * k, width: el.w * k, height: el.h * k, ...fillOpt, ...strokeOpt });
+        else if (el.type === "ellipse") page.drawEllipse({ x: (el.x + el.w / 2) * k, y: ph - (el.y + el.h / 2) * k, xScale: (el.w / 2) * k, yScale: (el.h / 2) * k, ...fillOpt, ...strokeOpt });
+        else if (el.type === "triangle") page.drawSvgPath(`M ${el.w * k / 2} 0 L ${el.w * k} ${el.h * k} L 0 ${el.h * k} Z`, { x: el.x * k, y: ph - el.y * k, ...fillOpt, ...strokeOpt });
+        else if (el.type === "line") {
+          const [x1, y1, x2, y2] = lineEnds(el, el.x * k, el.y * k, el.w * k, el.h * k);
+          page.drawLine({ start: { x: x1, y: ph - y1 }, end: { x: x2, y: ph - y2 }, thickness: (el.strokeWidth || 4) * k, color: rgbOf(el.stroke || "#1f1f1f"), opacity: op });
+          if (el.arrow) {
+            const ang = Math.atan2(y2 - y1, x2 - x1), hd = Math.max((el.strokeWidth || 4) * k * 3.5, 8);
+            page.drawSvgPath(`M ${x2} ${y2} L ${x2 - hd * Math.cos(ang - 0.45)} ${y2 - hd * Math.sin(ang - 0.45)} L ${x2 - hd * Math.cos(ang + 0.45)} ${y2 - hd * Math.sin(ang + 0.45)} Z`, { x: 0, y: ph, color: rgbOf(el.stroke || "#1f1f1f"), opacity: op });
+          }
+        }
         else if (el.type === "image") {
-          const bytes = new Uint8Array(await (await fetch(el.src)).arrayBuffer());
+          const bytes = Uint8Array.from(atob(el.src.split(",")[1] || ""), (c) => c.charCodeAt(0));
           const img = /png/.test(el.src.slice(0, 30)) ? await doc.embedPng(bytes) : await doc.embedJpg(bytes);
           page.drawImage(img, { x: el.x * k, y: ph - (el.y + el.h) * k, width: el.w * k, height: el.h * k, opacity: op });
         } else if (el.type === "text") {
+          if (el.highlight) page.drawRectangle({ x: el.x * k, y: ph - (el.y + el.h) * k, width: el.w * k, height: el.h * k, color: rgbOf(el.highlight), opacity: op });
           const font = await pick(el);
           const size = el.fontSize * k;
           const lh = size * el.lineHeight;
@@ -972,5 +1153,5 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { lineRuns, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
