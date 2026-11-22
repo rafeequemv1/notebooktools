@@ -84,6 +84,7 @@
               <button type="button" role="menuitem" data-act="pdf">PDF with real text</button>
               <button type="button" role="menuitem" data-act="png">PNG images (.zip)</button>
               <button type="button" role="menuitem" data-act="png-one">This slide as PNG</button>
+              <button type="button" role="menuitem" data-act="pictures">All pictures (.zip)</button>
             </div>
           </div>
         </div>
@@ -343,7 +344,7 @@
           const failed = deck.slides.filter((x) => x.status === "error").length;
           const textCount = deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.type === "text").length, 0);
           const objCount = deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.detected).length, 0);
-          status(ocr ? `Ready. ${textCount} text boxes${objCount ? ` and ${objCount} pictures and shapes` : ""} found${failed ? `; ${failed} slide${failed === 1 ? "" : "s"} couldn't be read` : ""}. Double-click any text to edit it; drag pictures to move them.` : "Ready.", "ok");
+          status(ocr ? `Ready. ${textCount} text boxes${objCount ? ` and ${objCount} picture${objCount === 1 ? "" : "s"}` : ""} found${failed ? `; ${failed} slide${failed === 1 ? "" : "s"} couldn't be read` : ""}. Double-click any text to edit it; drag pictures to move them.` : "Ready.", "ok");
         }
       });
     });
@@ -1113,6 +1114,7 @@
     pdf: () => runExport("pdf"),
     png: () => runExport("png"),
     "png-one": () => runExport("png-one"),
+    pictures: () => runExport("pictures"),
     "add-slide": () => {
       commit();
       const first = deck.slides[0];
@@ -1688,6 +1690,7 @@
       else if (kind === "pdf") await S.exportPdf(deck, `${deck.title} (edited).pdf`, prog);
       else if (kind === "png") await S.exportPngs(deck, deck.title, prog);
       else if (kind === "png-one") await S.exportPngs({ slides: [slide()] }, `${deck.title} - slide ${cur + 1}`, prog);
+      else if (kind === "pictures") { const n = await S.exportPictures(deck, deck.title); status(`${n} picture${n === 1 ? "" : "s"} downloaded.`, "ok"); return; }
       const motion = deck.slides.some((x) => (x.transition && x.transition.type !== "none") || animsOf(x).length);
       status(kind === "pptx" ? `PowerPoint downloaded${motion ? ", with your transitions and animations" : ""}. Opens in PowerPoint, Keynote or Google Slides (File → Import).` : "Downloaded.", "ok");
     } catch (error) {

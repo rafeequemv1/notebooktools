@@ -1270,7 +1270,7 @@ window.NTSlides = (() => {
       canvas.width = cw;
       canvas.height = ch2;
       canvas.getContext("2d").putImageData(cut, -tx0, -ty0, tx0, ty0, cw, ch2);
-      objects.push({ id: id(), type: "image", src: canvas.toDataURL("image/png"), x: X0 + tx0, y: Y0 + ty0, w: cw, h: ch2, opacity: 1, detected: true });
+      objects.push({ id: id(), type: "image", src: encodePicture(canvas), x: X0 + tx0, y: Y0 + ty0, w: cw, h: ch2, opacity: 1, detected: true });
     }
     cctx.putImageData(full, 0, 0);
     // Big pictures behind small ones
@@ -1338,6 +1338,20 @@ window.NTSlides = (() => {
     for (let x = X0; x < X1; x += 6) { test(x, Y0 - 4); test(x, Y1 + 3); }
     for (let y = Y0; y < Y1; y += 6) { test(X0 - 4, y); test(X1 + 3, y); }
     return n > 0 && near / n > 0.7;
+  }
+
+  // A solid rectangle with photo-like colour (micrograph, photo) is stored as JPEG to
+  // keep the PPTX small; anything with see-through parts or few colours stays PNG.
+  function encodePicture(canvas) {
+    const d = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    let clear = 0;
+    const colours = new Set();
+    const n = d.length / 4;
+    for (let i = 0; i < n; i += 1) {
+      if (d[i * 4 + 3] < 250) clear += 1;
+      if (i % 7 === 0) colours.add(((d[i * 4] >> 3) << 10) | ((d[i * 4 + 1] >> 3) << 5) | (d[i * 4 + 2] >> 3));
+    }
+    return clear / n < 0.03 && colours.size > 1500 ? canvas.toDataURL("image/jpeg", 0.9) : canvas.toDataURL("image/png");
   }
 
   // Mostly one colour (ignoring soft edges and a little text inside): a plain shape.
@@ -1679,6 +1693,34 @@ window.NTSlides = (() => {
   }
 
   // Add transitions and animations to the slide XML files of a pptx.
+  /* Readable names for PowerPoint's selection pane ("Title", "Text 2", "Picture 1")
+     and alt text for pictures (the caption under it, or the labels on it). */
+  function objectNames(slide) {
+    const names = new Map();
+    const texts = slide.elements.filter((e) => e.type === "text").sort((a, b) => a.y - b.y || a.x - b.x);
+    const biggest = Math.max(0, ...texts.map((e) => e.fontSize));
+    const title = texts.find((e) => e.fontSize === biggest && e.y < slide.h * 0.35);
+    let t = 0, p = 0, sh = 0;
+    for (const el of [...slide.elements].sort((a, b) => a.y - b.y || a.x - b.x)) {
+      if (el === title) names.set(el.id, "Title");
+      else if (el.type === "text") names.set(el.id, `Text ${(t += 1)}`);
+      else if (el.type === "image") names.set(el.id, `Picture ${(p += 1)}`);
+      else names.set(el.id, `Shape ${(sh += 1)}`);
+    }
+    return names;
+  }
+
+  function altTextFor(slide, img, name) {
+    if (img.alt) return img.alt;
+    const texts = slide.elements.filter((e) => e.type === "text");
+    const overlapX = (e) => Math.min(e.x + e.w, img.x + img.w) - Math.max(e.x, img.x);
+    const caption = texts.filter((e) => e.y >= img.y + img.h - 4 && e.y <= img.y + img.h + Math.max(40, e.fontSize * 2.5) && overlapX(e) > Math.min(e.w, img.w) * 0.5).sort((a, b) => a.y - b.y)[0];
+    if (caption) return caption.text.replace(/\s+/g, " ").slice(0, 250);
+    const labels = texts.filter((e) => e.x >= img.x - 4 && e.y >= img.y - 4 && e.x + e.w <= img.x + img.w + 4 && e.y + e.h <= img.y + img.h + 4);
+    if (labels.length) return `${name}: ${labels.map((e) => e.text.replace(/\s+/g, " ")).join(", ")}`.slice(0, 250);
+    return name;
+  }
+
   async function addMotion(buffer, deck) {
     const JSZip = window.JSZip;
     if (!JSZip) return new Blob([buffer]);
@@ -1700,7 +1742,8 @@ window.NTSlides = (() => {
         const ids = { v: 2 };
         const clicks = [];
         for (const el of animated) {
-          const m = xml.match(new RegExp(`<p:cNvPr id="(\\d+)" name="${el.id}"`));
+          const name = deck.__names?.get(el.id) || el.id;
+          const m = xml.match(new RegExp(`<p:cNvPr id="(\\d+)" name="${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
           if (m) clicks.push(entranceXml(el.anim.type, m[1], ids, Math.round((el.anim.dur || 0.5) * 1000)));
         }
         if (clicks.length) {
@@ -1726,13 +1769,16 @@ window.NTSlides = (() => {
     pptx.defineLayout({ name: "NT", width: widthIn, height: first.h * k });
     pptx.layout = "NT";
     pptx.title = deck.title || "Slides";
+    const allNames = new Map(); // element id → name, for the animation pass
     deck.slides.forEach((slide, i) => {
       onProgress(i, deck.slides.length);
       const s = pptx.addSlide();
       if (slide.bgMode === "color") s.background = { color: noHash(slide.bgColor) };
       else s.background = { data: bareData((slide.clean || slide.original).toDataURL("image/jpeg", 0.9)) };
+      const names = objectNames(slide);
+      names.forEach((v, key) => allNames.set(key, v));
       for (const el of slide.elements) {
-        const box = { x: el.x * k, y: el.y * k, w: el.w * k, h: el.h * k, objectName: el.id, ...(el.rotate ? { rotate: el.rotate } : {}) };
+        const box = { x: el.x * k, y: el.y * k, w: el.w * k, h: el.h * k, objectName: names.get(el.id) || el.id, ...(el.rotate ? { rotate: el.rotate } : {}) };
         const transparency = Math.round((1 - (el.opacity ?? 1)) * 100);
         const outline = el.stroke && el.strokeWidth ? { line: { color: noHash(el.stroke), width: pt(el.strokeWidth) } } : { line: { type: "none" } };
         if (el.type === "text") {
@@ -1791,7 +1837,7 @@ window.NTSlides = (() => {
             line: { color: noHash(el.stroke || "#1f1f1f"), width: pt(el.strokeWidth || 4), transparency, ...(el.arrow ? { endArrowType: "triangle" } : {}) }
           });
         } else if (el.type === "image") {
-          s.addImage({ ...box, data: bareData(el.src), transparency });
+          s.addImage({ ...box, data: bareData(el.src), transparency, altText: altTextFor(slide, el, names.get(el.id) || "Picture") });
         }
       }
       if (slide.notes) s.addNotes(slide.notes);
@@ -1800,7 +1846,7 @@ window.NTSlides = (() => {
     const hasMotion = deck.slides.some((sl) => (sl.transition && sl.transition.type && sl.transition.type !== "none") || sl.elements.some((e) => e.anim && e.anim.type && e.anim.type !== "none"));
     if (!hasMotion) return pptx.writeFile({ fileName: filename });
     const buffer = await pptx.write({ outputType: "arraybuffer" });
-    P.saveBlob(await addMotion(buffer, deck), filename);
+    P.saveBlob(await addMotion(buffer, Object.assign(Object.create(deck), { __names: allNames })), filename);
   }
 
   async function exportPdf(deck, filename, onProgress = () => {}) {
@@ -1892,5 +1938,21 @@ window.NTSlides = (() => {
     else P.saveBlob(P.zip(files), `${baseName} (slides).zip`);
   }
 
-  return { layoutLines, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  // Every picture in the deck, as its own file (PNG with transparency, JPEG for photos).
+  async function exportPictures(deck, baseName) {
+    const files = [];
+    deck.slides.forEach((slide, i) => {
+      const names = objectNames(slide);
+      slide.elements.filter((e) => e.type === "image").forEach((el) => {
+        const jpg = /^data:image\/jpe?g/.test(el.src);
+        const bytes = Uint8Array.from(atob(el.src.split(",")[1] || ""), (c) => c.charCodeAt(0));
+        files.push({ name: `slide ${String(i + 1).padStart(2, "0")} - ${(names.get(el.id) || "Picture").toLowerCase()}.${jpg ? "jpg" : "png"}`, data: bytes });
+      });
+    });
+    if (!files.length) throw new Error("No pictures found in this deck.");
+    P.saveBlob(P.zip(files), `${baseName} (pictures).zip`);
+    return files.length;
+  }
+
+  return { exportPictures, layoutLines, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
