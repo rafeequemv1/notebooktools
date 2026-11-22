@@ -294,9 +294,14 @@
       ["answer:markdown", "copy", "Markdown"]
     ].map(([v, ic, label]) => `<button type="button" class="ntr-menu-item" data-value="${v}">${icon(ic, 15)}<span>${esc(label)}</span></button>`).join("");
     const items = formats.map((f) => `<button type="button" class="ntr-menu-item" data-value="${esc(f.id)}">${icon("download", 15)}<span>${esc(f.label)}</span></button>`).join("");
-    openMenu(anchor, `<p class="ntr-menu-title">Last answer only</p>${answer}<p class="ntr-menu-title">Whole chat</p>${items}`, async (formatId) => {
+    const whole = `<button type="button" class="ntr-menu-item" data-value="notebook:zip">${icon("download", 15)}<span>Sources and notes (ZIP)</span></button>`;
+    openMenu(anchor, `<p class="ntr-menu-title">Last answer only</p>${answer}<p class="ntr-menu-title">Whole chat</p>${items}<p class="ntr-menu-title">Whole notebook</p>${whole}`, async (formatId) => {
       closeMenu();
       try {
+        if (formatId === "notebook:zip") {
+          const title = (document.title || "").replace(/\s*[-–|]\s*(NotebookLM|Gemini Notebook).*$/i, "").trim();
+          return void window.NotebookToolsNotebookExport?.openDialog([{ id: notebookId(), title: title || "This notebook" }]);
+        }
         if (formatId.startsWith("answer:")) {
           if (!window.NotebookToolsAnswerExport) throw new Error("Export is still loading. Try again in a moment.");
           return toast(await window.NotebookToolsAnswerExport.exportLastAnswer(formatId.slice(7)));

@@ -1309,6 +1309,12 @@ async function runBulk(action, anchor) {
   }
   if (!ids.length) return;
 
+  if (action === "export") {
+    const chosen = notebooks.filter((item) => selectedNotebookIds.has(item.id));
+    void NotebookToolsNotebookExport.openDialog(chosen, { authOptions: authUserOption(activeAccount) });
+    return;
+  }
+
   if (action === "move") {
     const moveAll = async (folder) => {
       for (const id of ids) await store.setNotebookFolder(id, folder);

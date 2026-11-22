@@ -111,6 +111,7 @@
         "notebooklm-source-filter.js",
         "notebooklm-studio-prompts.js",
         "workflows/studio/studio-modal.js",
+        "notebook-zip-export.js",
         "notebooklm-ribbon.js",
         "dev-reload.js"
       ],

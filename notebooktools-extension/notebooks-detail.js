@@ -210,6 +210,9 @@ const NotebookToolsNotebookDetail = (() => {
       });
     });
 
+    document.querySelector("#detailExportZip")?.addEventListener("click", () => {
+      if (notebook) void NotebookToolsNotebookExport.openDialog([notebook], { authOptions });
+    });
     document.querySelector("#detailNotesToggle")?.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();

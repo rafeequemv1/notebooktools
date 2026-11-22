@@ -40,6 +40,9 @@
     "snapshots": "Snapshots",
     "prompt-library": "Prompt library",
     "chat-export": "Chat export",
+    "notebook-export": "Export whole notebooks (ZIP)",
+    "notebook-merge": "Compare, merge and copy sources between notebooks",
+    "source-notes": "Highlights and notes on sources",
   };
 
   function storageGet(keys) {

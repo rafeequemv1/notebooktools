@@ -96,6 +96,7 @@
               <button type="button" class="nbx-bulk-btn" data-bulk="tag">Add tag</button>
               <button type="button" class="nbx-bulk-btn" data-bulk="favorite">Favorite</button>
               <button type="button" class="nbx-bulk-btn" data-bulk="pin">Pin</button>
+              <button type="button" class="nbx-bulk-btn" data-bulk="export">Export ZIP</button>
               <button type="button" class="nbx-bulk-btn is-danger" id="notebooksBulkDelete">Delete</button>
               <button type="button" class="nbx-bulk-btn is-ghost" data-bulk="clear">Clear</button>
             </div>
@@ -147,6 +148,7 @@
                 <button type="button" class="button secondary compact" id="detailNotesToggle">Notes</button>
                 <div class="detail-notes-menu" id="detailNotesMenu" hidden></div>
               </div>
+              <button type="button" class="button secondary compact" id="detailExportZip">Export ZIP</button>
               <a class="button secondary compact detail-open-btn" id="detailOpenNotebook" href="#" target="_blank" rel="noopener noreferrer">Open in NotebookLM</a>
             </div>
           </div>
@@ -327,6 +329,7 @@
     <script src="utils.js"></script>
     <script src="media-playback.js"></script>
     <script src="notebooklm-client.js"></script>
+    <script src="notebook-zip-export.js"></script>
     <script src="notebooks-cache.js"></script>
     <script src="notebooks-folders.js"></script>
     <script src="stats.js"></script>
