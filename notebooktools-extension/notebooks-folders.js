@@ -13,7 +13,8 @@ const NotebookToolsNotebookFolders = {
       tags: Array.isArray(state.tags) ? state.tags : [],
       tagAssignments: state.tagAssignments || {},
       pinned: Array.isArray(state.pinned) ? state.pinned : [],
-      favorites: Array.isArray(state.favorites) ? state.favorites : []
+      favorites: Array.isArray(state.favorites) ? state.favorites : [],
+      folderColors: state.folderColors || {}
     };
   },
 
@@ -25,9 +26,46 @@ const NotebookToolsNotebookFolders = {
         tags: Array.isArray(state.tags) ? state.tags : [],
         tagAssignments: state.tagAssignments || {},
         pinned: Array.isArray(state.pinned) ? state.pinned : [],
-        favorites: Array.isArray(state.favorites) ? state.favorites : []
+        favorites: Array.isArray(state.favorites) ? state.favorites : [],
+        folderColors: state.folderColors || {}
       }
     });
+  },
+
+  // Subfolders are stored as paths: "Research/Sleep". Adding a child also
+  // adds its parents so the tree is always complete.
+  async addSubfolder(parent, name) {
+    const child = String(name || "").trim().replace(/\//g, "-");
+    if (!child) return null;
+    return this.addFolder(parent ? `${parent}/${child}` : child);
+  },
+
+  async setFolderColor(folder, color) {
+    const state = await this.getState();
+    if (color) state.folderColors[folder] = color;
+    else delete state.folderColors[folder];
+    await this.saveState(state);
+    return state;
+  },
+
+  // Delete a folder and its subfolders; their notebooks become Unfiled.
+  async deleteFolder(folder) {
+    const state = await this.getState();
+    const inside = (name) => name === folder || name.startsWith(`${folder}/`);
+    state.folders = state.folders.filter((name) => !inside(name));
+    for (const [id, name] of Object.entries(state.assignments)) if (inside(name)) delete state.assignments[id];
+    for (const name of Object.keys(state.folderColors)) if (inside(name)) delete state.folderColors[name];
+    await this.saveState(state);
+    return state;
+  },
+
+  async getTableColumns() {
+    const stored = await chrome.storage.local.get("notebooktoolsTableColumns");
+    return Array.isArray(stored.notebooktoolsTableColumns) ? stored.notebooktoolsTableColumns : ["sources", "tags", "folder", "studio"];
+  },
+
+  async setTableColumns(columns) {
+    await chrome.storage.local.set({ notebooktoolsTableColumns: columns });
   },
 
   async addFolder(name) {
@@ -39,13 +77,21 @@ const NotebookToolsNotebookFolders = {
 
     const state = await this.getState();
 
-    if (!state.folders.includes(cleaned)) {
-      state.folders.push(cleaned);
+    const parts = cleaned.split("/").map((part) => part.trim()).filter(Boolean);
+    let changed = false;
+    parts.forEach((_part, i) => {
+      const path = parts.slice(0, i + 1).join("/");
+      if (!state.folders.includes(path)) {
+        state.folders.push(path);
+        changed = true;
+      }
+    });
+    if (changed) {
       state.folders.sort((a, b) => a.localeCompare(b));
       await this.saveState(state);
     }
 
-    return cleaned;
+    return parts.join("/");
   },
 
   async setNotebookFolder(notebookId, folderName) {

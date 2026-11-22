@@ -228,11 +228,41 @@ function folderLabel(folderId) {
   return folderId === "unfiled" ? "Unfiled" : folderId;
 }
 
+function inFolder(folder, folderId) {
+  return Boolean(folder) && (folder === folderId || folder.startsWith(`${folderId}/`));
+}
+
 function countInFolder(folderId) {
   return notebooks.filter((notebook) => {
     const folder = folderForNotebook(notebook.id);
-    return folderId === "unfiled" ? !folder : folder === folderId;
+    return folderId === "unfiled" ? !folder : inFolder(folder, folderId);
   }).length;
+}
+
+const FOLDER_COLORS = ["#4285f4", "#34a853", "#fbbc04", "#ea4335", "#a142f4", "#24c1e0", "#f06292", "#ff8a00"];
+
+// A folder's colour, or the nearest parent's.
+function folderColor(path) {
+  const colors = folderState?.folderColors || {};
+  const parts = String(path || "").split("/");
+  for (let i = parts.length; i > 0; i -= 1) {
+    const color = colors[parts.slice(0, i).join("/")];
+    if (color) return color;
+  }
+  return "";
+}
+
+function folderLeaf(path) {
+  return String(path || "").split("/").pop();
+}
+
+function folderDisplay(path) {
+  return String(path || "").split("/").join(" › ");
+}
+
+function folderIcon(path) {
+  const color = folderColor(path);
+  return `<span class="nbx-folder-ico"${color ? ` style="color:${color}"` : ""}>${color ? ICON.folder.replace('fill="none"', 'fill="currentColor" fill-opacity="0.25"') : ICON.folder}</span>`;
 }
 
 function extractEmailFromHtml(html) {
@@ -304,7 +334,7 @@ function getFilteredNotebooks() {
       return false;
     }
 
-    if (activeFolder !== "all" && activeFolder !== "unfiled" && folder !== activeFolder) {
+    if (activeFolder !== "all" && activeFolder !== "unfiled" && !inFolder(folder, activeFolder)) {
       return false;
     }
 
@@ -350,7 +380,7 @@ function renderMoveMenu(anchor, notebookId) {
   const addItem = (label, value) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = `nb-move-item${current === label ? " is-active" : ""}`;
+    btn.className = `nb-move-item${(current === value || (!value && current === label)) ? " is-active" : ""}`;
     btn.textContent = label;
     btn.addEventListener("click", async (event) => {
       event.preventDefault();
@@ -365,7 +395,7 @@ function renderMoveMenu(anchor, notebookId) {
 
   addItem("Unfiled", "");
 
-  folderState.folders.forEach((folder) => addItem(folder, folder));
+  folderState.folders.forEach((folder) => addItem(folderDisplay(folder), folder));
 
   const newRow = document.createElement("div");
   newRow.className = "nb-move-new";
@@ -878,7 +908,7 @@ function tagsCell(notebookId) {
 function folderCell(notebookId) {
   const folder = folderForNotebook(notebookId);
   return folder
-    ? `<button type="button" class="nbx-folder" data-folder-edit="${notebookId}" title="Move to folder">${ICON.folder}<span>${esc(folder)}</span></button>`
+    ? `<button type="button" class="nbx-folder" data-folder-edit="${notebookId}" title="${esc(folderDisplay(folder))}: move to another folder">${folderIcon(folder)}<span>${esc(folderLeaf(folder))}</span></button>`
     : `<button type="button" class="nbx-folder is-empty" data-folder-edit="${notebookId}" title="Move to folder">${ICON.plus}<span>Folder</span></button>`;
 }
 
@@ -913,7 +943,7 @@ function renderList(allItems) {
 
   mainEl.innerHTML = `
     <div class="nbx-table-wrap">
-      <table class="nbx-table">
+      <table class="nbx-table${columnClasses()}">
         <thead>
           <tr>
             <th class="nbx-col-check">${checkBox(`data-select-all${someChecked ? ' data-indeterminate="1"' : ""}`, allChecked, "Select all")}</th>
@@ -1150,6 +1180,87 @@ function sideItem(kind, id, icon, label, count, active, extra = "") {
   </button>`;
 }
 
+function openFolderMenu(anchor, folder) {
+  closeMenus();
+  const menu = document.createElement("div");
+  menu.className = "nb-move-menu nbx-folder-menu";
+  const current = (folderState.folderColors || {})[folder] || "";
+  menu.innerHTML = `
+    <p class="nbx-folder-menu-title">${esc(folderDisplay(folder))}</p>
+    <button type="button" class="nb-move-item" data-fm="sub">${ICON.plus}<span>New subfolder</span></button>
+    <p class="nbx-folder-menu-label">Colour</p>
+    <div class="nbx-swatches">
+      <button type="button" class="nbx-swatch is-none${current ? "" : " is-on"}" data-color="" title="No colour" aria-label="No colour"></button>
+      ${FOLDER_COLORS.map((c) => `<button type="button" class="nbx-swatch${current === c ? " is-on" : ""}" data-color="${c}" style="background:${c}" aria-label="Colour ${c}"></button>`).join("")}
+    </div>
+    <button type="button" class="nb-move-item is-danger" data-fm="delete"><span>Delete folder</span></button>`;
+  menu.addEventListener("click", async (event) => {
+    event.stopPropagation();
+    const swatch = event.target.closest("[data-color]");
+    if (swatch) {
+      folderState = await store.setFolderColor(folder, swatch.dataset.color);
+      closeMenus();
+      return renderAll();
+    }
+    const action = event.target.closest("[data-fm]")?.dataset.fm;
+    if (action === "sub") {
+      closeMenus();
+      const name = window.prompt(`New subfolder in “${folderLeaf(folder)}”`)?.trim();
+      if (!name) return;
+      const path = await store.addSubfolder(folder, name);
+      folderState = await store.getState();
+      activeFolder = path || activeFolder;
+      return renderAll();
+    }
+    if (action === "delete") {
+      closeMenus();
+      const count = countInFolder(folder);
+      if (!window.confirm(`Delete “${folderDisplay(folder)}” and its subfolders?${count ? ` ${count} notebook${count === 1 ? "" : "s"} will move to Unfiled.` : ""} Notebooks are not deleted.`)) return;
+      folderState = await store.deleteFolder(folder);
+      if (inFolder(activeFolder, folder)) activeFolder = "all";
+      renderAll();
+    }
+  });
+  document.body.appendChild(menu);
+  const rect = anchor.getBoundingClientRect();
+  menu.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - 230))}px`;
+  menu.style.top = `${Math.min(rect.bottom + 4, window.innerHeight - menu.offsetHeight - 8)}px`;
+}
+
+const TABLE_COLUMNS = [
+  ["sources", "Sources"],
+  ["tags", "Tags"],
+  ["folder", "Folder"],
+  ["studio", "Studio"]
+];
+let visibleColumns = ["sources", "tags", "folder", "studio"];
+
+function columnClasses() {
+  return TABLE_COLUMNS.filter(([key]) => !visibleColumns.includes(key)).map(([key]) => ` hide-${key}`).join("");
+}
+
+function openColumnsMenu(anchor) {
+  closeMenus();
+  const menu = document.createElement("div");
+  menu.className = "nb-move-menu nbx-columns-menu";
+  menu.innerHTML = `<p class="nbx-folder-menu-title">Show columns</p>
+    <label class="nbx-col-opt is-fixed"><input type="checkbox" checked disabled><span>Name</span></label>
+    ${TABLE_COLUMNS.map(([key, label]) => `<label class="nbx-col-opt"><input type="checkbox" data-col="${key}"${visibleColumns.includes(key) ? " checked" : ""}><span>${label}</span></label>`).join("")}`;
+  menu.addEventListener("click", (event) => event.stopPropagation());
+  menu.addEventListener("change", async (event) => {
+    const key = event.target.dataset.col;
+    if (!key) return;
+    visibleColumns = event.target.checked ? [...new Set([...visibleColumns, key])] : visibleColumns.filter((c) => c !== key);
+    await store.setTableColumns(visibleColumns);
+    const table = mainEl.querySelector(".nbx-table");
+    if (table) table.className = `nbx-table${columnClasses()}`;
+  });
+  document.body.appendChild(menu);
+  const rect = anchor.getBoundingClientRect();
+  menu.style.left = `${Math.max(8, Math.min(rect.right - 200, window.innerWidth - 210))}px`;
+  menu.style.top = `${rect.bottom + 4}px`;
+}
+
 function renderSidebar() {
   const side = document.querySelector("#nbSidebar");
   if (!side) return;
@@ -1168,9 +1279,18 @@ function renderSidebar() {
 
   const folders = [
     sideItem("folder", "unfiled", ICON.inbox, "Unfiled", countInFolder("unfiled"), activeFolder === "unfiled"),
-    ...folderState.folders.map((folder) =>
-      sideItem("folder", folder, ICON.folder, folder, countInFolder(folder), activeFolder === folder)
-    )
+    ...[...folderState.folders].sort((a, b) => a.localeCompare(b)).map((folder) => {
+      const depth = folder.split("/").length - 1;
+      return sideItem(
+        "folder",
+        folder,
+        folderIcon(folder),
+        folderLeaf(folder),
+        countInFolder(folder),
+        activeFolder === folder,
+        `style="--depth:${depth}" data-depth="${depth}"`
+      ).replace("</button>", `<span class="nbx-side-more" role="button" tabindex="0" data-folder-more="${esc(folder)}" title="Folder options" aria-label="Folder options">${ICON.more}</span></button>`);
+    })
   ].join("");
 
   const tagCounts = {};
@@ -1220,6 +1340,16 @@ function renderSidebar() {
       renderLimit = PAGE_SIZE;
       renderAll();
     });
+  });
+
+  side.querySelectorAll("[data-folder-more]").forEach((more) => {
+    const openMore = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openFolderMenu(more, more.dataset.folderMore);
+    };
+    more.addEventListener("click", openMore);
+    more.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") openMore(event); });
   });
 
   side.querySelectorAll("[data-side-folder]").forEach((btn) => {
@@ -1336,7 +1466,7 @@ async function runBulk(action, anchor) {
       renderAll();
     };
     openPickerMenu(anchor, {
-      items: [{ value: "", label: "Unfiled" }, ...folderState.folders.map((folder) => ({ value: folder, label: folder }))],
+      items: [{ value: "", label: "Unfiled" }, ...folderState.folders.map((folder) => ({ value: folder, label: folderDisplay(folder) }))],
       placeholder: "New folder",
       onPick: moveAll,
       onCreate: async (name) => {
@@ -1701,6 +1831,12 @@ profileButton?.addEventListener("click", (event) => {
   }
 });
 
+document.querySelector("#columnsButton")?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  if (document.querySelector(".nbx-columns-menu")) return closeMenus();
+  openColumnsMenu(event.currentTarget);
+});
+
 searchInput?.addEventListener("input", () => {
   renderLimit = 200;
   renderMain();
@@ -1825,6 +1961,7 @@ async function init() {
   viewMode = await store.getViewMode();
   browseMode = "all";
   sortMode = await store.getSortMode();
+  visibleColumns = await store.getTableColumns();
   activeTag = await store.getActiveTag();
 
   if (sortSelect) {
