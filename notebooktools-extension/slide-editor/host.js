@@ -12,9 +12,17 @@
   const title = (params.get("title") || "Slide deck").replace(/[<>:"/\\|?*]+/g, "-").slice(0, 90);
   const authUser = params.get("authuser");
   if (title) document.title = `${title} · Slide editor · NotebookTools`;
+  // A presentation saved on this computer (from the Presentations tab)
+  const savedId = params.get("deck");
+  if (savedId && window.NTSlideEditor) {
+    await window.NTSlideEditor.openSaved(savedId);
+    return;
+  }
   if (!notebookId || !window.NTSlideEditor) return;
 
   const editor = window.NTSlideEditor;
+  // Which NotebookLM deck this is, so its saved edits can be found again
+  const openOptions = { title, source: { notebookId, artifactId: artifactId || "", authUser: authUser || "", title } };
   const loader = editor.loader;
   const options = authUser ? { authUser } : {};
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,7 +76,7 @@
       const blob = await download(deck.pdfUrl);
       if (blob.size < 1000 || !/pdf|octet-stream/i.test(blob.type || "application/pdf")) return false;
       loader.text("Opening the slides…");
-      await editor.open([new File([blob], `${title}.pdf`, { type: "application/pdf" })]);
+      await editor.open([new File([blob], `${title}.pdf`, { type: "application/pdf" })], openOptions);
       return true;
     } catch (error) {
       pdfError = error;
@@ -89,7 +97,7 @@
       files.push(new File([blob], `${title}-${String(i + 1).padStart(2, "0")}.${ext}`, { type: blob.type || "image/png" }));
     }
     loader.text("Opening the slides…");
-    await editor.open(files);
+    await editor.open(files, openOptions);
     return true;
   }
 
@@ -99,7 +107,7 @@
     const r = await chrome.runtime.sendMessage({ type: "notebooktools-deck-via-notebook-download", notebookId, title: params.get("title") || "" });
     if (!r?.ok || !r.data) throw Object.assign(new Error(r?.error || "Couldn't download the deck through NotebookLM."), { needPermission: !!r?.needPermission });
     loader.text("Opening the slides…");
-    await editor.open([new File([base64Blob(r.data, "application/pdf")], `${title}.pdf`, { type: "application/pdf" })]);
+    await editor.open([new File([base64Blob(r.data, "application/pdf")], `${title}.pdf`, { type: "application/pdf" })], openOptions);
     return true;
   }
 
@@ -140,6 +148,19 @@
     document.querySelector(".se-loader-actions")?.remove();
     loader.hide();
     editor.status(error?.message || "Couldn't open the slide deck.", "error");
+  }
+
+  // Edited this deck before: reopen the saved edits (with a way to start over)
+  const fresh = params.get("fresh") === "1";
+  const saved = fresh ? null : await editor.findSaved(notebookId, artifactId || "").catch(() => null);
+  if (saved) {
+    const opened = await editor.openSaved(saved.id, () => editor.notice(`Opened your saved edits of “${saved.title}”.`, "Start over from NotebookLM", () => {
+      if (!confirm("Start over from the NotebookLM deck? Your saved edits stay in Presentations.")) return;
+      const next = new URLSearchParams(location.search);
+      next.set("fresh", "1");
+      location.search = next.toString();
+    }));
+    if (opened) return;
   }
 
   loader.show(`Importing “${title}” from NotebookLM`);

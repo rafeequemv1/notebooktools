@@ -31,7 +31,7 @@
   const ENTRANCES = [["none", "None"], ["appear", "Appear"], ["fade", "Fade"], ["fly", "Fly in"], ["rise", "Rise"], ["zoom", "Zoom"], ["wipe", "Wipe"]];
   const DURATIONS = [[0.3, "Quick"], [0.5, "Normal"], [0.8, "Slow"], [1.2, "Very slow"]];
 
-  const deck = { title: "slides", slides: [] };
+  const deck = { id: null, title: "slides", slides: [], source: null, createdAt: 0 };
   let cur = 0;
   let selected = null; // element id
   let editing = null; // element id being typed into
@@ -49,6 +49,7 @@
       <div id="seDrop"></div>
       <label class="se-ocr-opt"><input type="checkbox" id="seOcr" checked> Make the text editable (reads slides with OCR, English)</label>
       <label class="se-ocr-opt"><input type="checkbox" id="seObjects" checked> Separate pictures and shapes so you can move, resize or delete them</label>
+      <section class="se-recent" id="seRecent" hidden aria-label="Your presentations"></section>
       <ul class="se-points">
         <li><b>Edit text</b> right on the slide: click, double-click to type, drag to move.</li>
         <li><b>Format, animate and add transitions</b>, then present from the browser.</li>
@@ -189,6 +190,7 @@
     history.push(snapshot());
     if (history.length > 80) history.shift();
     future = [];
+    scheduleSave();
   }
   function restore(json) {
     const data = JSON.parse(json);
@@ -215,6 +217,171 @@
     if (!future.length) return;
     history.push(snapshot());
     restore(future.pop());
+  }
+
+  /* ---------- Saved on this computer (Presentations) ---------- */
+  const store = window.NTDeckStore || null;
+  const blobs = new WeakMap(); // canvas → its saved picture (pictures don't change once made)
+  function canvasBlob(canvas, type = "image/webp", quality = 0.95) {
+    if (!canvas) return Promise.resolve(null);
+    if (blobs.has(canvas)) return blobs.get(canvas);
+    const p = new Promise((resolve) => canvas.toBlob((b) => resolve(b), type, quality));
+    blobs.set(canvas, p);
+    return p;
+  }
+  let saveTimer = 0, saving = null, saveAgain = false;
+  function scheduleSave(delay = 1200) {
+    if (!store || !deck.id || !deck.slides.length) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => void saveNow(), delay);
+  }
+  async function saveNow() {
+    if (!store || !deck.id || !deck.slides.length) return;
+    if (saving) { saveAgain = true; return saving; }
+    saving = (async () => {
+      try {
+        const slides = [];
+        let bytes = 0;
+        for (const sl of deck.slides) {
+          const original = await canvasBlob(sl.original);
+          const clean = sl.clean && sl.clean !== sl.original ? await canvasBlob(sl.clean, "image/jpeg", 0.92) : null;
+          const elements = JSON.parse(JSON.stringify(sl.elements));
+          bytes += (original?.size || 0) + (clean?.size || 0) + JSON.stringify(elements).length;
+          slides.push({ id: sl.id, w: sl.w, h: sl.h, status: sl.status === "working" ? "pending" : sl.status, bgMode: sl.bgMode, bgColor: sl.bgColor, notes: sl.notes || "", transition: sl.transition || null, elements, original, clean, cleanIsOriginal: sl.clean === sl.original });
+        }
+        const first = deck.slides[0];
+        const thumb = S.slideCanvas(first, 320 / first.w, { original: !first.clean }).toDataURL("image/webp", 0.8);
+        await store.save({ id: deck.id, title: deck.title, slideCount: deck.slides.length, createdAt: deck.createdAt, updatedAt: Date.now(), thumb, bytes, source: deck.source || null }, { id: deck.id, slides });
+      } catch (_error) {
+        /* storage full or unavailable: editing goes on, the deck just isn't kept */
+      }
+    })();
+    await saving;
+    saving = null;
+    if (saveAgain) { saveAgain = false; scheduleSave(300); }
+  }
+  // Keep the latest edits when the page is closed or hidden
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") { clearTimeout(saveTimer); void saveNow(); } });
+
+  function newDeck(title, source) {
+    deck.id = `d${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    deck.title = title || "slides";
+    deck.source = source || null;
+    deck.createdAt = Date.now();
+  }
+
+  const ago = (t) => {
+    const s = Math.max(1, Math.round((Date.now() - t) / 1000));
+    if (s < 60) return "just now";
+    const m = Math.round(s / 60);
+    if (m < 60) return `${m} min ago`;
+    const h = Math.round(m / 60);
+    if (h < 24) return `${h} h ago`;
+    const d = Math.round(h / 24);
+    return d < 30 ? `${d} day${d === 1 ? "" : "s"} ago` : new Date(t).toLocaleDateString();
+  };
+
+  // "Your presentations" on the start screen
+  async function renderRecent() {
+    const box = $("#seRecent");
+    if (!box || !store) return;
+    let list = [];
+    try { list = await store.list(); } catch (_error) { list = []; }
+    box.hidden = !list.length;
+    if (!list.length) { box.innerHTML = ""; return; }
+    box.innerHTML = `<p class="se-recent-title">Your presentations <span>saved on this computer</span></p>
+      <div class="se-recent-list">${list.slice(0, 12).map((m) => `
+        <div class="se-recent-item" data-deck="${esc(m.id)}">
+          <button type="button" class="se-recent-open" data-open-deck="${esc(m.id)}" title="Open">
+            <span class="se-recent-thumb">${m.thumb ? `<img src="${m.thumb}" alt="">` : ""}</span>
+            <span class="se-recent-name">${esc(m.title)}</span>
+            <span class="se-recent-meta">${m.slideCount} slide${m.slideCount === 1 ? "" : "s"} · ${ago(m.updatedAt)}</span>
+          </button>
+          <button type="button" class="se-recent-del" data-del-deck="${esc(m.id)}" title="Delete from this computer" aria-label="Delete ${esc(m.title)}">${ico("trash", 14)}</button>
+        </div>`).join("")}</div>`;
+  }
+  $("#seRecent")?.addEventListener("click", async (event) => {
+    const open = event.target.closest("[data-open-deck]");
+    if (open) return void openSaved(open.dataset.openDeck);
+    const del = event.target.closest("[data-del-deck]");
+    if (del) {
+      const item = del.closest(".se-recent-item");
+      const name = item?.querySelector(".se-recent-name")?.textContent || "this presentation";
+      if (!confirm(`Delete “${name}” from this computer? This can't be undone.`)) return;
+      await store.remove(del.dataset.delDeck);
+      void renderRecent();
+    }
+  });
+
+  void renderRecent();
+
+  // Reopen a saved presentation with its edits; slides whose text wasn't read yet are read now
+  async function openSaved(deckId, notice) {
+    if (!store) return false;
+    const { meta, data } = await store.get(deckId);
+    if (!meta || !data) { status("That presentation isn't on this computer any more.", "error"); return false; }
+    $("#seStart").hidden = true;
+    $("#seEditor").hidden = false;
+    if (!loader.isOpen()) loader.show(`Opening “${meta.title}”`);
+    const toCanvas = async (blob, w, h) => {
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      if (blob) { const img = await createImageBitmap(blob); c.getContext("2d").drawImage(img, 0, 0, w, h); }
+      return c;
+    };
+    const slides = [];
+    for (let i = 0; i < data.slides.length; i += 1) {
+      const d = data.slides[i];
+      const original = await toCanvas(d.original, d.w, d.h);
+      blobs.set(original, Promise.resolve(d.original));
+      const sl = S.newSlide(original);
+      let clean = null;
+      if (d.cleanIsOriginal) clean = original;
+      else if (d.clean) { clean = await toCanvas(d.clean, d.w, d.h); blobs.set(clean, Promise.resolve(d.clean)); }
+      Object.assign(sl, { id: d.id, w: d.w, h: d.h, clean, status: d.status === "done" || d.status === "error" ? d.status : "pending", bgMode: d.bgMode, bgColor: d.bgColor, notes: d.notes, transition: d.transition || undefined, elements: d.elements || [] });
+      if (!sl.transition) delete sl.transition;
+      slides.push(sl);
+      loader.frame(i, data.slides.length, original);
+    }
+    deck.id = meta.id;
+    deck.title = meta.title;
+    deck.source = meta.source || null;
+    deck.createdAt = meta.createdAt || Date.now();
+    deck.slides = slides;
+    history = [];
+    future = [];
+    cur = 0;
+    selected = null;
+    loader.hide();
+    renderAll();
+    const waiting = slides.filter((x) => x.status === "pending");
+    if (waiting.length) readSlides(waiting, $("#seObjects").checked);
+    if (notice) notice(); else status(`Opened “${meta.title}” with your edits. Changes are saved on this computer as you go.`, "ok");
+    return true;
+  }
+
+  // Read the text of these slides, one after another
+  function readSlides(list, objectsOn) {
+    list.forEach((s) => {
+      queue = queue.then(async () => {
+        if (!deck.slides.includes(s)) return;
+        const i = deck.slides.indexOf(s);
+        showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length}`);
+        s.status = "working";
+        markScanning();
+        try {
+          await S.analyze(s, (p) => showProgress(`Reading text: slide ${i + 1} of ${deck.slides.length} · ${Math.round(p * 100)}%`), { objects: objectsOn });
+        } catch (_error) {
+          S.skipAnalysis(s);
+          s.status = "error";
+        }
+        renderThumb(deck.slides.indexOf(s));
+        markScanning();
+        if (deck.slides[cur] === s) { renderStage(); if (!selected) renderPanels(); }
+        if (s === list[list.length - 1]) showProgress("");
+        scheduleSave(400);
+      });
+    });
   }
 
   /* ---------- Open ---------- */
@@ -273,7 +440,7 @@
     }
   };
 
-  async function openFiles(files) {
+  async function openFiles(files, options = {}) {
     const ocr = $("#seOcr").checked;
     const objectsOn = $("#seObjects").checked;
     deck.slides = [];
@@ -288,7 +455,7 @@
     try {
       const pdfs = files.filter((f) => /pdf/i.test(f.type) || /\.pdf$/i.test(f.name));
       const images = files.filter((f) => /^image\//.test(f.type));
-      deck.title = P.baseName((pdfs[0] || images[0] || { name: "slides" }).name);
+      newDeck(options.title || P.baseName((pdfs[0] || images[0] || { name: "slides" }).name), options.source);
       for (const f of pdfs) {
         const { pdf, pageCount } = await S.loadPdf(await P.bytesOf(f));
         for (let i = 1; i <= pageCount; i += 1) {
@@ -316,6 +483,7 @@
     }
     loader.hide();
     renderAll();
+    scheduleSave(200);
     status(ocr ? "Reading the text on each slide. You can start editing slides that are ready." : "Opened. Text stays part of the slide image.");
     deck.slides.forEach((s, i) => {
       queue = queue.then(async () => {
@@ -335,6 +503,7 @@
         }
         renderThumb(deck.slides.indexOf(s));
         markScanning();
+        scheduleSave(400);
         if (deck.slides[cur] === s) {
           renderStage();
           if (!selected) renderPanels();
@@ -352,7 +521,20 @@
 
   // Let a host page (the extension) open a deck directly.
   window.NTSlideEditor = {
-    open: (files) => openFiles(files),
+    open: (files, options) => openFiles(files, options),
+    openSaved: (deckId, notice) => openSaved(deckId, notice),
+    findSaved: (notebookId, artifactId) => (store ? store.findBySource(notebookId, artifactId) : Promise.resolve(null)),
+    // A message with one action button (e.g. "Start over from NotebookLM")
+    notice: (msg, label, onClick) => {
+      status(msg, "ok");
+      if (!label) return;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "se-status-btn";
+      b.textContent = label;
+      b.addEventListener("click", onClick);
+      $("#seStatus").append(" ", b);
+    },
     loader,
     status: (msg, type) => {
       $("#seStart").hidden = true;
@@ -411,6 +593,7 @@
   function refreshThumbSoon() {
     clearTimeout(thumbTimer);
     thumbTimer = setTimeout(() => renderThumb(cur), 250);
+    scheduleSave();
   }
 
   function fitZoom() {
@@ -1195,7 +1378,7 @@
 
   const shapeBase = { opacity: 1, stroke: "#1f1f1f", strokeWidth: 0 };
   const actions = {
-    new: () => { $("#seEditor").hidden = true; $("#seStart").hidden = false; app.classList.remove("is-full"); },
+    new: () => { clearTimeout(saveTimer); void saveNow().then(renderRecent); $("#seEditor").hidden = true; $("#seStart").hidden = false; app.classList.remove("is-full"); },
     undo, redo,
     "add-text": () => addElement({ id: S.id(), type: "text", ...centerBox(700, 90), text: "Double-click to edit", fontSize: 56, lineHeight: 1.2, color: "#1f1f1f", bold: false, italic: false, align: "left", valign: "top", fontFamily: "Arial", opacity: 1 }),
     "add-rect": () => addElement({ id: S.id(), type: "rect", ...centerBox(420, 260), fill: "#0b57d0", radius: 0, ...shapeBase }),
@@ -1286,6 +1469,7 @@
         try { await S.analyze(s, (p) => showProgress(`Reading text… ${Math.round(p * 100)}%`), { objects: $("#seObjects").checked }); } catch (_e) { S.skipAnalysis(s); s.status = "error"; }
         showProgress("");
         if (deck.slides.includes(s)) { renderThumb(deck.slides.indexOf(s)); if (slide() === s) { renderStage(); renderPanels(); } }
+        scheduleSave(400);
       });
     },
     "clear-text": () => { commit(); const s = slide(); s.elements = s.elements.filter((e) => e.type !== "text"); renderStage(); renderPanels(); refreshThumbSoon(); },

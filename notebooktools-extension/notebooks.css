@@ -4059,3 +4059,22 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .stl-dl.stl-edit { background: var(--nt-accent); border-color: var(--nt-accent); color: var(--nt-surface); }
 .stl-dl.stl-edit:hover { color: var(--nt-surface); filter: brightness(1.08); }
 .stl-col-dl { width: 250px; }
+
+/* ==========================================================================
+   Presentations tab: decks being edited, saved on this computer
+   ========================================================================== */
+.pres-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.pres-card { background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; }
+.pres-card:hover { border-color: var(--nt-line-strong); }
+.pres-thumb { aspect-ratio: 16 / 9; background: var(--nt-line-soft); border: 0; cursor: pointer; display: block; padding: 0; width: 100%; }
+.pres-thumb img { display: block; height: 100%; object-fit: cover; width: 100%; }
+.pres-body { padding: 12px 14px 4px; }
+.pres-title { color: var(--nt-ink); font-size: 14px; font-weight: 500; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pres-meta, .pres-src { color: var(--nt-muted); font-size: 12.5px; margin: 4px 0 0; }
+.pres-src { color: var(--nt-subtle); }
+.pres-actions { display: flex; gap: 6px; padding: 10px 12px 12px; }
+.pres-btn { background: transparent; border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-ink); cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 500; height: 30px; padding: 0 12px; }
+.pres-btn:hover { background: var(--nt-line-soft); }
+.pres-btn.is-primary { background: var(--nt-accent); border-color: var(--nt-accent); color: #fff; }
+:root[data-theme="dark"] .pres-btn.is-primary { color: #0b1220; }
+.pres-btn.is-danger { color: var(--nt-danger); margin-left: auto; }

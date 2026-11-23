@@ -41,6 +41,7 @@
         <button type="button" class="app-tab" data-app-tab="allsources" role="tab">Sources</button>
         <button type="button" class="app-tab" data-app-tab="library" role="tab">Studio</button>
         <button type="button" class="app-tab" data-app-tab="podcast" role="tab">Podcast</button>
+        <button type="button" class="app-tab" data-app-tab="presentations" role="tab">Presentations</button>
         <button type="button" class="app-tab" data-app-tab="sources" role="tab" hidden>Sources</button>
         <button type="button" class="app-tab" data-app-tab="studio" role="tab" hidden>Studio</button>
         <button type="button" class="app-tab" data-app-tab="notes" role="tab" hidden>Notes</button>
@@ -115,6 +116,7 @@
 
       <section class="studio-library" id="sourcesLibraryView" hidden aria-label="All sources"></section>
       <section class="studio-library" id="studioLibraryView" hidden aria-label="All Studio files"></section>
+      <section class="studio-library" id="presentationsView" hidden aria-label="Presentations"></section>
 
       <section class="podcast-view" id="podcastView" hidden>
         <div class="podcast-chrome">
@@ -357,6 +359,8 @@
     <script src="notebooks-sources-library.js"></script>
     <script src="notebooks-merge.js"></script>
     <script src="source-notes.js"></script>
+    <script src="slide-editor/deck-store.js"></script>
+    <script src="notebooks-presentations.js"></script>
     <script src="notebooks-detail.js"></script>
     <script src="notebooks.js"></script>
       <script src="dev-reload.js"></script>

@@ -707,6 +707,10 @@ function setListScreen(screen) {
     NotebookToolsSourcesLibrary.close();
   }
 
+  if (screen !== "presentations") {
+    window.NotebookToolsPresentations?.close();
+  }
+
   if (isNotebooks) {
     NotebookToolsPodcast.close();
     renderAll();
@@ -721,6 +725,12 @@ function setListScreen(screen) {
       authOptions: authUserOption(activeAccount),
       onOpenNotebook: (notebook) => openNotebookInApp(notebook, "sources")
     });
+    return;
+  }
+
+  if (screen === "presentations") {
+    NotebookToolsPodcast.close();
+    window.NotebookToolsPresentations?.open();
     return;
   }
 
