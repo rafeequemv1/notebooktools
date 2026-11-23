@@ -217,9 +217,9 @@ if (IS_POPUP) {
   if (bulkPanel) {
     const note = document.createElement("p");
     note.className = "sp-popup-note";
-    note.innerHTML = 'Clicking outside closes this dropdown and stops a running import. For big imports, <button type="button" class="sp-link-btn">pop it out</button>.';
+    note.innerHTML = 'Keep this open while it imports, or <button type="button" class="sp-link-btn">open it in its own window</button>.';
     note.querySelector("button").addEventListener("click", popOut);
-    bulkPanel.prepend(note);
+    bulkPanel.append(note);
   }
 }
 

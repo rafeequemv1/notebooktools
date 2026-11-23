@@ -2520,6 +2520,13 @@
 .sp-viewbar b { color: var(--sp-text, #1f1f1f); font-size: 13.5px; font-weight: 500; }
 
 /* The extension's own screens (shadow roots, see surfaces.js mountApps) */
-.br-sidepanel.sp-is-app { display: flex; flex-direction: column; overflow: hidden; }
+/* The extension's popup: drops from the toolbar button over the page, like Chrome draws it */
+.br-body { position: relative; }
+.br-sidepanel.sp-is-app {
+  border: 0; border-radius: 12px; box-shadow: 0 2px 6px rgba(60, 64, 67, 0.15), 0 10px 30px rgba(60, 64, 67, 0.25);
+  display: flex; flex-direction: column; max-height: calc(100% - 12px); overflow: hidden; position: absolute; right: 10px; top: 4px; z-index: 20;
+}
 .br-sidepanel.sp-is-app .sp-app-host { flex: 1; min-height: 0; overflow: auto; scrollbar-width: none; }
 .nt-drop.nt-drop-app { background: #fff; border-radius: 16px; box-shadow: 0 8px 28px rgba(60, 64, 67, 0.22); overflow: hidden; padding: 0; }
+/* The dashboard (notebooks.html), captured from the app, inside the demo's browser */
+.br-page .app-page-host { height: 100%; overflow: auto; position: relative; scrollbar-width: none; }

@@ -13,26 +13,6 @@ Features
 
 # Manage & organize sources
 
-### Research — AI tools
-
-Notes
-
-Open in NotebookLM
-
-Search sources Add sources Check updates Scan duplicates Manage Export (0)
-
-All 📄 Papers 🎥 Talks Unfiled + Folder
-
-PDF **RAG survey 2026** arxiv.org/abs/2601.04411 refresh more_horiz
-
-PDF **Lost in the Middle** arxiv.org/abs/2307.03172 refresh more_horiz
-
-PDF **RAGAS: automated evaluation** arxiv.org/abs/2309.15217 refresh more_horiz
-
-YouTube **Long-context vs RAG — talk** youtube.com/watch?v=8nX2kq1ZpQe refresh more_horiz
-
-Web **Evaluating retrieval systems** blog.langchain.dev/evaluating-rag refresh more_horiz
-
 How it works
 
 ## From install to done

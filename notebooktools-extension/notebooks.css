@@ -4143,3 +4143,13 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 
 /* One menu shape across NotebookTools */
 .nb-dropdown-menu, .nb-move-menu, .detail-notes-menu, .src-label-menu, .nbx-menu { border-radius: 16px !important; }
+
+/* Fixes after the pill restyle */
+.notebooks-logo.nt-brand { display: inline-flex; height: auto; opacity: 1; }
+/* Manage dialog rows are <label>s: not the small uppercase field-label style */
+.manage-row { color: var(--nt-ink); font-size: 13px; letter-spacing: 0; margin: 0; text-transform: none; }
+.manage-row .src-select-input { accent-color: var(--nt-accent); appearance: auto; -webkit-appearance: checkbox; height: 16px; margin: 0; opacity: 1; pointer-events: auto; position: static; width: 16px; }
+.manage-row { border-radius: 12px; }
+.manage-modal-toolbar .button { flex: none; width: auto; }
+/* toolbar buttons keep their label on one line */
+.notebooks-app .button, .notebooks-app .nbx-primary, .notebooks-app .src-tool-btn, .notebooks-app .detail-actions .button { white-space: nowrap; }

@@ -13,24 +13,6 @@ Features
 
 # Google Drive source refresh
 
-### Q3 planning
-
-Notes
-
-Open in NotebookLM
-
-Search sources Add sources Check updates Scan duplicates Manage
-
-Doc **Q3 roadmap** Google Doc · docs.google.com/document/d/1Qx… refresh more_horiz
-
-Slides **Launch deck** Google Slides · docs.google.com/presentation/d/7Ft… refresh more_horiz
-
-Sheets **Budget sheet** Google Sheets · docs.google.com/spreadsheets/d/2Lm… refresh more_horiz
-
-Text **Meeting notes — 2 Sept** Pasted text refresh more_horiz
-
-PDF **Vendor contract** drive.google.com/file/d/9Ka… refresh more_horiz
-
 How it works
 
 ## From install to done

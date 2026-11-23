@@ -13,26 +13,6 @@ Features
 
 # Studio & podcasts
 
-### History seminar
-
-Notes
-
-Open in NotebookLM
-
-Audio Quiz Cards Report Slides Table Mind map Video Graphic
-
-All sources (3) Generate audio
-
-Format Deep dive Brief Critique Debate
-
-Length Short Default Long
-
-Optional instructions...
-
-**Outputs** Manage Export sources
-
-Report Briefing Doc Ready Open in NotebookLM
-
 How it works
 
 ## From install to done

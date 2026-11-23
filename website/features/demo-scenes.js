@@ -587,170 +587,79 @@
 
   // Manage sources: Manage modal → select → Organize into a folder; then duplicate scan.
   // notebooks-sources.js, notebooks-duplicate-sources.js
+  // Manage sources: the dashboard's real Manage dialog (captured from the app)
   register("manage", function (a) {
-    return [
-      a.click("mg-open"),
-      a.show("mg-modal"),
+    var rows = a.all("#srcManageList .manage-row").slice(0, 3);
+    var steps = [a.wait(500), a.click("mg-open"), a.show("mg-modal"), a.wait(600)];
+    rows.forEach(function (row, i) {
+      steps.push(
+        a.click(row),
+        a.run(function () {
+          row.classList.add("is-selected");
+          var box = row.querySelector("input");
+          if (box) box.checked = true;
+          a.el("mg-organize").disabled = false;
+          a.el("mg-delete").disabled = false;
+        }),
+        a.text("mg-count", i + 1 + " selected"),
+        a.wait(350)
+      );
+    });
+    steps.push(
+      a.wait(400),
+      a.click("mg-delete"),
       a.wait(500),
-      a.click("mg-r1"),
-      a.add("mg-r1", "is-on"),
-      a.text("mg-count", "1 selected"),
-      a.click("mg-r2"),
-      a.add("mg-r2", "is-on"),
-      a.text("mg-count", "2 selected"),
-      a.click("mg-r3"),
-      a.add("mg-r3", "is-on"),
-      a.text("mg-count", "3 selected"),
-      a.wait(300),
-      a.click("mg-organize-btn"),
-      a.show("mg-organize"),
-      a.wait(500),
-      a.click("mg-folder-papers"),
-      a.add("mg-folder-papers", "is-active"),
-      a.status("mg-status", "Moved 3 source(s) into folder.", "success"),
-      a.run(function () {
-        a.all("src-papers").forEach(function (chip) { chip.hidden = false; });
-      }),
-      a.wait(1100),
-      a.click("mg-close"),
-      a.hide("mg-modal"),
-      a.wait(700),
-      a.click("dup-open"),
-      a.show("dup-modal"),
-      a.wait(600),
-      a.click("dup-run"),
-      a.hide("dup-choose"),
-      a.show("dup-scanning"),
-      a.text("dup-scan-status", "Analyzing sources..."),
-      a.run(function () { a.el("dup-fill").style.width = "45%"; }),
-      a.wait(600),
-      a.text("dup-scan-status", "Comparing sources..."),
-      a.run(function () { a.el("dup-fill").style.width = "100%"; }),
-      a.wait(600),
-      a.hide("dup-scanning"),
-      a.show("dup-review"),
-      a.wait(1100),
-      a.click("dup-clean"),
-      a.hide("dup-review"),
-      a.show("dup-confirm"),
-      a.wait(700),
-      a.click("dup-delete"),
-      a.hide("dup-confirm"),
-      a.show("dup-done"),
-      a.hide("src-dup"),
-      a.wait(1000),
-      a.click("dup-ok"),
-      a.hide("dup-modal"),
-      a.wait(900),
-    ];
+      a.run(function () { rows.forEach(function (row) { row.hidden = true; }); }),
+      a.text("mg-count", "0 selected"),
+      a.run(function () { var st = a.el("mg-status"); if (st) { st.hidden = false; st.textContent = "Deleted."; } a.el("mg-delete").disabled = true; a.el("mg-organize").disabled = true; }),
+      a.wait(1600)
+    );
+    return steps;
   });
 
   // Drive refresh: quiet freshness check → "Update available" → Refresh stale (N).
   // notebooks-sources.js (freshness), notebooklm-client.js (refreshable types)
+  // Drive refresh: the dashboard's real Sources view; two Google Drive files
+  // have changed (Update available) and Refresh stale re-syncs them.
   register("drive", function (a) {
-    var stale = ["dr-1", "dr-2"];
-    var ok = ["dr-3", "dr-5"];
+    var stale = a.all(".src-item.is-stale");
     return [
-      a.run(function () {
-        stale.concat(ok).forEach(function (k) {
-          var b = a.el(k + "-badge");
-          b.hidden = false;
-          b.className = "ntb-src-badge is-checking";
-          b.textContent = "Checking…";
-        });
-      }),
+      a.wait(700),
+      a.click("refresh-stale"),
+      a.text("refresh-stale", "Refreshing..."),
       a.wait(1300),
       a.run(function () {
-        ok.forEach(function (k) { a.el(k + "-badge").hidden = true; });
-        stale.forEach(function (k) {
-          var b = a.el(k + "-badge");
-          b.className = "ntb-src-badge";
-          b.textContent = "Update available";
-          a.el(k).classList.add("is-stale");
+        stale.forEach(function (row) {
+          row.classList.remove("is-stale");
+          var badge = row.querySelector(".src-stale-badge");
+          if (badge) badge.remove();
         });
       }),
-      a.show("dr-refresh"),
-      a.wait(900),
-      a.click("dr-refresh"),
-      a.text("dr-refresh", "Refreshing..."),
-      a.status("dr-status", "Refreshing 2 sources...", "loading"),
-      a.wait(600),
-      a.status("dr-status", 'Refreshing "Q3 roadmap" (1/2)...', "loading"),
-      a.wait(800),
-      a.run(function () { a.el("dr-1").classList.remove("is-stale"); a.el("dr-1-badge").hidden = true; }),
-      a.text("dr-1-time", "Google Doc · synced just now"),
-      a.status("dr-status", 'Refreshing "Launch deck" (2/2)...', "loading"),
-      a.wait(800),
-      a.run(function () { a.el("dr-2").classList.remove("is-stale"); a.el("dr-2-badge").hidden = true; }),
-      a.text("dr-2-time", "Google Slides · synced just now"),
-      a.status("dr-status", "Refreshed 2 sources.", "success"),
-      a.hide("dr-refresh"),
-      a.wait(1700),
+      a.text("refresh-stale", "Refresh stale"),
+      a.run(function () { var st = a.el("src-status"); if (st) { st.hidden = false; st.textContent = "Refreshed " + stale.length + " sources."; } }),
+      a.wait(1800),
     ];
   });
 
   // Studio & podcasts: Studio tab → Generate audio → Ready; Podcast tab → Scan → play.
   // notebooks-studio.js, notebooks-podcast.js
+  // Studio & podcasts: the dashboard's real Podcast tab; every Audio Overview
+  // from all notebooks in one list, played in one player.
   register("studio", function (a) {
-    var hubEl = function () { return a.el(".ntb"); };
+    var item = a.all(".podcast-item")[0];
+    var title = item ? item.querySelector(".podcast-item-title").textContent : "";
     return [
-      a.click("st-instructions"),
-      a.add("st-instructions", "is-focus"),
-      a.run(function () { a.el("st-instructions").classList.remove("sf-ph"); a.el("st-instructions").textContent = ""; }),
-      a.type("st-instructions", "Focus on how textile mills changed family life", 26),
-      a.remove("st-instructions", "is-focus"),
-      a.wait(300),
-      a.click("st-generate"),
-      a.status("st-status", "Starting...", "loading"),
       a.wait(700),
-      a.status("st-status", "Generation started.", "success"),
-      a.show("st-new"),
-      a.wait(1600),
-      a.text("st-new-state", "Ready"),
-      a.add("st-new-state", "is-ready"),
-      a.show("st-new-open"),
-      a.wait(1000),
-      a.click('[data-hub-tab="Notebooks"]'),
-      a.run(function () {
-        window.NT_SURFACES.setHubTabs(hubEl(), ["Notebooks", "Podcast"], "Notebooks");
-      }),
-      a.wait(400),
-      a.click('[data-hub-tab="Podcast"]'),
-      a.run(function () {
-        window.NT_SURFACES.setHubTabs(hubEl(), ["Notebooks", "Podcast"], "Podcast");
-        a.el("st-view").hidden = true;
-        a.el("pc-view").hidden = false;
-      }),
-      a.wait(600),
-      a.click("pc-scan"),
-      a.status("pc-status", "Scanning 1/6: Competitor briefs", "loading"),
-      a.wait(450),
-      a.status("pc-status", "Scanning 3/6: History seminar", "loading"),
-      a.wait(450),
-      a.status("pc-status", "Scanning 6/6: Research — AI tools", "loading"),
-      a.wait(450),
-      a.status("pc-status", "Found 4 podcasts across your notebooks.", "success"),
-      a.show("pc-list"),
-      a.wait(800),
-      a.click("pc-first"),
-      a.add("pc-item-1", "is-playing"),
-      a.text("pc-first", "❚❚"),
-      a.show("pc-player"),
-      a.run(function () {
-        var t = 252;
-        var bar = a.el("pc-fill");
-        var time = a.el("pc-time");
-        var token = a.el("pc-player");
-        var tick = function () {
-          if (!token.isConnected || t > 262) return;
-          t += 1;
-          bar.style.width = (t / 522) * 100 + "%";
-          time.textContent = Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0") + " / 8:42";
-          setTimeout(tick, 1000);
-        };
-        tick();
-      }),
-      a.wait(3500),
+      a.click(".podcast-item-play"),
+      a.run(function () { if (item) item.classList.add("is-active"); }),
+      a.show("pod-player"),
+      a.text("pod-title", title),
+      a.text("pod-meta", "Product launch 2026"),
+      a.run(function () { var f = a.el("pod-fill"); if (f) { f.style.transition = "width 3s linear"; f.style.width = "0%"; void f.offsetWidth; f.style.width = "28%"; } }),
+      a.text("pod-time", "0:12 / 12:15"),
+      a.wait(1500),
+      a.text("pod-time", "1:48 / 12:15"),
+      a.wait(1800),
     ];
   });
 })();

@@ -52,6 +52,22 @@ const SCREENS = [
       document.querySelector('#sourceTitle').textContent = '[X] Thread: five papers that changed RAG';
       document.querySelector('#sourcePreview').textContent = '4 segments · x.com/mayabuilds/status/1834201977';
     } },
+  { name: 'hub-sources', url: 'notebooks.html?notebook=nb1&tab=sources&title=Research', root: 'body', width: 1240, wait: 2500 },
+  { name: 'hub-manage', url: 'notebooks.html?notebook=nb1&tab=sources&title=Research', root: 'body', width: 1240, wait: 2500,
+    setup: async () => {
+      const btn = [...document.querySelectorAll('button')].find((b) => /^Manage$/.test(b.textContent.trim()) && b.offsetParent);
+      btn?.click();
+      await new Promise((r) => setTimeout(r, 800));
+    } },
+  { name: 'hub-drive', url: 'notebooks.html?notebook=nb3&tab=sources&title=Product%20launch%202026', root: 'body', width: 1240, wait: 3500 },
+  { name: 'hub-podcast', url: 'notebooks.html', root: 'body', width: 1240, wait: 2500,
+    setup: async () => {
+      document.querySelector('[data-app-tab="podcast"]')?.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const scan = [...document.querySelectorAll('button')].find((b) => /scan/i.test(b.textContent) && b.offsetParent);
+      scan?.click();
+      await new Promise((r) => setTimeout(r, 2500));
+    } },
 ];
 
 (async () => {
@@ -71,7 +87,36 @@ const SCREENS = [
       get: () => client,
       set: (value) => {
         client = value;
+        const SOURCES = {
+          nb1: [
+            { id: 's1', title: 'RAG survey 2026', typeCode: 3, type: 'PDF', url: 'https://arxiv.org/abs/2601.04411' },
+            { id: 's2', title: 'Lost in the Middle', typeCode: 3, type: 'PDF', url: 'https://arxiv.org/abs/2307.03172' },
+            { id: 's3', title: 'RAGAS: automated evaluation', typeCode: 3, type: 'PDF', url: 'https://arxiv.org/abs/2309.15217' },
+            { id: 's4', title: 'Long-context vs RAG — talk', typeCode: 9, type: 'YouTube', url: 'https://www.youtube.com/watch?v=8nX2kq1ZpQc' },
+            { id: 's5', title: 'Evaluating retrieval systems', typeCode: 5, type: 'Web', url: 'https://blog.langchain.dev/evaluating-rag' },
+            { id: 's6', title: 'Chunking strategies that work', typeCode: 5, type: 'Web', url: 'https://www.pinecone.io/learn/chunking-strategies/' },
+          ],
+          nb3: [
+            { id: 'd1', title: 'Q3 roadmap', typeCode: 1, type: 'Doc', url: 'https://docs.google.com/document/d/q3-roadmap' },
+            { id: 'd2', title: 'Launch deck', typeCode: 2, type: 'Slides', url: 'https://docs.google.com/presentation/d/launch' },
+            { id: 'd3', title: 'Budget sheet', typeCode: 14, type: 'Sheets', url: 'https://docs.google.com/spreadsheets/d/budget' },
+            { id: 'd4', title: 'Meeting notes — 2 Sept', typeCode: 4, type: 'Text', url: '' },
+            { id: 'd5', title: 'Vendor contract', typeCode: 3, type: 'PDF', url: 'https://drive.google.com/file/d/vendor/view' },
+          ],
+        };
+        const STALE = new Set(['d1', 'd2']);
+        const PODCASTS = {
+          nb1: [{ id: 'a1', title: 'Deep dive: how RAG is evaluated', duration: 1104 }],
+          nb2: [{ id: 'a2', title: 'Chapter 3 in fifteen minutes', duration: 902 }],
+          nb3: [{ id: 'a3', title: 'Launch plan, explained', duration: 735 }],
+          nb4: [{ id: 'a4', title: 'This week in AI research', duration: 1288 }],
+        };
         client.listNotebookLmNotebooks = async () => notebooks.map((n) => ({ ...n }));
+        client.listNotebookLmSources = async (id) => (SOURCES[id] || []).map((x) => ({ ...x, createdAt: Date.now() - 86400e3 }));
+        client.listNotebookLmLabels = async () => [];
+        client.listNotebookLmNotes = async () => [];
+        client.checkNotebookLmSourceFreshness = async (_nb, sourceId) => (STALE.has(sourceId) ? 'stale' : 'fresh');
+        client.listNotebookLmArtifacts = async (id) => (PODCASTS[id] || []).map((a) => ({ ...a, typeCode: 1, type: 'Audio Overview', status: 'ready', mediaUrl: 'https://example.com/a.mp4', createdAt: Date.now() - 3600e3 }));
       },
     });
   }, NOTEBOOKS);
@@ -81,7 +126,7 @@ const SCREENS = [
     const page = await ctx.newPage();
     await page.setViewportSize({ width: s.width, height: 900 });
     await page.goto(`chrome-extension://${id}/${s.url}`);
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(s.wait || 1500);
     if (s.setup) await page.evaluate(s.setup, LINKS);
     await page.evaluate((notebooks) => {
       // a signed-in sample account, and the sample notebooks in every picker
@@ -102,7 +147,11 @@ const SCREENS = [
       const root = document.querySelector(sel);
       // the demo shows the result of one action: no live status, nothing focused
       root.querySelectorAll('.status').forEach((e) => { e.className = 'status'; e.textContent = ''; });
-      return { html: root.outerHTML, bodyClass: document.body.className, theme: document.documentElement.dataset.theme || '' };
+      // the whole page (dialogs are appended to <body>), without its scripts
+      const html = sel === 'body'
+        ? [...root.children].filter((n) => !['SCRIPT', 'NOSCRIPT', 'TEMPLATE'].includes(n.tagName)).map((n) => n.outerHTML).join('')
+        : root.outerHTML;
+      return { html, bodyClass: document.body.className, theme: document.documentElement.dataset.theme || '' };
     }, s.root);
     html.html = html.html
       .replace(/src="(?:\.\/)?(logo\.png|icons\/[\w.-]+\.png)"/g, (_, f) => `src="/features/app/${path.basename(f)}"`)
@@ -114,7 +163,7 @@ const SCREENS = [
   await ctx.close();
 
   // The extension's CSS, scoped to the demo's shadow root
-  const css = ['shared.css', 'bulk-import.css', 'snapshots.css']
+  const css = ['shared.css', 'bulk-import.css', 'snapshots.css', 'notebooks.css', 'prompt-library.css']
     .map((f) => `/* ${f} */\n` + fs.readFileSync(path.join(EXT, f), 'utf8'))
     .join('\n')
     .replace(/:root\[data-theme="dark"\]/g, ':host([data-theme="dark"])')

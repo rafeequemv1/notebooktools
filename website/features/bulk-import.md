@@ -25,30 +25,6 @@ Instead of relying only on what a model learned in training, RAG first searches 
 
 The approach reduces hallucinations and lets answers cite their sources, which is why research tools such as NotebookLM ground every answer in your uploads.
 
-#### Playlist / channel
-
-Open a playlist or channel /videos page, then import in one click.
-
-Load from tab
-
-#### Add links
-
-Extract from page Open tabs Paste links
-
-One link per line
-
-#### Queue 0 items
-
-All Remove Retry Clear
-
-Add open tabs or paste links to build your queue.
-
-0 of 0 processed
-
-Import queue
-
-Refresh
-
 How it works
 
 ## From install to done

@@ -127,7 +127,7 @@
 
     sidepanel: function (el) {
       var s = SURFACES.sidepanel;
-      // The extension's own screen (captured from the app), in Chrome's side panel chrome
+      // The extension's own screen (captured from the app), as Chrome's popup
       if (el.hasAttribute("data-app-screen")) {
         el.classList.add("br-sidepanel", "sp", "sp-is-app");
         var hostEl = document.createElement("div");
@@ -136,7 +136,8 @@
         if (el.hasAttribute("data-app-map")) hostEl.setAttribute("data-app-map", el.getAttribute("data-app-map"));
         el.removeAttribute("data-app-screen");
         el.removeAttribute("data-app-map");
-        el.innerHTML = '<div class="sp-chrome">' + extIcon(16) + '<span>' + esc(SURFACES.extName) + "</span>" + ms("keep", "sp-chrome-pin") + ms("close") + "</div>";
+        // Chrome shows the extension as a popup under its toolbar button (no title bar)
+        el.innerHTML = "";
         el.appendChild(hostEl);
         return;
       }
@@ -245,7 +246,9 @@
         '<link rel="stylesheet" href="/features/app/app.css">' +
         "<style>:host{display:block;text-align:left;line-height:normal}" +
         ".app-body{background:var(--nt-bg);color:var(--nt-ink);margin:0;width:auto!important;max-width:none!important;height:auto!important;min-height:100%!important;overflow:visible!important}" +
-        ".app.embedded{max-width:none!important;min-width:0!important;width:100%!important}</style>" +
+        ".app.embedded{max-width:none!important;min-width:0!important;width:100%!important}" +
+        // the dashboard's dialogs and player stay inside the demo's browser frame
+        ".nt-modal{position:absolute!important}.podcast-player{position:sticky!important}</style>" +
         '<div class="app-body ' + esc(screen.bodyClass || "") + '">' + screen.html + "</div>";
       var map = {};
       try { map = JSON.parse(el.getAttribute("data-app-map") || "{}"); } catch (e) { map = {}; }
@@ -253,6 +256,9 @@
         var target = root.querySelector(map[key]);
         if (target) target.setAttribute("data-s", key);
       });
+      var hide = [];
+      try { hide = JSON.parse(el.getAttribute("data-app-hide") || "[]"); } catch (e) { hide = []; }
+      hide.forEach(function (sel) { var t = root.querySelector(sel); if (t) t.hidden = true; });
       el.classList.add("app-host");
     });
   }

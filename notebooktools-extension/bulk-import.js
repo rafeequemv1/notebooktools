@@ -585,6 +585,10 @@ const NotebookToolsBulkImportUI = (() => {
     const [tab] = await chrome.tabs.query({ active: true, windowId: await NotebookToolsStore.browserWindowId() });
     const batch = NotebookToolsStore.classifyYouTubeBatchUrl(tab?.url || "");
 
+    // The playlist card only shows on a YouTube playlist or channel page
+    const card = root?.querySelector(".bulk-youtube-card");
+    if (card) card.hidden = !batch;
+
     if (!batch) {
       youtubeBatchHint.textContent = "Open a playlist or channel /videos page, then import in one click.";
       return;
@@ -807,7 +811,7 @@ const NotebookToolsBulkImportUI = (() => {
     root = container;
     root.innerHTML = `
       <div class="bulk-import sp-stack">
-        <section class="sp-card bulk-youtube-card">
+        <section class="sp-card bulk-youtube-card" hidden>
           <h2 class="sp-label">Playlist / channel</h2>
           <p class="bulk-youtube-hint" id="bulkYouTubeHint">Open a playlist or channel page, then load videos here.</p>
           <button type="button" class="bulk-secondary-btn bulk-youtube-btn" id="bulkYouTubeLoadButton">Load from tab</button>
@@ -832,17 +836,20 @@ const NotebookToolsBulkImportUI = (() => {
         <section class="sp-card bulk-source-actions">
           <h2 class="sp-label">Add links</h2>
           <div class="bulk-action-row">
-            <button type="button" class="bulk-secondary-btn" id="bulkExtractLinksButton">Extract from page</button>
-            <button type="button" class="bulk-secondary-btn" id="bulkAddTabsButton">Open tabs</button>
+            <button type="button" class="bulk-secondary-btn" id="bulkExtractLinksButton" title="Every link on the page you're on">From page</button>
+            <button type="button" class="bulk-secondary-btn" id="bulkAddTabsButton" title="Every website tab in this window">Open tabs</button>
             <button type="button" class="bulk-secondary-btn" id="bulkCsvButton" title="Import every link in a CSV or text file">CSV file</button>
           </div>
-          <button type="button" class="bulk-secondary-btn bulk-paste-add" id="bulkAddPasteButton">Add pasted links</button>
-          <textarea
-            class="bulk-paste"
-            id="bulkPasteInput"
-            placeholder="One link per line"
-            aria-label="Paste links"
-          ></textarea>
+          <div class="bulk-paste-row">
+            <textarea
+              class="bulk-paste"
+              id="bulkPasteInput"
+              placeholder="Or paste links, one per line"
+              rows="2"
+              aria-label="Paste links"
+            ></textarea>
+            <button type="button" class="bulk-secondary-btn bulk-paste-add" id="bulkAddPasteButton">Add</button>
+          </div>
         </section>
 
         <section class="sp-card bulk-queue-section">
