@@ -1854,3 +1854,7 @@ html.is-popup .sidepanel-tabs {
 /* Plan chip: readable on light and dark (it was white on white in light) */
 .sidepanel-body .sp-account-chip[data-plan="pro"] { background: var(--nt-accent-soft); border-color: transparent; color: var(--nt-accent); }
 .sidepanel-body .sp-account-chip[data-plan="free"] { background: transparent; color: var(--nt-muted); }
+/* Snapshots waiting to be sent */
+.sp-tool-count { background: var(--nt-accent-soft); border-radius: 999px; color: var(--nt-accent); font-size: 11px; font-style: normal; font-weight: 600; padding: 1px 7px; }
+.sp-tool-count[hidden] { display: none; }
+.sidepanel-body .sp-tool.sidepanel-tab { background: var(--nt-surface); }

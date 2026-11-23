@@ -232,7 +232,44 @@ async function openPanel(panelName) {
   return true;
 }
 
+// Snapshot: start drag-to-capture on the page right away (no screen). The
+// dropdown closes so the page can be dragged on; snapshots are reviewed and
+// sent from Snapshots on the notebook page.
+async function startSnapshot() {
+  if (!(await NotebookToolsPlan.can("snapshots"))) {
+    NotebookToolsPlan.showUpgrade("snapshots");
+    return;
+  }
+  const show = (message, type = "error") => NotebookToolsUI.setImportStatus(statusBox, { message, type });
+  try {
+    let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (!tab?.id || tab.url?.startsWith(chrome.runtime.getURL(""))) {
+      [tab] = await chrome.tabs.query({ active: true, windowType: "normal" });
+    }
+    if (!tab?.id) throw new Error("Click the page you want to capture first.");
+    if (!NotebookToolsSnapshotStore.isCapturableUrl(tab.url)) throw new Error("This page can't be captured. Open a regular website tab first.");
+    const response = await chrome.runtime.sendMessage({ type: "notebooktools-start-snapshot-overlay", tabId: tab.id });
+    if (!response?.ok) throw new Error(response?.error || "Could not start the capture.");
+    await chrome.tabs.update(tab.id, { active: true }).catch(() => {});
+    if (IS_POPUP) window.close();
+    else show("Drag on the page to capture an area.", "success");
+  } catch (error) {
+    show(error.message || "Could not start the capture.");
+  }
+}
+
+async function refreshSnapshotCount() {
+  const badge = document.querySelector("#snapshotCount");
+  if (!badge) return;
+  const list = await NotebookToolsSnapshotStore.list?.().catch(() => []) || [];
+  badge.hidden = !list.length;
+  badge.textContent = String(list.length);
+  badge.title = `${list.length} snapshot${list.length === 1 ? "" : "s"} waiting. Review and send them from Snapshots on your notebook page.`;
+}
+
 function markProTabs() {
+  const snap = document.querySelector("#tabSnapshots");
+  if (snap && !snap.querySelector(".sp-pro-tag")) snap.insertAdjacentHTML("beforeend", ' <span class="sp-pro-tag" title="Pro feature">Pro</span>');
   panelTabs.forEach((tab) => {
     if (PRO_PANELS[tab.dataset.panel] && !tab.querySelector(".sp-pro-tag")) {
       tab.insertAdjacentHTML("beforeend", ' <span class="sp-pro-tag" title="Pro feature">Pro</span>');
@@ -951,6 +988,8 @@ async function initSidePanel() {
   panelTabs.forEach((tab) => {
     tab.addEventListener("click", () => void openPanel(tab.dataset.panel));
   });
+  document.querySelector("#tabSnapshots")?.addEventListener("click", () => void startSnapshot());
+  void refreshSnapshotCount();
 
   modeButtons.forEach((button) => {
     button.addEventListener("click", () => setActiveMode(button.dataset.mode));
