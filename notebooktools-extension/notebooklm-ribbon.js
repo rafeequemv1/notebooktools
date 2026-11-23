@@ -343,14 +343,54 @@
     }
   }
 
-  function openPrompts() {
+  const CUSTOM_PROMPTS_KEY = "notebooktoolsCustomPrompts";
+  const setChatText = (input, value) => {
+    const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set;
+    setter.call(input, value);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  };
+
+  // Prompts: insert one with /, save what's in the chat box as your own, or
+  // manage your prompts in the notebooks dashboard. Your prompts come first in
+  // the / menu (notebooklm-prompt-slash.js reads the same storage key).
+  function promptsMenu(anchor) {
+    const input = findChatInput();
+    const text = (input?.value || "").trim();
+    const canSave = Boolean(text) && !text.startsWith("/");
+    const item = (value, ic, label, note = "") =>
+      `<button type="button" class="ntr-menu-item${value === "save" && !canSave ? " is-quiet" : ""}" data-value="${value}">${icon(ic, 15)}<span>${esc(label)}${note ? `<small>${esc(note)}</small>` : ""}</span></button>`;
+    openMenu(anchor, `<p class="ntr-menu-title">Prompts</p>${item("insert", "copy", "Insert a prompt", "Type / in the chat box")}${item("save", "plus", "Save chat box text as a prompt", canSave ? "" : "Write a prompt in the chat box first")}${item("manage", "grid", "Manage my prompts")}`, (value) => {
+      closeMenu();
+      if (value === "insert") return insertPrompt();
+      if (value === "save") return saveChatPrompt();
+      if (value === "manage") return send({ type: "notebooktools-ribbon-open-hub", view: "prompts" });
+    });
+  }
+
+  function insertPrompt() {
     const input = findChatInput();
     if (!input) return toast("Chat box not found.", true);
     input.focus();
-    if (!input.value.startsWith("/")) {
-      const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set;
-      setter.call(input, "/");
-      input.dispatchEvent(new Event("input", { bubbles: true }));
+    if (input.value.trim() && !input.value.startsWith("/")) return toast("Clear the chat box to pick a prompt, or save this text as a prompt.");
+    if (!input.value.startsWith("/")) setChatText(input, "/");
+  }
+
+  async function saveChatPrompt() {
+    const input = findChatInput();
+    const text = (input?.value || "").trim();
+    if (!text || text.startsWith("/")) return toast("Write or paste a prompt in the chat box first.", true);
+    const suggested = text.split(/\n/)[0].replace(/\s+/g, " ").slice(0, 60);
+    const title = window.prompt("Name this prompt", suggested);
+    if (title === null) return;
+    try {
+      const stored = await chrome.storage.local.get(CUSTOM_PROMPTS_KEY);
+      const items = Array.isArray(stored[CUSTOM_PROMPTS_KEY]) ? stored[CUSTOM_PROMPTS_KEY] : [];
+      const now = Date.now();
+      items.unshift({ id: `custom-${now}-${Math.random().toString(36).slice(2, 8)}`, title: title.trim() || suggested || "Untitled prompt", prompt: text, type: "text", createdAt: now, updatedAt: now });
+      await chrome.storage.local.set({ [CUSTOM_PROMPTS_KEY]: items });
+      toast(`Saved "${title.trim() || suggested}". Type / to use it in any notebook.`);
+    } catch (error) {
+      toast(error.message || "Could not save the prompt.", true);
     }
   }
 
@@ -413,7 +453,7 @@
         if (!window.NotebookToolsCarousel) return toast("Carousel is still loading. Try again in a moment.", true);
         return window.NotebookToolsCarousel.open(notebookId());
       case "snapdoc": return clickWorkflow(".notebooktools-snapshot-workflow-btn", "Snapshots", button);
-      case "prompts": return openPrompts();
+      case "prompts": return promptsMenu(button);
       case "hub": return send({ type: "notebooktools-ribbon-open-hub" });
       case "collapse":
         collapsed = !collapsed;

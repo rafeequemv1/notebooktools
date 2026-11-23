@@ -711,6 +711,10 @@ function setListScreen(screen) {
     window.NotebookToolsPresentations?.close();
   }
 
+  if (screen !== "prompts") {
+    window.NotebookToolsPromptsView?.close();
+  }
+
   if (isNotebooks) {
     NotebookToolsPodcast.close();
     renderAll();
@@ -731,6 +735,12 @@ function setListScreen(screen) {
   if (screen === "presentations") {
     NotebookToolsPodcast.close();
     window.NotebookToolsPresentations?.open();
+    return;
+  }
+
+  if (screen === "prompts") {
+    NotebookToolsPodcast.close();
+    window.NotebookToolsPromptsView?.open();
     return;
   }
 
@@ -2038,6 +2048,11 @@ async function init() {
   // Deep link from the in-notebook ribbon: notebooks.html?notebook=<id>&tab=sources
   const deepLink = new URLSearchParams(location.search);
   const deepId = deepLink.get("notebook");
+
+  // notebooks.html?view=prompts (from the ribbon's Prompts menu)
+  if (!deepId && deepLink.get("view") === "prompts") {
+    document.querySelector('[data-app-tab="prompts"]')?.click();
+  }
 
   if (deepId) {
     const deepTab = ["sources", "studio", "notes"].includes(deepLink.get("tab")) ? deepLink.get("tab") : "sources";

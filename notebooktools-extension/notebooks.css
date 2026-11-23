@@ -4078,3 +4078,12 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .pres-btn.is-primary { background: var(--nt-accent); border-color: var(--nt-accent); color: #fff; }
 :root[data-theme="dark"] .pres-btn.is-primary { color: #0b1220; }
 .pres-btn.is-danger { color: var(--nt-danger); margin-left: auto; }
+
+/* Prompts tab */
+.prompts-view { padding: 8px 0 48px; }
+.prompts-wrap { margin: 0 auto; max-width: 760px; }
+.prompts-head { margin: 4px 0 18px; }
+.prompts-head h2 { color: var(--nt-ink); font-family: "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif; font-size: 22px; font-weight: 400; line-height: 1.3; margin: 0 0 4px; }
+.prompts-head p { color: var(--nt-muted, #5f6368); font-size: 14px; margin: 0; }
+.prompts-view .pl-section-label { font-size: 13px; }
+.prompts-view .pl-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }

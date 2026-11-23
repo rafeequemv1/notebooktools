@@ -296,6 +296,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     }
 
+    if (message.view) {
+      params.set("view", String(message.view));
+    }
+
     const query = params.toString();
     // notebooks.html shows its own Pro lock screen for Free users.
     chrome.tabs.create({ url: chrome.runtime.getURL(`notebooks.html${query ? `?${query}` : ""}`) });
