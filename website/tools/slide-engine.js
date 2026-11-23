@@ -693,6 +693,95 @@ window.NTSlides = (() => {
     void onProgress;
   }
 
+  /* Number badges: "01", "2", "A" in a solid circle or rounded square. Light
+     marks on a strong colour are often skipped or misread by the page pass, so
+     each badge's marks are redrawn dark on white, enlarged, and read on their own.
+     The badge shape then stays in the background and its number becomes text. */
+  async function readBadges(slide, segs, img) {
+    if (typeof P.ocrLine !== "function") return;
+    const { data, width: W, height: H } = img;
+    const at = (x, y) => (y * W + x) * 4;
+    const corners = [[2, 2], [W - 3, 2], [2, H - 3], [W - 3, H - 3], [W >> 1, 2], [W >> 1, H - 3]].map(([x, y]) => at(x, y));
+    const bg = [0, 1, 2].map((c) => median(corners.map((i) => data[i + c])));
+    const seen = new Uint8Array(W * H);
+    const found = [];
+    const stack = [];
+    const MAXS = 150;
+    for (let y0 = 0; y0 < H; y0 += 4) for (let x0 = 0; x0 < W; x0 += 4) {
+      const s0 = y0 * W + x0;
+      if (seen[s0]) continue;
+      const i0 = s0 * 4;
+      const fill = [data[i0], data[i0 + 1], data[i0 + 2]];
+      if (Math.abs(fill[0] - bg[0]) + Math.abs(fill[1] - bg[1]) + Math.abs(fill[2] - bg[2]) < 120) continue;
+      let bx0 = x0, by0 = y0, bx1 = x0, by1 = y0, n = 0, big = false;
+      const rows = new Map();
+      stack.push(s0);
+      seen[s0] = 1;
+      while (stack.length) {
+        const j = stack.pop();
+        const x = j % W, y = (j / W) | 0;
+        n += 1;
+        if (x < bx0) bx0 = x; if (x > bx1) bx1 = x; if (y < by0) by0 = y; if (y > by1) by1 = y;
+        if (bx1 - bx0 > MAXS || by1 - by0 > MAXS) big = true;
+        const r = rows.get(y); if (!r) rows.set(y, [x, x]); else { if (x < r[0]) r[0] = x; if (x > r[1]) r[1] = x; }
+        for (const q of [j - 1, j + 1, j - W, j + W]) {
+          if (q < 0 || q >= W * H || seen[q]) continue;
+          const qx = q % W; if (Math.abs(qx - x) > 1) continue;
+          const k = q * 4;
+          if (Math.abs(data[k] - fill[0]) + Math.abs(data[k + 1] - fill[1]) + Math.abs(data[k + 2] - fill[2]) > 60) continue;
+          seen[q] = 1;
+          stack.push(q);
+        }
+      }
+      const w = bx1 - bx0 + 1, h = by1 - by0 + 1;
+      if (big || w < 18 || h < 18 || w / h > 1.6 || h / w > 1.6) continue;
+      // Marks inside the shape: pixels between its left and right edge on each row that aren't its colour
+      let inside = 0, ink = 0, ix0 = W, iy0 = H, ix1 = -1, iy1 = -1;
+      const inkPx = [];
+      for (const [y, [ra, rb]] of rows) for (let x = ra; x <= rb; x += 1) {
+        inside += 1;
+        const k = at(x, y);
+        const d = Math.abs(data[k] - fill[0]) + Math.abs(data[k + 1] - fill[1]) + Math.abs(data[k + 2] - fill[2]);
+        if (d > 90) { ink += 1; inkPx.push(x, y); if (x < ix0) ix0 = x; if (x > ix1) ix1 = x; if (y < iy0) iy0 = y; if (y > iy1) iy1 = y; }
+      }
+      if (inside < w * h * 0.6 || ink < inside * 0.03 || ink > inside * 0.45) continue;
+      // The marks sit well inside (not a ring or an outline)
+      if (ix0 - bx0 < w * 0.12 || bx1 - ix1 < w * 0.12 || iy0 - by0 < h * 0.12 || by1 - iy1 < h * 0.12) continue;
+      found.push({ bx0, by0, bx1, by1, ix0, iy0, ix1, iy1, inkPx });
+    }
+    for (const b of found.slice(0, 16)) {
+      const ih = b.iy1 - b.iy0 + 1, iw = b.ix1 - b.ix0 + 1;
+      const scale = Math.max(1, 52 / ih), pad = 24;
+      const crop = document.createElement("canvas");
+      crop.width = Math.round(iw * scale + pad * 2);
+      crop.height = Math.round(ih * scale + pad * 2);
+      const cx = crop.getContext("2d");
+      cx.fillStyle = "#fff";
+      cx.fillRect(0, 0, crop.width, crop.height);
+      cx.fillStyle = "#000";
+      for (let j = 0; j < b.inkPx.length; j += 2) cx.fillRect(pad + (b.inkPx[j] - b.ix0) * scale, pad + (b.inkPx[j + 1] - b.iy0) * scale, Math.ceil(scale), Math.ceil(scale));
+      let words = [];
+      try {
+        const blocks = await P.ocrLine(crop);
+        for (const bl of blocks) for (const pa of bl.paragraphs || []) for (const l of pa.lines || []) for (const wd of l.words || []) if (wd.text && wd.text.trim()) words.push(wd);
+      } catch (_error) { return; }
+      const text = words.map((wd) => wd.text.trim()).join("").replace(/[.)]$/, "");
+      const conf = words.length ? Math.min(...words.map((wd) => wd.confidence ?? 0)) : 0;
+      if (!/^(\d{1,3}|[A-Z])$/.test(text) || conf < 55) continue;
+      const box = { x0: b.ix0, y0: b.iy0, x1: b.ix1 + 1, y1: b.iy1 + 1 };
+      // Readings of the page pass that took in the badge ("(03) Ship and measure") lose those words
+      for (let s2 = segs.length - 1; s2 >= 0; s2 -= 1) {
+        const sg = segs[s2];
+        const hit = (wd) => Math.min(wd.bbox.x1, b.bx1) - Math.max(wd.bbox.x0, b.bx0) > 0 && Math.min(wd.bbox.y1, b.by1) - Math.max(wd.bbox.y0, b.by0) > 0;
+        if (!sg.words.some(hit)) continue;
+        const rest = sg.words.filter((wd) => !hit(wd));
+        const again = rest.length ? segmentsOf([{ paragraphs: [{ lines: [{ words: rest }] }] }], img) : [];
+        segs.splice(s2, 1, ...again);
+      }
+      segs.push({ words: [{ text, confidence: conf, bbox: box }], text, conf, quality: 1, badge: true, h: ih / 0.72, tx0: box.x0, ...box });
+    }
+  }
+
   /* Lines the page pass wasn't sure of ("[ion through" for "matter through"):
      read each again on its own, enlarged 2x, as a single line, and keep the
      better reading. Chart numbers and specks are left alone. */
@@ -814,6 +903,7 @@ window.NTSlides = (() => {
     const dropped = [];
     const allSegs = segmentsOf(blocks, img);
     await addSparseText(slide, allSegs, img, onProgress);
+    await readBadges(slide, allSegs, img);
     // Chart ticks: numbers lined up in a row or column with even steps (0 100 200,
     // 500 1000 1500), or tiny numbers. A row of years ("2012 2015 2019") or a
     // lone figure is real text.
@@ -848,7 +938,7 @@ window.NTSlides = (() => {
     const segs = allSegs.filter((sg) => {
       const h = sg.y1 - sg.y0;
       const letters = sg.text.replace(/[^\p{L}\p{N}]/gu, "").length;
-      const why = letters < 2 || h < 8 ? "tiny"
+      const why = sg.badge ? (h < 6 ? "tiny" : "") : letters < 2 || h < 8 ? "tiny"
         : /notebook\s?[li1|]*m/i.test(sg.text) && sg.y0 > slide.h * 0.85 && sg.text.length < 20 ? "watermark"
         : sg.conf < 60 ? `conf ${Math.round(sg.conf)}`
         : sg.quality < (sg.conf >= 80 ? 0.5 : 0.7) ? `quality ${sg.quality.toFixed(2)}`
@@ -890,11 +980,11 @@ window.NTSlides = (() => {
       const y1 = Math.max(...group.map((g) => g.y1));
       // Text over a photo or strong gradient: keep it in the picture (removing it would leave patches).
       const behind = ringSpread(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o)));
-      if (behind > 45) { dropped.push(`on a picture: ${group[0].text}`); continue; }
+      if (behind > 45 && !group[0].badge) { dropped.push(`on a picture: ${group[0].text}`); continue; }
       // Short one-line labels stay in the picture when they're part of a figure:
       // a fragment ("onduction"), a label OCR only half read ("Dirac Point (E"),
       // or a label among a chart's numbers and ticks.
-      if (group.length === 1) {
+      if (group.length === 1 && !group[0].badge) {
         const sg = group[0];
         const nWords = sg.text.replace(/^•\s*/, "").split(/\s+/).length;
         if (nWords <= 4) {
@@ -1136,7 +1226,23 @@ window.NTSlides = (() => {
       const rim = Math.max(6, Math.round(Math.min(w, h) * 0.06));
       let onRim = 0;
       for (const j of pix) { const x = j % sw, y = (j / sw) | 0; if (x - x0 < rim || x1 - x < rim || y - y0 < rim || y1 - y < rim) onRim += 1; }
-      if (w >= 30 && h >= 16 && onRim / n > 0.85) continue;
+      // (unless what it holds is a soft photo: a card is one colour or a smooth
+      // gradient inside, a photo with soft texture isn't, though only its edge is busy)
+      // A small filled shape (the bar under an icon) is a shape, not an outline: it
+      // joins a picture next to it, or stays in the background alone (flat shape)
+      const filledSmall = () => {
+        if (Math.max(w, h) > 70) return false;
+        let hit = 0, tests = 0;
+        for (const [fx, fy] of [[0.5, 0.5], [0.3, 0.5], [0.7, 0.5], [0.5, 0.35], [0.5, 0.65]]) {
+          const px2 = Math.round(x0 + (w - 1) * fx), py2 = Math.round(y0 + (h - 1) * fy), oy = y0 - 3;
+          if (oy < 0) continue;
+          const a1 = (py2 * sw + px2) * 4, a2 = (oy * sw + px2) * 4;
+          tests += 1;
+          if (Math.abs(sd[a1] - sd[a2]) + Math.abs(sd[a1 + 1] - sd[a2 + 1]) + Math.abs(sd[a1 + 2] - sd[a2 + 2]) > 60) hit += 1;
+        }
+        return tests >= 4 && hit / tests >= 0.8;
+      };
+      if (w >= 30 && h >= 16 && onRim / n > 0.85 && !filledSmall() && !softPhoto(sd, busy, sw, x0 + rim + 2, y0 + rim + 2, x1 - rim - 2, y1 - rim - 2)) continue;
       // A lone thin stroke (a diagonal leader line, an arrow) stays in the background
       const cx = mx / n, cy = my / n;
       const vxx = mxx / n - cx * cx, vyy = myy / n - cy * cy, vxy = mxy / n - cx * cy;
@@ -1144,7 +1250,21 @@ window.NTSlides = (() => {
       const l1 = tr / 2 + Math.sqrt(Math.max(0, tr * tr / 4 - det)), l2 = Math.max(0.01, tr / 2 - Math.sqrt(Math.max(0, tr * tr / 4 - det)));
       if (l1 / l2 > 60 && n / ext < 6) continue;
       // An arrow or connector: long and thin with a small head, mostly empty
-      if (Math.max(w, h) >= 3 * Math.min(w, h) && Math.min(w, h) <= 22 && n / (w * h) < 0.35) continue;
+      // (a solid bar, filled with colour along its middle, is a shape, not an arrow)
+      if (Math.max(w, h) >= 3 * Math.min(w, h) && Math.min(w, h) <= 22 && n / (w * h) < 0.35) {
+        let filled = 0, tests = 0;
+        const horiz = w >= h;
+        // filled across its thickness too (an arrow's shaft is only a thin line)
+        for (let t = 0.15; t <= 0.85; t += 0.07) for (const q of [0.3, 0.5, 0.7]) {
+          const mx2 = horiz ? Math.round(x0 + w * t) : Math.round(x0 + (w - 1) * q), my2 = horiz ? Math.round(y0 + (h - 1) * q) : Math.round(y0 + h * t);
+          const ox = horiz ? mx2 : x0 - 3, oy = horiz ? y0 - 3 : my2;
+          if (ox < 0 || oy < 0) continue;
+          const a1 = (my2 * sw + mx2) * 4, a2 = (oy * sw + ox) * 4;
+          tests += 1;
+          if (Math.abs(sd[a1] - sd[a2]) + Math.abs(sd[a1 + 1] - sd[a2 + 1]) + Math.abs(sd[a1 + 2] - sd[a2 + 2]) > 60) filled += 1;
+        }
+        if (!(tests && filled / tests >= 0.7)) continue;
+      }
       parts.push({ x0, y0, x1, y1, n });
     }
     let boxes = parts.map((b) => ({ ...b }));
@@ -1228,15 +1348,32 @@ window.NTSlides = (() => {
     const src = new Uint8ClampedArray(fd);
     const painted = slide._painted || [];
     const inPic = (x, y) => boxes.some((b) => x >= b.x0 - 4 && x <= b.x1 + 4 && y >= b.y0 - 4 && y <= b.y1 + 4);
-    const fit = fitBackground(sd, busy, sw, sh, inPic);
+    // (wider margin for the fit: soft shadows around pictures aren't background)
+    const fit = fitBackground(sd, busy, sw, sh, (x, y) => boxes.some((b) => x >= b.x0 - 24 && x <= b.x1 + 24 && y >= b.y0 - 24 && y <= b.y1 + 24));
+    void inPic;
     for (const b of boxes) {
-      const X0 = Math.max(0, b.x0 * k - 6), Y0 = Math.max(0, b.y0 * k - 6);
-      const X1 = Math.min(W0, (b.x1 + 1) * k + 6), Y1 = Math.min(H0, (b.y1 + 1) * k + 6);
+      let X0 = Math.max(0, b.x0 * k - 6), Y0 = Math.max(0, b.y0 * k - 6);
+      let X1 = Math.min(W0, (b.x1 + 1) * k + 6), Y1 = Math.min(H0, (b.y1 + 1) * k + 6);
+      if (X1 - X0 < 8 || Y1 - Y0 < 8) continue;
+      // A drop shadow travels with its picture: widen the cut to take it in
+      const reach = fit ? shadowReach(fit, src, W0, H0, X0, Y0, X1, Y1, k) : [0, 0, 0, 0];
+      const shadow = reach.some((r) => r > 0);
+      let onFit = false;
+      if (shadow) {
+        const nY0 = Math.max(0, Y0 - reach[0]), nY1 = Math.min(H0, Y1 + reach[1]);
+        const nX0 = Math.max(0, X0 - reach[2]), nX1 = Math.min(W0, X1 + reach[3]);
+        // Only a shadow on the slide's own background (past it, the background is back)
+        onFit = surroundMatches(fit, src, W0, H0, nX0, nY0, nX1, nY1, k);
+        if (onFit) { X0 = nX0; Y0 = nY0; X1 = nX1; Y1 = nY1; }
+      } else onFit = fit && surroundMatches(fit, src, W0, H0, X0, Y0, X1, Y1, k);
+      const shadowOk = shadow && onFit;
+      if (shadow && !onFit) onFit = fit && surroundMatches(fit, src, W0, H0, X0, Y0, X1, Y1, k);
       const w = X1 - X0, h = Y1 - Y0;
-      if (w < 8 || h < 8) continue;
-      let surf = localSurface(src, W0, H0, X0, Y0, X1, Y1);
-      if (fit && surroundMatches(fit, src, W0, H0, X0, Y0, X1, Y1, k)) surf = fit.over(X0, Y0, w, h, k);
+      const inner = { x0: b.x0 * k - 6 - X0, y0: b.y0 * k - 6 - Y0, x1: (b.x1 + 1) * k + 6 - X0, y1: (b.y1 + 1) * k + 6 - Y0 };
+      const useShadow = shadowOk;
+      let surf = onFit ? fit.over(X0, Y0, w, h, k) : localSurface(src, W0, H0, X0, Y0, X1, Y1);
       const cut = new ImageData(w, h);
+      const shade = new Uint8Array(w * h); // shadow pixels
       let tx0 = w, ty0 = h, tx1 = -1, ty1 = -1;
       for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
         const i = ((Y0 + y) * W0 + (X0 + x)) * 4, o = (y * w + x) * 4, s3 = (y * w + x) * 3;
@@ -1245,9 +1382,28 @@ window.NTSlides = (() => {
         let d = Math.abs(c[0] - bgc[0]) + Math.abs(c[1] - bgc[1]) + Math.abs(c[2] - bgc[2]);
         // Where a label was removed, only clearly drawn pixels belong to the picture
         if (d < 50 && painted.some((p) => X0 + x >= p.x0 && X0 + x < p.x1 && Y0 + y >= p.y0 && Y0 + y < p.y1)) d = 0;
-        const a = d <= 18 ? 0 : d >= 60 ? 1 : (d - 18) / 42;
-        // Edge pixels: take the background's share out of the colour (no fringe on a new background)
-        for (let ch = 0; ch < 3; ch += 1) cut.data[o + ch] = a > 0 && a < 1 ? Math.max(0, Math.min(255, (c[ch] - (1 - a) * bgc[ch]) / a)) : c[ch];
+        let a = d <= 18 ? 0 : d >= 60 ? 1 : (d - 18) / 42;
+        // Shadow: a pixel that is just the background darkened becomes see-through black
+        const outside = x < inner.x0 || y < inner.y0 || x >= inner.x1 || y >= inner.y1;
+        let dark = 0;
+        if (useShadow && (a < 1 || outside)) {
+          const lb = 0.2126 * bgc[0] + 0.7152 * bgc[1] + 0.0722 * bgc[2], lc = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+          const sa = lb > 20 ? 1 - lc / lb : 0;
+          // darkened, not tinted: every channel scaled about the same
+          const tint = sa > 0 ? Math.max(...[0, 1, 2].map((ch) => Math.abs(c[ch] - bgc[ch] * (1 - sa)))) : 99;
+          // (outside the picture's own box anything darker is shadow)
+          if (sa > 0.012 && (outside || (tint < 20 && sa < 0.75))) dark = Math.min(0.9, sa);
+          else if (outside) a = 0;
+          if (outside) for (let ch = 0; ch < 3; ch += 1) fd[i + ch] = bgc[ch];
+        }
+        if (dark) {
+          a = dark;
+          shade[y * w + x] = 1;
+          cut.data[o] = cut.data[o + 1] = cut.data[o + 2] = 0;
+        } else {
+          // Edge pixels: take the background's share out of the colour (no fringe on a new background)
+          for (let ch = 0; ch < 3; ch += 1) cut.data[o + ch] = a > 0 && a < 1 ? Math.max(0, Math.min(255, (c[ch] - (1 - a) * bgc[ch]) / a)) : c[ch];
+        }
         cut.data[o + 3] = Math.round(a * 255);
         if (a > 0) {
           if (x < tx0) tx0 = x; if (x > tx1) tx1 = x; if (y < ty0) ty0 = y; if (y > ty1) ty1 = y;
@@ -1256,6 +1412,7 @@ window.NTSlides = (() => {
         }
       }
       if (tx1 < 0) continue;
+      matteEdges(cut, shade, w, h, src, W0, X0, Y0, surf);
       // A single flat one-colour shape (a badge circle, a plain card) is decoration:
       // it stays in the background
       if (flatShape(cut, w, h)) {
@@ -1276,6 +1433,102 @@ window.NTSlides = (() => {
     // Big pictures behind small ones
     objects.sort((a, b) => b.w * b.h - a.w * a.h);
     return { objects };
+  }
+
+  // Inside of a box (half-size pixels): a smooth fill (plane per channel) covers
+  // most of a card, even one holding a small picture; a photo's soft texture
+  // leaves most of it off any plane.
+  function softPhoto(sd, busy, sw, x0, y0, x1, y1) {
+    if (x1 - x0 < 12 || y1 - y0 < 12) return false;
+    const pts = [];
+    const step = Math.max(2, Math.round(Math.sqrt(((x1 - x0) * (y1 - y0)) / 900)));
+    for (let y = y0; y <= y1; y += step) for (let x = x0; x <= x1; x += step) {
+      const j = y * sw + x;
+      pts.push([x - x0, y - y0, sd[j * 4], sd[j * 4 + 1], sd[j * 4 + 2], busy[j]]);
+    }
+    if (pts.length < 40) return false;
+    // Least-squares plane per channel, refitted once without the outliers
+    const plane = (list, ch) => {
+      let n = 0, sx = 0, sy = 0, sz = 0, sxx = 0, syy = 0, sxy = 0, sxz = 0, syz = 0;
+      for (const p of list) { n += 1; sx += p[0]; sy += p[1]; sz += p[ch]; sxx += p[0] * p[0]; syy += p[1] * p[1]; sxy += p[0] * p[1]; sxz += p[0] * p[ch]; syz += p[1] * p[ch]; }
+      const mx = sx / n, my = sy / n, mz = sz / n;
+      const a11 = sxx / n - mx * mx, a22 = syy / n - my * my, a12 = sxy / n - mx * my, b1 = sxz / n - mx * mz, b2 = syz / n - my * mz;
+      const det = a11 * a22 - a12 * a12 || 1e-9;
+      const gx = (b1 * a22 - b2 * a12) / det, gy = (b2 * a11 - b1 * a12) / det;
+      return (x, y) => mz + gx * (x - mx) + gy * (y - my);
+    };
+    const off = (fits, p) => Math.abs(fits[0](p[0], p[1]) - p[2]) + Math.abs(fits[1](p[0], p[1]) - p[3]) + Math.abs(fits[2](p[0], p[1]) - p[4]);
+    // Robust start: the typical colour (a picture inside the card doesn't pull it)
+    let fits = [2, 3, 4].map((ch) => { const m = median(pts.map((p) => p[ch])); return () => m; });
+    for (const tol of [40, 30]) {
+      const keep = pts.filter((p) => off(fits, p) < tol);
+      if (keep.length < 20) break;
+      fits = [2, 3, 4].map((ch) => plane(keep, ch));
+    }
+    const onPlane = pts.filter((p) => off(fits, p) < 18).length / pts.length;
+    if (onPlane >= 0.45) return false;
+    // ...and it has fine texture: a radial or other smooth gradient fits no plane
+    // either, but is smooth up close
+    const L = (j) => 0.2126 * sd[j * 4] + 0.7152 * sd[j * 4 + 1] + 0.0722 * sd[j * 4 + 2];
+    let sum = 0, n = 0;
+    for (let y = y0 + 1; y < y1; y += 1) for (let x = x0 + 1; x < x1; x += 1) {
+      const j = y * sw + x;
+      if (busy[j] || busy[j - 1] || busy[j + 1] || busy[j - sw] || busy[j + sw]) continue;
+      sum += Math.abs(4 * L(j) - L(j - 1) - L(j + 1) - L(j - sw) - L(j + sw));
+      n += 1;
+    }
+    return n > 100 && sum / n > 1.6;
+  }
+
+  // Soft drop shadow around a picture box (full-size pixels): how far the
+  // background is darkened past each side, measured against the fitted
+  // background. 0 on a side without shadow.
+  function shadowReach(fit, d, W, H, X0, Y0, X1, Y1, k) {
+    const sw = Math.ceil(W / k), sh = Math.ceil(H / k);
+    const lumAt = (x, y) => { const i = (y * W + x) * 4; return 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]; };
+    const deficit = (side, r) => {
+      const vals = [];
+      const len = side < 2 ? X1 - X0 : Y1 - Y0;
+      for (let t = 0.15; t <= 0.85; t += 0.05) {
+        const along = Math.round((side < 2 ? X0 : Y0) + len * t);
+        const x = side < 2 ? along : side === 2 ? X0 - r : X1 + r;
+        const y = side === 0 ? Y0 - r : side === 1 ? Y1 + r : along;
+        if (x < 0 || y < 0 || x >= W || y >= H) continue;
+        const c = fit.at(x / k / sw, y / k / sh);
+        vals.push(0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] - lumAt(x, y));
+      }
+      return vals.length >= 5 ? median(vals) : 0;
+    };
+    // A shadow is neutral: every channel darkened by about the same share (a tinted
+    // card around the picture is not a shadow)
+    const neutral = (side, r) => {
+      const len = side < 2 ? X1 - X0 : Y1 - Y0;
+      const shares = [[], [], []];
+      for (let t = 0.2; t <= 0.8; t += 0.1) {
+        const along = Math.round((side < 2 ? X0 : Y0) + len * t);
+        const x = side < 2 ? along : side === 2 ? X0 - r : X1 + r;
+        const y = side === 0 ? Y0 - r : side === 1 ? Y1 + r : along;
+        if (x < 0 || y < 0 || x >= W || y >= H) continue;
+        const c = fit.at(x / k / sw, y / k / sh), i = (y * W + x) * 4;
+        for (let ch = 0; ch < 3; ch += 1) shares[ch].push((c[ch] - d[i + ch]) / Math.max(20, c[ch]));
+      }
+      if (shares[0].length < 4) return false;
+      const m = shares.map(median);
+      const mean = (m[0] + m[1] + m[2]) / 3;
+      return mean > 0 && Math.max(...m) - Math.min(...m) < mean * 0.45 + 0.01;
+    };
+    // top, bottom, left, right
+    return [0, 1, 2, 3].map((side) => {
+      const d2 = deficit(side, 2), d4 = deficit(side, 4);
+      const near = Math.max(d2, d4);
+      if (near < 4 || !neutral(side, d2 >= d4 ? 2 : 4)) return 0;
+      let r = 4;
+      while (r < 90 && deficit(side, r) > 1.2) r += 3;
+      // A shadow fades out gradually; a band that stays dark and then stops (a card,
+      // a frame) is something else
+      if (r >= 90 || deficit(side, Math.max(4, Math.round(r / 2))) > near * 0.75) return 0;
+      return r + 4;
+    });
   }
 
   // Smooth background model: per colour channel, a quadratic surface in x and y
@@ -1354,20 +1607,87 @@ window.NTSlides = (() => {
     return clear / n < 0.03 && colours.size > 1500 ? canvas.toDataURL("image/jpeg", 0.9) : canvas.toDataURL("image/png");
   }
 
+  // Anti-aliased edges: a pixel on a picture's edge is a mix of the picture's own
+  // colour just inside and the background behind. Its transparency is how far it
+  // sits from the background toward that inside colour, and it takes the pure
+  // inside colour, so the edge has no light or dark rim on a new background.
+  function matteEdges(cut, shade, w, h, src, W0, X0, Y0, surf) {
+    const d = cut.data;
+    const solid = (x, y) => x >= 0 && y >= 0 && x < w && y < h && d[(y * w + x) * 4 + 3] === 255 && !shade[y * w + x];
+    const interior = new Uint8Array(w * h);
+    for (let y = 1; y < h - 1; y += 1) for (let x = 1; x < w - 1; x += 1) if (solid(x, y) && solid(x - 1, y) && solid(x + 1, y) && solid(x, y - 1) && solid(x, y + 1) && solid(x - 2, y) && solid(x + 2, y) && solid(x, y - 2) && solid(x, y + 2)) interior[y * w + x] = 1;
+    const out = new Uint8ClampedArray(d);
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+      const p = y * w + x, o = p * 4;
+      if (!d[o + 3] || interior[p] || shade[p]) continue;
+      // nearest inside pixel within 3
+      let best = -1, bd = 99;
+      for (let dy = -3; dy <= 3; dy += 1) for (let dx = -3; dx <= 3; dx += 1) {
+        const xx = x + dx, yy = y + dy;
+        if (xx < 0 || yy < 0 || xx >= w || yy >= h || !interior[yy * w + xx]) continue;
+        const dd = dx * dx + dy * dy;
+        if (dd < bd) { bd = dd; best = yy * w + xx; }
+      }
+      if (best < 0) continue;
+      const i = ((Y0 + y) * W0 + (X0 + x)) * 4, s3 = p * 3, f = best * 4;
+      const F = [d[f], d[f + 1], d[f + 2]], B = [surf[s3], surf[s3 + 1], surf[s3 + 2]], C = [src[i], src[i + 1], src[i + 2]];
+      const fb = [F[0] - B[0], F[1] - B[1], F[2] - B[2]];
+      const len = fb[0] * fb[0] + fb[1] * fb[1] + fb[2] * fb[2];
+      if (len < 60 * 60) continue; // inside too close to the background to tell
+      const a = Math.max(0, Math.min(1, ((C[0] - B[0]) * fb[0] + (C[1] - B[1]) * fb[1] + (C[2] - B[2]) * fb[2]) / len));
+      // Only when the pixel really is such a mix (not a detail of another colour)
+      const rest = [0, 1, 2].reduce((t, c) => t + Math.abs(B[c] + a * fb[c] - C[c]), 0);
+      if (rest > 60) continue;
+      out[o] = F[0]; out[o + 1] = F[1]; out[o + 2] = F[2];
+      out[o + 3] = Math.round(a * 255);
+    }
+    d.set(out);
+  }
+
   // Mostly one colour (ignoring soft edges and a little text inside): a plain shape.
   function flatShape(cut, w, h) {
     const d = cut.data;
-    const bins = new Map();
-    let solid = 0;
-    for (let i = 0; i < w * h; i += 1) {
-      if (d[i * 4 + 3] < 250) continue;
-      solid += 1;
-      const key = ((d[i * 4] >> 4) << 8) | ((d[i * 4 + 1] >> 4) << 4) | (d[i * 4 + 2] >> 4);
-      bins.set(key, (bins.get(key) || 0) + 1);
+    let solidN = 0;
+    for (let i = 0; i < w * h; i += 1) if (d[i * 4 + 3] >= 250) solidN += 1;
+    if (solidN < 50) return true;
+    const px = [];
+    const solidAt = (x, y) => x >= 0 && y >= 0 && x < w && y < h && d[(y * w + x) * 4 + 3] >= 250;
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) if (solidAt(x, y) && solidAt(x - 3, y) && solidAt(x + 3, y) && solidAt(x, y - 3) && solidAt(x, y + 3)) px.push((y * w + x) * 4);
+    // Line drawings (chart curves, outlines) have little or no inside: never a flat shape
+    if (px.length < solidN * 0.5) return false;
+    // Several separate shapes (the bars of a chart) are a picture, even in one colour
+    {
+      const lab = new Uint8Array(w * h);
+      let pieces = 0;
+      const st = [];
+      for (let i0 = 0; i0 < w * h; i0 += 1) {
+        if (lab[i0] || d[i0 * 4 + 3] < 250) continue;
+        let n = 0;
+        st.push(i0); lab[i0] = 1;
+        while (st.length) {
+          const j = st.pop(); n += 1;
+          const x = j % w;
+          for (const q of [x > 0 ? j - 1 : -1, x < w - 1 ? j + 1 : -1, j - w, j + w]) if (q >= 0 && q < w * h && !lab[q] && d[q * 4 + 3] >= 250) { lab[q] = 1; st.push(q); }
+        }
+        if (n >= solidN * 0.05 && (pieces += 1) > 1) return false;
+      }
     }
-    if (solid < 50) return true;
-    const top = Math.max(...bins.values());
-    return top / solid > 0.97;
+    // Share of solid pixels close to the shape's typical colour (loose enough for
+    // the ringing JPEG leaves near strong edges)
+    const sample = px.filter((_v, j) => j % 5 === 0);
+    const typical = [0, 1, 2].map((c) => median(sample.map((i) => d[i + c])));
+    const near = px.filter((i) => Math.abs(d[i] - typical[0]) + Math.abs(d[i + 1] - typical[1]) + Math.abs(d[i + 2] - typical[2]) < 45).length;
+    if (near / px.length <= 0.97) return false;
+    // ...and smooth up close: a micrograph or photo in one tint has fine texture
+    const L = (i) => 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+    let sum = 0, n = 0;
+    for (const i of px) {
+      const p = i / 4, x = p % w;
+      if (x < 1 || x >= w - 1 || p < w || p >= w * (h - 1)) continue;
+      sum += Math.abs(4 * L(i) - L(i - 4) - L(i + 4) - L(i - w * 4) - L(i + w * 4));
+      n += 1;
+    }
+    return !(n > 50 && sum / n > 2.4);
   }
 
   // Background colour across a box, from thin strips just outside each side
