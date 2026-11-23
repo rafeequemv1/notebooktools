@@ -537,19 +537,105 @@
   function setText(txt, el) {
     const paras = String(el.text).split("\n");
     const bullets = paras.some((p) => /^•\s/.test(p));
-    if (!el.labelColor && !bullets) {
+    const styled = el.labelColor || (el.runs && el.runs.length);
+    if (!styled && !bullets) {
       txt.textContent = el.text;
       return;
     }
     bulletCtx.font = `${el.bold ? 700 : 400} 100px ${S.cssFamily(el.fontFamily)}`;
     const em = (bulletCtx.measureText("• ").width / 100).toFixed(3);
+    let at = 0;
     txt.innerHTML = paras.map((para) => {
-      const inner = (el.labelColor ? S.lineRuns(el, para) : [{ text: para }]).map((r) => r.label
-        ? `<span style="color:${el.labelColor};font-weight:${el.labelBold ? 700 : 400}">${esc(r.text)}</span>`
-        : esc(r.text)).join("");
+      const start = at;
+      at += para.length + 1;
+      // Styled words (and "Label:" lead-ins) in their own weight, slant, colour, position
+      const inner = S.stylePieces(el, para, start, start).map((p) => {
+        const css = [
+          p.bold !== !!el.bold ? `font-weight:${p.bold ? 700 : 400}` : "",
+          p.italic !== !!el.italic ? `font-style:${p.italic ? "italic" : "normal"}` : "",
+          p.color !== el.color ? `color:${p.color}` : "",
+          p.sup ? "vertical-align:super;font-size:62%" : p.sub ? "vertical-align:sub;font-size:62%" : ""
+        ].filter(Boolean).join(";");
+        return css ? `<span style="${css}">${esc(p.text)}</span>` : esc(p.text);
+      }).join("");
       const hang = /^•\s/.test(para) ? ` style="padding-left:${em}em;text-indent:-${em}em"` : "";
       return `<div${hang}>${inner || "<br>"}</div>`;
     }).join("");
+  }
+
+  // Text offsets of a point in a box being typed in (paragraph blocks count one
+  // character each for the line break between them), and back.
+  function blocksOf(txt) {
+    const divs = [...txt.children].filter((n) => n.tagName === "DIV");
+    return divs.length ? divs : null;
+  }
+  function offsetIn(txt, node, off) {
+    const r = document.createRange();
+    const blocks = blocksOf(txt);
+    if (!blocks) { r.setStart(txt, 0); r.setEnd(node, off); return r.toString().length; }
+    if (node === txt) return blocks.slice(0, off).reduce((n, b) => n + b.textContent.length + 1, 0) - (off ? 1 : 0) * 0;
+    let total = 0;
+    for (const b of blocks) {
+      if (b === node || b.contains(node)) { r.setStart(b, 0); r.setEnd(node, off); return total + r.toString().length; }
+      total += b.textContent.length + 1;
+    }
+    return Math.max(0, total - 1);
+  }
+  function pointAt(txt, pos) {
+    const blocks = blocksOf(txt) || [txt];
+    let rem = pos;
+    for (let k = 0; k < blocks.length; k += 1) {
+      const b = blocks[k], len = b.textContent.length;
+      if (rem <= len || k === blocks.length - 1) {
+        const walker = document.createTreeWalker(b, NodeFilter.SHOW_TEXT);
+        let t = walker.nextNode(), last = null;
+        while (t) {
+          if (rem <= t.length) return [t, rem];
+          rem -= t.length;
+          last = t;
+          t = walker.nextNode();
+        }
+        return last ? [last, last.length] : [b, 0];
+      }
+      rem -= len + 1;
+    }
+    return [txt, 0];
+  }
+  // The selected stretch of the box being typed in, or null
+  function textSelection(txt) {
+    const sel = getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return null;
+    const r = sel.getRangeAt(0);
+    if (!txt.contains(r.startContainer) || !txt.contains(r.endContainer)) return null;
+    const a = offsetIn(txt, r.startContainer, r.startOffset), b = offsetIn(txt, r.endContainer, r.endOffset);
+    return b > a ? [a, b] : null;
+  }
+  // Bold / italic / colour on the selected words only (while typing with a selection)
+  function styleSelection(el, prop, value) {
+    const node = nodeOf(el.id);
+    const txt = node && node.querySelector(".se-txt");
+    if (!txt || editing !== el.id) return false;
+    const range = textSelection(txt);
+    if (!range) return false;
+    const [a, b] = range;
+    el.text = txt.innerText.replace(/\n$/, "");
+    if (value === undefined) {
+      // toggle: on unless every selected letter already has it
+      const pieces = S.stylePieces(el, el.text.slice(a, b), a);
+      value = !pieces.every((p) => (prop === "sup" || prop === "sub" ? p[prop] : p[prop]) || !p.text.trim());
+    }
+    commit();
+    S.applyStyle(el, a, b, { [prop]: value });
+    setText(txt, el);
+    const [n0, o0] = pointAt(txt, a), [n1, o1] = pointAt(txt, b);
+    const r = document.createRange();
+    r.setStart(n0, o0);
+    r.setEnd(n1, o1);
+    const sel = getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    refreshThumbSoon();
+    return true;
   }
 
   function applyBox(node, el) {
@@ -604,7 +690,13 @@
     popFor = null;
     app.querySelectorAll("[data-pop].is-on").forEach((b) => b.classList.remove("is-on"));
   }
+  let popSel = null; // words selected in the box being typed in when the colour list opened
   function openPop(btn) {
+    popSel = null;
+    if (editing && btn.dataset.prop === "color") {
+      const txt = nodeOf(editing)?.querySelector(".se-txt");
+      popSel = txt ? textSelection(txt) : null;
+    }
     const kind = btn.dataset.pop;
     if (popFor && popFor.btn === btn) return closePop();
     closePop();
@@ -658,6 +750,18 @@
       return;
     }
     const v = value === "none" ? (prop === "highlight" ? "" : "none") : value;
+    // Text colour on the selected words only
+    if (prop === "color" && popSel && editing && v !== "none") {
+      const el = find(editing), txt = nodeOf(editing)?.querySelector(".se-txt");
+      if (el && txt) {
+        if (!opts?.noCommit) commit();
+        el.text = txt.innerText.replace(/\n$/, "");
+        S.applyStyle(el, popSel[0], popSel[1], { color: v });
+        setText(txt, el);
+        refreshThumbSoon();
+        return;
+      }
+    }
     const props = { [prop]: v };
     // Picking an outline colour with no width gives it a visible width.
     const el = find(selected);
@@ -763,6 +867,8 @@
         <span class="se-sep"></span>
         <button type="button" class="se-btn" data-act="replace-image" title="Swap in another picture, same place and size">${ico("image")}<span>Replace</span></button>
         <button type="button" class="se-btn" data-act="fit-image" title="Restore the picture's own proportions">Reset shape</button>
+        <button type="button" class="se-btn" data-act="merge-image" title="Merge this picture with another one: click this, then the other picture">Merge</button>
+        <button type="button" class="se-btn" data-act="split-image" title="Cut this picture into its separate parts">Split</button>
         ${tail(el)}`;
     }
   }
@@ -860,6 +966,10 @@
     const el = find(selected);
     if (!el) return;
     if (!opts.noCommit) commit();
+    // Typed text keeps its styled words in place; a style set on the whole box
+    // applies to all of it (its styled words follow)
+    if (props.text !== undefined && el.runs) el.runs = S.remapRuns(el.text, props.text, el.runs);
+    for (const k of ["bold", "italic", "color"]) if (props[k] !== undefined) S.clearRunProp(el, k);
     Object.assign(el, props);
     repaint(el);
     refreshThumbSoon();
@@ -985,7 +1095,11 @@
     const el = find(selected);
     if (t.dataset.tab) { tab = t.dataset.tab; return renderProps(); }
     if (t.dataset.pickEl) { tab = "motion"; return select(t.dataset.pickEl); }
-    if (t.dataset.toggle && el) { update({ [t.dataset.toggle]: !el[t.dataset.toggle] }); return renderPanels(); }
+    if (t.dataset.toggle && el) {
+      if (["bold", "italic"].includes(t.dataset.toggle) && el.type === "text" && styleSelection(el, t.dataset.toggle)) return;
+      update({ [t.dataset.toggle]: !el[t.dataset.toggle] });
+      return renderPanels();
+    }
     if (t.dataset.align) { update({ align: t.dataset.align }); return renderPanels(); }
     if (t.dataset.valign) { update({ valign: t.dataset.valign }); return renderPanels(); }
     if (t.dataset.transition) {
@@ -1092,6 +1206,27 @@
     "add-arrow": () => addElement({ id: S.id(), type: "line", ...centerBox(520, 0), stroke: "#0b57d0", strokeWidth: 5, arrow: true, opacity: 1 }),
     "add-image": () => { replacing = false; $("#seImageInput").click(); },
     "replace-image": () => { replacing = true; $("#seImageInput").click(); },
+    "split-image": async () => {
+      const el = find(selected);
+      if (!el || el.type !== "image") return;
+      let parts = null;
+      try { parts = await S.splitPicture(el); } catch (_error) { parts = null; }
+      if (!parts) { status("This picture is one piece, so there's nothing to split."); return; }
+      commit();
+      const list = slide().elements;
+      list.splice(list.indexOf(el), 1, ...parts);
+      selected = parts[0].id;
+      renderStage();
+      renderPanels();
+      refreshThumbSoon();
+      status(`Split into ${parts.length} pictures.`);
+    },
+    "merge-image": () => {
+      const el = find(selected);
+      if (!el || el.type !== "image") return;
+      mergeFrom = el.id;
+      status("Now click the picture to merge it with (Esc cancels).");
+    },
     "fit-image": () => {
       const el = find(selected);
       if (!el || el.type !== "image") return;
@@ -1274,8 +1409,34 @@
     stopEditing();
     if (selected) select(null);
   });
+  let mergeFrom = null; // picture waiting for a second one to merge with
+  async function finishMerge(otherId) {
+    const a = find(mergeFrom), b = find(otherId);
+    mergeFrom = null;
+    if (!a || !b || a === b) return;
+    if (b.type !== "image") { status("Merging works on pictures only."); return; }
+    const list = slide().elements;
+    const ordered = [a, b].sort((p, q) => list.indexOf(p) - list.indexOf(q));
+    let merged;
+    try { merged = await S.mergePictures(ordered); } catch (error) { status(error.message || "These pictures couldn't be merged."); return; }
+    commit();
+    const at = list.indexOf(ordered[1]);
+    list.splice(at, 1, merged);
+    list.splice(list.indexOf(ordered[0]), 1);
+    selected = merged.id;
+    renderStage();
+    renderPanels();
+    refreshThumbSoon();
+    status("Merged into one picture.");
+  }
   $("#seStage").addEventListener("pointerdown", (event) => {
     const node = event.target.closest(".se-el");
+    if (mergeFrom) {
+      event.preventDefault();
+      if (node && node.dataset.id !== mergeFrom) { finishMerge(node.dataset.id); return; }
+      if (!node) { mergeFrom = null; status(""); }
+      return;
+    }
     if (!node) {
       stopEditing();
       if (selected) select(null);
@@ -1400,7 +1561,9 @@
     sel.removeAllRanges();
     sel.addRange(range);
     txt.oninput = () => {
-      el.text = txt.innerText.replace(/\n$/, "");
+      const typed = txt.innerText.replace(/\n$/, "");
+      if (el.runs) el.runs = S.remapRuns(el.text, typed, el.runs);
+      el.text = typed;
       fitTextHeight(el, node);
       const ta = $('#seProps textarea[data-prop="text"]');
       if (ta) ta.value = el.text;
@@ -1427,7 +1590,9 @@
       node.classList.remove("is-editing");
       if (txt) {
         txt.contentEditable = "false";
-        el.text = txt.innerText.replace(/\n$/, "");
+        const typed = txt.innerText.replace(/\n$/, "");
+        if (el.runs) el.runs = S.remapRuns(el.text, typed, el.runs);
+        el.text = typed;
       }
       if (!el.text.trim()) {
         slide().elements = slide().elements.filter((e) => e !== el);
@@ -1448,12 +1613,14 @@
     const el = selected && find(selected);
     if (mod && key === "z" && !typing) { event.preventDefault(); event.shiftKey ? redo() : undo(); return; }
     if (mod && key === "y" && !typing) { event.preventDefault(); redo(); return; }
+    if (event.key === "Escape" && mergeFrom) { mergeFrom = null; status(""); return; }
     if (event.key === "Escape") { if (!$("#sePop").hidden) closePop(); else if (editing) stopEditing(); else if (selected) select(null); else app.classList.remove("is-full"); return; }
     if (event.key === "F5") { event.preventDefault(); present(event.shiftKey ? cur : 0); return; }
     // Text styling works while typing too (whole box).
     if (mod && el?.type === "text" && ["b", "i", "u"].includes(key)) {
       event.preventDefault();
       const prop = { b: "bold", i: "italic", u: "underline" }[key];
+      if (prop !== "underline" && styleSelection(el, prop)) return;
       update({ [prop]: !el[prop] });
       renderPanels();
       return;

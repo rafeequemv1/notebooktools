@@ -831,15 +831,20 @@ window.NTSlides = (() => {
     return out;
   }
 
-  async function addSparseText(slide, segs, img, onProgress) {
-    if (typeof P.ocrSparse !== "function") return;
-    let blocks;
+  // The sparse read runs on the second OCR worker while the page pass runs on the first.
+  function startSparse(slide) {
+    if (typeof P.ocrSparse !== "function") return Promise.resolve(null);
     try {
       slide._map = contrastMap(slide); // kept for re-reading fragments, dropped after analysis
-      blocks = await P.ocrSparse(slide._map);
+      return P.ocrSparse(slide._map).catch(() => null);
     } catch (_error) {
-      return;
+      return Promise.resolve(null);
     }
+  }
+
+  async function addSparseText(slide, segs, img, sparseJob) {
+    const blocks = await sparseJob;
+    if (!blocks) return;
     const found = segmentsOf(blocks, img);
     for (const sg of found) {
       if ((sg.conf < 70) || sg.quality < 0.7 || (sg.text.match(/\p{L}|\d/gu) || []).length < 2) continue;
@@ -856,7 +861,6 @@ window.NTSlides = (() => {
         && Math.min(k.x1, sg.x1) - Math.max(k.x0, sg.x0) > (k.x1 - k.x0) * 0.6 && Math.abs((k.y0 + k.y1) / 2 - (sg.y0 + sg.y1) / 2) < (k.y1 - k.y0) * 0.6);
       if (part && /^[\p{Lu}\d]/u.test(sg.text)) Object.assign(part, sg, { sparse: true });
     }
-    void onProgress;
   }
 
   /* Number badges: "01", "2", "A" in a solid circle or rounded square. Light
@@ -1317,10 +1321,15 @@ window.NTSlides = (() => {
 
   async function analyze(slide, onProgress = () => {}, options = {}) {
     slide.status = "working";
+    const t0 = performance.now(), times = {};
+    let tl = t0;
+    const T = (k) => { const n = performance.now(); times[k] = Math.round(n - tl); tl = n; };
     const added = slide.elements.slice(); // anything added by hand while the slide waited
-    const blocks = await P.ocrBlocks(slide.original, (m) => {
+    const pageJob = P.ocrBlocks(slide.original, (m) => {
       if (m.status === "recognizing text") onProgress(m.progress);
     });
+    const sparseJob = startSparse(slide);
+    const blocks = await pageJob;
     const octx = slide.original.getContext("2d", { willReadFrequently: true });
     const img = octx.getImageData(0, 0, slide.w, slide.h);
     const elements = [];
@@ -1328,9 +1337,12 @@ window.NTSlides = (() => {
 
     // 1. Keep real text: confident, plausible words, on a calm background.
     const dropped = [];
+    T("page ocr");
     const allSegs = segmentsOf(blocks, img);
-    await addSparseText(slide, allSegs, img, onProgress);
+    await addSparseText(slide, allSegs, img, sparseJob);
+    T("sparse");
     await readBadges(slide, allSegs, img);
+    T("badges");
     // Chart ticks: numbers lined up in a row or column with even steps (0 100 200,
     // 500 1000 1500), or tiny numbers. A row of years ("2012 2015 2019") or a
     // lone figure is real text.
@@ -1362,6 +1374,7 @@ window.NTSlides = (() => {
       return digits > 0 && digits >= (sg.text.match(/\p{L}/gu) || []).length;
     });
     await rereadUnsure(slide, allSegs, img);
+    T("reread");
     const segs = allSegs.filter((sg) => {
       const h = sg.y1 - sg.y0;
       const letters = sg.text.replace(/[^\p{L}\p{N}]/gu, "").length;
@@ -1390,7 +1403,9 @@ window.NTSlides = (() => {
     segs.push(...kept);
     slide.debugDropped = dropped;
     segs.forEach((sg) => lineStyle(img, sg));
+    T("styles");
     await readScripts(slide, segs, img);
+    T("scripts");
     // The slide's regular weight: what its longer lines (mostly body text) measure
     const long = segs.filter((sg) => sg.text.length >= 15 && sg.weight > 0);
     const baseWeight = long.length >= 2 ? weightedMedian(long.map((sg) => [sg.weight, sg.text.length])) : 0.95;
@@ -1591,8 +1606,10 @@ window.NTSlides = (() => {
     clean.height = slide.h;
     const cctx = clean.getContext("2d", { willReadFrequently: true });
     cctx.drawImage(slide.original, 0, 0);
+    T("boxes");
     paintOut(cctx, boxes, slide.w, slide.h);
     fillTextured(cctx, boxes, slide.w, slide.h);
+    T("paint");
     slide._painted = boxes; // where text was removed (pictures stay see-through there)
     slide.clean = clean;
     slide.elements = [...elements, ...added];
@@ -1602,11 +1619,13 @@ window.NTSlides = (() => {
         await Promise.all(found.objects.filter((o) => o.type === "image").map((o) => imageFor(o.src).decode().catch(() => {})));
         slide.elements = [...found.objects, ...elements, ...added];
         slide.objectsNote = found.skipped || "";
+        T("pictures");
       } catch (_error) {
         // Keep the flat background if detection fails.
       }
     }
     slide.status = "done";
+    if (options.debug) slide.debugTimes = times;
     return slide;
   }
 

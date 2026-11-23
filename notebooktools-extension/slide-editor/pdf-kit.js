@@ -547,15 +547,22 @@ window.NTPdf = (() => {
 
   // One line at a time (mode 7), or sparse text anywhere on the page (mode 11:
   // labels scattered over figures). Calls are sequential, so one worker serves both.
+  // Jobs queue up, so a mode change never lands in the middle of another read.
   let lineMode = "";
-  async function recognizeIn(mode, image) {
-    const worker = await lineWorker();
-    if (lineMode !== mode) {
-      await worker.setParameters({ tessedit_pageseg_mode: mode });
-      lineMode = mode;
-    }
-    const { data } = await worker.recognize(image, {}, { blocks: true, text: true });
-    return data.blocks || [];
+  let lineQueue = Promise.resolve();
+  function recognizeIn(mode, image) {
+    const run = async () => {
+      const worker = await lineWorker();
+      if (lineMode !== mode) {
+        await worker.setParameters({ tessedit_pageseg_mode: mode });
+        lineMode = mode;
+      }
+      const { data } = await worker.recognize(image, {}, { blocks: true, text: true });
+      return data.blocks || [];
+    };
+    const job = lineQueue.then(run, run);
+    lineQueue = job.catch(() => {});
+    return job;
   }
   const ocrLine = (image) => recognizeIn("7", image);
   const ocrSparse = (image) => recognizeIn("11", image);
