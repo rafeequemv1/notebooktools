@@ -117,7 +117,23 @@ window.NTSlides = (() => {
     for (let y = box.y0 - pad; y <= box.y1 + pad; y += 2) {
       for (const x of [box.x0 - pad, box.x1 + pad]) if (x >= 0 && y >= 0 && x < width && y < height) ring.push(pixelAt(data, width, x, y));
     }
-    const bg = [0, 1, 2].map((k) => median(ring.map((p) => p[k])));
+    let bg = [0, 1, 2].map((k) => median(ring.map((p) => p[k])));
+    // The ring can run through the line above and a box's border below (tight
+    // labels in a box). Between the letters is mostly background: when that
+    // disagrees strongly with the ring, it wins.
+    {
+      const inside = [];
+      for (let y = Math.max(0, Math.round(box.y0)); y < Math.min(height, box.y1); y += 2) for (let x = Math.max(0, Math.round(box.x0)); x < Math.min(width, box.x1); x += 2) inside.push(pixelAt(data, width, x, y));
+      if (inside.length >= 20) {
+        const L = (p) => 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2];
+        const ml = median(inside.map(L));
+        const calm = inside.filter((p) => Math.abs(L(p) - ml) < 25);
+        if (calm.length >= inside.length * 0.55) {
+          const ib = [0, 1, 2].map((k) => median(calm.map((p) => p[k])));
+          if (dist(ib, bg) > 45) bg = ib;
+        }
+      }
+    }
     const ink = [];
     let count = 0;
     let total = 0;
@@ -250,14 +266,15 @@ window.NTSlides = (() => {
     return sd >= 14 && detail(r.y0 - 7) >= 0.25 && detail(r.y1 + 6) >= 0.25 ? sd : 0;
   }
 
-  function fillTextured(cctx, boxes, W, H) {
+  function fillTextured(cctx, boxes, W, H, fillThis = () => true) {
     const img = cctx.getImageData(0, 0, W, H);
     const d = img.data;
     const hole = new Uint8Array(W * H), filled = new Uint8Array(W * H);
-    const rects = boxes.map((b) => ({ x0: Math.max(0, Math.floor(b.x0)), y0: Math.max(0, Math.floor(b.y0)), x1: Math.min(W, Math.ceil(b.x1)), y1: Math.min(H, Math.ceil(b.y1)) })).filter((r) => r.x1 > r.x0 && r.y1 > r.y0);
+    const rects = boxes.map((b) => ({ x0: Math.max(0, Math.floor(b.x0)), y0: Math.max(0, Math.floor(b.y0)), x1: Math.min(W, Math.ceil(b.x1)), y1: Math.min(H, Math.ceil(b.y1)), b })).filter((r) => r.x1 > r.x0 && r.y1 > r.y0);
     for (const r of rects) for (let y = r.y0; y < r.y1; y += 1) hole.fill(1, y * W + r.x0, y * W + r.x1);
     let changed = false;
     for (const r of rects) {
+      if (!fillThis(r.b)) continue;
       const bh = r.y1 - r.y0, bw = r.x1 - r.x0;
       const grain = texturedAround(d, W, H, r, (x, y) => hole[y * W + x] === 1);
       if (!grain) continue;
@@ -375,6 +392,8 @@ window.NTSlides = (() => {
       .replace(/(\d{4}s?)\s*-\s*(\d{4})/g, "$1–$2") // 1930s-2004 → 1930s–2004
       .replace(SUBSCRIPT_2, "$1₂") // SiO, → SiO₂
       .replace(/\bH[,2]O\b/g, "H₂O")
+      .replace(/(^|\s)\[(?=[a-z]{3,}(?:\s|$|[.,;:]))(?![^\]]*\])/g, "$1I") // "[slet" → "Islet" (not "[young scientists]")
+      .replace(/(\p{L})\s+[«¢]\s+(?=\p{L})/gu, "$1 • ") // a dot between phrases read as « or ¢
       .replace(/\bCO[,2](?=\s+[a-z]|[.;:)]|$)/g, "CO₂")
       .replace(/\s*(?:[—–-]+\s*>|=>)\s*/g, " → ") // —> arrows
       .replace(/\s+([,.;:!?])(?=\s|$)/g, "$1")
@@ -919,6 +938,182 @@ window.NTSlides = (() => {
     }
   }
 
+  /* Labels in figures: words in small outlined pills and ellipses, next to
+     drawings. The page pass reads a pill's outline as brackets or skips the box,
+     so here each line of letters is found from the contrast map (marks of letter
+     size lined up in a row), redrawn alone dark on white (no outline, no leader
+     line, no drawing behind it), enlarged, and all the lines are read together
+     in one stacked image. */
+  function labelCandidates(map, threshold) {
+    const W = map.width, H = map.height;
+    const d = map.getContext("2d", { willReadFrequently: true }).getImageData(0, 0, W, H).data;
+    const lab = new Int32Array(W * H), stack = new Int32Array(W * H), comps = [];
+    for (let s = 0; s < W * H; s += 1) {
+      if (lab[s] || d[s * 4] >= threshold) continue;
+      const id = comps.length + 1;
+      let sp = 0, x0 = W, y0 = H, x1 = 0, y1 = 0, n = 0;
+      stack[sp++] = s; lab[s] = id;
+      while (sp) {
+        const q = stack[--sp], x = q % W, y = (q / W) | 0;
+        n += 1;
+        if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+        for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+          const xx = x + dx, yy = y + dy;
+          if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+          const r = yy * W + xx;
+          if (!lab[r] && d[r * 4] < threshold) { lab[r] = id; stack[sp++] = r; }
+        }
+      }
+      comps.push({ id, x0, y0, x1: x1 + 1, y1: y1 + 1, n });
+    }
+    // Letters (or a few letters run together): letter height, not a long rule or a frame
+    const glyph = comps.filter((c) => {
+      const w = c.x1 - c.x0, h = c.y1 - c.y0;
+      return h >= 7 && h <= 60 && w >= 2 && w <= h * 8 && c.n >= 12 && c.n <= w * h * 0.9;
+    }).sort((a, b) => a.x0 - b.x0);
+    const par = glyph.map((_, i) => i);
+    const root = (i) => (par[i] === i ? i : (par[i] = root(par[i])));
+    for (let i = 0; i < glyph.length; i += 1) {
+      const A = glyph[i], ha = A.y1 - A.y0;
+      for (let j = i + 1; j < glyph.length; j += 1) {
+        const B = glyph[j], hb = B.y1 - B.y0, mh = Math.max(ha, hb);
+        // (letters and word spaces; labels side by side sit further apart)
+        if (B.x0 - A.x1 > mh * 1.0) { if (B.x0 - A.x1 > 160) break; continue; }
+        const ov = Math.min(A.y1, B.y1) - Math.max(A.y0, B.y0);
+        if (ov < Math.min(ha, hb) * 0.6 || mh > Math.min(ha, hb) * 2.2) continue;
+        // (on one baseline: a descender over the next line's capital doesn't chain lines)
+        if (Math.abs(A.y1 - B.y1) > mh * 0.45 && Math.abs((A.y0 + A.y1) - (B.y0 + B.y1)) / 2 > mh * 0.3) continue;
+        par[root(i)] = root(j);
+      }
+    }
+    const groups = new Map();
+    glyph.forEach((c, i) => { const r = root(i); if (!groups.has(r)) groups.set(r, []); groups.get(r).push(c); });
+    const lines = [];
+    for (let cs of groups.values()) {
+      if (cs.length < 2 && cs[0].x1 - cs[0].x0 < (cs[0].y1 - cs[0].y0) * 1.4) continue;
+      // A shape's rounded ends (pill, ellipse) reach past the letters above and below
+      const m = median(cs.map((c) => c.y1 - c.y0));
+      const plain = cs.filter((c) => c.y1 - c.y0 < m * 1.45);
+      if (plain.length) {
+        const top = Math.min(...plain.map((c) => c.y0)), bot = Math.max(...plain.map((c) => c.y1));
+        cs = cs.filter((c) => c.y1 - c.y0 < m * 1.45 || !(c.y0 < top - m * 0.12 && c.y1 > bot + m * 0.12));
+      }
+      if (!cs.length) continue;
+      const x0 = Math.min(...cs.map((c) => c.x0)), x1 = Math.max(...cs.map((c) => c.x1));
+      const y0 = Math.min(...cs.map((c) => c.y0)), y1 = Math.max(...cs.map((c) => c.y1));
+      const h = median(cs.map((c) => c.y1 - c.y0));
+      if (x1 - x0 < h * 1.2 || y1 - y0 > h * 2.4) continue; // (taller than a line: lines run together)
+      lines.push({ x0, y0, x1, y1, h, ids: new Set(cs.map((c) => c.id)) });
+    }
+    // Dots, hyphens and accents inside a line belong to it
+    for (const c of comps) {
+      const w = c.x1 - c.x0, hh = c.y1 - c.y0;
+      if (hh > 60 || w > 60) continue;
+      for (const L of lines) {
+        if (c.x0 >= L.x0 - L.h * 0.5 && c.x1 <= L.x1 + L.h * 0.5 && c.y0 >= L.y0 - L.h * 0.35 && c.y1 <= L.y1 + L.h * 0.35 && hh <= (L.y1 - L.y0) * 1.1) L.ids.add(c.id);
+      }
+    }
+    lines.forEach((L) => { L.lab = lab; L.W = W; });
+    return lines;
+  }
+
+  async function readLabels(slide, segs, img) {
+    if (!slide._map || typeof P.ocrStack !== "function") return;
+    const area = (b) => Math.max(1, (b.x1 - b.x0) * (b.y1 - b.y0));
+    const inter = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
+    // Lines the page pass already read well are left alone
+    const good = segs.filter((sg) => sg.conf >= 85 && sg.quality >= 0.9);
+    const lines = [];
+    for (const threshold of [90, 120]) {
+      for (const L of labelCandidates(slide._map, threshold)) {
+        if (good.some((sg) => inter(sg, L) > area(L) * 0.6)) continue;
+        if (lines.some((o) => inter(o, L) > Math.max(area(o), area(L)) * 0.7)) continue;
+        lines.push(L);
+      }
+    }
+    if (!lines.length) return;
+    // Stack the lines: letters only, about 40 px tall, with room between rows
+    const rowH = 40, gap = 36, mx = 24;
+    const rows = [];
+    let top = gap, maxW = 0;
+    for (const L of lines) {
+      const pad = Math.round((L.y1 - L.y0) * 0.25);
+      const bx0 = Math.max(0, L.x0 - pad), by0 = Math.max(0, L.y0 - pad);
+      const bx1 = Math.min(slide.w, L.x1 + pad), by1 = Math.min(slide.h, L.y1 + pad);
+      const s = rowH / (L.y1 - L.y0);
+      const w = Math.round((bx1 - bx0) * s), h = Math.round((by1 - by0) * s);
+      rows.push({ L, bx0, by0, bx1, by1, s, top, w, h });
+      top += h + gap;
+      maxW = Math.max(maxW, w);
+      if (top > 12000) break; // keep the stacked image a sane size
+    }
+    const sheet = document.createElement("canvas");
+    sheet.width = maxW + mx * 2;
+    sheet.height = top;
+    const sctx = sheet.getContext("2d");
+    sctx.fillStyle = "#fff";
+    sctx.fillRect(0, 0, sheet.width, sheet.height);
+    const piece = document.createElement("canvas");
+    const pctx = piece.getContext("2d");
+    for (const r of rows) {
+      const cw = r.bx1 - r.bx0, ch = r.by1 - r.by0;
+      piece.width = cw; piece.height = ch;
+      const im = pctx.createImageData(cw, ch);
+      const { lab, W, ids } = r.L;
+      for (let y = 0; y < ch; y += 1) for (let x = 0; x < cw; x += 1) {
+        const v = ids.has(lab[(r.by0 + y) * W + r.bx0 + x]) ? 0 : 255;
+        const o = (y * cw + x) * 4;
+        im.data[o] = im.data[o + 1] = im.data[o + 2] = v; im.data[o + 3] = 255;
+      }
+      pctx.putImageData(im, 0, 0);
+      sctx.imageSmoothingQuality = "high";
+      sctx.drawImage(piece, mx, r.top, r.w, r.h);
+    }
+    let blocks;
+    try { blocks = await P.ocrStack(sheet); } catch (_error) { return; }
+    // Words back to slide coordinates, one line per row
+    // (whole pixels: the colour and stroke samplers index the image with these)
+    const back = (r, b) => ({ x0: Math.round(r.bx0 + (b.x0 - mx) / r.s), x1: Math.round(r.bx0 + (b.x1 - mx) / r.s), y0: Math.round(r.by0 + (b.y0 - r.top) / r.s), y1: Math.round(r.by0 + (b.y1 - r.top) / r.s) });
+    const byRow = new Map();
+    for (const block of blocks || []) for (const para of block.paragraphs || []) for (const line of para.lines || []) for (const w of line.words || []) {
+      const cy = (w.bbox.y0 + w.bbox.y1) / 2;
+      const r = rows.find((o) => cy >= o.top - 4 && cy <= o.top + o.h + 4);
+      if (!r) continue;
+      if (!byRow.has(r)) byRow.set(r, []);
+      byRow.get(r).push({ ...w, bbox: back(r, w.bbox) });
+    }
+    const found = segmentsOf([...byRow.values()].map((words) => ({ paragraphs: [{ lines: [{ words }] }] })), img);
+    const log = (slide.debugLabels = []);
+    const letters = (t) => t.replace(/[^\p{L}\p{N}]/gu, "").length;
+    const norm = (t) => t.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+    // Longest, surest lines first, so a stray "in" never blocks "(Insulin)"
+    found.sort((a, b) => b.conf * letters(b.text) - a.conf * letters(a.text));
+    for (const sg of found) {
+      // (a longer label of real words is kept a little less sure: "Wnt/β-Catenin")
+      const sure = (sg.conf >= 75 && (letters(sg.text) >= 3 || sg.conf >= 90)) || (sg.conf >= 60 && sg.quality >= 1 && letters(sg.text) >= 6) || (sg.conf >= 55 && sg.quality >= 1 && letters(sg.text) >= 9);
+      if (!sure || sg.quality < 0.8 || letters(sg.text) < 2) { log.push(`weak ${Math.round(sg.conf)} ${sg.quality.toFixed(2)}: ${sg.text}`); continue; }
+      const clash = segs.filter((k) => inter(k, sg) > Math.min(area(k), area(sg)) * 0.3);
+      // (an earlier reading of only part of the label, "Lipid" of "Regulated Lipid", gives way)
+      // (nor does a fuller reading that runs well past this piece: a styled word or two
+      // read apart from the rest of their line)
+      // The page pass's reading stays when it is at least as long, or sure and not
+      // wholly inside this one; this pass adds labels and mends broken readings
+      // (brackets round the page pass's reading that this one lacks were a pill's ends)
+      const capped = (k) => /^[([{]/.test(k.text.trim()) && /[)\]}]$/.test(k.text.trim()) && !/^[([{]/.test(sg.text.trim());
+      if (clash.some((k) => (k.conf >= 65 && k.quality >= 0.6 && (letters(k.text) > letters(sg.text) || (letters(k.text) === letters(sg.text) && k.conf >= sg.conf - 5 && !capped(k))))
+        || (k.conf >= 80 && k.quality >= 0.9 && !capped(k) && !(inter(k, sg) >= area(k) * 0.9 && letters(sg.text) > letters(k.text)))
+        || (k.conf >= sg.conf - 5 && k.quality >= 0.8 && letters(k.text) >= letters(sg.text) * 0.8 && !capped(k))
+        || (k.alone && letters(k.text) > letters(sg.text))
+        // (a fuller reading of the same word: "Semiconductor" over "miconductor")
+        || (norm(k.text).length > norm(sg.text).length && norm(k.text).includes(norm(sg.text)))
+        || (k.conf >= 60 && k.quality >= 0.7 && inter(k, sg) < area(k) * 0.7 && letters(k.text) > letters(sg.text)))) { log.push(`have: ${sg.text} <- ${clash.map((k) => k.text).join(" / ")}`); continue; }
+      log.push(`add ${Math.round(sg.conf)}: ${sg.text}`);
+      clash.forEach((k) => segs.splice(segs.indexOf(k), 1));
+      sg.alone = true;
+      segs.push(sg);
+    }
+  }
+
   /* Number badges: "01", "2", "A" in a solid circle or rounded square. Light
      marks on a strong colour are often skipped or misread by the page pass, so
      each badge's marks are redrawn dark on white, enlarged, and read on their own.
@@ -991,6 +1186,8 @@ window.NTSlides = (() => {
       const inWord = segs.some((sg) => sg.words.some((wd) => (wd.confidence ?? 0) >= 70 && (wd.text.match(/\p{L}/gu) || []).length >= 3
         && Math.min(wd.bbox.x1, bx1) - Math.max(wd.bbox.x0, bx0) > w * 0.5 && Math.min(wd.bbox.y1, by1) - Math.max(wd.bbox.y0, by0) > h * 0.5));
       if (inWord) continue;
+      // nor are letters already read as a label line
+      if (segs.some((sg) => sg.alone && Math.min(sg.x1, ix1) - Math.max(sg.x0, ix0) > 0 && Math.min(sg.y1, iy1) - Math.max(sg.y0, iy0) > 0)) continue;
       found.push({ bx0, by0, bx1, by1, ix0, iy0, ix1, iy1, inkPx });
     }
     // Marks drawn dark on white at a given height, read as one line
@@ -1033,6 +1230,7 @@ window.NTSlides = (() => {
         if (!sg.words.some(hit)) continue;
         const rest = sg.words.filter((wd) => !hit(wd));
         const again = rest.length ? segmentsOf([{ paragraphs: [{ lines: [{ words: rest }] }] }], img) : [];
+        again.forEach((a) => { a.alone = sg.alone; a.sparse = sg.sparse; });
         segs.splice(s2, 1, ...again);
       }
       segs.push({ words: [{ text, confidence: conf, bbox: box }], text, conf, quality: 1, badge: true, h: ih / 0.72, tx0: box.x0, ...box });
@@ -1201,7 +1399,7 @@ window.NTSlides = (() => {
         }
         const merged = segmentsOf([{ paragraphs: [{ lines: [{ words: [...a.words, ...b.words] }] }] }], img, { keepLine: true });
         if (merged.length !== 1) continue;
-        Object.assign(merged[0], { sparse: a.sparse || b.sparse }, unread ? { conf: Math.min(merged[0].conf, 70) } : {});
+        Object.assign(merged[0], { sparse: a.sparse || b.sparse, alone: !!(a.alone && b.alone) }, unread ? { conf: Math.min(merged[0].conf, 70) } : {});
         segs.splice(segs.indexOf(a), 1);
         segs.splice(segs.indexOf(b), 1, merged[0]);
         changed = true;
@@ -1263,12 +1461,12 @@ window.NTSlides = (() => {
   async function rereadUnsure(slide, segs, img) {
     if (typeof P.ocrLine !== "function") return;
     const unsure = segs
-      .filter((sg) => (sg.conf < 82 || sg.quality < 0.85) && (sg.text.match(/\p{L}/gu) || []).length >= 4 && sg.y1 - sg.y0 >= 10 && sg.x1 - sg.x0 < slide.w * 0.9)
+      .filter((sg) => !sg.alone && (sg.conf < 82 || sg.quality < 0.85) && (sg.text.match(/\p{L}/gu) || []).length >= 4 && sg.y1 - sg.y0 >= 10 && sg.x1 - sg.x0 < slide.w * 0.9)
       .sort((a, b) => a.conf - b.conf)
       .slice(0, 14);
     // Lines that start in lowercase with nothing above them may have lost a first
     // letter that touches a drawing ("onduction Band"): look a bit further left
-    const fragments = segs.filter((sg) => /^[a-z]/.test(sg.text) && !unsure.includes(sg)
+    const fragments = segs.filter((sg) => !sg.alone && /^[a-z]/.test(sg.text) && !unsure.includes(sg)
       && !segs.some((o) => o !== sg && o.y1 <= sg.y0 + 2 && o.y1 > sg.y0 - (sg.y1 - sg.y0) * 1.8 && Math.min(o.x1, sg.x1) > Math.max(o.x0, sg.x0)));
     // Read a crop of the slide (or of the contrast map) as one line, mapped back to slide pixels
     const readCrop = async (src, x0, y0, w, h, scale) => {
@@ -1509,6 +1707,8 @@ window.NTSlides = (() => {
     const allSegs = segmentsOf(blocks, img);
     await addSparseText(slide, allSegs, img, sparseJob);
     T("sparse");
+    await readLabels(slide, allSegs, img);
+    T("labels");
     await readBadges(slide, allSegs, img);
     joinSameLine(allSegs, img);
     T("badges");
@@ -1553,7 +1753,7 @@ window.NTSlides = (() => {
         : sg.quality < (sg.conf >= 80 ? 0.5 : 0.7) ? `quality ${sg.quality.toFixed(2)}`
         : letters <= 3 && sg.conf < 80 ? "short"
         : isTick(sg) ? "numbers (chart)"
-        : Math.min(...[0.12, 0.2, 0.35].map((f) => ringBusy(img, sg, Math.max(3, Math.round(h * f))))) > 0.3 ? "busy background" : "";
+        : Math.min(...(sg.alone ? [0.08] : [0.12, 0.2, 0.35]).map((f) => ringBusy(img, sg, Math.max(sg.alone ? 2 : 3, Math.round(h * f))))) > 0.3 ? "busy background" : ""; // (a label read alone sits in its own pill: look just around its letters)
       if (why) dropped.push(`${why}: ${sg.text}`);
       return !why;
     });
@@ -1597,6 +1797,9 @@ window.NTSlides = (() => {
       // (a header cell's lines close around its words aren't a picture)
       // (only for real words, clearly read: marks in a drawing can read as "IN")
       const letters = group.map((g) => g.text).join("").replace(/[^A-Za-z]/g, "").length;
+      // A label read alone (its letters found one by one) on an even patch just
+      // around them, inside its pill or ellipse: it paints out cleanly
+      if (behind > 45 && group.every((g) => g.alone) && ringSpread(img, { x0, y0, x1, y1 }, 3, segs.filter((o) => !group.includes(o))) < 18) behind = 0;
       if (behind > 45 && letters >= 5 && Math.min(...group.map((g) => g.conf)) >= 75 && ringSides(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o))) < 12) behind = 0;
       // ...unless it's a texture (micrograph, photo grain): that is repaired from the picture itself
       const onTexture = behind > 45 && behind <= 70 && !!texturedAround(img.data, slide.w, slide.h, { x0: Math.round(x0), y0: Math.round(y0), x1: Math.round(x1), y1: Math.round(y1) }, (x, y) => segs.some((o) => !group.includes(o) && x >= o.x0 - 2 && x <= o.x1 + 2 && y >= o.y0 - 2 && y <= o.y1 + 2));
@@ -1613,9 +1816,11 @@ window.NTSlides = (() => {
           const near = chartish.filter((d) => d !== sg && d.x1 > sg.x0 - sg.h * 4 && d.x0 < sg.x1 + sg.h * 4 && d.y1 > sg.y0 - sg.h * 4 && d.y0 < sg.y1 + sg.h * 4).length;
           const opens = (sg.text.match(/\(/g) || []).length, closes = (sg.text.match(/\)/g) || []).length;
           const above = allSegs.some((o) => o !== sg && o.y1 <= sg.y0 + 2 && o.y1 > sg.y0 - Math.max(sg.h, sg.y1 - sg.y0, o.y1 - o.y0) * 1.8 && Math.min(o.x1, sg.x1) > Math.max(o.x0, sg.x0));
-          const why = /^[a-z]/.test(sg.text) && !above ? "fragment"
+          // (a label read alone: its whole extent is known from its letters, so not a fragment or cut off)
+          const why = near >= 3 ? "in a chart"
+            : sg.alone ? ""
+            : /^[a-z]/.test(sg.text) && !above ? "fragment"
             : opens !== closes ? "unmatched bracket" // the rest of the label is on lines left in the picture
-            : near >= 3 ? "in a chart"
             : nWords <= 3 && (sg.h < textSize * 1.4 || (sg.text.match(/\p{L}/gu) || []).length < 4) && cutOff(img, sg) ? "cut off" : "";
           if (why) { dropped.push(`${why}: ${sg.text}`); continue; }
         }
@@ -1639,15 +1844,20 @@ window.NTSlides = (() => {
       const serifAvg = scored.length ? scored.reduce((n, g) => n + g.serif * g.text.length, 0) / scored.reduce((n, g) => n + g.text.length, 0) : 0;
       // Neither signal is reliable alone (geometric sans fonts have flat feet too), so
       // serif needs both to agree; when unsure the text stays sans
-      const serif = serifAvg >= 1.4 && serifLead > 0.02;
+      // (labels read alone sit in pills whose outline is close: they need clearer feet)
+      const alone = group.some((g) => g.alone);
+      const serif = alone ? serifAvg >= 2 && serifLead > 0.06 : serifAvg >= 1.4 && serifLead > 0.02;
       void margin;
+      // Without a font match, size from the letters' own height: capitals and tall
+      // letters stand about 0.73 em, a line with descenders about 0.95 em
+      const fromBox = median(group.map((g) => (g.y1 - g.y0) / (/[gjpqy]/.test(g.text) ? 0.95 : /[A-Z0-9bdfhklt]/.test(g.text) ? 0.73 : 0.53)));
       const font = votes.length
         ? { family: serif ? "Georgia" : "Arial", bold, size: votes[0].size }
-        : { family: "Arial", bold, size: lineH * 0.8 };
+        : { family: "Arial", bold, size: Math.max(lineH * 0.8, fromBox) };
       // Size: median of width-fitted sizes for the longer lines, in the matched font.
       const sizes = group.filter((g) => g.text.length >= 6).map((g) => sizeFromWidth(g.text.replace(/^•\s*/, ""), g.x1 - g.x0 - (g.text.startsWith("•") ? lineH * 0.9 : 0), font.bold, font.family)).filter(Boolean);
       let fontSize = sizes.length ? median(sizes) : font.size;
-      if (!(fontSize > lineH * 0.55 && fontSize < lineH * 1.7)) fontSize = lineH * 0.8;
+      if (!(fontSize > lineH * 0.55 && fontSize < Math.max(lineH, fromBox * 0.8) * 1.7)) fontSize = Math.max(lineH * 0.8, Math.min(fromBox, lineH * 1.7));
       fontSize = Math.max(8, Math.round(fontSize));
       const pitch = group.length > 1 ? (group[group.length - 1].y0 - group[0].y0) / (group.length - 1) : fontSize * 1.2;
       const lineHeight = Math.max(1, Math.min(1.9, pitch / fontSize));
@@ -1784,7 +1994,8 @@ window.NTSlides = (() => {
     cctx.drawImage(slide.original, 0, 0);
     T("boxes");
     paintOut(cctx, boxes, slide.w, slide.h);
-    fillTextured(cctx, boxes, slide.w, slide.h);
+    // (labels read alone sit on a pill's flat colour: never patched from nearby texture)
+    fillTextured(cctx, boxes, slide.w, slide.h, (b) => !b.seg?.alone);
     T("paint");
     slide._painted = boxes; // where text was removed (pictures stay see-through there)
     slide.clean = clean;
@@ -2076,6 +2287,17 @@ window.NTSlides = (() => {
         if (xx >= 0 && yy >= 0 && xx < sw && yy < sh) latticeNear[yy * sw + xx] = 1;
       }
     }
+    // A diagram whose drawings are all joined up by arrows, zoom lines and leader
+    // lines reads as one picture the size of the slide. On a plain page, take it
+    // apart instead: each drawing on its own, the thin connectors apart from them.
+    {
+      const huge = boxes.filter((b) => (b.x1 - b.x0 + 1) * (b.y1 - b.y0 + 1) >= slideArea * 0.8);
+      const parts2 = huge.length ? diagramParts(sd, sw, sh) : null;
+      if (parts2) {
+        const inHuge = (p) => huge.some((b) => p.x0 >= b.x0 && p.x1 <= b.x1 && p.y0 >= b.y0 && p.y1 <= b.y1);
+        boxes = [...boxes.filter((b) => !huge.includes(b)), ...parts2.filter(inHuge)];
+      }
+    }
     boxes = boxes.filter((b) => {
       const w = b.x1 - b.x0 + 1, h = b.y1 - b.y0 + 1;
       // Big enough to be a picture, not the whole slide (a full-slide photo stays the background)
@@ -2121,6 +2343,19 @@ window.NTSlides = (() => {
         return latticeNear[hy * sw + hx] === 1 || others.some((o) => hx >= o.x0 - 2 && hx <= o.x1 + 2 && hy >= o.y0 - 2 && hy <= o.y1 + 2);
       };
       let surf = onFit ? fit.over(X0, Y0, w, h, k) : localSurface(src, W0, H0, X0, Y0, X1, Y1, skip, fit ? (x, y) => fit.at(x / k / sw, y / k / sh) : null);
+      // A label removed from inside the picture (a pill drawn on it): what was
+      // painted in is the picture's own colour, so it goes with the picture
+      const within = painted.filter((p) => {
+        if (p.x0 < X0 || p.y0 < Y0 || p.x1 > X1 || p.y1 > Y1) return false;
+        let on = 0, all = 0;
+        for (let x = Math.round(p.x0) - 3; x <= p.x1 + 3; x += 3) for (const y of [Math.round(p.y0) - 3, Math.round(p.y1) + 3]) {
+          if (y < Y0 || y >= Y1 || x < X0 || x >= X1) continue;
+          const i = (y * W0 + x) * 4, s3 = ((y - Y0) * w + (x - X0)) * 3;
+          all += 1;
+          if (Math.abs(src[i] - surf[s3]) + Math.abs(src[i + 1] - surf[s3 + 1]) + Math.abs(src[i + 2] - surf[s3 + 2]) >= 60) on += 1;
+        }
+        return all >= 6 && on >= all * 0.8;
+      });
       const cut = new ImageData(w, h);
       const shade = new Uint8Array(w * h); // shadow pixels
       let tx0 = w, ty0 = h, tx1 = -1, ty1 = -1;
@@ -2130,7 +2365,7 @@ window.NTSlides = (() => {
         const c = [src[i], src[i + 1], src[i + 2]];
         let d = Math.abs(c[0] - bgc[0]) + Math.abs(c[1] - bgc[1]) + Math.abs(c[2] - bgc[2]);
         // Where a label was removed, only clearly drawn pixels belong to the picture
-        if (d < 50 && painted.some((p) => X0 + x >= p.x0 && X0 + x < p.x1 && Y0 + y >= p.y0 && Y0 + y < p.y1)) d = 0;
+        if (d < 50 && painted.some((p) => X0 + x >= p.x0 && X0 + x < p.x1 && Y0 + y >= p.y0 && Y0 + y < p.y1)) d = within.some((p) => X0 + x >= p.x0 && X0 + x < p.x1 && Y0 + y >= p.y0 && Y0 + y < p.y1) ? 99 : 0;
         let a = d <= 18 ? 0 : d >= 60 ? 1 : (d - 18) / 42;
         // Shadow: a pixel that is just the background darkened becomes see-through black
         const outside = x < inner.x0 || y < inner.y0 || x >= inner.x1 || y >= inner.y1;
@@ -2182,6 +2417,90 @@ window.NTSlides = (() => {
     // Big pictures behind small ones
     objects.sort((a, b) => b.w * b.h - a.w * a.h);
     return { objects };
+  }
+
+  /* Drawings of a diagram, apart (half-size pixels). Foreground is whatever
+     differs from the page colour; opening it (shrink, then grow back) cuts the
+     thin lines that join drawings, so each drawing is one group. The thin lines
+     themselves (arrows) are groups of their own; short dashes stay behind. A
+     group inside another one is part of it. null when the page has no plain
+     colour of its own (a full-slide photo). */
+  function diagramParts(sd, sw, sh) {
+    const ring = [];
+    for (let x = 0; x < sw; x += 3) ring.push(x, (sh - 1) * sw + x, sw + x, (sh - 2) * sw + x);
+    for (let y = 0; y < sh; y += 3) ring.push(y * sw, y * sw + sw - 1, y * sw + 1, y * sw + sw - 2);
+    const bg = [0, 1, 2].map((c) => median(ring.map((j) => sd[j * 4 + c])));
+    const off = (j) => Math.abs(sd[j * 4] - bg[0]) + Math.abs(sd[j * 4 + 1] - bg[1]) + Math.abs(sd[j * 4 + 2] - bg[2]);
+    if (ring.filter((j) => off(j) < 30).length < ring.length * 0.6) return null;
+    const N = sw * sh, fg = new Uint8Array(N);
+    let nfg = 0;
+    for (let j = 0; j < N; j += 1) if (off(j) > 22) { fg[j] = 1; nfg += 1; }
+    if (nfg > N * 0.75 || nfg < N * 0.05) return null;
+    // square min / max filters of radius r, done along rows then columns
+    const filt = (src, r, keepIf) => {
+      const tmp = new Uint8Array(N), out = new Uint8Array(N);
+      for (let y = 0; y < sh; y += 1) {
+        let cnt = 0;
+        for (let x = -r; x < sw + r; x += 1) {
+          if (x + r < sw && x + r >= 0) cnt += src[y * sw + x + r];
+          if (x - r - 1 >= 0 && x - r - 1 < sw) cnt -= src[y * sw + x - r - 1];
+          if (x >= 0 && x < sw) tmp[y * sw + x] = keepIf(cnt, Math.min(sw - 1, x + r) - Math.max(0, x - r) + 1) ? 1 : 0;
+        }
+      }
+      for (let x = 0; x < sw; x += 1) {
+        let cnt = 0;
+        for (let y = -r; y < sh + r; y += 1) {
+          if (y + r < sh && y + r >= 0) cnt += tmp[(y + r) * sw + x];
+          if (y - r - 1 >= 0 && y - r - 1 < sh) cnt -= tmp[(y - r - 1) * sw + x];
+          if (y >= 0 && y < sh) out[y * sw + x] = keepIf(cnt, Math.min(sh - 1, y + r) - Math.max(0, y - r) + 1) ? 1 : 0;
+        }
+      }
+      return out;
+    };
+    const erode = (m, r) => filt(m, r, (c, n) => c === n);
+    const dilate = (m, r) => filt(m, r, (c) => c > 0);
+    const opened = dilate(erode(fg, 3), 3);
+    const near = dilate(opened, 2);
+    const rest = new Uint8Array(N);
+    for (let j = 0; j < N; j += 1) rest[j] = fg[j] && !near[j] ? 1 : 0;
+    const groups = (m, keep) => {
+      const seen = new Uint8Array(N), out = [], st = [];
+      for (let s0 = 0; s0 < N; s0 += 1) {
+        if (!m[s0] || seen[s0]) continue;
+        let x0 = sw, y0 = sh, x1 = 0, y1 = 0, n = 0;
+        st.push(s0); seen[s0] = 1;
+        while (st.length) {
+          const j = st.pop(), x = j % sw, y = (j / sw) | 0;
+          n += 1;
+          if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+          for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+            const xx = x + dx, yy = y + dy;
+            if (xx < 0 || yy < 0 || xx >= sw || yy >= sh) continue;
+            const q = yy * sw + xx;
+            if (m[q] && !seen[q]) { seen[q] = 1; st.push(q); }
+          }
+        }
+        const b = { x0, y0, x1, y1, n };
+        if (keep(b)) out.push(b);
+      }
+      return out;
+    };
+    const area = (b) => (b.x1 - b.x0 + 1) * (b.y1 - b.y0 + 1);
+    let list = [
+      ...groups(opened, (b) => area(b) >= N * 0.0015 && area(b) <= N * 0.6),
+      // connectors: long thin strokes (arrows); dashes and specks stay in the background
+      ...groups(rest, (b) => Math.max(b.x1 - b.x0, b.y1 - b.y0) >= 24 && b.n >= 30)
+    ];
+    if (list.length < 2) return null;
+    // a group inside another is part of it
+    list.sort((a, b) => area(b) - area(a));
+    const kept = [];
+    for (const b of list) {
+      const host = kept.find((o) => Math.max(0, Math.min(o.x1, b.x1) - Math.max(o.x0, b.x0) + 1) * Math.max(0, Math.min(o.y1, b.y1) - Math.max(o.y0, b.y0) + 1) >= area(b) * 0.9);
+      if (host) { host.n += b.n; continue; }
+      kept.push({ ...b });
+    }
+    return kept;
   }
 
   // A busy group (half-size pixels) that is a lattice of long straight lines: at

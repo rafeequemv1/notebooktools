@@ -566,12 +566,14 @@ window.NTPdf = (() => {
   }
   const ocrLine = (image) => recognizeIn("7", image);
   const ocrSparse = (image) => recognizeIn("11", image);
+  // A block of lines (mode 6): label lines stacked one under another
+  const ocrStack = (image) => recognizeIn("6", image);
 
   // NotebookLM limits, for the "will it fit" messages.
   const LIMITS = { words: 500000, bytes: 200 * 1024 * 1024, sources: 50 };
 
   return {
     pdfLib, pdfjs, openPdfjs, openPdfLib, bytesOf, fmtBytes, baseName, saveBlob, pdfBlob,
-    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, ocrLine, ocrSparse, sample, LIMITS
+    dropZone, parseRanges, copyPages, renderPage, canvasBlob, pageText, words, zip, status, progress, ocr, ocrBlocks, ocrLine, ocrSparse, ocrStack, sample, LIMITS
   };
 })();
