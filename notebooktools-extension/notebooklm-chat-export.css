@@ -116,3 +116,6 @@
 .notebooktools-nlm-export-btn,
 .notebooktools-nlm-export-option { border-radius: 999px !important; }
 /* end pill */
+
+/* One menu shape across NotebookTools */
+.notebooktools-nlm-export-menu { border-radius: 16px !important; }

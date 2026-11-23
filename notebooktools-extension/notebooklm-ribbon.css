@@ -708,3 +708,6 @@
 .ntr-chip,
 .ntr-pill { border-radius: 999px !important; }
 /* end pill */
+
+/* One menu shape across NotebookTools */
+.ntr-menu { border-radius: 16px !important; }

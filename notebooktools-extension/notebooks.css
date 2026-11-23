@@ -4140,3 +4140,6 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .nbx-sort select:hover { border-color: var(--nt-line-strong); }
 .notebooks-logo.nt-brand .nt-brand-name { font-size: 19px; }
 .notebooks-logo.nt-brand img { height: 22px; width: 22px; }
+
+/* One menu shape across NotebookTools */
+.nb-dropdown-menu, .nb-move-menu, .detail-notes-menu, .src-label-menu, .nbx-menu { border-radius: 16px !important; }

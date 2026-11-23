@@ -467,3 +467,24 @@
 .notebooktools-blog-workflow-menu:not(.is-busy) .notebooktools-blog-workflow-progress-bar {
   display: none;
 }
+
+/* ==========================================================================
+   NotebookLM dialog look, shared by every NotebookTools dialog and menu:
+   28 px dialogs, Google Sans title, sentence-case labels, soft fields,
+   pill buttons with one dark primary.
+   ========================================================================== */
+.notebooktools-blog-workflow-downloads-label { color: var(--nbw-muted) !important; font-size: 12.5px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; }
+.notebooktools-blog-workflow-select { background-color: var(--nbw-bg) !important; border: 1px solid var(--nbw-line) !important; border-radius: 12px !important; min-height: 38px; }
+.notebooktools-blog-workflow-menu { border-radius: 16px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16) !important; font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; }
+.notebooktools-blog-workflow-option.is-primary { background: #1f1f1f !important; border-color: transparent !important; color: #fff !important; }
+.notebooktools-blog-workflow-option.is-primary:hover:not(:disabled) { background: #3c4043 !important; }
+.notebooktools-blog-workflow-menu.is-dark .notebooktools-blog-workflow-option.is-primary { background: #e8eaed !important; color: #1f1f1f !important; }
+
+/* NT pill buttons */
+.notebooktools-blog-workflow-btn,
+.notebooktools-blog-workflow-download-buttons,
+.notebooktools-blog-workflow-download-buttons-btn,
+.notebooktools-blog-workflow-option { border-radius: 999px !important; }
+/* end pill */
+
+.notebooktools-blog-workflow-label, .notebooktools-blog-workflow-history-title { color: var(--nbw-muted) !important; font-size: 12.5px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; }

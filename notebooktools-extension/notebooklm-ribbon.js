@@ -224,10 +224,14 @@
 
   /* ---------- Menus ---------- */
   function closeMenu() {
-    document.querySelector(".ntr-menu")?.remove();
+    document.querySelector(".ntr-menu:not(.ntr-sf-menu)")?.remove();
   }
 
+  // One NotebookTools dropdown open at a time: close when another one opens
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "ribbon") closeMenu(); });
+
   function openMenu(anchor, html, onClick) {
+    document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "ribbon" }));
     closeMenu();
     const menu = document.createElement("div");
     menu.className = `ntr-menu${isDarkPage() ? " is-dark" : ""}`;

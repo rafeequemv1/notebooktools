@@ -45,6 +45,9 @@
     document.getElementById(WRAP_ID)?.classList.remove("is-open");
   }
 
+  // One NotebookTools dropdown open at a time: close when another one opens
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "chat-export") closeMenu(); });
+
   async function runExport(formatId, button) {
     if (exportBusy) {
       return;
@@ -148,6 +151,7 @@
         window.NotebookToolsPlan.showUpgrade("chat-export");
         return;
       }
+      if (!wrap.classList.contains("is-open")) document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "chat-export" }));
       wrap.classList.toggle("is-open");
     });
 

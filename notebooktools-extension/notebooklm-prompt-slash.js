@@ -123,6 +123,9 @@
     return menuEl;
   }
 
+  // One NotebookTools dropdown open at a time: close when another one opens
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "slash") hideMenu(); });
+
   function hideMenu() {
     slashContext = null;
     activeInput = null;
@@ -203,6 +206,7 @@
       <div class="notebooktools-prompt-slash-list">${rows}</div>
       <div class="notebooktools-prompt-slash-foot"><kbd>↑</kbd><kbd>↓</kbd> move <kbd>Enter</kbd> insert <kbd>Esc</kbd> close</div>`;
 
+    if (menu.hidden) document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "slash" }));
     menu.hidden = false;
     activeInput = input;
     slashContext = context;

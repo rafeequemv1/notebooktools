@@ -113,6 +113,9 @@
     close();
   }
 
+  // One dropdown open at a time
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "sp-target" && open) close(); });
+
   function close() {
     open = false;
     creating = false;
@@ -194,6 +197,7 @@
     const target = event.target;
     if (target.closest(".sp-target-btn")) {
       open = !open;
+      if (open) document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "sp-target" }));
       creating = false;
       render();
       return;

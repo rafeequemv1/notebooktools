@@ -165,7 +165,11 @@ const googleAccount = (() => {
     await picker.refresh({ silent: true });
   }
 
+  // One dropdown open at a time
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "gacct" && !menu.hidden) close(); });
+
   function open() {
+    document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "gacct" }));
     menu.hidden = false;
     button.setAttribute("aria-expanded", "true");
     renderMenu();

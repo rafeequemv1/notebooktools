@@ -158,3 +158,6 @@
 .notebooktools-prompt-slash-foot kbd + kbd {
   margin-left: 0;
 }
+
+/* One menu shape across NotebookTools */
+.notebooktools-prompt-slash-menu { border-radius: 16px !important; }

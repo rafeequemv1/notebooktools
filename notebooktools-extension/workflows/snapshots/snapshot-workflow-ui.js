@@ -80,6 +80,9 @@
     getMenu()?.classList.remove("is-open");
   }
 
+  // One NotebookTools dropdown open at a time: close when another one opens
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "snapshots") closeMenu(); });
+
   function isDarkPage() {
     for (const node of [document.body, document.documentElement]) {
       const m = node && getComputedStyle(node).backgroundColor.match(/[\d.]+/g);
@@ -91,6 +94,7 @@
   }
 
   function openMenu() {
+    document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "snapshots" }));
     getWrap()?.classList.add("is-open");
     getMenu()?.classList.toggle("is-dark", isDarkPage());
     getMenu()?.classList.add("is-open");

@@ -601,3 +601,11 @@
 .notebooktools-snapshot-workflow-download-btn.is-primary:hover:not(:disabled) { background: #3c4043 !important; }
 .notebooktools-snapshot-workflow-menu.is-dark .notebooktools-snapshot-workflow-option.is-primary,
 .notebooktools-snapshot-workflow-menu.is-dark .notebooktools-snapshot-workflow-download-btn.is-primary { background: #e8eaed !important; color: #1f1f1f !important; }
+
+/* ==========================================================================
+   NotebookLM dialog look, shared by every NotebookTools dialog and menu:
+   28 px dialogs, Google Sans title, sentence-case labels, soft fields,
+   pill buttons with one dark primary.
+   ========================================================================== */
+.notebooktools-snapshot-workflow-downloads-label, .notebooktools-snapshot-workflow-menu .nsw-label { color: var(--nsw-muted) !important; font-size: 12.5px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; }
+.notebooktools-snapshot-workflow-menu { border-radius: 16px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16) !important; font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; }

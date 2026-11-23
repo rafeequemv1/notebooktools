@@ -1989,3 +1989,6 @@ html.is-popup .sidepanel-tabs {
 .nt-brand img { border-radius: 5px; display: block; flex: none; height: 20px; width: 20px; }
 .nt-brand-name { color: var(--nt-ink); font-family: "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif; font-size: 17px; font-weight: 400; letter-spacing: -0.01em; line-height: 1; white-space: nowrap; }
 :root[data-theme="dark"] .nt-brand, :root[data-theme="dark"] .nt-brand img { filter: none !important; }
+
+/* One menu shape across NotebookTools */
+.sp-target-menu, .sidepanel-body .sp-target-menu, .sp-gacct-menu { border-radius: 16px !important; }

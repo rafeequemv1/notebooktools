@@ -136,7 +136,11 @@
     document.querySelector(".ntr-menu.ntr-sf-menu")?.remove();
   }
 
+  // One NotebookTools dropdown open at a time: close when another one opens
+  document.addEventListener("notebooktools-dropdown-open", (event) => { if (event.detail !== "studio-filter") closeMenu(); });
+
   function openMenu(anchor, which) {
+    document.dispatchEvent(new CustomEvent("notebooktools-dropdown-open", { detail: "studio-filter" }));
     closeMenu();
     const menu = document.createElement("div");
     menu.className = `ntr-menu ntr-sf-menu${isDark() ? " is-dark" : ""}`;
