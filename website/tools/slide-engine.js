@@ -375,6 +375,8 @@ window.NTSlides = (() => {
       .replace(/(\d{4}s?)\s*-\s*(\d{4})/g, "$1–$2") // 1930s-2004 → 1930s–2004
       .replace(SUBSCRIPT_2, "$1₂") // SiO, → SiO₂
       .replace(/\bH[,2]O\b/g, "H₂O")
+      .replace(/(^|[\s•(])[|[]([tnsf])\b/g, "$1I$2") // "|t", "[n" → "It", "In"
+      .replace(/(^|[\s•])\|(?=\s+\p{Ll})/gu, "$1I") // "| think" → "I think"
       .replace(/\bCO[,2](?=\s+[a-z]|[.;:)]|$)/g, "CO₂")
       .replace(/\s*(?:[—–-]+\s*>|=>)\s*/g, " → ") // —> arrows
       .replace(/\s+([,.;:!?])(?=\s|$)/g, "$1")
@@ -738,12 +740,21 @@ window.NTSlides = (() => {
         const lh = last.h;
         // Sizes of very short lines are guessed from their height ("ness" has no tall
         // letters and looks half its size), so they get a looser match
-        const loose = seg.text.length < 8 || last.text.length < 8;
+        // (not when the short line looks half again bigger: it can look smaller than it is, and
+        // only a little bigger (a descender), so a short title line over a subtitle is two sizes)
+        const sShort = seg.text.length < 8, lShort = last.text.length < 8;
+        const loose = (sShort || lShort) && ((sShort && lShort) || (sShort ? h : lh) <= (sShort ? lh : h) * 1.5);
         if (Math.max(h, lh) / Math.max(1, Math.min(h, lh)) > (loose ? 2.2 : 1.28)) return false;
         const gap = seg.y0 - last.y1;
+        if (/^•/.test(seg.text)) return false;
+        // A line that starts in lower case goes on from the one above (a wrapped sentence), even
+        // with roomy line spacing or a styled word in the line above, unless plainly another colour
+        const goesOn = /^\p{Ll}/u.test(seg.text) && !/[.!?:]$/.test(last.text) && Math.max(h, lh) / Math.max(1, Math.min(h, lh)) < 1.2
+          && gap >= -lh * 0.35 && gap <= Math.max(h, lh) * 1.1 && Math.abs(seg.tx0 - last.tx0) < Math.max(h, lh) * 0.9
+          && !(seg.color && last.color && dist(rgbOf(seg.color), rgbOf(last.color)) > 120);
+        if (goesOn) return true;
         // Lines in a paragraph sit close; a half-line gap or a bullet starts a new paragraph.
         if (gap < -lh * 0.35 || gap > Math.max(h, lh) * (loose ? 0.75 : 0.5)) return false;
-        if (/^•/.test(seg.text)) return false;
         // A heading line on its own ("Mechanism:", "Concept:") is its own paragraph
         if (/:$/.test(last.text) && last.text.split(/\s+/).length <= 5 && seg.color && last.color
           && (seg.bold !== last.bold || dist(rgbOf(seg.color), rgbOf(last.color)) > 45)) return false;
@@ -1647,7 +1658,10 @@ window.NTSlides = (() => {
       // Size: median of width-fitted sizes for the longer lines, in the matched font.
       const sizes = group.filter((g) => g.text.length >= 6).map((g) => sizeFromWidth(g.text.replace(/^•\s*/, ""), g.x1 - g.x0 - (g.text.startsWith("•") ? lineH * 0.9 : 0), font.bold, font.family)).filter(Boolean);
       let fontSize = sizes.length ? median(sizes) : font.size;
-      if (!(fontSize > lineH * 0.55 && fontSize < lineH * 1.7)) fontSize = lineH * 0.8;
+      // (a long line's width is the surer measure: its letters' height can be read short when
+      // few of them reach up, as in "Mitosis and meiosis", so it may be up to 2.1 heights)
+      const longLine = group.some((g) => g.text.length >= 12);
+      if (!(fontSize > lineH * 0.55 && fontSize < lineH * (longLine ? 2.1 : 1.7))) fontSize = lineH * 0.8;
       fontSize = Math.max(8, Math.round(fontSize));
       const pitch = group.length > 1 ? (group[group.length - 1].y0 - group[0].y0) / (group.length - 1) : fontSize * 1.2;
       const lineHeight = Math.max(1, Math.min(1.9, pitch / fontSize));
@@ -1741,7 +1755,7 @@ window.NTSlides = (() => {
       const fit = e._lines.map((ln, i) => sizeFromWidth((lines[i] || "").replace(/^•\s*/, ""), ln.w - (lines[i]?.startsWith("•") ? e._lineH * 0.9 : 0), e.bold, e.fontFamily)).filter((v, i) => v && (lines[i] || "").length >= 6);
       if (fit.length) {
         const size = Math.round(median(fit));
-        if (size > e._lineH * 0.55 && size < e._lineH * 1.7) {
+        if (size > e._lineH * 0.55 && size < e._lineH * (lines.some((l) => l.length >= 12) ? 2.1 : 1.7)) {
           e.h = (e.h / e.fontSize) * size;
           e.fontSize = size;
         }
@@ -1791,13 +1805,22 @@ window.NTSlides = (() => {
     slide.elements = [...elements, ...added];
     if (options.objects !== false) {
       try {
-        const found = detectObjects(slide);
+        const found = detectObjects(slide, options);
         await Promise.all(found.objects.filter((o) => o.type === "image").map((o) => imageFor(o.src).decode().catch(() => {})));
         slide.elements = [...found.objects, ...elements, ...added];
         slide.objectsNote = found.skipped || "";
         T("pictures");
       } catch (_error) {
         // Keep the flat background if detection fails.
+      }
+    }
+    if (options.shapes) {
+      try {
+        const panels = findPanels(slide);
+        if (panels.length) slide.elements = [...panels, ...slide.elements];
+        T("shapes");
+      } catch (_error) {
+        // Cards stay in the background.
       }
     }
     slide.status = "done";
@@ -1811,7 +1834,9 @@ window.NTSlides = (() => {
   // non-background regions on the text-free image, turns solid blocks into
   // native rectangles / ellipses and everything else into pictures with a
   // transparent background, then clears them from the background image.
-  function detectObjects(slide) {
+  // options.shapes: plain cards and circles become shapes of their own (rect / ellipse) instead
+  // of staying in the background
+  function detectObjects(slide, options = {}) {
     const W0 = slide.w, H0 = slide.h;
     const cctx = slide.clean.getContext("2d", { willReadFrequently: true });
     const full = cctx.getImageData(0, 0, W0, H0);
@@ -2164,7 +2189,13 @@ window.NTSlides = (() => {
       matteEdges(cut, shade, w, h, src, W0, X0, Y0, surf);
       // A single flat one-colour shape (a badge circle, a plain card) is decoration:
       // it stays in the background
-      if (flatShape(cut, w, h) || flatBand(cut, w, h)) {
+      const flat = flatShape(cut, w, h);
+      const shape = flat && options.shapes ? nativeShape(cut, w, h) : null;
+      if (shape) {
+        objects.push({ id: id(), ...shape, x: X0 + shape.x, y: Y0 + shape.y, detected: true });
+        continue;
+      }
+      if (flat || flatBand(cut, w, h)) {
         for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
           const i = ((Y0 + y) * W0 + (X0 + x)) * 4;
           for (let c = 0; c < 3; c += 1) fd[i + c] = src[i + c];
@@ -2599,6 +2630,140 @@ window.NTSlides = (() => {
       out[o + 3] = Math.round(a * 255);
     }
     d.set(out);
+  }
+
+  // Cards, panels and circles left in the background (after the text and pictures came out), as
+  // shapes of their own: each run of one colour that fills its box (a rectangle, rounded or not)
+  // or an ellipse's share of it. A card is taken only when everything inside it is taken too
+  // (nested shapes, or text and pictures already out), so nothing is hidden under it; its soft
+  // shadow goes with it. Only on a page of one plain colour.
+  function findPanels(slide) {
+    const W0 = slide.w, H0 = slide.h, N = W0 * H0;
+    const ctx = slide.clean.getContext("2d", { willReadFrequently: true });
+    const img = ctx.getImageData(0, 0, W0, H0);
+    const d = img.data;
+    const near = (i, c, tol) => Math.abs(d[i] - c[0]) + Math.abs(d[i + 1] - c[1]) + Math.abs(d[i + 2] - c[2]) <= tol;
+    const border = [];
+    for (let x = 2; x < W0 - 2; x += 4) border.push((2 * W0 + x) * 4, ((H0 - 3) * W0 + x) * 4);
+    for (let y = 2; y < H0 - 2; y += 4) border.push((y * W0 + 2) * 4, (y * W0 + W0 - 3) * 4);
+    const pc = [0, 1, 2].map((c) => median(border.map((i) => d[i + c])));
+    if (border.filter((i) => near(i, pc, 24)).length < border.length * 0.9) return [];
+    // Each pixel: -1 the page, else the run of one colour it belongs to (1, 2, …)
+    const lab = new Int32Array(N);
+    for (let p = 0; p < N; p += 1) if (near(p * 4, pc, 18)) lab[p] = -1;
+    const regions = [null];
+    const stack = [];
+    for (let p0 = 0; p0 < N; p0 += 1) {
+      if (lab[p0]) continue;
+      const id = regions.length, c = [d[p0 * 4], d[p0 * 4 + 1], d[p0 * 4 + 2]];
+      const r = { id, n: 0, x0: W0, y0: H0, x1: -1, y1: -1, rs: [], gs: [], bs: [] };
+      lab[p0] = id;
+      stack.push(p0);
+      while (stack.length) {
+        const p = stack.pop(), x = p % W0, y = (p - x) / W0;
+        r.n += 1;
+        if (x < r.x0) r.x0 = x; if (x > r.x1) r.x1 = x; if (y < r.y0) r.y0 = y; if (y > r.y1) r.y1 = y;
+        if (r.n % 9 === 0) { r.rs.push(d[p * 4]); r.gs.push(d[p * 4 + 1]); r.bs.push(d[p * 4 + 2]); }
+        for (const q of [x > 0 ? p - 1 : -1, x < W0 - 1 ? p + 1 : -1, p - W0, p + W0]) if (q >= 0 && q < N && !lab[q] && near(q * 4, c, 30)) { lab[q] = id; stack.push(q); }
+      }
+      regions.push(r);
+    }
+    const area = (r) => (r.x1 - r.x0 + 1) * (r.y1 - r.y0 + 1);
+    const inside = (a, b) => a.x0 >= b.x0 && a.y0 >= b.y0 && a.x1 <= b.x1 && a.y1 <= b.y1;
+    const SMALL = 400; // edges and specks
+    // What each big run is, smallest first (a container is judged after what is in it)
+    const big = regions.filter((r) => r && r.n >= SMALL).sort((a, b) => area(a) - area(b));
+    const shapes = new Map();
+    for (const r of big) {
+      const bw = r.x1 - r.x0 + 1, bh = r.y1 - r.y0 + 1;
+      if (Math.min(bw, bh) < 12 || bw * bh < N * 0.001 || bw * bh > N * 0.7) continue;
+      let mine = 0, ok = true;
+      for (let y = r.y0; y <= r.y1 && ok; y += 1) for (let x = r.x0; x <= r.x1; x += 1) {
+        const l = lab[y * W0 + x];
+        if (l === r.id) { mine += 1; continue; }
+        if (l <= 0) continue;
+        const o = regions[l];
+        if (o.n < SMALL) { mine += 1; continue; }
+        if (shapes.has(l) && inside(o, r)) { mine += 1; continue; }
+        // A big run of another colour that isn't a shape of its own: leave this one be
+        if (inside(o, r)) { ok = false; break; }
+      }
+      if (!ok) continue;
+      const filled = mine / (bw * bh);
+      let t = 0;
+      const solidAt = (x, y) => { const l = lab[y * W0 + x]; return l === r.id || (l > 0 && shapes.has(l)); };
+      while (t < Math.min(bw, bh) / 2 && !solidAt(r.x0 + t, r.y0 + t)) t += 1;
+      let type = null;
+      if (filled >= 0.92) type = "rect";
+      else if (Math.abs(filled - Math.PI / 4) < 0.05 && t >= Math.min(bw, bh) * 0.1) type = "ellipse";
+      if (!type) continue;
+      // A shadow: the page a little darker just below it
+      let dark = 0, rows = 0;
+      for (let y = r.y1 + 2; y < Math.min(H0, r.y1 + 10); y += 1) {
+        let s = 0, n = 0;
+        for (let x = r.x0 + Math.floor(bw * 0.2); x < r.x1 - bw * 0.2; x += 3) { const i = (y * W0 + x) * 4; s += lum([d[i], d[i + 1], d[i + 2]]); n += 1; }
+        if (n) { rows += 1; if (s / n < lum(pc) - 3) dark += 1; }
+      }
+      const shadow = rows > 0 && dark >= rows * 0.6;
+      shapes.set(r.id, {
+        id: id(), type, x: r.x0, y: r.y0, w: bw, h: bh, fill: hex(median(r.rs), median(r.gs), median(r.bs)),
+        stroke: null, strokeWidth: 0, opacity: 1, ...(type === "rect" ? { radius: Math.min(Math.round(t / 0.293), Math.floor(Math.min(bw, bh) / 2)) } : {}),
+        ...(shadow ? { shadow: true } : {}), detected: true, _r: r
+      });
+    }
+    if (!shapes.size) return [];
+    // Out of the background: the shapes, their edges and their shadows become the page
+    for (const s of shapes.values()) {
+      const r = s._r, pad = s.shadow ? 34 : 3;
+      for (let y = Math.max(0, r.y0 - pad); y <= Math.min(H0 - 1, r.y1 + pad + (s.shadow ? 12 : 0)); y += 1) for (let x = Math.max(0, r.x0 - pad); x <= Math.min(W0 - 1, r.x1 + pad); x += 1) {
+        const p = y * W0 + x, l = lab[p];
+        if (l === -1) continue;
+        const inBox = x >= r.x0 && x <= r.x1 && y >= r.y0 && y <= r.y1;
+        const o = l > 0 ? regions[l] : null;
+        // Around it only edges and shadow (a little darker than the page), never a neighbour
+        if (!inBox && !(o && o.n < SMALL) && !(l === r.id)) {
+          const i = p * 4;
+          const darker = lum(pc) - lum([d[i], d[i + 1], d[i + 2]]);
+          if (!(darker > 0 && darker < 40 && near(i, pc, 90))) continue;
+        }
+        const i = p * 4;
+        d[i] = pc[0]; d[i + 1] = pc[1]; d[i + 2] = pc[2];
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    return [...shapes.values()].map(({ _r, ...s }) => s).sort((a, b) => b.w * b.h - a.w * a.h);
+  }
+
+  // A flat shape as a native one: a (rounded) rectangle or an ellipse, with its colour, corner
+  // radius and whether a soft shadow falls below it. Anything else (a triangle, a blob): null.
+  function nativeShape(cut, w, h) {
+    const d = cut.data;
+    let x0 = w, y0 = h, x1 = -1, y1 = -1, n = 0;
+    const rs = [], gs = [], bs = [];
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+      const i = (y * w + x) * 4;
+      if (d[i + 3] < 250) continue;
+      n += 1;
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+      if (n % 7 === 0) { rs.push(d[i]); gs.push(d[i + 1]); bs.push(d[i + 2]); }
+    }
+    if (x1 < 0) return null;
+    const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
+    if (bw < 8 || bh < 8) return null;
+    const filled = n / (bw * bh);
+    // How far the top-left corner is empty along its diagonal (0.293 of a rounding radius)
+    const solid = (x, y) => d[(y * w + x) * 4 + 3] >= 250;
+    let t = 0;
+    while (t < Math.min(bw, bh) / 2 && !solid(x0 + t, y0 + t)) t += 1;
+    const fill = hex(median(rs), median(gs), median(bs));
+    // A soft shadow: see-through pixels reaching well below the shape
+    let below = 0;
+    for (let y = y1 + 3; y < h; y += 1) for (let x = x0; x <= x1; x += 1) if (d[(y * w + x) * 4 + 3] > 12) below += 1;
+    const shadow = below > bw * 2;
+    const box = { x: x0, y: y0, w: bw, h: bh, fill, stroke: null, strokeWidth: 0, opacity: 1, ...(shadow ? { shadow: true } : {}) };
+    if (filled > 0.9) return { type: "rect", ...box, radius: Math.min(Math.round(t / 0.293), Math.floor(Math.min(bw, bh) / 2)) };
+    if (Math.abs(filled - Math.PI / 4) < 0.05 && t >= Math.min(bw, bh) * 0.1) return { type: "ellipse", ...box };
+    return null;
   }
 
   // Mostly one colour (ignoring soft edges and a little text inside): a plain shape.
