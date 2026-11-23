@@ -1769,3 +1769,9 @@ html.is-popup .sidepanel-tabs {
 .sp-gacct-icon { align-items: center; color: var(--nt-muted); display: inline-flex; height: 28px; justify-content: center; width: 28px; }
 .sp-gacct-sep { background: var(--nt-line); height: 1px; margin: 6px 4px; }
 .sp-gacct-empty { color: var(--nt-muted); font-size: 12.5px; line-height: 1.45; margin: 4px 10px 8px; }
+
+.acct-google { align-items: center; background: #fff; border: 1px solid #dadce0; border-radius: 999px; color: #1f1f1f; cursor: pointer; display: flex; font: inherit; font-size: 13.5px; font-weight: 500; gap: 10px; justify-content: center; padding: 9px 14px; width: 100%; }
+.acct-google:hover:not(:disabled) { background: #f8f9fa; box-shadow: 0 1px 3px rgba(60, 64, 67, 0.2); }
+.acct-google:disabled { cursor: default; opacity: 0.6; }
+.acct-or { align-items: center; color: var(--nt-muted, #80868b); display: flex; font-size: 12px; gap: 10px; }
+.acct-or::before, .acct-or::after { background: rgba(128, 128, 128, 0.3); content: ""; flex: 1; height: 1px; }

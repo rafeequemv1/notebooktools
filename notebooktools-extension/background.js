@@ -234,6 +234,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message?.type === "notebooktools-google-signin") {
+    NotebookToolsAccount.signInWithGoogle()
+      .then(() => sendResponse({ ok: true }))
+      .catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+
   if (message?.type === "notebooktools-refresh-plan") {
     NotebookToolsAccount.refreshProfile()
       .then((profile) => sendResponse({ ok: true, plan: profile?.plan || "free" }))

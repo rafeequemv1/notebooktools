@@ -148,6 +148,38 @@ const NotebookToolsAccount = (() => {
     return { confirmEmail: true };
   }
 
+  const inWorker = typeof ServiceWorkerGlobalScope !== "undefined" && globalThis instanceof ServiceWorkerGlobalScope;
+
+  /**
+   * Google sign-in through Supabase OAuth. The browser window runs from the
+   * background worker (an extension popup closes when the Google window opens).
+   * Needs the Google provider enabled in Supabase and
+   * https://<extension-id>.chromiumapp.org/** in its Redirect URLs.
+   */
+  async function signInWithGoogle() {
+    if (!inWorker) {
+      const res = await chrome.runtime.sendMessage({ type: "notebooktools-google-signin" });
+      if (!res?.ok) throw new Error(res?.error || "Google sign-in didn't finish.");
+      return getState();
+    }
+    const redirect = chrome.identity.getRedirectURL("supabase");
+    const url = `${CONFIG.supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirect)}`;
+    let finalUrl;
+    try {
+      finalUrl = await chrome.identity.launchWebAuthFlow({ url, interactive: true });
+    } catch (error) {
+      throw new Error(/did not approve|canceled|cancelled|closed/i.test(error?.message || "") ? "Google sign-in was cancelled." : "Google sign-in isn't available right now. Use email instead.");
+    }
+    const params = new URLSearchParams((finalUrl.split("#")[1] || finalUrl.split("?")[1] || ""));
+    if (params.get("error")) throw new Error(friendlyError(params.get("error_description") || params.get("error")));
+    const accessToken = params.get("access_token");
+    if (!accessToken) throw new Error("Google sign-in didn't return a session. Try again.");
+    const user = await request("/auth/v1/user", { token: accessToken });
+    await saveSession(toSession({ access_token: accessToken, refresh_token: params.get("refresh_token"), expires_in: params.get("expires_in"), user }));
+    await refreshProfile();
+    return getState();
+  }
+
   async function sendPasswordReset(email) {
     const redirect = encodeURIComponent(CONFIG.accountPageUrl);
     await request(`/auth/v1/recover?redirect_to=${redirect}`, { method: "POST", body: { email: String(email).trim() } });
@@ -240,6 +272,7 @@ const NotebookToolsAccount = (() => {
     getState,
     getSession,
     signIn,
+    signInWithGoogle,
     signUp,
     signOut,
     sendPasswordReset,

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NotebookTools — Import to NotebookLM",
-  "version": "0.14.4",
+  "version": "0.14.5",
   "description": "Import ChatGPT, Claude, YouTube, X, Reddit, webpages and more into NotebookLM, and organize every notebook in one table.",
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; media-src 'self' data: blob: https: http:;"
@@ -11,7 +11,8 @@
     "storage",
     "contextMenus",
     "tabs",
-    "scripting"
+    "scripting",
+    "identity"
   ],
   "host_permissions": [
     "https://*/*",
