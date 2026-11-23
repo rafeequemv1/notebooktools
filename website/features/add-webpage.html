@@ -325,14 +325,7 @@
         <div class="demo-shell" data-scene="webpage">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "The state of AI research assistants", "url": "stratechery.example.com/2026/ai-research-assistants", "icon": "web", "active": true}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Analysis</span><h2>The state of AI research assistants</h2><div class="pg-meta">By Dana Whitfield · 12 min read</div><p>A year ago, “research assistant” meant a chatbot that sounded confident. Today the best tools ground every answer in documents you choose.</p><p>NotebookLM leads that shift: you add sources, and every reply points back to the exact passage it came from.</p><p>The bottleneck is no longer the model. It is getting the right material into the notebook quickly — articles, videos, threads and notes.</p></div></div>
-            <aside data-surface="sidepanel" data-tab="Import" data-tagline="Current webpage" hidden>
-              <section class="sp-card"><div class="sp-modes"><span class="is-active">Web</span><span>YouTube</span></div>
-                <div class="sp-preview"><span class="br-tab-ico"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ff6719"/><path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h12l-6 4z" fill="#fff"/></svg></span><div>The state of AI research assistants<small>stratechery.example.com/2026/ai-research-assistants</small></div></div></section>
-              <div data-surface="picker" data-variant="card" data-selected="Product launch (8)"></div>
-              <span class="sp-primary" data-s="wp-add">Add page to notebook</span>
-              <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="wp-open" hidden>Open notebook</span></div>
-              <p class="sp-status" data-s="wp-status" hidden></p>
-            </aside>
+            <aside data-surface="sidepanel" data-app-screen="popup-web" data-app-map='{"wp-add":"#importButton","wp-status":"#status","wp-open":"#openNotebookLink"}' hidden></aside>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
         </div>
@@ -461,6 +454,7 @@
     </footer>
     <script src="/features/nlm/nlm-config.js"></script>
     <script src="/features/nlm/nlm-shell.js"></script>
+    <script src="/features/app/screens.js"></script>
     <script src="/features/surfaces/surfaces.js"></script>
     <script src="/features/demo.js"></script>
     <script src="/features/stage/stage.js" defer></script>

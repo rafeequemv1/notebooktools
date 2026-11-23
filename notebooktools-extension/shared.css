@@ -1982,3 +1982,10 @@ html.is-popup .sidepanel-tabs {
 
 /* Segmented controls hold pills, so they are pills too */
 .import-modes { border-radius: 999px !important; }
+
+/* The NotebookTools name in headers: the app icon and the name in Google Sans,
+   big enough to read (replaces the tiny wordmark image) */
+.nt-brand { align-items: center; display: inline-flex; gap: 8px; height: auto !important; width: auto !important; }
+.nt-brand img { border-radius: 5px; display: block; flex: none; height: 20px; width: 20px; }
+.nt-brand-name { color: var(--nt-ink); font-family: "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif; font-size: 17px; font-weight: 400; letter-spacing: -0.01em; line-height: 1; white-space: nowrap; }
+:root[data-theme="dark"] .nt-brand, :root[data-theme="dark"] .nt-brand img { filter: none !important; }

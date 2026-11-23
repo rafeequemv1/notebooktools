@@ -2518,3 +2518,8 @@
 /* The popup's back bar for screens like the links queue (no tabs any more) */
 .sp-viewbar { align-items: center; display: flex; gap: 6px; margin: 2px 0 10px; }
 .sp-viewbar b { color: var(--sp-text, #1f1f1f); font-size: 13.5px; font-weight: 500; }
+
+/* The extension's own screens (shadow roots, see surfaces.js mountApps) */
+.br-sidepanel.sp-is-app { display: flex; flex-direction: column; overflow: hidden; }
+.br-sidepanel.sp-is-app .sp-app-host { flex: 1; min-height: 0; overflow: auto; scrollbar-width: none; }
+.nt-drop.nt-drop-app { background: #fff; border-radius: 16px; box-shadow: 0 8px 28px rgba(60, 64, 67, 0.22); overflow: hidden; padding: 0; }

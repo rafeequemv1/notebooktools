@@ -87,3 +87,5 @@
 
 .nt-ai .nt-ai__rest { left: 760px; position: absolute; top: 470px; }
 .nt-ai .ss-stage[data-layout="compact"] .nt-ai__rest { left: 300px; top: 470px; }
+/* The picker is the extension's own panel (AppPanel) */
+.nt-ai .nt-ai__picker { border-radius: 16px; gap: 0; overflow: hidden; padding: 0; }

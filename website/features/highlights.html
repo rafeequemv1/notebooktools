@@ -325,13 +325,7 @@
         <div class="demo-shell" data-scene="highlights">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "Why shared sources beat smart summaries", "url": "hbr.example.org/2026/09/shared-sources", "icon": "web", "active": true}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Harvard Business Review</span><h2>Why shared sources beat smart summaries</h2><div class="pg-meta">By Priya Raman · 8 min read</div><p>Most teams now ask an AI to summarise the reading. It is fast, and it feels thorough.</p><p><span data-s="hl-start"></span><mark data-s="hl-mark">Teams that review sources together make better decisions than teams that rely on summaries alone.</mark><span data-s="hl-end"></span> In our study of 140 product teams, groups that read the underlying documents caught twice as many risks.</p><p>The fix is not to abandon summaries, but to keep the sources one click away — and to save the passages that matter.</p></div><div data-surface="ctxmenu" data-kind="selection" data-selection="Teams that review sources together make better decisions than teams that rely on summaries alone." data-s="hl-menu" hidden style="left:300px;top:230px"></div></div>
-            <aside data-surface="sidepanel" data-tab="Import" data-tagline="Selected text" hidden>
-              <section class="sp-card"><div class="sp-modes three"><span>Web</span><span>YouTube</span><span class="is-active">Text</span></div>
-                <blockquote class="sp-quote">Teams that review sources together make better decisions than teams that rely on summaries alone....</blockquote></section>
-              <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
-              <span class="sp-primary" data-s="hl-import">Add text to notebook</span>
-              <p class="sp-status" data-s="hl-status" hidden></p>
-            </aside>
+            <aside data-surface="sidepanel" data-app-screen="popup-text" data-app-map='{"hl-import":"#importButton","hl-status":"#status"}' hidden></aside>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
         </div>
@@ -459,6 +453,7 @@
     </footer>
     <script src="/features/nlm/nlm-config.js"></script>
     <script src="/features/nlm/nlm-shell.js"></script>
+    <script src="/features/app/screens.js"></script>
     <script src="/features/surfaces/surfaces.js"></script>
     <script src="/features/demo.js"></script>
     <script src="/features/stage/stage.js" defer></script>

@@ -35,3 +35,7 @@
 
 .nt-ca .nt-ca__rest { left: 760px; position: absolute; top: 520px; }
 .nt-ca .ss-stage[data-layout="compact"] .nt-ca__rest { left: 300px; top: 500px; }
+/* The one primary button across NotebookTools: the dark pill */
+.nt-ca .nt-ca__go { background: #1f1f1f; }
+.nt-ca .nt-ca__go[data-hover] { background: #3c4043; }
+.nt-ca .nt-ca__ghost { border-radius: 999px; }

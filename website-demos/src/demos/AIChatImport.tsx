@@ -1,6 +1,7 @@
 import { ArrowUp, ChevronDown, FileText, Globe, MessageSquare, Plus } from 'lucide-react'
 import { Bar, Check, Collapse, Count, Popover, Spinner, Stage, States, Text, Window, type Act, type Rect } from '../kit'
-import { ICON, LOGO, TOKENS } from './shared'
+import { AppPanel, ICON, LOGO, TOKENS } from './shared'
+import './panel.css'
 import './aichat.css'
 
 // Feels-like-use story: in an AI chat, the "Send to NotebookLM" pill in the
@@ -113,29 +114,7 @@ export default function AIChatImport() {
 
             {/* The panel opens under the pill, as the extension draws it */}
             <Popover show={s.open} origin="top right" className="nt-ai__picker" style={pickerAt(rect('nt-pill'), layout)}>
-              <div className="nt-ai__picker-head">
-                <img src={LOGO} alt="" width={18} height={18} />
-                <div className="nt-ai__picker-text">
-                  <b>{SOURCE}</b>
-                  <em>6 segments · chatgpt.com/c/6a1f…</em>
-                </div>
-              </div>
-              <div className="nt-ai__label">Notebook</div>
-              <div className="nt-ai__select">
-                <span className="nt-ai__select-emoji" aria-hidden>🤖</span>
-                <span className="nt-ai__select-name">{NOTEBOOK}</span>
-                <ChevronDown {...ICON} className="nt-ai__select-caret" />
-              </div>
-              <button type="button" className="nt-ai__go" data-target="send" data-cursor="pointer" data-phase={s.phase}>
-                <States
-                  value={s.phase}
-                  states={{
-                    idle: <span>Send to notebook</span>,
-                    busy: <span className="nt-ai__go-row"><Spinner size={14} /> Sending to NotebookLM</span>,
-                    done: <span className="nt-ai__go-row"><Check on={s.phase === 'done'} size={15} /> Added to "{NOTEBOOK}"</span>,
-                  }}
-                />
-              </button>
+              <AppPanel title={SOURCE} meta="6 segments · chatgpt.com/c/6a1f2b9e" notebook={NOTEBOOK} phase={s.phase} sendTarget="send" />
             </Popover>
 
             {/* Satellite: the notebook's Sources, straddling the window's left margin */}

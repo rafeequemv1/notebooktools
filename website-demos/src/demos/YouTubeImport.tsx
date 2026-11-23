@@ -1,6 +1,7 @@
 import { ChevronDown, FileText, Globe } from 'lucide-react'
 import { Bar, Check, Collapse, Count, Popover, Spinner, Stage, States, Text, Window, type Act, type Rect } from '../kit'
-import { ICON, LOGO, TOKENS, YouTubeMark } from './shared'
+import { AppPanel, ICON, LOGO, TOKENS, YouTubeMark } from './shared'
+import './panel.css'
 import './youtube.css'
 
 // Feels-like-use story: on a YouTube video, the NotebookTools button sends the
@@ -37,12 +38,17 @@ async function script(a: Act<S>) {
   await a.wait(2400)
 }
 
-const PICKER_W = { wide: 288, compact: 268 }
+const PICKER_W = { wide: 300, compact: 280 }
 
 function pickerAt(pill: Rect, layout: 'wide' | 'compact') {
   const width = PICKER_W[layout]
   const left = layout === 'wide' ? pill.x + pill.width - width : pill.x
-  return { left, top: pill.y + pill.height + 8, width }
+  // Like the extension, the panel opens above its button when there's no room below
+  const height = 352
+  const below = pill.y + pill.height + 8
+  const stageH = layout === 'wide' ? 600 : 548
+  const top = below + height > stageH - 8 ? Math.max(8, pill.y - height - 8) : below
+  return { left, top, width }
 }
 
 export default function YouTubeImport() {
@@ -114,23 +120,8 @@ export default function YouTubeImport() {
           </Window>
 
           {/* The picker opens under its button, as the extension draws it */}
-          <Popover show={s.open} origin="top right" className="nt-yt__picker" style={pickerAt(rect("nt-pill"), layout)}>
-            <div className="nt-yt__picker-head">Send to NotebookLM</div>
-            <div className="nt-yt__select">
-              <span className="nt-yt__select-emoji" aria-hidden>🤖</span>
-              <span className="nt-yt__select-name">{NOTEBOOK}</span>
-              <ChevronDown {...ICON} className="nt-yt__select-caret" />
-            </div>
-            <button type="button" className="nt-yt__import" data-target="import" data-cursor="pointer" data-phase={s.phase}>
-              <States
-                value={s.phase}
-                states={{
-                  idle: <span>Send to notebook</span>,
-                  busy: <span className="nt-yt__import-row"><Spinner size={14} /> Sending</span>,
-                  done: <span className="nt-yt__import-row"><Check on={s.phase === 'done'} size={15} /> Added to notebook</span>,
-                }}
-              />
-            </button>
+          <Popover show={s.open} origin="bottom right" className="nt-yt__picker" style={pickerAt(rect("nt-pill"), layout)}>
+            <AppPanel title="Send to NotebookLM" meta={VIDEO} notebook={NOTEBOOK} phase={s.phase} sendTarget="import" search />
           </Popover>
 
           {/* Satellite: the notebook's Sources, straddling the window's left margin */}

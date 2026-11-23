@@ -157,3 +157,4 @@
 .nt-sn .ss-stage[data-layout="compact"] .nt-sn__tray[data-phase="capture"] { top: 392px; }
 .nt-sn .ss-stage[data-layout="compact"] .nt-sn__tray[data-phase="guide"] { top: 200px; }
 .nt-sn .nt-sn__doc .ss-window__title { overflow: hidden; padding: 0 70px; text-overflow: ellipsis; white-space: nowrap; }
+.nt-sn .nt-sn__bar-btn { border-radius: 999px; }

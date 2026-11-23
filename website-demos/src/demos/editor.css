@@ -93,3 +93,16 @@
 
 .nt-se .nt-se__rest { left: 620px; position: absolute; top: 520px; }
 .nt-se .ss-stage[data-layout="compact"] .nt-se__rest { left: 280px; top: 440px; }
+
+/* The slide editor's NotebookLM look (website/tools/tools.css): soft grey ground,
+   white rounded panels, pill tools, the dark pill for Download PowerPoint */
+.nt-se .nt-se__app { background: #f0f4f9; }
+.nt-se .nt-se__bar { background: #f0f4f9; border-bottom: 0; }
+.nt-se .nt-se__tool { border-radius: 999px; }
+.nt-se .nt-se__primary { background: #1f1f1f; }
+.nt-se .nt-se__primary[data-hover] { background: #3c4043; }
+.nt-se .nt-se__body { gap: 10px; padding: 0 10px 10px; }
+.nt-se .nt-se__rail, .nt-se .nt-se__inspect { border: 0; border-radius: 18px; box-shadow: 0 1px 2px rgba(60, 64, 67, 0.08); }
+.nt-se .nt-se__slide { box-shadow: 0 1px 3px rgba(60, 64, 67, 0.18), 0 6px 24px rgba(60, 64, 67, 0.12); }
+.nt-se .nt-se__field { border-radius: 10px; background: #f1f3f4; border-color: transparent; }
+.nt-se .nt-se__styles i { border-radius: 999px; }

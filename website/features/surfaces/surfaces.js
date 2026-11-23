@@ -127,6 +127,19 @@
 
     sidepanel: function (el) {
       var s = SURFACES.sidepanel;
+      // The extension's own screen (captured from the app), in Chrome's side panel chrome
+      if (el.hasAttribute("data-app-screen")) {
+        el.classList.add("br-sidepanel", "sp", "sp-is-app");
+        var hostEl = document.createElement("div");
+        hostEl.className = "sp-app-host";
+        hostEl.setAttribute("data-app-screen", el.getAttribute("data-app-screen"));
+        if (el.hasAttribute("data-app-map")) hostEl.setAttribute("data-app-map", el.getAttribute("data-app-map"));
+        el.removeAttribute("data-app-screen");
+        el.removeAttribute("data-app-map");
+        el.innerHTML = '<div class="sp-chrome">' + extIcon(16) + '<span>' + esc(SURFACES.extName) + "</span>" + ms("keep", "sp-chrome-pin") + ms("close") + "</div>";
+        el.appendChild(hostEl);
+        return;
+      }
       var tab = el.getAttribute("data-tab") || "Import";
       var tagline = el.getAttribute("data-tagline") || "Import to NotebookLM";
       el.classList.add("br-sidepanel", "sp");
@@ -220,6 +233,31 @@
     }).join("");
   };
 
+  // The extension's real screens (website/features/app, captured from the app by
+  // scripts/capture-app-ui.js), each in a shadow root with the extension's CSS.
+  // data-app-map names inner elements for the demo scenes: {"wp-add": "#importButton"}.
+  function mountApps(scope) {
+    (scope || document).querySelectorAll("[data-app-screen]").forEach(function (el) {
+      var screen = window.NTAppScreens && window.NTAppScreens[el.getAttribute("data-app-screen")];
+      if (!screen || el.shadowRoot) return;
+      var root = el.attachShadow({ mode: "open" });
+      root.innerHTML =
+        '<link rel="stylesheet" href="/features/app/app.css">' +
+        "<style>:host{display:block;text-align:left;line-height:normal}" +
+        ".app-body{background:var(--nt-bg);color:var(--nt-ink);margin:0;width:auto!important;max-width:none!important;height:auto!important;min-height:100%!important;overflow:visible!important}" +
+        ".app.embedded{max-width:none!important;min-width:0!important;width:100%!important}</style>" +
+        '<div class="app-body ' + esc(screen.bodyClass || "") + '">' + screen.html + "</div>";
+      var map = {};
+      try { map = JSON.parse(el.getAttribute("data-app-map") || "{}"); } catch (e) { map = {}; }
+      Object.keys(map).forEach(function (key) {
+        var target = root.querySelector(map[key]);
+        if (target) target.setAttribute("data-s", key);
+      });
+      el.classList.add("app-host");
+    });
+  }
+  window.NT_SURFACES.mountApps = mountApps;
+
   // Inner surfaces first (side panels and pickers live inside browsers).
   ["picker", "ctxmenu", "sidepanel", "hub", "browser"].forEach(function (name) {
     document.querySelectorAll('[data-surface="' + name + '"]').forEach(function (el) {
@@ -227,4 +265,5 @@
       el.removeAttribute("data-surface");
     });
   });
+  mountApps(document);
 })();

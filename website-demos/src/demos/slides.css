@@ -133,3 +133,5 @@
 
 .nt-sl .nt-sl__menu .ss-collapse { grid-template-columns: minmax(0, 1fr); }
 .nt-sl .nt-sl__count { flex: none; }
+/* Ribbon buttons and chips are pills, as in the extension */
+.nt-sl .nt-sl__chip, .nt-sl .nt-sl__rbtn { border-radius: 999px; }

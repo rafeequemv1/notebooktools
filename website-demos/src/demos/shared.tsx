@@ -58,3 +58,33 @@ export function DownloadRow({ name, size, kind, target }: { name: string; size: 
     </>
   )
 }
+
+/** The extension's in-page "Send to NotebookLM" panel (platform-import.html /
+ *  youtube-import.html), same layout and CSS values as the app (.nt-panel). */
+export function AppPanel({ title, meta, notebook, phase, sendTarget, search }: {
+  title: string; meta: string; notebook: string; phase: 'idle' | 'busy' | 'done'; sendTarget: string; search?: boolean
+}) {
+  return (
+    <div className="nt-app-panel">
+      <div className="ntp-head">
+        <img src={LOGO} alt="" width={18} height={18} />
+        <div className="ntp-head-copy">
+          <p className="ntp-title">{title}</p>
+          <p className="ntp-meta">{meta}</p>
+        </div>
+      </div>
+      <span className="ntp-label">Add to</span>
+      {search && <span className="ntp-input is-ph">Search notebooks</span>}
+      <span className="ntp-select">{notebook}</span>
+      <span className="ntp-input is-ph">Or create a new notebook</span>
+      <button type="button" className="ntp-primary" data-target={sendTarget} data-cursor="pointer">Send to notebook</button>
+      <div className="ntp-foot"><span>Refresh list</span>{phase === 'done' && <span>Open notebook</span>}</div>
+      {phase !== 'idle' && (
+        <div className={`ntp-status ${phase === 'busy' ? 'is-loading' : 'is-done'}`}>
+          {phase === 'busy' ? <i className="ntp-spin" /> : <i className="ntp-check"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 6.8 11.3 12 5.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></i>}
+          <span>{phase === 'busy' ? 'Sending to NotebookLM...' : `Added to "${notebook}"`}</span>
+        </div>
+      )}
+    </div>
+  )
+}

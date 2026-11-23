@@ -408,21 +408,7 @@
         <div class="demo-shell" data-scene="bulk">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "Retrieval-augmented generation - Wikipedia", "url": "en.wikipedia.org/wiki/Retrieval-augmented_generation", "icon": "web", "active": true}, {"title": "Introducing NotebookLM Video Overviews", "url": "youtube.com/watch?v=Qv3jF0sXc2Y", "icon": "yt"}, {"title": "Evaluating RAG pipelines", "url": "blog.langchain.dev/evaluating-rag-pipelines", "icon": "web"}, {"title": "Long-context vs RAG — talk", "url": "youtube.com/watch?v=8nX2kq1ZpQe", "icon": "yt"}, {"title": "Chunking strategies that work", "url": "pinecone.io/learn/chunking-strategies", "icon": "web"}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Wikipedia</span><h2>Retrieval-augmented generation</h2><div class="pg-meta">From Wikipedia, the free encyclopedia</div><p><b>Retrieval-augmented generation</b> (RAG) is a technique that grants generative models the ability to retrieve and incorporate new information before responding.</p><p>Instead of relying only on what a model learned in training, RAG first searches a set of documents, then passes the most relevant passages to the model as context.</p><p>The approach reduces hallucinations and lets answers cite their sources, which is why research tools such as NotebookLM ground every answer in your uploads.</p></div></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div>
-            <aside data-surface="sidepanel" data-tab="Bulk" data-tagline="Links from this page">
-              <section class="sp-card"><h4 class="sp-card-title">Playlist / channel</h4><p class="sp-hint">Open a playlist or channel /videos page, then import in one click.</p><span class="sp-btn">Load from tab</span></section>
-              <section class="sp-card"><h4 class="sp-card-title">Add links</h4>
-                <div class="sp-grid-2"><span class="sp-btn">Extract from page</span><span class="sp-btn" data-s="open-tabs">Open tabs</span><span class="sp-btn">Paste links</span></div>
-                <div class="sp-textarea">One link per line</div></section>
-              <section class="sp-card"><h4 class="sp-card-title">Queue <small data-s="q-meta">0 items</small></h4>
-                <div class="q-tools"><span>All</span><span>Remove</span><span>Retry</span><span>Clear</span></div>
-                <div class="q-list"><div class="q-empty" data-s="q-empty">Add open tabs or paste links to build your queue.</div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Retrieval-augmented generation</span><span class="q-url">en.wikipedia.org/wiki/Retrieval-augmented_generation</span></span><span class="q-pill">WEBPAGE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Introducing NotebookLM Video Overviews</span><span class="q-url">youtube.com/watch?v=Qv3jF0sXc2Y</span></span><span class="q-pill yt">YOUTUBE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Evaluating RAG pipelines</span><span class="q-url">blog.langchain.dev/evaluating-rag-pipelines</span></span><span class="q-pill">WEBPAGE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Long-context vs RAG — talk</span><span class="q-url">youtube.com/watch?v=8nX2kq1ZpQe</span></span><span class="q-pill yt">YOUTUBE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Chunking strategies that work</span><span class="q-url">pinecone.io/learn/chunking-strategies</span></span><span class="q-pill">WEBPAGE</span></div></div></section>
-              <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
-              <div class="q-progress"><i data-s="q-fill"></i></div>
-              <span class="q-progress-text" data-s="q-progress-text">0 of 0 processed</span>
-              <span class="sp-primary" data-s="bulk-import">Import queue</span>
-              <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="bulk-open" hidden>Open notebook</span></div>
-              <p class="sp-status" data-s="bulk-status" hidden></p>
-            </aside>
+            <aside data-surface="sidepanel" data-app-screen="popup-bulk" data-app-map='{"bulk-import":"#bulkImportButton","bulk-status":"#bulkStatus","bulk-open":"#bulkOpenNotebookLink","q-fill":"#bulkProgressFill","q-progress-text":"#bulkProgressLabel","q-progress":"#bulkProgress","q-meta":"#bulkQueueMeta"}'></aside>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
         </div>
@@ -876,14 +862,7 @@
         <div class="demo-shell" data-scene="webpage">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "The state of AI research assistants", "url": "stratechery.example.com/2026/ai-research-assistants", "icon": "web", "active": true}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Analysis</span><h2>The state of AI research assistants</h2><div class="pg-meta">By Dana Whitfield · 12 min read</div><p>A year ago, “research assistant” meant a chatbot that sounded confident. Today the best tools ground every answer in documents you choose.</p><p>NotebookLM leads that shift: you add sources, and every reply points back to the exact passage it came from.</p><p>The bottleneck is no longer the model. It is getting the right material into the notebook quickly — articles, videos, threads and notes.</p></div></div>
-            <aside data-surface="sidepanel" data-tab="Import" data-tagline="Current webpage" hidden>
-              <section class="sp-card"><div class="sp-modes"><span class="is-active">Web</span><span>YouTube</span></div>
-                <div class="sp-preview"><span class="br-tab-ico"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ff6719"/><path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h12l-6 4z" fill="#fff"/></svg></span><div>The state of AI research assistants<small>stratechery.example.com/2026/ai-research-assistants</small></div></div></section>
-              <div data-surface="picker" data-variant="card" data-selected="Product launch (8)"></div>
-              <span class="sp-primary" data-s="wp-add">Add page to notebook</span>
-              <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="wp-open" hidden>Open notebook</span></div>
-              <p class="sp-status" data-s="wp-status" hidden></p>
-            </aside>
+            <aside data-surface="sidepanel" data-app-screen="popup-web" data-app-map='{"wp-add":"#importButton","wp-status":"#status","wp-open":"#openNotebookLink"}' hidden></aside>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
         </div>
@@ -948,16 +927,7 @@
                   <span class="nt-pill" data-s="x-btn" title="Send this conversation to a NotebookLM notebook as a source"><img class="sf-ext-icon" src="/assets/logo-mark-32.png" alt="" width="18" height="18">Send to NotebookLM</span>
                 </div>
                 <div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>Thread: five papers that changed how we think about retrieval-augmented generation 🧵</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div><div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>1/ “Lost in the Middle” showed long contexts still miss facts buried in the middle. Retrieval keeps the evidence near the question.</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div><div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>2/ RAGAS made evaluation practical: faithfulness, answer relevance and context precision, scored automatically.</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div><div class="x-post"><i></i><div><b>Maya Chen</b><small>@mayabuilds · 2h</small><p>3/ Late-chunking and contextual retrieval cut failed lookups by a third in our tests.</p><div class="x-post-actions"><span class="nlm-ms sf-ms" aria-hidden="true">chat_bubble</span><span class="nlm-ms sf-ms" aria-hidden="true">repeat</span><span class="nlm-ms sf-ms" aria-hidden="true">favorite</span><span class="nlm-ms sf-ms" aria-hidden="true">bar_chart</span></div></div></div>
-                <div class="nt-drop" data-s="x-drop" hidden style="right:12px;top:58px;width:288px">
-                  <div class="nt-drop-head"><img class="sf-ext-icon" src="/assets/logo-mark-32.png" alt="" width="18" height="18"><div><b>[X] Thread: five papers that changed RAG</b><small>4 segments · x.com/mayabuilds/status/18342…</small></div></div>
-                  <span class="sp-card-title" style="margin:2px 0 0">Notebook</span>
-                  <span class="sf-select"><span class="sf-select-value">Research — AI tools (12)</span><span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span>
-                  <span class="sp-hint">or create new</span>
-                  <span class="sf-input sf-ph">Notebook name</span>
-                  <span class="sp-primary" data-s="x-import">Send to notebook</span>
-                  <p class="nt-drop-status" data-s="x-status"></p>
-                  <div class="nt-drop-links"><span>Refresh list</span></div>
-                </div>
+                <div class="nt-drop nt-drop-app" data-s="x-drop" hidden style="right:12px;top:58px;width:300px" data-app-screen="panel-x" data-app-map='{"x-import":"#importButton","x-status":"#status"}'></div>
               </div>
               <div class="x-side"><div class="x-search">Search</div></div>
             </div></div>
@@ -1020,13 +990,7 @@
         <div class="demo-shell" data-scene="highlights">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "Why shared sources beat smart summaries", "url": "hbr.example.org/2026/09/shared-sources", "icon": "web", "active": true}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Harvard Business Review</span><h2>Why shared sources beat smart summaries</h2><div class="pg-meta">By Priya Raman · 8 min read</div><p>Most teams now ask an AI to summarise the reading. It is fast, and it feels thorough.</p><p><span data-s="hl-start"></span><mark data-s="hl-mark">Teams that review sources together make better decisions than teams that rely on summaries alone.</mark><span data-s="hl-end"></span> In our study of 140 product teams, groups that read the underlying documents caught twice as many risks.</p><p>The fix is not to abandon summaries, but to keep the sources one click away — and to save the passages that matter.</p></div><div data-surface="ctxmenu" data-kind="selection" data-selection="Teams that review sources together make better decisions than teams that rely on summaries alone." data-s="hl-menu" hidden style="left:300px;top:230px"></div></div>
-            <aside data-surface="sidepanel" data-tab="Import" data-tagline="Selected text" hidden>
-              <section class="sp-card"><div class="sp-modes three"><span>Web</span><span>YouTube</span><span class="is-active">Text</span></div>
-                <blockquote class="sp-quote">Teams that review sources together make better decisions than teams that rely on summaries alone....</blockquote></section>
-              <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
-              <span class="sp-primary" data-s="hl-import">Add text to notebook</span>
-              <p class="sp-status" data-s="hl-status" hidden></p>
-            </aside>
+            <aside data-surface="sidepanel" data-app-screen="popup-text" data-app-map='{"hl-import":"#importButton","hl-status":"#status"}' hidden></aside>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
         </div>

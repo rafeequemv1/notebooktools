@@ -325,21 +325,7 @@
         <div class="demo-shell" data-scene="bulk">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "Retrieval-augmented generation - Wikipedia", "url": "en.wikipedia.org/wiki/Retrieval-augmented_generation", "icon": "web", "active": true}, {"title": "Introducing NotebookLM Video Overviews", "url": "youtube.com/watch?v=Qv3jF0sXc2Y", "icon": "yt"}, {"title": "Evaluating RAG pipelines", "url": "blog.langchain.dev/evaluating-rag-pipelines", "icon": "web"}, {"title": "Long-context vs RAG — talk", "url": "youtube.com/watch?v=8nX2kq1ZpQe", "icon": "yt"}, {"title": "Chunking strategies that work", "url": "pinecone.io/learn/chunking-strategies", "icon": "web"}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Wikipedia</span><h2>Retrieval-augmented generation</h2><div class="pg-meta">From Wikipedia, the free encyclopedia</div><p><b>Retrieval-augmented generation</b> (RAG) is a technique that grants generative models the ability to retrieve and incorporate new information before responding.</p><p>Instead of relying only on what a model learned in training, RAG first searches a set of documents, then passes the most relevant passages to the model as context.</p><p>The approach reduces hallucinations and lets answers cite their sources, which is why research tools such as NotebookLM ground every answer in your uploads.</p></div></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div>
-            <aside data-surface="sidepanel" data-tab="Bulk" data-tagline="Links from this page">
-              <section class="sp-card"><h4 class="sp-card-title">Playlist / channel</h4><p class="sp-hint">Open a playlist or channel /videos page, then import in one click.</p><span class="sp-btn">Load from tab</span></section>
-              <section class="sp-card"><h4 class="sp-card-title">Add links</h4>
-                <div class="sp-grid-2"><span class="sp-btn">Extract from page</span><span class="sp-btn" data-s="open-tabs">Open tabs</span><span class="sp-btn">Paste links</span></div>
-                <div class="sp-textarea">One link per line</div></section>
-              <section class="sp-card"><h4 class="sp-card-title">Queue <small data-s="q-meta">0 items</small></h4>
-                <div class="q-tools"><span>All</span><span>Remove</span><span>Retry</span><span>Clear</span></div>
-                <div class="q-list"><div class="q-empty" data-s="q-empty">Add open tabs or paste links to build your queue.</div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Retrieval-augmented generation</span><span class="q-url">en.wikipedia.org/wiki/Retrieval-augmented_generation</span></span><span class="q-pill">WEBPAGE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Introducing NotebookLM Video Overviews</span><span class="q-url">youtube.com/watch?v=Qv3jF0sXc2Y</span></span><span class="q-pill yt">YOUTUBE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Evaluating RAG pipelines</span><span class="q-url">blog.langchain.dev/evaluating-rag-pipelines</span></span><span class="q-pill">WEBPAGE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Long-context vs RAG — talk</span><span class="q-url">youtube.com/watch?v=8nX2kq1ZpQe</span></span><span class="q-pill yt">YOUTUBE</span></div><div class="q-row" data-s="q-row" hidden><i class="q-check"></i><span class="q-text"><span class="q-title">Chunking strategies that work</span><span class="q-url">pinecone.io/learn/chunking-strategies</span></span><span class="q-pill">WEBPAGE</span></div></div></section>
-              <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
-              <div class="q-progress"><i data-s="q-fill"></i></div>
-              <span class="q-progress-text" data-s="q-progress-text">0 of 0 processed</span>
-              <span class="sp-primary" data-s="bulk-import">Import queue</span>
-              <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="bulk-open" hidden>Open notebook</span></div>
-              <p class="sp-status" data-s="bulk-status" hidden></p>
-            </aside>
+            <aside data-surface="sidepanel" data-app-screen="popup-bulk" data-app-map='{"bulk-import":"#bulkImportButton","bulk-status":"#bulkStatus","bulk-open":"#bulkOpenNotebookLink","q-fill":"#bulkProgressFill","q-progress-text":"#bulkProgressLabel","q-progress":"#bulkProgress","q-meta":"#bulkQueueMeta"}'></aside>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
         </div>
@@ -470,6 +456,7 @@
     </footer>
     <script src="/features/nlm/nlm-config.js"></script>
     <script src="/features/nlm/nlm-shell.js"></script>
+    <script src="/features/app/screens.js"></script>
     <script src="/features/surfaces/surfaces.js"></script>
     <script src="/features/demo.js"></script>
     <script src="/features/stage/stage.js" defer></script>

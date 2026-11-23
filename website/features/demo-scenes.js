@@ -16,11 +16,22 @@
     function alive() {
       return root._token === token;
     }
+    // Also looks inside the app screens' shadow roots (surfaces.js mountApps)
+    function q(css) {
+      var found = root.querySelector(css);
+      if (found) return found;
+      var hosts = root.querySelectorAll(".app-host");
+      for (var i = 0; i < hosts.length; i += 1) {
+        found = hosts[i].shadowRoot && hosts[i].shadowRoot.querySelector(css);
+        if (found) return found;
+      }
+      return null;
+    }
     function el(sel) {
       if (!sel) return null;
       if (typeof sel !== "string") return sel;
-      if (/^[a-z0-9-]+$/i.test(sel)) return root.querySelector('[data-s="' + sel + '"]');
-      return root.querySelector(sel);
+      if (/^[a-z0-9-]+$/i.test(sel)) return q('[data-s="' + sel + '"]');
+      return q(sel);
     }
     function guard(fn) {
       return function () {
@@ -31,7 +42,12 @@
     var api = {
       el: el,
       all: function (sel) {
-        return Array.prototype.slice.call(root.querySelectorAll(/^[a-z0-9-]+$/i.test(sel) ? '[data-s="' + sel + '"]' : sel));
+        var css = /^[a-z0-9-]+$/i.test(sel) ? '[data-s="' + sel + '"]' : sel;
+        var list = Array.prototype.slice.call(root.querySelectorAll(css));
+        root.querySelectorAll(".app-host").forEach(function (h) {
+          if (h.shadowRoot) list = list.concat(Array.prototype.slice.call(h.shadowRoot.querySelectorAll(css)));
+        });
+        return list;
       },
       wait: function (ms) {
         return function () { return alive() ? D.wait(ms) : new Promise(function () {}); };
@@ -125,6 +141,7 @@
     function play() {
       root._token += 1;
       root.innerHTML = initial;
+      if (window.NT_SURFACES && window.NT_SURFACES.mountApps) window.NT_SURFACES.mountApps(root);
       D.hideDemoCursor(root);
       var api = makeApi(root, root._token);
       var list = [500].concat(steps(api), [
@@ -157,6 +174,29 @@
   });
 
   /* Shared step helpers ---------------------------------------------------- */
+
+
+  // Status lines exactly as the extension draws them (utils.js setImportStatus)
+  var CHECK = '<span class="status-icon-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 6.8 11.3 12 5.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+  function appStatus(a, sel, message, kind) {
+    return a.run(function () {
+      var e = a.el(sel);
+      if (!e) return;
+      var icon = kind === "loading" ? '<span class="status-spinner" aria-hidden="true"></span>' : kind === "done" ? CHECK : "";
+      e.innerHTML = icon + '<span class="status-text">' + message + "</span>";
+      e.className = "status show " + (kind === "loading" ? "loading" : kind === "done" ? "success done" : "success");
+      e.hidden = false;
+    });
+  }
+  function appImport(a, sel, notebook) {
+    return [
+      appStatus(a, sel, "Preparing import...", "loading"),
+      a.wait(650),
+      appStatus(a, sel, "Sending to NotebookLM...", "loading"),
+      a.wait(900),
+      appStatus(a, sel, 'Added to "' + notebook + '"', "done"),
+    ];
+  }
 
   function importStatuses(a, statusSel, notebook, extra) {
     return [
@@ -219,44 +259,38 @@
 
   // Bulk: side panel Bulk tab → Open tabs → queue → Import N sources.
   // bulk-import.js (labels, statuses, progress)
+  // Bulk import: the extension's links queue (captured from the app), five
+  // links ready; Import queue imports them one by one with progress.
   register("bulk", function (a) {
-    var items = a.all("q-row");
+    var items = a.all(".bulk-queue-item");
     var titles = ["Retrieval-augmented generation", "Introducing NotebookLM Video Overviews", "Evaluating RAG pipelines", "Long-context vs RAG — talk", "Chunking strategies that work"];
     var steps = [
-      a.click("open-tabs"),
-      a.status("bulk-status", "Added 5 · 0 duplicates skipped · 0 invalid lines skipped.", "success"),
-      a.hide("q-empty"),
-      a.run(function () { items.forEach(function (r) { r.hidden = false; }); }),
-      a.text("q-meta", "5 items · 5 ready · 2 YT"),
-      a.text("bulk-import", "Import 5 sources"),
-      a.wait(900),
-      a.click(".sp-card .sf-select"),
-      a.add(".sp-card .sf-select", "is-focus"),
-      a.wait(350),
-      a.remove(".sp-card .sf-select", "is-focus"),
+      a.run(function () { var q = a.el("#bulkQueueList"); if (q) q.scrollIntoView({ block: "nearest" }); }),
+      a.wait(400),
       a.click("bulk-import"),
-      a.add("bulk-import", "is-busy"),
-      a.status("bulk-status", "Preparing bulk import...", "loading"),
+      a.text("bulk-import", "Importing…"),
+      a.run(function () { var p = a.el("q-progress"); if (p) p.classList.add("is-visible"); }),
+      appStatus(a, "bulk-status", "Preparing bulk import...", "loading"),
       a.wait(600),
     ];
     items.forEach(function (row, i) {
       steps.push(
-        a.run(function () { row.classList.add("is-active"); }),
-        a.status("bulk-status", "Importing " + titles[i] + "...", "loading"),
-        a.text("q-progress-text", "Importing " + (i + 1) + " of 5..."),
+        appStatus(a, "bulk-status", "Importing " + titles[i] + "...", "loading"),
+        a.text("q-progress-text", "Importing " + (i + 1) + " of " + items.length + "..."),
         a.wait(620),
         a.run(function () {
-          row.classList.remove("is-active");
           row.classList.add("is-success");
-          a.el("q-fill").style.width = ((i + 1) / 5) * 100 + "%";
+          var check = row.querySelector("input");
+          if (check) check.disabled = true;
+          var fill = a.el("q-fill");
+          if (fill) fill.style.width = ((i + 1) / items.length) * 100 + "%";
         }),
-        a.text("q-progress-text", i + 1 + " of 5 processed")
+        a.text("q-progress-text", i + 1 + " of " + items.length + " processed")
       );
     });
     steps.push(
-      a.remove("bulk-import", "is-busy"),
       a.text("bulk-import", "Import queue"),
-      a.status("bulk-status", "Bulk import complete: 5 added, 0 failed, 0 skipped.", "success"),
+      appStatus(a, "bulk-status", "Bulk import complete: " + items.length + " added, 0 failed, 0 skipped.", "done"),
       a.show("bulk-open"),
       a.wait(1500)
     );
@@ -270,15 +304,9 @@
       a.click(".br-ext-btn"),
       a.add(".br-ext-btn", "is-pressed"),
       a.show(".br-sidepanel"),
-      a.wait(700),
-      a.click(".sp-card .sf-select"),
-      a.add(".sp-card .sf-select", "is-focus"),
-      a.wait(300),
-      a.text(".sp-card .sf-select-value", "Research — AI tools (12)"),
-      a.remove(".sp-card .sf-select", "is-focus"),
-      a.wait(300),
+      a.wait(900),
       a.click("wp-add"),
-    ].concat(importStatuses(a, "wp-status", "Research — AI tools"), [
+    ].concat(appImport(a, "wp-status", "Research — AI tools"), [
       a.show("wp-open"),
       a.wait(1600),
     ]);
@@ -299,9 +327,9 @@
       a.click('[data-ctx="Add to NotebookLM"]'),
       a.hide("hl-menu"),
       a.show(".br-sidepanel"),
-      a.wait(800),
+      a.wait(900),
       a.click("hl-import"),
-    ].concat(importStatuses(a, "hl-status", "Research — AI tools", " <u>Open notebook</u>"), [a.wait(1600)]);
+    ].concat(appImport(a, "hl-status", "Research — AI tools"), [a.wait(1600)]);
   });
 
   // X: one "NotebookLM" pill in the column header → import panel.
@@ -311,19 +339,14 @@
       a.click("x-btn"),
       a.add("x-btn", "is-pressed"),
       a.show("x-drop"),
-      a.wait(800),
+      a.wait(900),
       a.click("x-import"),
-      a.add("x-import", "is-busy"),
-      a.text("x-status", "Sending to NotebookLM..."),
-      a.wait(1000),
-      a.remove("x-import", "is-busy"),
-      a.add("x-status", "is-success"),
-      a.text("x-status", 'Added to "Research — AI tools"'),
+    ].concat(appImport(a, "x-status", "Research — AI tools"), [
       a.wait(1300),
       a.hide("x-drop"),
       a.remove("x-btn", "is-pressed"),
       a.wait(900),
-    ];
+    ]);
   });
 
   // Snapshots: Drag to capture → overlay → annotate → side panel → send.

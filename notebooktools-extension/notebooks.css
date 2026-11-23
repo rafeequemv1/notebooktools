@@ -4138,3 +4138,5 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
   border: 1px solid var(--nt-line); border-radius: 999px; font-weight: 500; height: 32px; padding: 0 30px 0 12px;
 }
 .nbx-sort select:hover { border-color: var(--nt-line-strong); }
+.notebooks-logo.nt-brand .nt-brand-name { font-size: 19px; }
+.notebooks-logo.nt-brand img { height: 22px; width: 22px; }

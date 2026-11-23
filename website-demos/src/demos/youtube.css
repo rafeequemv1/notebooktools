@@ -388,3 +388,5 @@
   display: block;
   flex: none;
 }
+/* The picker is the extension's own panel (AppPanel) */
+.nt-yt .nt-yt__picker { border-radius: 16px; gap: 0; overflow: hidden; padding: 0; }

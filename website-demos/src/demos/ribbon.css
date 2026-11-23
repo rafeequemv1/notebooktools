@@ -355,3 +355,5 @@
 .nt-rb .nt-rb__ask.is-filler {
   padding: 14px 16px;
 }
+/* Ribbon buttons and chips are pills, as in the extension */
+.nt-rb .nt-rb__btn, .nt-rb .nt-rb__chip { border-radius: 999px; }

@@ -94,6 +94,11 @@ def main() -> None:
         for tag in SCRIPTS_BEFORE_DEMO:
             if tag not in new:
                 new = new.replace(demo, tag + "\n    " + demo, 1)
+        # the extension's captured screens (scripts/capture-app-ui.js) load before surfaces.js
+        screens = '<script src="/features/app/screens.js"></script>'
+        surfaces = '<script src="/features/surfaces/surfaces.js"></script>'
+        if screens not in new:
+            new = new.replace(surfaces, screens + "\n    " + surfaces, 1)
         for tag in reversed(SCRIPTS_AFTER_DEMO):
             if tag not in new:
                 new = new.replace(demo, demo + "\n    " + tag, 1)
