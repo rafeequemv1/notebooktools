@@ -258,6 +258,69 @@ async function startSnapshot() {
   }
 }
 
+// Add open tabs: every website tab in this window goes into the chosen notebook
+// in one go (NotebookLM pages, other extension pages and duplicates are left out).
+async function openWebsiteTabs() {
+  let win = null;
+  try { win = await chrome.windows.getLastFocused({ windowTypes: ["normal"] }); } catch (_error) { win = null; }
+  const tabs = await chrome.tabs.query(win?.id ? { windowId: win.id } : { currentWindow: true });
+  const seen = new Set();
+  const items = [];
+  for (const tab of tabs) {
+    const url = tab.url || "";
+    if (!/^https?:\/\//i.test(url) || /^https?:\/\/(notebooklm|notebook)\.google\.com\//i.test(url)) continue;
+    const video = NotebookToolsStore.normalizeYouTubeVideoUrl?.(url) || "";
+    const key = video || url.split("#")[0];
+    if (seen.has(key)) continue;
+    seen.add(key);
+    items.push({ type: video ? "youtube" : "webpage", url: video || url, title: tab.title || "", selected: true, status: "pending" });
+  }
+  return items;
+}
+
+async function refreshOpenTabCount() {
+  const badge = document.querySelector("#openTabCount");
+  if (!badge) return;
+  const items = await openWebsiteTabs().catch(() => []);
+  badge.hidden = !items.length;
+  badge.textContent = String(items.length);
+}
+
+let addingTabs = false;
+async function addOpenTabs() {
+  if (addingTabs) return;
+  const button = document.querySelector("#tabBulk");
+  try {
+    const items = await openWebsiteTabs();
+    if (!items.length) throw new Error("No website tabs to add in this window.");
+    await NotebookToolsSourceLimits.assertCanImport({ ...importNotebookState, adding: items.length });
+    addingTabs = true;
+    if (button) button.disabled = true;
+    setStatus(`Adding ${items.length} tab${items.length === 1 ? "" : "s"}…`, { loading: true });
+    const target = await picker.resolveTarget();
+    const summary = await NotebookToolsBulkRunner.run({
+      items,
+      notebookId: target.id,
+      onProgress: ({ index }) => setStatus(`Adding tab ${index + 1} of ${items.length}… keep this open until it's done.`, { loading: true })
+    });
+    document.querySelector("#newNotebookLmName").value = "";
+    await picker.refresh({ silent: true });
+    if (target.id) {
+      document.querySelector("#notebookLmSelect").value = target.id;
+      document.dispatchEvent(new CustomEvent("notebooktools-target", { detail: { id: target.id } }));
+      showOpenNotebook(target.id);
+    }
+    const failed = summary.failed ? `, ${summary.failed} couldn't be added` : "";
+    const limit = summary.stoppedByLimit ? " The notebook is full (source limit)." : "";
+    setStatus(`Added ${summary.success} of ${items.length} tab${items.length === 1 ? "" : "s"}${failed}.${limit}`, summary.failed || summary.stoppedByLimit ? { type: "error" } : { done: true });
+  } catch (error) {
+    setStatus(error.message || "Could not add your tabs.", { type: "error" });
+  } finally {
+    addingTabs = false;
+    if (button) button.disabled = false;
+  }
+}
+
 async function refreshSnapshotCount() {
   const badge = document.querySelector("#snapshotCount");
   if (!badge) return;
@@ -724,6 +787,7 @@ async function runStudioImport() {
     document.querySelector("#newNotebookLmName").value = "";
     await picker.refresh({ silent: true });
     document.querySelector("#notebookLmSelect").value = targetNotebook.id;
+    document.dispatchEvent(new CustomEvent("notebooktools-target", { detail: { id: targetNotebook.id } }));
     importNotebookState = {
       notebookId: targetNotebook.id,
       isNewNotebook: false,
@@ -989,7 +1053,11 @@ async function initSidePanel() {
     tab.addEventListener("click", () => void openPanel(tab.dataset.panel));
   });
   document.querySelector("#tabSnapshots")?.addEventListener("click", () => void startSnapshot());
+  document.querySelector("#tabBulk")?.addEventListener("click", () => void addOpenTabs());
   void refreshSnapshotCount();
+  void refreshOpenTabCount();
+  chrome.tabs.onCreated.addListener(() => void refreshOpenTabCount());
+  chrome.tabs.onRemoved.addListener(() => void refreshOpenTabCount());
 
   modeButtons.forEach((button) => {
     button.addEventListener("click", () => setActiveMode(button.dataset.mode));

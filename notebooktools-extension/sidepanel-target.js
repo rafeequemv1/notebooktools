@@ -94,6 +94,17 @@
     close();
   }
 
+  // After an import into a notebook made from "New notebook", the bar moves to
+  // that notebook (so the next import doesn't make another one)
+  document.addEventListener("notebooktools-target", (event) => {
+    const id = event.detail?.id;
+    if (!id) return;
+    current = { id, newName: "" };
+    chrome.storage.local.set({ [LAST_KEY]: id });
+    sync();
+    render();
+  });
+
   function chooseNew(name) {
     const clean = String(name || "").trim();
     if (!clean) return;
