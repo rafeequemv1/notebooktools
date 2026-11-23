@@ -381,9 +381,24 @@ window.NTSlides = (() => {
     // Share of the line's letters in words that lean (per word, so a line with one
     // italic title in it stays upright)
     const longWords = (words.length ? words : sg.words).filter((w) => (w.text.match(/\p{L}/gu) || []).length >= 4);
-    const leaning = longWords.filter((w) => slantOf(img, [w], st.bg) >= 4);
+    const leaning = longWords.filter((w) => leans(slantOf(img, [w], st.bg, true), (w.text.match(/\p{L}/gu) || []).length));
     const chars = (list) => list.reduce((n, w) => n + w.text.length, 0);
     sg.italicShare = longWords.length ? chars(leaning) / chars(longWords) : 0;
+    // Each word's own look (a bold, italic or coloured word inside the line)
+    sg.wordLooks = sg.words.map((w) => {
+      const t = w.text.trim();
+      const letters = (t.match(/[\p{L}\p{N}]/gu) || []).length;
+      // (one letter or digit is enough for weight and colour: "chapter 4")
+      if (!letters || (letters < 2 && !/^[\p{L}\p{N}][.,;:)]?$/u.test(t)) || w.bbox.x1 - w.bbox.x0 < 6) return null;
+      const lettersOnly = (t.match(/\p{L}/gu) || []).length;
+      return {
+        color: sampleStyle(img, w.bbox).color,
+        weight: (strokeRatio(img, w.bbox, st.bg, sg.h) * sg.h) / strokeNorm(sg.h),
+        // (slashes and digits lean or stand on their own: letters only)
+        slant: lettersOnly >= 3 && lettersOnly >= t.replace(/[.,;:!?'"“”‘’()]/g, "").length * 0.85 ? slantOf(img, [w], st.bg, true) : null,
+        letters
+      };
+    });
     sg.label = null;
     if (hasLabel) {
       const lb = boxOf(words.slice(0, colon + 1));
@@ -450,7 +465,7 @@ window.NTSlides = (() => {
   // Letter slant in degrees: shear the line's ink back by each angle and see which
   // makes the vertical strokes line up into the sharpest columns. ~0 upright,
   // ~10-15 italic. Measured on letters only (digits and symbols vary).
-  function slantOf(img, words, bg) {
+  function slantOf(img, words, bg, withGain = false) {
     const { data, width, height } = img;
     const letters = words.filter((w) => /\p{L}{2}/u.test(w.text));
     if (!letters.length) return 0;
@@ -479,8 +494,17 @@ window.NTSlides = (() => {
     let best = 0, bestVal = -1;
     for (let deg = -6; deg <= 24; deg += 1) { const v = sharp(deg); if (v > bestVal) { bestVal = v; best = deg; } }
     // Lean only counts if it sharpens the strokes clearly over upright
-    return bestVal > sharp(0) * 1.05 ? best : 0;
+    const gain = bestVal / Math.max(1, sharp(0));
+    if (withGain) return { deg: gain > 1.05 ? best : 0, gain };
+    return gain > 1.05 ? best : 0;
   }
+
+  // A word leans (italic) when shearing it sharpens its strokes clearly: a short
+  // upright word can find a small gain at some odd angle, a real italic finds a big one
+  // (a steep lean is often a fluke on a short word, so it needs a bigger gain)
+  // (a steep lean is often a fluke on a short word, A and V lean on their own,
+  // so it needs a bigger gain and a longer word)
+  const leans = (sl, letters = 9) => !!sl && (sl.deg > 13 ? sl.deg <= 20 && sl.gain >= 1.25 && letters >= 4 : (sl.deg >= 3 && sl.gain >= 1.22) || (sl.deg >= 6 && sl.gain >= 1.12));
 
   // Stroke thickness of the text in a box, as a share of the font size:
   // ~0.08–0.10 for regular weight, ~0.13+ for bold. Ink area divided by
@@ -852,7 +876,10 @@ window.NTSlides = (() => {
      When no width does both, the box keeps its line breaks. */
   function makeParagraphs(e, lines, measure) {
     if (lines.length < 2) return;
-    const lw = lines.map((ln) => measure(ln));
+    // Where each line starts in the box's text now (styled words are measured in their own font)
+    const oldStarts = [];
+    lines.reduce((at, ln, i) => { oldStarts[i] = at; return at + ln.length + 1; }, 0);
+    const lw = lines.map((ln, i) => measure(ln, oldStarts[i]));
     const maxW = Math.max(...lw);
     const paras = [];
     let cur = [];
@@ -875,15 +902,136 @@ window.NTSlides = (() => {
       p.forEach((li, j) => {
         const ind = bullet && j > 0 ? indent : 0;
         lo = Math.max(lo, lw[li] + ind);
-        if (j < p.length - 1) hi = Math.min(hi, measure(`${lines[li]} ${lines[p[j + 1]].split(/\s+/)[0]}`) + ind);
+        if (j < p.length - 1) hi = Math.min(hi, lw[li] + measure(` ${lines[p[j + 1]].split(/\s+/)[0]}`, oldStarts[p[j + 1]] - 1) + ind);
       });
     }
     if (!(hi - lo > 3)) return;
-    const join = (p) => p.map((li) => lines[li]).reduce((acc, ln) => (acc.endsWith("-") && /^[a-z]/.test(ln) ? acc + ln : `${acc} ${ln}`));
     const width = lo + (hi - lo) * 0.4;
     if (e.align === "center") e.x += (e.w - width) / 2;
     e.w = width;
-    e.text = paras.map(join).join("\n");
+    // Join, noting where each line lands, so styled words move with their line
+    const newStarts = [];
+    let text = "";
+    paras.forEach((p, pi) => {
+      if (pi) text += "\n";
+      p.forEach((li, j) => {
+        if (j && !(text.endsWith("-") && /^[a-z]/.test(lines[li]))) text += " ";
+        newStarts[li] = text.length;
+        text += lines[li];
+      });
+    });
+    if (e.runs) e.runs = e.runs.map((r) => {
+      let li = lines.length - 1;
+      while (li > 0 && oldStarts[li] > r.start) li -= 1;
+      const shift = newStarts[li] - oldStarts[li];
+      return { ...r, start: r.start + shift, end: r.end + shift };
+    });
+    e.text = text;
+  }
+
+  // Where each word of a line sits in its text: [{ s, e, look }]
+  function wordSpans(sg) {
+    const spans = [];
+    let cur = 0;
+    sg.words.forEach((w, k) => {
+      const t = w.text.trim();
+      if (!t) return;
+      let at = sg.text.indexOf(t, cur), len = t.length;
+      if (at < 0 || at - cur > 3) {
+        const core = t.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
+        at = core ? sg.text.indexOf(core, cur) : -1;
+        len = core.length;
+        if (at < 0 || at - cur > 3) return;
+      }
+      spans.push({ s: at, e: at + len, look: sg.wordLooks ? sg.wordLooks[k] : null });
+      cur = at + len;
+    });
+    return spans;
+  }
+
+  // Words styled unlike the rest of their box: heavier/lighter, slanted/upright,
+  // another colour. Measured against the word's own line (and the slide's body
+  // weight), so a heading or a light font doesn't fool it. Returns runs relative
+  // to the line's text.
+  function lineMarks(sg, box, baseWeight) {
+    if (!sg.wordLooks || sg.words.length < 2) return [];
+    const spans = wordSpans(sg);
+    const measured = spans.filter((sp) => sp.look);
+    if (measured.length < 2) return [];
+    const lineWeight = weightedMedian(measured.map((sp) => [sp.look.weight, sp.e - sp.s]));
+    const labelEnd = box.label && LABEL_RE.test(sg.text) ? sg.text.match(LABEL_RE)[1].length : 0;
+    const boxRgb = rgbOf(box.color);
+    const marks = spans.map((sp) => {
+      const L = sp.look;
+      if (!L || sp.s < labelEnd) return null;
+      const m = {};
+      // (short words measure less reliably: they need a clearer margin)
+      if (!box.bold && L.weight > lineWeight * (L.letters >= 4 ? 1.25 : 1.35) && L.weight > baseWeight * BOLD_STEP) m.bold = true;
+      if (box.bold && L.weight < lineWeight * 0.8 && L.weight < baseWeight * BOLD_STEP) m.bold = false;
+      if (L.slant) {
+        if (!box.italic && leans(L.slant, L.letters)) m.italic = true;
+      }
+      if (dist(rgbOf(L.color), boxRgb) > 90) m.color = L.color;
+      return m;
+    });
+    // A reference in an italic box: the authors and year before the title stay
+    // upright ("Li, D., et al. (2008). Processable …") unless they lean too
+    if (box.italic) {
+      const cite = sg.text.match(/^(.{2,80}?\(\d{4}[a-z]?\)\.?)\s/);
+      if (cite && !spans.some((sp) => sp.s < cite[1].length && sp.look && leans(sp.look.slant, sp.look.letters))) {
+        spans.forEach((sp, i) => { if (sp.e <= cite[1].length) marks[i] = { ...(marks[i] || {}), italic: false }; });
+      }
+    }
+    // A short word between two words styled the same way ("The rise of graphene")
+    // takes their style when it couldn't be measured itself
+    for (const k of ["bold", "italic", "color"]) {
+      for (let i = 1; i < marks.length - 1; i += 1) {
+        const a = marks[i - 1], b = marks[i + 1];
+        const unknown = !spans[i].look || (k === "italic" && !spans[i].look.slant) || (k === "bold" && spans[i].look.letters < 3);
+        if (unknown && a && b && a[k] !== undefined && a[k] === b[k] && !(marks[i] && marks[i][k] !== undefined)) marks[i] = { ...(marks[i] || {}), [k]: a[k] };
+      }
+    }
+    // A number or short word next to a bold word, clearly heavier than the line
+    // itself, is part of it ("chapter 4")
+    marks.forEach((m, i) => {
+      const L = spans[i].look;
+      if (!L || L.letters >= 3 || box.bold || (m && m.bold !== undefined)) return;
+      const next = (j) => marks[j] && marks[j].bold === true;
+      if ((next(i - 1) || next(i + 1)) && L.weight > lineWeight * 1.18) marks[i] = { ...(m || {}), bold: true };
+    });
+    // A mark on every word of the line is the line's own style, not a styled word
+    for (const k of ["bold", "italic", "color"]) {
+      if (spans.length >= 2 && marks.every((m) => m && m[k] !== undefined && m[k] === marks[0][k])) marks.forEach((m) => { delete m[k]; });
+    }
+    const runs = [];
+    marks.forEach((m, i) => {
+      if (!m || !Object.keys(m).length) return;
+      const last = runs[runs.length - 1];
+      // neighbouring words styled alike join (colours a few shades apart count as one)
+      const alike = (a, b) => Object.keys(a).length === Object.keys(b).length && Object.keys(a).every((k) => (k === "color" ? b.color && dist(rgbOf(a.color), rgbOf(b.color)) < 40 : a[k] === b[k]));
+      const same = last && last.k === i - 1 && alike(last.m, m);
+      if (same) { last.end = spans[i].e; last.k = i; } else runs.push({ start: spans[i].s, end: spans[i].e, m, k: i });
+    });
+    return runs.map((r) => ({ start: r.start, end: r.end, ...r.m }));
+  }
+
+  // Super- and subscript digits written as Unicode (SiO₂) become plain digits
+  // styled as sub/superscript, so they edit like any other text
+  const SUP_CH = "⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺", SUB_CH = "₀₁₂₃₄₅₆₇₈₉₋₊", PLAIN_CH = "0123456789-+";
+  function scriptRuns(text) {
+    const runs = [];
+    let out = "";
+    for (let i = 0; i < text.length; i += 1) {
+      const ch = text[i];
+      const sup = SUP_CH.indexOf(ch), sub = SUB_CH.indexOf(ch);
+      if (sup >= 0 || sub >= 0) {
+        out += PLAIN_CH[sup >= 0 ? sup : sub];
+        const kind = sup >= 0 ? "sup" : "sub";
+        const last = runs[runs.length - 1];
+        if (last && last.end === i && last[kind]) last.end = i + 1; else runs.push({ start: i, end: i + 1, [kind]: true });
+      } else out += ch;
+    }
+    return { text: out, runs };
   }
 
   const longest0 = (group) => [...group].sort((a, b) => b.text.length - a.text.length)[0];
@@ -967,6 +1115,7 @@ window.NTSlides = (() => {
     const long = segs.filter((sg) => sg.text.length >= 15 && sg.weight > 0);
     const baseWeight = long.length >= 2 ? weightedMedian(long.map((sg) => [sg.weight, sg.text.length])) : 0.95;
     segs.forEach((sg) => { sg.bold = sg.weight > baseWeight * BOLD_STEP; });
+    if (options.debug) slide.debugSegs = segs.map((sg) => ({ text: sg.text, weight: sg.weight, base: baseWeight, words: sg.words.map((w, k) => [w.text, sg.wordLooks?.[k] && { c: sg.wordLooks[k].color, w: +sg.wordLooks[k].weight.toFixed(2), s: sg.wordLooks[k].slant && `${sg.wordLooks[k].slant.deg}/${sg.wordLooks[k].slant.gain.toFixed(2)}` }]) }));
 
 
     const converted = new Set(); // lines turned into text boxes (the rest stay in the picture)
@@ -1049,6 +1198,20 @@ window.NTSlides = (() => {
       }
       const pad = Math.max(4, Math.round(fontSize * 0.2));
       const inkRgb = [1, 3, 5].map((k) => parseInt(style.color.slice(k, k + 2), 16));
+      // Italic when nearly all of the box leans (a line with an italic title in it
+      // stays upright, with the title as styled words)
+      const italic = group.reduce((n, g) => n + g.italicShare * g.text.length, 0) > group.reduce((n, g) => n + g.text.length, 0) * 0.7;
+      // Styled words, as runs over the box's text (lines joined by "\n")
+      const runs = [];
+      let lineOff = 0;
+      const lineTexts = group.map((g) => {
+        const sc = scriptRuns(g.text);
+        for (const r of lineMarks(g, { bold: font.bold, italic, color: style.color, label: !!label }, baseWeight)) runs.push({ ...r, start: r.start + lineOff, end: r.end + lineOff });
+        for (const r of sc.runs) runs.push({ ...r, start: r.start + lineOff, end: r.end + lineOff });
+        lineOff += sc.text.length + 1;
+        return sc.text;
+      });
+      runs.sort((a, b) => a.start - b.start);
       const elId = id();
       group.forEach((g) => { converted.add(g); boxes.push({ x0: g.x0 - pad, y0: g.y0 - pad, x1: g.x1 + pad, y1: g.y1 + pad, bg: style.bg, ink: inkRgb, seg: g, elId }); });
       // Box wide enough for the longest line in our font, so it doesn't re-wrap.
@@ -1062,13 +1225,14 @@ window.NTSlides = (() => {
         y: y0 - (fontSize * lineHeight - lineH) / 2 - fontSize * 0.04,
         w: boxW,
         h: group.length * fontSize * lineHeight,
-        text: group.map((g) => g.text).join("\n"),
+        text: lineTexts.join("\n"),
+        ...(runs.length ? { runs } : {}),
         fontSize,
         lineHeight: Math.round(lineHeight * 100) / 100,
         color: style.color,
         bold: font.bold,
         // Italic when most of the paragraph's letters lean clearly
-        italic: group.reduce((n, g) => n + g.italicShare * g.text.length, 0) > group.reduce((n, g) => n + g.text.length, 0) * 0.6,
+        italic,
         align,
         fontFamily: font.family,
         _lines: group.map((g) => ({ w: g.x1 - g.x0 })),
@@ -1108,13 +1272,15 @@ window.NTSlides = (() => {
           e.fontSize = size;
         }
       }
-      measureCtx.font = `${e.bold ? 700 : 400} ${e.fontSize}px ${fam}`;
-      const need = Math.max(...lines.map((ln) => measureCtx.measureText(ln).width)) * 1.04 + 6;
+      void fam;
+      const rich = richMeasure(measureCtx, e, 1);
+      let at0 = 0;
+      const need = Math.max(...lines.map((ln) => { const v = rich(ln, at0); at0 += ln.length + 1; return v; })) * 1.04 + 6;
       if (need > e.w) {
         if (e.align === "center") e.x -= (need - e.w) / 2;
         e.w = Math.min(slide.w - Math.max(0, e.x), need);
       }
-      makeParagraphs(e, lines, (t) => measureCtx.measureText(t).width);
+      makeParagraphs(e, lines, richMeasure(measureCtx, e, 1));
       delete e._lines;
       delete e._lineH;
       delete e._serifAvg;
@@ -1772,22 +1938,29 @@ window.NTSlides = (() => {
   // ("• …") keeps its wrapped lines under the text, not under the bullet.
   // Each line: { text, indent, first } (first = first line of its paragraph).
   function layoutLines(text, maxWidth, measure) {
+    // measure(str, start): start = where str begins in the text (styled words measure in their own font)
     const out = [];
+    let base = 0;
     for (const para of String(text).split("\n")) {
       const bullet = /^•\s/.test(para);
-      const indent = bullet ? measure("• ") : 0;
+      const indent = bullet ? measure("• ", base) : 0;
       let line = "";
       let first = true;
+      let lineStart = base;
+      let pos = base;
       for (const word of para.split(/(\s+)/)) {
         const next = line + word;
         const room = maxWidth - (first ? 0 : indent);
-        if (measure(next.trimEnd()) > room && line.trim()) {
-          out.push({ text: line.trimEnd(), indent: first ? 0 : indent, first });
+        if (measure(next.trimEnd(), lineStart) > room && line.trim()) {
+          out.push({ text: line.trimEnd(), indent: first ? 0 : indent, first, start: lineStart });
+          lineStart = pos + (word.length - word.trimStart().length);
           line = word.trimStart();
           first = false;
         } else line = next;
+        pos += word.length;
       }
-      out.push({ text: line.trimEnd(), indent: first ? 0 : indent, first });
+      out.push({ text: line.trimEnd(), indent: first ? 0 : indent, first, start: lineStart });
+      base += para.length + 1;
     }
     return out;
   }
@@ -1813,6 +1986,102 @@ window.NTSlides = (() => {
   function lineRuns(el, line) {
     const m = el.labelColor ? line.match(LABEL_RE) : null;
     return m ? [{ text: m[1], label: true }, { text: m[2] }] : [{ text: line }];
+  }
+
+  /* Styled words inside a box: el.runs = [{ start, end, bold?, italic?, color?, sup?, sub? }],
+     character ranges of el.text that differ from the box's own style. */
+  const SCRIPT_SCALE = 0.62;
+  // A stretch of the text cut into pieces of one style: { text, bold, italic, color, sup, sub, label }
+  function stylePieces(el, text, start, paraStart) {
+    const n = text.length;
+    if (!n) return [{ text, bold: el.bold, italic: el.italic, color: el.color }];
+    const st = Array.from({ length: n }, () => ({ bold: !!el.bold, italic: !!el.italic, color: el.color }));
+    // "Label:" lead-in of a paragraph
+    if (el.labelColor && paraStart !== undefined) {
+      const para = String(el.text).slice(paraStart).split("\n")[0];
+      const m = para.match(LABEL_RE);
+      if (m) for (let i = Math.max(0, paraStart - start); i < Math.min(n, paraStart + m[1].length - start); i += 1) st[i] = { ...st[i], bold: !!el.labelBold, color: el.labelColor, label: true };
+    }
+    for (const r of el.runs || []) {
+      const a = Math.max(0, r.start - start), b = Math.min(n, r.end - start);
+      for (let i = a; i < b; i += 1) {
+        const c = { ...st[i] };
+        if (r.bold !== undefined) c.bold = r.bold;
+        if (r.italic !== undefined) c.italic = r.italic;
+        if (r.color) c.color = r.color;
+        if (r.sup) c.sup = true;
+        if (r.sub) c.sub = true;
+        st[i] = c;
+      }
+    }
+    const same = (a, b) => a.bold === b.bold && a.italic === b.italic && a.color === b.color && !!a.sup === !!b.sup && !!a.sub === !!b.sub && !!a.label === !!b.label;
+    const out = [];
+    for (let i = 0; i < n; i += 1) {
+      const last = out[out.length - 1];
+      if (last && same(last, st[i])) last.text += text[i];
+      else out.push({ ...st[i], text: text[i] });
+    }
+    return out;
+  }
+  const pieceFont = (el, p, scale) => fontString({ ...el, bold: p.bold, italic: p.italic, fontSize: el.fontSize * (p.sup || p.sub ? SCRIPT_SCALE : 1) }, scale);
+  const plainStyle = (el) => !(el.runs && el.runs.length) && !el.labelColor;
+  // Width of a stretch of text as drawn, styled words in their own font
+  function richMeasure(ctx, el, scale) {
+    if (plainStyle(el)) { ctx.font = fontString(el, scale); return (t) => ctx.measureText(t).width; }
+    return (t, start) => {
+      if (start === undefined) { ctx.font = fontString(el, scale); return ctx.measureText(t).width; }
+      return stylePieces(el, t, start).reduce((sum, p) => { ctx.font = pieceFont(el, p, scale); return sum + ctx.measureText(p.text).width; }, 0);
+    };
+  }
+  // Paragraph start offsets (for "Label:" lead-ins)
+  const paraStartOf = (text, at) => String(text).lastIndexOf("\n", at - 1) + 1;
+
+  // Style a stretch of a box's text [a, b): props like { bold: true } or { color: "#d93025" }.
+  // Runs are rebuilt per character and kept minimal (no run repeats the box's own style).
+  function applyStyle(el, a, b, props) {
+    const n = String(el.text).length;
+    const keys = ["bold", "italic", "color", "sup", "sub"];
+    const per = Array.from({ length: n }, () => ({}));
+    for (const r of el.runs || []) for (let i = Math.max(0, r.start); i < Math.min(n, r.end); i += 1) for (const k2 of keys) if (r[k2] !== undefined) per[i][k2] = r[k2];
+    for (let i = Math.max(0, a); i < Math.min(n, b); i += 1) {
+      Object.assign(per[i], props);
+      if (props.sup) delete per[i].sub;
+      if (props.sub) delete per[i].sup;
+    }
+    const base = { bold: !!el.bold, italic: !!el.italic, color: el.color };
+    for (const p of per) {
+      for (const k2 of ["bold", "italic", "color"]) if (p[k2] === base[k2] || p[k2] === undefined) delete p[k2];
+      for (const k2 of ["sup", "sub"]) if (!p[k2]) delete p[k2];
+    }
+    const runs = [];
+    const key = (p) => JSON.stringify(p);
+    for (let i = 0; i < n; i += 1) {
+      if (!Object.keys(per[i]).length) continue;
+      const last = runs[runs.length - 1];
+      if (last && last.end === i && key(last.style) === key(per[i])) last.end = i + 1;
+      else runs.push({ start: i, end: i + 1, style: per[i] });
+    }
+    el.runs = runs.map((r) => ({ start: r.start, end: r.end, ...r.style }));
+    if (!el.runs.length) delete el.runs;
+  }
+  // The box's own style changed: its styled words follow (that property is dropped from runs)
+  function clearRunProp(el, prop) {
+    if (!el.runs) return;
+    el.runs = el.runs.map((r) => { const c = { ...r }; delete c[prop]; return c; }).filter((r) => Object.keys(r).some((k2) => !["start", "end"].includes(k2)));
+    if (!el.runs.length) delete el.runs;
+  }
+
+  // Runs kept in place while the text is edited: the changed stretch is found from
+  // what stayed the same at both ends; runs after it move, runs across it stretch.
+  function remapRuns(oldText, newText, runs) {
+    if (!runs || !runs.length || oldText === newText) return runs;
+    let a = 0;
+    while (a < oldText.length && a < newText.length && oldText[a] === newText[a]) a += 1;
+    let b = 0;
+    while (b < oldText.length - a && b < newText.length - a && oldText[oldText.length - 1 - b] === newText[newText.length - 1 - b]) b += 1;
+    const oldEnd = oldText.length - b, delta = newText.length - oldText.length;
+    const move = (p, isEnd) => (p < a || (p === a && !isEnd) ? p : p >= oldEnd ? p + delta : isEnd ? oldEnd + delta : a);
+    return runs.map((r) => ({ ...r, start: move(r.start, false), end: move(r.end, true) })).filter((r) => r.end > r.start && r.start < newText.length).map((r) => ({ ...r, end: Math.min(r.end, newText.length) }));
   }
 
   /* ---------- Shapes as paths (shared by canvas drawing) ---------- */
@@ -1912,32 +2181,33 @@ window.NTSlides = (() => {
         ctx.fillStyle = el.color;
         ctx.textBaseline = "middle";
         const lh = el.fontSize * el.lineHeight * scale;
-        const laid = layoutLines(el.text, bw, (t) => ctx.measureText(t).width);
+        const measure = richMeasure(ctx, el, scale);
+        const laid = layoutLines(el.text, bw, measure);
         const lines = laid.map((l) => l.text);
         const textH = lines.length * lh;
         const top = el.valign === "middle" ? y + (bh - textH) / 2 : el.valign === "bottom" ? y + bh - textH : y;
-        const fontFor = (r) => fontString({ ...el, bold: r.label ? el.labelBold : el.bold }, scale);
         lines.forEach((line, i) => {
           const ly = top + lh * i + lh / 2;
-          const runs = laid[i].first ? lineRuns(el, line) : [{ text: line }];
-          const widths = runs.map((r) => { ctx.font = fontFor(r); return ctx.measureText(r.text).width; });
+          const pieces = stylePieces(el, line, laid[i].start, laid[i].first ? laid[i].start : undefined);
+          const widths = pieces.map((p) => { ctx.font = pieceFont(el, p, scale); return ctx.measureText(p.text).width; });
           const total = widths.reduce((s2, v) => s2 + v, 0);
           let cx = el.align === "center" ? x + (bw - total) / 2 : el.align === "right" ? x + bw - total : x + laid[i].indent;
           // Justify: spread words of full lines (not the last line of a paragraph).
-          const justify = el.align === "justify" && runs.length === 1 && i < lines.length - 1 && line.includes(" ") && laid[i + 1] && !laid[i + 1].first;
+          const justify = el.align === "justify" && pieces.length === 1 && i < lines.length - 1 && line.includes(" ") && laid[i + 1] && !laid[i + 1].first;
           ctx.textAlign = "left";
           if (justify) {
-            ctx.font = fontFor(runs[0]);
+            ctx.font = pieceFont(el, pieces[0], scale);
             const words = line.split(" ");
             const ww = words.map((wd) => ctx.measureText(wd).width);
             const gap = (bw - ww.reduce((s2, v) => s2 + v, 0)) / (words.length - 1);
             let wx = x;
             words.forEach((wd, k2) => { ctx.fillText(wd, wx, ly); wx += ww[k2] + gap; });
           } else {
-            runs.forEach((r, k2) => {
-              ctx.font = fontFor(r);
-              ctx.fillStyle = r.label ? el.labelColor : el.color;
-              ctx.fillText(r.text, cx, ly);
+            const fs = el.fontSize * scale;
+            pieces.forEach((p, k2) => {
+              ctx.font = pieceFont(el, p, scale);
+              ctx.fillStyle = p.color;
+              ctx.fillText(p.text, cx, ly + (p.sup ? -fs * 0.3 : p.sub ? fs * 0.2 : 0));
               cx += widths[k2];
             });
           }
@@ -2107,14 +2377,22 @@ window.NTSlides = (() => {
           // hanging indent; "Label:" lead-ins keep their colour and weight
           measureCtx.font = fontString(el, 1);
           const bulletPt = Math.round(measureCtx.measureText("• ").width * k * 72 * 10) / 10;
+          // Styled words (bold, italic, colour, super/subscript) become their own runs
+          let at = 0;
           const runs = String(el.text).split("\n").flatMap((para, li, all) => {
+            const paraStart = at;
+            at += para.length + 1;
             const bullet = /^•\s/.test(para);
-            const body = bullet ? para.replace(/^•\s*/, "") : para;
-            const parts = el.labelColor ? lineRuns(el, body) : [{ text: body }];
+            const lead = bullet ? para.match(/^•\s*/)[0].length : 0;
+            const parts = stylePieces(el, para.slice(lead), paraStart + lead, paraStart);
             return parts.map((r, ri, arr) => ({
               text: r.text,
               options: {
-                ...(r.label ? { color: noHash(el.labelColor), bold: Boolean(el.labelBold) } : {}),
+                ...(r.bold !== !!el.bold ? { bold: r.bold } : {}),
+                ...(r.italic !== !!el.italic ? { italic: r.italic } : {}),
+                ...(r.color !== el.color ? { color: noHash(r.color) } : {}),
+                ...(r.sup ? { superscript: true } : {}),
+                ...(r.sub ? { subscript: true } : {}),
                 ...(bullet ? { bullet: { indent: bulletPt } } : {}),
                 ...(ri === arr.length - 1 && li < all.length - 1 ? { breakLine: true } : {})
               }
@@ -2226,16 +2504,23 @@ window.NTSlides = (() => {
           const font = await pick(el);
           const size = el.fontSize * k;
           const lh = size * el.lineHeight;
-          const laid = layoutLines(safe(font, el.text), el.w * k, (s) => font.widthOfTextAtSize(s, size));
-          const labelFont = el.labelColor ? await pick({ ...el, bold: el.labelBold }) : font;
-          laid.forEach(({ text: line, indent, first }, n) => {
-            const runs = (first ? lineRuns(el, line) : [{ text: line }]).map((r) => ({ ...r, f: r.label ? labelFont : font }));
-            const widths = runs.map((r) => r.f.widthOfTextAtSize(r.text, size));
+          // Every style used in the box, embedded up front (measuring is synchronous)
+          const shown = { ...el, text: safe(font, el.text) };
+          const fontFor = {};
+          for (const b of [false, true]) for (const it of [false, true]) fontFor[`${b}${it}`] = await pick({ ...el, bold: b, italic: it });
+          const pf = (p) => fontFor[`${!!p.bold}${!!p.italic}`];
+          const ps = (p) => (p.sup || p.sub ? size * SCRIPT_SCALE : size);
+          const measure = plainStyle(el) ? (t) => font.widthOfTextAtSize(t, size)
+            : (t, start) => (start === undefined ? font.widthOfTextAtSize(t, size) : stylePieces(shown, t, start).reduce((sum, p) => sum + pf(p).widthOfTextAtSize(p.text, ps(p)), 0));
+          const laid = layoutLines(shown.text, el.w * k, measure);
+          laid.forEach(({ text: line, indent, first, start }, n) => {
+            const runs = stylePieces(shown, line, start, first ? start : undefined);
+            const widths = runs.map((r) => pf(r).widthOfTextAtSize(r.text, ps(r)));
             const tw = widths.reduce((a, b) => a + b, 0);
             let x = el.align === "center" ? el.x * k + (el.w * k - tw) / 2 : el.align === "right" ? (el.x + el.w) * k - tw : el.x * k + indent;
             const baseline = ph - (el.y * k + lh * n + lh / 2 + size * 0.35);
             runs.forEach((r, i) => {
-              page.drawText(r.text, { x, y: baseline, size, font: r.f, color: rgbOf(r.label ? el.labelColor : el.color), opacity: op });
+              page.drawText(r.text, { x, y: baseline + (r.sup ? size * 0.33 : r.sub ? -size * 0.12 : 0), size: ps(r), font: pf(r), color: rgbOf(r.color), opacity: op });
               x += widths[i];
             });
           });
@@ -2274,5 +2559,5 @@ window.NTSlides = (() => {
     return files.length;
   }
 
-  return { exportPictures, layoutLines, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { exportPictures, layoutLines, stylePieces, remapRuns, applyStyle, clearRunProp, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
