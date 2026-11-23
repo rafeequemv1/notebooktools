@@ -1,0 +1,181 @@
+[
+ [
+  {
+   "text": "What Customers Told Us",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "“The new dashboard saves me an hour every week.”",
+   "bold": false,
+   "color": "#333333",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "Operations manager, retail",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "“Setup took ten minutes, not ten days.”",
+   "bold": false,
+   "color": "#333333",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "Head of IT, logistics",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "A Note on Method",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "We interviewed forty teachers across six schools.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Each interview lasted about an hour.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "All names have been changed to protect privacy.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": true
+  }
+ ],
+ [
+  {
+   "text": "Coastal Erosion",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "How the shoreline moved in thirty years",
+   "bold": false,
+   "color": "#546e7a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "Satellite view of the bay, 2023.",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "The cliffs lost about",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "two metres every year.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Further Reading",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "The Structure of Scientific Revolutions",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "The Double Helix",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "Silent Spring",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": true
+  },
+  {
+   "text": "Available from the school library.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ]
+]

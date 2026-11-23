@@ -1,0 +1,450 @@
+[
+ [
+  {
+   "text": "Remote Work: What the Data Says",
+   "bold": true,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Findings from a survey of 4,000 employees",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Productivity: Output rose for most",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "teams after the first three months.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Wellbeing: Staff reported less stress",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "but more feelings of isolation.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Our Onboarding Process",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "01",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Welcome call",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "We learn your goals",
+   "bold": false,
+   "color": "#444444",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "02",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Account setup",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Logins and tools",
+   "bold": false,
+   "color": "#444444",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "03",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "First project",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "A small first win",
+   "bold": false,
+   "color": "#444444",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "The Origins of Coffee",
+   "bold": true,
+   "color": "#4e2a14",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Legend says a goat herder in Ethiopia noticed his",
+   "bold": false,
+   "color": "#2d2d2d",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "goats dancing after eating red berries from a shrub.",
+   "bold": false,
+   "color": "#2d2d2d",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "By the fifteenth century coffee was drunk in Yemen.",
+   "bold": false,
+   "color": "#2d2d2d",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Source: National Coffee Association, 2021.",
+   "bold": false,
+   "color": "#7a7a7a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Results at a Glance",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "87%",
+   "bold": true,
+   "color": "#00897b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "of customers renewed",
+   "bold": false,
+   "color": "#37474f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "3.2x",
+   "bold": true,
+   "color": "#00897b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "faster checkout",
+   "bold": false,
+   "color": "#37474f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "12",
+   "bold": true,
+   "color": "#00897b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "new markets",
+   "bold": false,
+   "color": "#37474f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Security Checklist",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "• Passwords: Use a password manager for every account.",
+   "bold": false,
+   "color": "#cfd8dc",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Updates: Install patches within a week of release.",
+   "bold": false,
+   "color": "#cfd8dc",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Backups: Keep one copy offline and test restores.",
+   "bold": false,
+   "color": "#cfd8dc",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "READING LIST FOR NEW MANAGERS",
+   "bold": true,
+   "color": "#263238",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Grove, A. (1983). High Output Management.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Scott, K. (2017). Radical Candor.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Lencioni, P. (2002). The Five Dysfunctions of a Team.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Why Small Habits Win",
+   "bold": true,
+   "color": "#bf360c",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Improving by one percent a day",
+   "bold": false,
+   "color": "#3e2723",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "adds up to a large change over",
+   "bold": false,
+   "color": "#3e2723",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "a year, even if no single day",
+   "bold": false,
+   "color": "#3e2723",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "feels like progress.",
+   "bold": false,
+   "color": "#3e2723",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Project Risks and Responses",
+   "bold": true,
+   "color": "#b71c1c",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Budget overrun",
+   "bold": true,
+   "color": "#b71c1c",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Review spending every two weeks",
+   "bold": false,
+   "color": "#212121",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "and pause optional extras early.",
+   "bold": false,
+   "color": "#212121",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Key person leaves",
+   "bold": true,
+   "color": "#b71c1c",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Pair people on critical work so",
+   "bold": false,
+   "color": "#212121",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "knowledge is never held by one.",
+   "bold": false,
+   "color": "#212121",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ]
+]

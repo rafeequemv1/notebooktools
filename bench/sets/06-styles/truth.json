@@ -1,0 +1,421 @@
+[
+ [
+  {
+   "text": "Quarterly Results",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "• Revenue grew 40% in the third quarter.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "40%",
+     "at": 15,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "• Costs fell by 12 percent after the move.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "12 percent",
+     "at": 16,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "• Our biggest risk is the supply of chips.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "biggest risk",
+     "at": 6,
+     "c": "#d93025"
+    }
+   ]
+  },
+  {
+   "text": "• The plan is not final until the board agrees.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "not",
+     "at": 14,
+     "i": 1
+    }
+   ]
+  },
+  {
+   "text": "• Churn stayed flat at three percent.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Measuring Graphene",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "The G peak sits near 1580 cm-1 in the spectrum.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "-1",
+     "at": 28,
+     "sup": 1
+    }
+   ]
+  },
+  {
+   "text": "A sheet of one square metre weighs 0.77 mg.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Its area is about 2630 m2 per gram.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "2",
+     "at": 24,
+     "sup": 1
+    }
+   ]
+  },
+  {
+   "text": "Water (H2O) and CO2 adsorb on the surface.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "2",
+     "at": 8,
+     "sub": 1
+    },
+    {
+     "text": "2",
+     "at": 18,
+     "sub": 1
+    }
+   ]
+  },
+  {
+   "text": "Electron mobility reaches 200000 cm2/Vs.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "2",
+     "at": 35,
+     "sup": 1
+    }
+   ]
+  }
+ ],
+ [
+  {
+   "text": "Three Steps to Launch",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "01",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "badge": true
+  },
+  {
+   "text": "Plan the release",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "02",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "badge": true
+  },
+  {
+   "text": "Test with real users",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "03",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "badge": true
+  },
+  {
+   "text": "Ship and measure",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Each step has an owner and a date.",
+   "bold": false,
+   "color": "#3c4043",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Review progress every Friday.",
+   "bold": false,
+   "color": "#3c4043",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Field Photos",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "The north site after the storm.",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Both photos were taken in May.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Shadows should move with them.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Under the Microscope",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Sample A",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Grain boundary",
+   "bold": false,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Grains are a few microns wide.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Boundaries scatter electrons.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "References",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Li, D. and Kaner, R. Graphene-based materials. Science, 2008.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "Graphene-based materials",
+     "at": 21,
+     "i": 1
+    }
+   ]
+  },
+  {
+   "text": "Geim, A. K. The rise of graphene. Nature Materials, 2007.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "The rise of graphene",
+     "at": 12,
+     "i": 1
+    }
+   ]
+  },
+  {
+   "text": "Novoselov, K. S. Electric field effect. Science, 2004.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "Electric field effect",
+     "at": 17,
+     "i": 1
+    }
+   ]
+  },
+  {
+   "text": "See chapter 4 for the full method.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "chapter 4",
+     "at": 4,
+     "b": 1
+    }
+   ]
+  }
+ ]
+]

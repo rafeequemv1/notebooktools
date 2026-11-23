@@ -1,0 +1,621 @@
+{
+ "date": "2026-11-23T09:14:10.937Z",
+ "commit": "dee6f9e",
+ "sets": {
+  "01-business": {
+   "score": 96.86804661474774,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 100,
+    "labels": 100,
+    "pictures": 100,
+    "textRemoved": 99.9735865890308,
+    "picturesLifted": 68.70687955844667,
+    "structureKept": 100,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 49,
+    "found": 49,
+    "chars": 49,
+    "bold": [
+     49,
+     49
+    ],
+    "italic": [
+     49,
+     49
+    ],
+    "serif": [
+     49,
+     49
+    ],
+    "colour": [
+     49,
+     49
+    ],
+    "styled": [
+     0,
+     0
+    ],
+    "falseStyled": 0,
+    "labels": [
+     5,
+     5
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 1,
+    "wholePics": 1,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      170323,
+      170368
+     ],
+     "picture": [
+      6971,
+      10146
+     ],
+     "structure": [
+      92352,
+      92352
+     ],
+     "page": [
+      5448734,
+      5448734
+     ]
+    },
+    "ms": 10621.299999999814,
+    "slides": 8
+   },
+   "misses": []
+  },
+  "02-layouts": {
+   "score": 98.34247099846802,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 95.94594594594594,
+    "labels": 91.66666666666667,
+    "pictures": null,
+    "textRemoved": 99.9559198758975,
+    "picturesLifted": null,
+    "structureKept": 100,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 37,
+    "found": 37,
+    "chars": 37,
+    "bold": [
+     35,
+     37
+    ],
+    "italic": [
+     37,
+     37
+    ],
+    "serif": [
+     33,
+     37
+    ],
+    "colour": [
+     37,
+     37
+    ],
+    "styled": [
+     0,
+     0
+    ],
+    "falseStyled": 0,
+    "labels": [
+     11,
+     12
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 0,
+    "wholePics": 0,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      117915,
+      117967
+     ],
+     "picture": [
+      0,
+      0
+     ],
+     "structure": [
+      190235,
+      190235
+     ],
+     "page": [
+      5413398,
+      5413398
+     ]
+    },
+    "ms": 6909.500000000931,
+    "slides": 8
+   },
+   "misses": [
+    "slide 2: bold wrong on \"2. Avoid screens for an hour before bed.\"",
+    "slide 2: bold wrong on \"4. Limit caffeine after lunch.\"",
+    "slide 4: serif wrong on \"On Reading Slowly\"",
+    "slide 5: serif wrong on \"Prices include tax and can be cancelled at any time.\"",
+    "slide 5: label on a picture not editable: \"1 TB\"",
+    "slide 6: serif wrong on \"• Speed: Teams shipped features twice as fast.\"",
+    "slide 6: serif wrong on \"• Quality: Bug reports dropped by a third.\""
+   ]
+  },
+  "03-mixed": {
+   "score": 99.71556548066056,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 98.33333333333333,
+    "labels": 100,
+    "pictures": 100,
+    "textRemoved": 99.9400400252299,
+    "picturesLifted": 98.88228144804236,
+    "structureKept": 100,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 45,
+    "found": 45,
+    "chars": 45,
+    "bold": [
+     44,
+     45
+    ],
+    "italic": [
+     45,
+     45
+    ],
+    "serif": [
+     44,
+     45
+    ],
+    "colour": [
+     44,
+     45
+    ],
+    "styled": [
+     0,
+     0
+    ],
+    "falseStyled": 0,
+    "labels": [
+     3,
+     3
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 1,
+    "wholePics": 1,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      128342,
+      128419
+     ],
+     "picture": [
+      45561,
+      46076
+     ],
+     "structure": [
+      113119,
+      113119
+     ],
+     "page": [
+      5433986,
+      5433986
+     ]
+    },
+    "ms": 7350.999999999069,
+    "slides": 8
+   },
+   "misses": [
+    "slide 3: serif wrong on \"Source: National Coffee Association, 2021.\"",
+    "slide 4: bold wrong on \"87%\"",
+    "slide 4: colour off on \"of customers renewed\" (#018878 for #37474f)"
+   ]
+  },
+  "04-figures": {
+   "score": 97.4349145039316,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 91.33333333333334,
+    "labels": 90,
+    "pictures": 100,
+    "textRemoved": 100,
+    "picturesLifted": 99.99689350720817,
+    "structureKept": 93.01891819877432,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 15,
+    "found": 15,
+    "chars": 15,
+    "bold": [
+     13,
+     15
+    ],
+    "italic": [
+     15,
+     15
+    ],
+    "serif": [
+     13,
+     15
+    ],
+    "colour": [
+     15,
+     15
+    ],
+    "styled": [
+     0,
+     0
+    ],
+    "falseStyled": 1,
+    "labels": [
+     18,
+     20
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 10,
+    "wholePics": 10,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      64087,
+      64087
+     ],
+     "picture": [
+      450655,
+      450669
+     ],
+     "structure": [
+      10473,
+      11259
+     ],
+     "page": [
+      3765185,
+      3765185
+     ]
+    },
+    "ms": 8300.200000001118,
+    "slides": 6
+   },
+   "misses": [
+    "slide 1: styling on \"Band\" that the original doesn't have",
+    "slide 4: bold wrong on \"Stacking 2D Materials\"",
+    "slide 5: bold wrong on \"Spectrum of a Single Layer\"",
+    "slide 5: label on a picture not editable: \"G peak\"",
+    "slide 6: serif wrong on \"Optical image of a flake on silicon.\"",
+    "slide 6: serif wrong on \"purple patches on the wafer.\"",
+    "slide 6: label on a picture not editable: \"Monolayer\""
+   ]
+  },
+  "05-italic": {
+   "score": 99.79757085020243,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 98.6842105263158,
+    "labels": null,
+    "pictures": null,
+    "textRemoved": 100,
+    "picturesLifted": null,
+    "structureKept": 100,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 19,
+    "found": 19,
+    "chars": 19,
+    "bold": [
+     19,
+     19
+    ],
+    "italic": [
+     19,
+     19
+    ],
+    "serif": [
+     18,
+     19
+    ],
+    "colour": [
+     19,
+     19
+    ],
+    "styled": [
+     0,
+     0
+    ],
+    "falseStyled": 0,
+    "labels": [
+     0,
+     0
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 0,
+    "wholePics": 0,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      53235,
+      53235
+     ],
+     "picture": [
+      0,
+      0
+     ],
+     "structure": [
+      143077,
+      143077
+     ],
+     "page": [
+      2664488,
+      2664488
+     ]
+    },
+    "ms": 3514.9000000003725,
+    "slides": 4
+   },
+   "misses": [
+    "slide 2: serif wrong on \"A Note on Method\""
+   ]
+  },
+  "06-styles": {
+   "score": 99.8928760994189,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 98.989898989899,
+    "labels": 100,
+    "pictures": 100,
+    "textRemoved": 99.93886200429002,
+    "picturesLifted": 100,
+    "structureKept": 100,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 33,
+    "found": 33,
+    "chars": 33,
+    "bold": [
+     32,
+     33
+    ],
+    "italic": [
+     33,
+     33
+    ],
+    "serif": [
+     32,
+     33
+    ],
+    "colour": [
+     33,
+     33
+    ],
+    "styled": [
+     13,
+     13
+    ],
+    "falseStyled": 0,
+    "labels": [
+     2,
+     2
+    ],
+    "badges": [
+     3,
+     3
+    ],
+    "realPics": 3,
+    "wholePics": 3,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      96444,
+      96503
+     ],
+     "picture": [
+      358081,
+      358081
+     ],
+     "structure": [
+      4522,
+      4522
+     ],
+     "page": [
+      3832094,
+      3832094
+     ]
+    },
+    "ms": 8587.199999999255,
+    "slides": 6
+   },
+   "misses": [
+    "slide 4: bold wrong on \"The north site after the storm.\"",
+    "slide 6: serif wrong on \"References\""
+   ]
+  },
+  "07-structure": {
+   "score": 86.66137701689038,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 100,
+    "textStyle": 95.71428571428571,
+    "labels": 60,
+    "pictures": 61.904761904761905,
+    "textRemoved": 100,
+    "picturesLifted": 100,
+    "structureKept": 68.04234159747534,
+    "noDamage": 100
+   },
+   "counts": {
+    "lines": 35,
+    "found": 35,
+    "chars": 35,
+    "bold": [
+     35,
+     35
+    ],
+    "italic": [
+     35,
+     35
+    ],
+    "serif": [
+     31,
+     35
+    ],
+    "colour": [
+     35,
+     35
+    ],
+    "styled": [
+     4,
+     4
+    ],
+    "falseStyled": 1,
+    "labels": [
+     3,
+     5
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 16,
+    "wholePics": 13,
+    "falsePics": 5,
+    "px": {
+     "text": [
+      61655,
+      61655
+     ],
+     "picture": [
+      324890,
+      324890
+     ],
+     "structure": [
+      58430,
+      85873
+     ],
+     "page": [
+      3818782,
+      3818782
+     ]
+    },
+    "ms": 9951.500000001863,
+    "slides": 6
+   },
+   "misses": [
+    "slide 1: styling on \"Ways\" that the original doesn't have",
+    "slide 1: a picture cut out where there is none (96,208,1254,20)",
+    "slide 1: a picture cut out where there is none (96,145,1254,17)",
+    "slide 3: a picture cut out where there is none (102,525,587,199)",
+    "slide 3: a picture cut out where there is none (904,525,587,199)",
+    "slide 4: serif wrong on \"Sync two clocks\"",
+    "slide 4: serif wrong on \"in the lab.\"",
+    "slide 4: serif wrong on \"after landing.\"",
+    "slide 4: serif wrong on \"Each step took about a week.\"",
+    "slide 4: picture not cut out whole (best overlap 2%)",
+    "slide 4: picture not cut out whole (best overlap 2%)",
+    "slide 4: picture not cut out whole (best overlap 2%)",
+    "slide 4: a picture cut out where there is none (93,220,1401,355)",
+    "slide 5: label on a picture not editable: \"faster at the top\"",
+    "slide 6: label on a picture not editable: \"Atomic clock\""
+   ]
+  }
+ },
+ "categories": {
+  "textFound": 100,
+  "textAccuracy": 100,
+  "textStyle": 94.56938483547926,
+  "labels": 89.36170212765957,
+  "pictures": 77.77777777777777,
+  "textRemoved": 99.96634086161616,
+  "picturesLifted": 99.688703395856,
+  "structureKept": 95.5922284315241,
+  "noDamage": 100
+ },
+ "score": 94.58450263188017,
+ "secondsPerSlide": 1.2007739130435309,
+ "counts": {
+  "lines": 233,
+  "found": 233,
+  "chars": 233,
+  "bold": [
+   227,
+   233
+  ],
+  "italic": [
+   233,
+   233
+  ],
+  "serif": [
+   220,
+   233
+  ],
+  "colour": [
+   232,
+   233
+  ],
+  "styled": [
+   17,
+   17
+  ],
+  "falseStyled": 2,
+  "labels": [
+   42,
+   47
+  ],
+  "badges": [
+   3,
+   3
+  ],
+  "realPics": 31,
+  "wholePics": 28,
+  "falsePics": 5,
+  "px": {
+   "text": [
+    692001,
+    692234
+   ],
+   "picture": [
+    1186158,
+    1189862
+   ],
+   "structure": [
+    612208,
+    640437
+   ],
+   "page": [
+    30376667,
+    30376667
+   ]
+  },
+  "ms": 55235.60000000242,
+  "slides": 46
+ }
+}

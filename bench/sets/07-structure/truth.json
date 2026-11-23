@@ -1,0 +1,402 @@
+[
+ [
+  {
+   "text": "Two Ways Clocks Slow Down",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Speed",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Gravity",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Cause",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Moving very fast",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Being near a heavy object",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Example",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "A clock on a rocket",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "A clock near a planet",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Light Always Moves at the Same Speed",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "At rest",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "The Rule: light speed is the same for everyone.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "The Rule:",
+     "at": 0,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "The Catch: so time itself has to change.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "The Catch:",
+     "at": 0,
+     "b": 1
+    }
+   ]
+  }
+ ],
+ [
+  {
+   "text": "Two Ideas of Time",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Newton: time is the same",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "Newton:",
+     "at": 0,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "for everyone, everywhere.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Einstein: time depends on",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "Einstein:",
+     "at": 0,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "how fast you move.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "How the Experiment Ran",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Step one",
+   "bold": true,
+   "color": "#1a73e8",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Sync two clocks",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "in the lab.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Step two",
+   "bold": true,
+   "color": "#1a73e8",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Fly one clock",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "around the world.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Step three",
+   "bold": true,
+   "color": "#1a73e8",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Compare them",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "after landing.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Each step took about a week.",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Clocks Drift With Height",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "faster at the top",
+   "bold": false,
+   "color": "#1e88e5",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Higher clocks run a little",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "faster than clocks on the",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "ground, by a few billionths",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "of a second each day.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "TIME IS FLEXIBLE",
+   "bold": true,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "(And why your head is older than your feet)",
+   "bold": false,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Atomic clock",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "EARTH",
+   "bold": true,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "GRAVITY",
+   "bold": true,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  }
+ ]
+]

@@ -1,0 +1,329 @@
+[
+ [
+  {
+   "text": "Physics of the Cone",
+   "bold": true,
+   "color": "#183959",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Electrons near the Dirac point",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "behave as if they had no mass.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Energy (E)",
+   "bold": false,
+   "color": "#455a64",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Conduction Band",
+   "bold": false,
+   "color": "#263238",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Dirac Point",
+   "bold": false,
+   "color": "#455a64",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Valence Band",
+   "bold": false,
+   "color": "#455a64",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Inside a Graphene Sheet",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Carbon atom",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Bond length",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "0.142 nm",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "One atom thick",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "From Raw Material to Product",
+   "bold": true,
+   "color": "#1b5e20",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Mining",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Ore is dug out",
+   "bold": false,
+   "color": "#424242",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Refining",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Metal is purified",
+   "bold": false,
+   "color": "#424242",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Assembly",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Parts are joined",
+   "bold": false,
+   "color": "#424242",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Stacking 2D Materials",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Top electrode",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Semiconductor",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Bottom electrode",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Layers held",
+   "bold": false,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "by weak forces",
+   "bold": false,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Spectrum of a Single Layer",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "G peak",
+   "bold": false,
+   "color": "#c62828",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2D peak",
+   "bold": false,
+   "color": "#c62828",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "A tall 2D peak",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "means one layer.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Under the Microscope",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Monolayer",
+   "bold": true,
+   "color": "#311b92",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Optical image of a flake on silicon.",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Thin flakes show up as faint",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "purple patches on the wafer.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ]
+]

@@ -1,0 +1,459 @@
+[
+ [
+  {
+   "text": "The Future of Urban Transport",
+   "bold": true,
+   "color": "#0d47a1",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "A briefing for the city council",
+   "bold": false,
+   "color": "#546e7a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Five Steps to Better Sleep",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "1. Keep the same bedtime every night.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2. Avoid screens for an hour before bed.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "3. Keep your bedroom cool and dark.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "4. Limit caffeine after lunch.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "5. Get some daylight every morning.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Company Timeline",
+   "bold": true,
+   "color": "#2e7d32",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2012",
+   "bold": true,
+   "color": "#2e7d32",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Founded in a garage",
+   "bold": false,
+   "color": "#333333",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2015",
+   "bold": true,
+   "color": "#2e7d32",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "First thousand customers",
+   "bold": false,
+   "color": "#333333",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2019",
+   "bold": true,
+   "color": "#2e7d32",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Opened offices in Europe",
+   "bold": false,
+   "color": "#333333",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2023",
+   "bold": true,
+   "color": "#2e7d32",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Launched the mobile app",
+   "bold": false,
+   "color": "#333333",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "On Reading Slowly",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "A book read quickly is often forgotten just as quickly.",
+   "bold": false,
+   "color": "#2b2b2b",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Slow reading asks us to pause, reread and argue with",
+   "bold": false,
+   "color": "#2b2b2b",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "the author, and that effort is what makes ideas stay.",
+   "bold": false,
+   "color": "#2b2b2b",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Plan Comparison",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Feature",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Basic",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Premium",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Storage",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "10 GB",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "1 TB",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Users",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "One",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Unlimited",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Support",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Email",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Phone and email",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Prices include tax and can be cancelled at any time.",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Lessons From the Pilot",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "• Speed: Teams shipped features twice as fast.",
+   "bold": false,
+   "color": "#d7dde5",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Quality: Bug reports dropped by a third.",
+   "bold": false,
+   "color": "#d7dde5",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Morale: Most people asked to keep the new process.",
+   "bold": false,
+   "color": "#d7dde5",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Three Habitats Under Threat",
+   "bold": true,
+   "color": "#4e342e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Coral reefs",
+   "bold": true,
+   "color": "#4e342e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Warming seas bleach them",
+   "bold": false,
+   "color": "#5d4037",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Rainforests",
+   "bold": true,
+   "color": "#4e342e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Logging clears vast areas",
+   "bold": false,
+   "color": "#5d4037",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Wetlands",
+   "bold": true,
+   "color": "#4e342e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Drained for farmland",
+   "bold": false,
+   "color": "#5d4037",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "“We do not inherit the earth from our ancestors;",
+   "bold": false,
+   "color": "#3e2723",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "we borrow it from our children.”",
+   "bold": false,
+   "color": "#3e2723",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Traditional proverb",
+   "bold": false,
+   "color": "#8d6e63",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ]
+]

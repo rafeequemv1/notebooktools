@@ -1,0 +1,504 @@
+[
+ [
+  {
+   "text": "Quarterly Market Review",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "How demand shifted across regions in 2024",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "• Growth: Revenue rose twelve percent compared with the previous year.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Margins: Operating costs fell after the new supplier contracts.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Risks: Currency swings could reduce profits in the second half.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  },
+  {
+   "text": "• Outlook: We expect steady demand from enterprise customers.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": true,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Why Bees Matter for Farming",
+   "bold": true,
+   "color": "#1f3b57",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "The Pollination Problem",
+   "bold": true,
+   "color": "#a61b29",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Roughly one third of the food we eat",
+   "bold": false,
+   "color": "#222222",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "depends on insects moving pollen",
+   "bold": false,
+   "color": "#222222",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "between flowers during the spring.",
+   "bold": false,
+   "color": "#222222",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "What Farmers Can Do",
+   "bold": true,
+   "color": "#a61b29",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Plant wildflower strips near fields,",
+   "bold": false,
+   "color": "#222222",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "reduce spraying while crops bloom,",
+   "bold": false,
+   "color": "#222222",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "and leave old hedges standing.",
+   "bold": false,
+   "color": "#222222",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "A Short History of Printing",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "From movable type to the modern press",
+   "bold": false,
+   "color": "#444444",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Gutenberg, J. (1455). The Forty-Two Line Bible. Mainz.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Eisenstein, E. (1979). The Printing Press as an Agent of Change.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Febvre, L., & Martin, H. (1958). The Coming of the Book.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Johns, A. (1998). The Nature of the Book. Chicago Press.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": true,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Sales Over Twelve Months",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Online sales doubled",
+   "bold": false,
+   "color": "#202124",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "after the summer launch,",
+   "bold": false,
+   "color": "#202124",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "while store sales grew",
+   "bold": false,
+   "color": "#202124",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "slowly but steadily.",
+   "bold": false,
+   "color": "#202124",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Designing for Dark Mode",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Contrast",
+   "bold": true,
+   "color": "#8ab4f8",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Light grey text on a near black background is easier",
+   "bold": false,
+   "color": "#e8eaed",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "on the eyes than pure white on pure black.",
+   "bold": false,
+   "color": "#e8eaed",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Colour",
+   "bold": true,
+   "color": "#8ab4f8",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Desaturated accent colours stop bright buttons",
+   "bold": false,
+   "color": "#e8eaed",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "from glowing against the dark surface.",
+   "bold": false,
+   "color": "#e8eaed",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "The Water Cycle Explained",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Where every raindrop comes from",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Evaporation:",
+   "bold": true,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "The sun heats oceans and lakes",
+   "bold": false,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "until water rises as vapour.",
+   "bold": false,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Condensation:",
+   "bold": true,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Cooling vapour forms the clouds",
+   "bold": false,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "we see high in the sky.",
+   "bold": false,
+   "color": "#5c1a1a",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Clouds",
+   "bold": true,
+   "color": "#ffffff",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "FROM IDEA TO LAUNCH",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Research",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Prototype",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Testing",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Launch",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Each stage ends with a review before the team moves on,",
+   "bold": false,
+   "color": "#3c4043",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "so problems are caught while they are still cheap to fix.",
+   "bold": false,
+   "color": "#3c4043",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Climate Basics",
+   "bold": true,
+   "color": "#0b3d6b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Burning fuel releases CO₂ into the air.",
+   "bold": false,
+   "color": "#1b1b1b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Plants turn CO₂ and H₂O into sugar and oxygen.",
+   "bold": false,
+   "color": "#1b1b1b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Global temperatures rose about 1.1 °C since 1900.",
+   "bold": false,
+   "color": "#1b1b1b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "“The best time to plant a tree was twenty years ago.”",
+   "bold": false,
+   "color": "#7a1f2b",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": true
+  }
+ ]
+]

@@ -1878,7 +1878,13 @@ window.NTSlides = (() => {
       const vxx = mxx / n - cx * cx, vyy = myy / n - cy * cy, vxy = mxy / n - cx * cy;
       const tr = vxx + vyy, det = vxx * vyy - vxy * vxy;
       const l1 = tr / 2 + Math.sqrt(Math.max(0, tr * tr / 4 - det)), l2 = Math.max(0.01, tr / 2 - Math.sqrt(Math.max(0, tr * tr / 4 - det)));
-      if (l1 / l2 > 60 && n / ext < 6) continue;
+      // (straight only: a chart's line bends, a leader line doesn't)
+      if (l1 / l2 > 60 && n / ext < 6) {
+        const ang = 0.5 * Math.atan2(2 * vxy, vxx - vyy), ux = Math.cos(ang), uy = Math.sin(ang);
+        let dev = 0;
+        for (let q = 0; q < pix.length; q += 3) { const x = pix[q] % sw, y = (pix[q] / sw) | 0; dev = Math.max(dev, Math.abs(-(x - cx) * uy + (y - cy) * ux)); }
+        if (dev < Math.max(4, ext * 0.04)) continue;
+      }
       // An arrow or connector: long and thin with a small head, mostly empty
       // (a solid bar, filled with colour along its middle, is a shape, not an arrow)
       if (Math.max(w, h) >= 3 * Math.min(w, h) && Math.min(w, h) <= 22 && n / (w * h) < 0.35) {
