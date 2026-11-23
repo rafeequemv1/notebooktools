@@ -2115,7 +2115,7 @@ window.NTSlides = (() => {
       matteEdges(cut, shade, w, h, src, W0, X0, Y0, surf);
       // A single flat one-colour shape (a badge circle, a plain card) is decoration:
       // it stays in the background
-      if (flatShape(cut, w, h)) {
+      if (flatShape(cut, w, h) || flatBand(cut, w, h)) {
         for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
           const i = ((Y0 + y) * W0 + (X0 + x)) * 4;
           for (let c = 0; c < 3; c += 1) fd[i + c] = src[i + c];
@@ -2216,9 +2216,11 @@ window.NTSlides = (() => {
           if (rest[q] && !seen[q]) { seen[q] = 1; st.push(q); }
         }
       }
-      // corner arcs, callout tails and specks left by the lines are not pictures
+      // corner arcs, callout tails and specks left by the lines are not pictures,
+      // nor a coloured row running the table's full width (a header row's fill)
       const ext = Math.max(bx - ax + 1, by - ay + 1);
       if (n < 120 || ext < 20) continue;
+      if (bx - ax + 1 >= w * 0.8 && by - ay + 1 <= h * 0.25) continue;
       out.push({ x0: x0 + ax, y0: y0 + ay, x1: x0 + bx, y1: y0 + by, n });
     }
     return out;
@@ -2394,6 +2396,43 @@ window.NTSlides = (() => {
       if (i % 7 === 0) colours.add(((d[i * 4] >> 3) << 10) | ((d[i * 4 + 1] >> 3) << 5) | (d[i * 4 + 2] >> 3));
     }
     return clear / n < 0.03 && colours.size > 1500 ? canvas.toDataURL("image/jpeg", 0.9) : canvas.toDataURL("image/png");
+  }
+
+  // A long thin strip of a few flat colours (a table's coloured header row, a banner
+  // band): decoration, like a single flat shape
+  function flatBand(cut, w, h) {
+    const d = cut.data;
+    let x0 = w, x1 = -1, y0 = h, y1 = -1;
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) if (d[(y * w + x) * 4 + 3] >= 250) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
+    if (x1 < 0 || bw < bh * 5) return false;
+    // share of the strip close to its few most common colours (JPEG noise
+    // spreads one flat colour over neighbouring shades)
+    const bins = new Map();
+    const px = [];
+    for (let y = y0 + 2; y <= y1 - 2; y += 2) for (let x = x0 + 2; x <= x1 - 2; x += 2) {
+      const i = (y * w + x) * 4;
+      if (d[i + 3] < 250) continue;
+      px.push(i);
+      const key = ((d[i] >> 4) << 8) | ((d[i + 1] >> 4) << 4) | (d[i + 2] >> 4);
+      const b = bins.get(key) || [0, 0, 0, 0];
+      b[0] += d[i]; b[1] += d[i + 1]; b[2] += d[i + 2]; b[3] += 1;
+      bins.set(key, b);
+    }
+    const solid = px.length;
+    if (solid <= 50) return false;
+    const main = [...bins.values()].sort((a, b) => b[3] - a[3]).slice(0, 4).map((b) => [b[0] / b[3], b[1] / b[3], b[2] / b[3]]);
+    const near = px.filter((i) => main.some((c) => Math.abs(d[i] - c[0]) + Math.abs(d[i + 1] - c[1]) + Math.abs(d[i + 2] - c[2]) < 60)).length;
+    if (near / solid < 0.9) return false;
+    // ...and almost no detail inside (a strip of icons or a timeline drawing has plenty)
+    let edges = 0, tests = 0;
+    for (let y = y0 + 2; y <= y1 - 2; y += 2) for (let x = x0 + 2; x <= x1 - 3; x += 2) {
+      const i = (y * w + x) * 4, j = i + 4;
+      if (d[i + 3] < 250 || d[j + 3] < 250) continue;
+      tests += 1;
+      if (Math.abs(d[i] - d[j]) + Math.abs(d[i + 1] - d[j + 1]) + Math.abs(d[i + 2] - d[j + 2]) > 60) edges += 1;
+    }
+    return tests > 0 && edges / tests < 0.04;
   }
 
   // Anti-aliased edges: a pixel on a picture's edge is a mix of the picture's own
