@@ -73,3 +73,8 @@
 #notebooktools-snapshot-overlay.is-busy {
   cursor: wait;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.secondary { border-radius: 999px !important; }
+/* end pill */

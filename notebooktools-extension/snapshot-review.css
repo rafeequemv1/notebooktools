@@ -380,3 +380,14 @@
   .ntsr-foot { flex-wrap: wrap; }
   .ntsr-status { flex-basis: 100%; order: -1; text-align: left; }
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.ntsr-btn,
+.ntsr-tool { border-radius: 999px !important; }
+/* end pill */
+/* The one primary button across NotebookTools: a dark pill (light on dark pages) */
+.ntsr-btn.is-primary { background: #1f1f1f !important; color: #fff !important; }
+.ntsr-btn.is-primary:hover:not(:disabled) { background: #3c4043 !important; }
+#notebooktools-snapshot-review.is-dark .ntsr-btn.is-primary { background: #e8eaed !important; color: #1f1f1f !important; }
+#notebooktools-snapshot-review.is-dark .ntsr-btn.is-primary:hover:not(:disabled) { background: #fff !important; }

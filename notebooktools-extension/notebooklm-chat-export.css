@@ -110,3 +110,9 @@
 .notebooktools-nlm-export-toast.is-error {
   background: #b3261e;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.notebooktools-nlm-export-btn,
+.notebooktools-nlm-export-option { border-radius: 999px !important; }
+/* end pill */

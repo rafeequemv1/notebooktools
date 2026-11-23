@@ -107,7 +107,7 @@
   border: 1px solid rgba(22, 163, 74, 0.25);
   border-radius: 10px;
   color: #166534;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
   margin: 0;
@@ -117,7 +117,7 @@
 
 .notebooktools-snapshot-workflow-steps {
   color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   font-size: 11px;
   line-height: 1.5;
   margin: 0;
@@ -139,7 +139,7 @@
 
 .notebooktools-snapshot-workflow-complete-note {
   color: #5f6368;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   font-size: 12px;
   line-height: 1.45;
   margin: 0;
@@ -156,7 +156,7 @@
 .notebooktools-snapshot-workflow-status,
 .notebooktools-snapshot-workflow-detail {
   color: #202124;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   font-size: 12px;
   line-height: 1.45;
   margin: 0;
@@ -172,7 +172,7 @@
   border-radius: 10px;
   color: #202124;
   cursor: pointer;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   font-size: 13px;
   font-weight: 500;
   padding: 10px 12px;
@@ -266,7 +266,7 @@
   border-radius: 8px;
   bottom: 24px;
   color: #ffffff;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   font-size: 13px;
   left: 50%;
   max-width: min(420px, calc(100vw - 32px));
@@ -584,3 +584,20 @@
 .notebooktools-snapshot-workflow-menu [hidden] {
   display: none !important;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.notebooktools-snapshot-workflow-btn,
+.notebooktools-snapshot-workflow-download-btn,
+.notebooktools-snapshot-workflow-option,
+.secondary { border-radius: 999px !important; }
+/* end pill */
+
+/* NotebookTools look: Google Sans and the one primary button, a dark pill */
+.notebooktools-snapshot-workflow-menu, .notebooktools-snapshot-workflow-menu * { font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; }
+.notebooktools-snapshot-workflow-option.is-primary,
+.notebooktools-snapshot-workflow-download-btn.is-primary { background: #1f1f1f !important; border-color: transparent !important; color: #fff !important; }
+.notebooktools-snapshot-workflow-option.is-primary:hover:not(:disabled),
+.notebooktools-snapshot-workflow-download-btn.is-primary:hover:not(:disabled) { background: #3c4043 !important; }
+.notebooktools-snapshot-workflow-menu.is-dark .notebooktools-snapshot-workflow-option.is-primary,
+.notebooktools-snapshot-workflow-menu.is-dark .notebooktools-snapshot-workflow-download-btn.is-primary { background: #e8eaed !important; color: #1f1f1f !important; }

@@ -238,3 +238,11 @@
   background-color: var(--nt-line-soft);
   border-color: transparent;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.button,
+.snapshot-action-type,
+.snapshot-card-action,
+.snapshot-remove-btn { border-radius: 999px !important; }
+/* end pill */

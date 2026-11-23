@@ -1858,3 +1858,127 @@ html.is-popup .sidepanel-tabs {
 .sp-tool-count { background: var(--nt-accent-soft); border-radius: 999px; color: var(--nt-accent); font-size: 11px; font-style: normal; font-weight: 600; padding: 1px 7px; }
 .sp-tool-count[hidden] { display: none; }
 .sidepanel-body .sp-tool.sidepanel-tab { background: var(--nt-surface); }
+
+/* ==========================================================================
+   NotebookLM style for every screen of the popup: the bulk links queue and
+   Snapshots use the same cards, buttons, fields and links as the main view.
+   ========================================================================== */
+.sidepanel-body #panelBulk .sp-card,
+.sidepanel-body #panelSnapshots .sp-card { border-radius: 16px; gap: 10px; padding: 14px; }
+.sidepanel-body #panelBulk .sp-label,
+.sidepanel-body #panelSnapshots .sp-label { color: var(--nt-ink); font-family: "Google Sans", Roboto, Arial, sans-serif; font-size: 13.5px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+/* secondary buttons: like the popup's Add open tabs / Snapshot */
+.sidepanel-body .bulk-secondary-btn,
+.sidepanel-body .bulk-youtube-primary,
+.sidepanel-body #panelSnapshots .button.secondary {
+  background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 12px; box-shadow: none; color: var(--nt-ink);
+  font: 500 13px/1.2 inherit; font-family: inherit; min-height: 36px; padding: 0 12px;
+}
+.sidepanel-body .bulk-secondary-btn:hover,
+.sidepanel-body .bulk-youtube-primary:hover,
+.sidepanel-body #panelSnapshots .button.secondary:hover { background: var(--sp-hover); border-color: var(--nt-line-strong); }
+.sidepanel-body #panelSnapshots .button.secondary.compact { min-height: 30px; padding: 0 10px; font-size: 12.5px; }
+/* the one strong action stays the black pill at the bottom; the rest are quiet */
+.sidepanel-body #panelBulk .sp-primary,
+.sidepanel-body #panelSnapshots .sp-primary { border-radius: 999px; min-height: 40px; }
+/* text links: no underlines, blue, a soft pill on hover */
+.sidepanel-body .bulk-text-btn,
+.sidepanel-body #panelBulk .text-button,
+.sidepanel-body #panelSnapshots .text-button {
+  background: transparent; border: 0; border-radius: 999px; color: var(--nt-accent); cursor: pointer; font: 500 12.5px/1 inherit;
+  font-family: inherit; padding: 5px 8px; text-decoration: none;
+}
+.sidepanel-body .bulk-text-btn:hover,
+.sidepanel-body #panelBulk .text-button:hover,
+.sidepanel-body #panelSnapshots .text-button:hover { background: var(--sp-hover); }
+.sidepanel-body .bulk-queue-tools { gap: 2px; margin-left: -8px; }
+/* fields */
+.sidepanel-body #panelBulk textarea,
+.sidepanel-body #panelSnapshots textarea,
+.sidepanel-body #panelSnapshots input[type="text"] {
+  background: var(--nt-line-soft); border: 1px solid transparent; border-radius: 12px; color: var(--nt-ink); font: 400 13px/1.4 inherit; font-family: inherit; padding: 10px 12px;
+}
+.sidepanel-body #panelBulk textarea:focus,
+.sidepanel-body #panelSnapshots textarea:focus,
+.sidepanel-body #panelSnapshots input[type="text"]:focus { background: var(--nt-surface); border-color: var(--nt-accent); outline: none; }
+.sidepanel-body #panelSnapshots select {
+  appearance: none; -webkit-appearance: none; background: var(--nt-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23747775' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border: 1px solid var(--nt-line); border-radius: 12px; color: var(--nt-ink); font: 500 13px/1 inherit; font-family: inherit; height: 38px; padding: 0 36px 0 12px; width: 100%;
+}
+/* queue */
+.sidepanel-body .bulk-queue-list { border: 1px solid var(--nt-line-soft); border-radius: 12px; }
+.sidepanel-body .bulk-queue-empty,
+.sidepanel-body .snapshots-empty { background: var(--nt-line-soft); border: 0; border-radius: 12px; color: var(--nt-muted); font-size: 12.5px; padding: 18px 14px; text-align: center; }
+.sidepanel-body .bulk-youtube-hint { color: var(--nt-muted); font-size: 12.5px; }
+.sidepanel-body .bulk-progress-bar { background: var(--nt-line-soft); border-radius: 999px; height: 4px; }
+.sidepanel-body .bulk-progress-fill { background: var(--nt-accent); border-radius: 999px; }
+.sidepanel-body .snapshots-capture-row { display: grid; gap: 8px; grid-template-columns: 1fr 1fr auto; align-items: center; }
+.sidepanel-body .snapshots-capture-row .sp-primary {
+  background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 12px; color: var(--nt-ink); font: 500 13px/1.2 inherit; font-family: inherit; min-height: 38px;
+}
+.sidepanel-body .snapshots-capture-row .sp-primary:hover { background: var(--sp-hover); border-color: var(--nt-line-strong); }
+.sidepanel-body .snapshots-empty:has(+ .snapshots-capture-row) { background: transparent; padding: 0; text-align: left; }
+.sidepanel-body #panelSnapshots .button.secondary:not(.compact) { border-radius: 999px; min-height: 40px; }
+.sidepanel-body .sp-card:has(.snapshots-capture-row) .snapshots-empty { background: transparent; color: var(--nt-muted); padding: 0; text-align: left; }
+.sidepanel-body .snapshots-grid > .snapshots-empty { grid-column: 1 / -1; }
+
+/* ==========================================================================
+   In-page "Send to NotebookLM" panels (chat sites, X, Reddit, LinkedIn,
+   Google Docs, YouTube): the popup's look in a 300 px card.
+   ========================================================================== */
+.nt-panel { font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; --sp-hover: rgba(11, 87, 208, 0.07); }
+:root[data-theme="dark"] .nt-panel { --sp-hover: rgba(138, 180, 248, 0.12); }
+.nt-panel .card { background: var(--nt-surface); border: 0; box-shadow: none; display: flex; flex-direction: column; gap: 10px; padding: 14px; }
+.nt-panel .ntp-head { align-items: flex-start; display: flex; gap: 10px; padding-bottom: 2px; }
+.nt-panel .ntp-head img { border-radius: 4px; flex: none; margin-top: 1px; }
+.nt-panel .ntp-head-copy { min-width: 0; }
+.nt-panel .ntp-title { color: var(--nt-ink); font: 500 14px/1.3 "Google Sans", Roboto, Arial, sans-serif; margin: 0; overflow-wrap: anywhere; }
+.nt-panel .ntp-meta { color: var(--nt-subtle); font-size: 12px; line-height: 1.35; margin: 3px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-panel .source-note { background: var(--nt-line-soft); border-radius: 10px; color: var(--nt-muted); font-size: 12px; margin: 0; padding: 8px 10px; }
+.nt-panel .ntp-label { color: var(--nt-subtle); font-size: 12px; font-weight: 500; margin: 2px 0 -4px; }
+.nt-panel select,
+.nt-panel input[type="text"],
+.nt-panel input[type="search"] { box-sizing: border-box; font: 400 13px/1 inherit; font-family: inherit; height: 38px; width: 100%; }
+.nt-panel select {
+  appearance: none; -webkit-appearance: none; background: var(--nt-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23747775' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border: 1px solid var(--nt-line); border-radius: 12px; color: var(--nt-ink); font-weight: 500; padding: 0 36px 0 12px;
+}
+.nt-panel select:hover { border-color: var(--nt-line-strong); }
+.nt-panel input[type="text"],
+.nt-panel input[type="search"] { background: var(--nt-line-soft); border: 1px solid transparent; border-radius: 12px; color: var(--nt-ink); padding: 0 12px; }
+.nt-panel select:focus,
+.nt-panel input:focus { border-color: var(--nt-accent); outline: none; }
+.nt-panel input:focus { background: var(--nt-surface); }
+.nt-panel .ntp-primary { background: var(--nt-ink); border: 0; border-radius: 999px; color: var(--nt-surface); font: 500 13.5px/1 inherit; font-family: inherit; min-height: 40px; margin-top: 2px; }
+.nt-panel .ntp-primary:hover { opacity: 0.88; }
+.nt-panel .ntp-foot { display: flex; gap: 4px; justify-content: center; margin-top: -4px; }
+.nt-panel .ntp-foot .text-button { background: transparent; border: 0; border-radius: 999px; color: var(--nt-accent); font: 500 12.5px/1 inherit; font-family: inherit; padding: 6px 10px; text-decoration: none; }
+.nt-panel .ntp-foot .text-button:hover { background: var(--sp-hover); }
+.nt-panel .studio-options label:not(.embedded-toggle) { color: var(--nt-subtle); font-size: 12px; font-weight: 500; }
+.nt-panel .status:empty { display: none; }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.bulk-secondary-btn,
+.bulk-text-btn,
+.bulk-youtube-primary,
+.button,
+.header-icon-btn,
+.icon-btn,
+.import-mode,
+.ntp-primary,
+.secondary,
+.sp-account-chip,
+.sp-gacct-btn,
+.sp-link-btn,
+.sp-notebooks-btn,
+.sp-popout-btn,
+.sp-primary,
+.sp-studio-btn,
+.sp-target-create-btn,
+.sp-tool,
+.text-button { border-radius: 999px !important; }
+/* end pill */
+
+/* Segmented controls hold pills, so they are pills too */
+.import-modes { border-radius: 999px !important; }

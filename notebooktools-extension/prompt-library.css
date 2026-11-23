@@ -749,3 +749,14 @@
   padding: 24px 8px;
   text-align: center;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.button,
+.pl-copy-btn,
+.pl-delete-btn,
+.pl-more-btn,
+.pl-my-add-btn,
+.pl-rename-btn,
+.pl-view-btn { border-radius: 999px !important; }
+/* end pill */

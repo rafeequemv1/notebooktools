@@ -452,3 +452,15 @@
   border-color: var(--nt-accent);
   box-shadow: 0 0 0 3px var(--nt-accent-soft);
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.bulk-cancel-btn,
+.bulk-secondary-btn,
+.bulk-text-btn,
+.bulk-type-pill,
+.bulk-youtube-btn,
+.bulk-youtube-primary,
+.button,
+.youtube-batch-tool { border-radius: 999px !important; }
+/* end pill */

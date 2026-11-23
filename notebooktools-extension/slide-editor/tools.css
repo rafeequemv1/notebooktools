@@ -1441,3 +1441,60 @@
 .se-recent-item:hover .se-recent-del, .se-recent-del:focus-visible { opacity: 1; }
 .se-recent-del:hover { color: #c5221f; }
 .se-status-btn { background: none; border: 0; color: inherit; cursor: pointer; font: inherit; font-weight: 500; padding: 0; text-decoration: underline; }
+
+/* ==========================================================================
+   Slide editor in NotebookLM's look: soft grey ground, white rounded panels,
+   pill buttons (black for the main action), light menus. Same in the
+   extension and on the website.
+   ========================================================================== */
+.se-app {
+  --se-bg: #f0f4f9; --se-panel: #ffffff; --se-line: rgba(31, 31, 31, 0.1); --se-ink: #1f1f1f; --se-muted: #5f6368; --se-accent: #0b57d0;
+  --se-btn: #f1f3f4; --se-hover: rgba(11, 87, 208, 0.07); --se-on: rgba(11, 87, 208, 0.1);
+}
+.se-app [hidden] { display: none !important; }
+.se-editor { background: var(--se-bg); }
+.se-bar { background: var(--se-bg); border-bottom: 0; padding: 10px 14px 8px; }
+.se-btn { border-radius: 999px; }
+.se-btn:hover:not(:disabled) { background: var(--se-hover); }
+.se-btn.is-on { background: var(--se-on); color: var(--se-accent); }
+.se-btn.is-small { background: var(--se-panel); border: 1px solid var(--se-line); }
+.se-btn.is-small:hover:not(:disabled) { background: var(--se-hover); }
+.se-btn.is-danger { color: #c5221f; }
+.se-btn.is-danger:hover { color: #a50e0e; }
+.se-btn.is-primary { background: #1f1f1f; color: #fff; }
+.se-btn.is-primary:hover:not(:disabled) { background: #3c4043; }
+.se-split .se-btn.is-primary:first-child { border-radius: 999px 0 0 999px; padding-left: 14px; }
+.se-split .se-btn.is-caret { border-left: 1px solid rgba(255, 255, 255, 0.22); border-radius: 0 999px 999px 0; }
+.se-menu, .se-pop { background: var(--se-panel); border: 1px solid var(--se-line); border-radius: 16px; box-shadow: 0 8px 28px rgba(60, 64, 67, 0.2); }
+.se-menu button { border-radius: 10px; }
+.se-menu button:hover { background: var(--se-hover); }
+.se-fmt { background: var(--se-panel); border: 0; border-radius: 999px; box-shadow: 0 1px 2px rgba(60, 64, 67, 0.08); margin: 0 14px 10px; padding: 6px 14px; }
+.se-fmt select, .se-fmt input[type="number"] { background: var(--se-btn); border-radius: 999px; padding: 0 10px; }
+.se-num, .se-mini, .se-toggle { border-radius: 999px; }
+.se-toggle.is-on { background: var(--se-on); color: var(--se-accent); }
+.se-body { gap: 12px; padding: 0 14px 12px; }
+.se-pages, .se-props { border: 0; border-radius: 20px; box-shadow: 0 1px 2px rgba(60, 64, 67, 0.08); padding: 14px; }
+.se-label { color: var(--se-muted); font-family: "Google Sans", Roboto, Arial, sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.se-thumb { border-radius: 12px; }
+.se-thumb:hover { background: var(--se-hover); border-color: transparent; }
+.se-thumb.is-on { background: var(--se-on); border-color: var(--se-accent); }
+.se-thumb-busy { border-color: rgba(31, 31, 31, 0.15); border-top-color: var(--se-accent); }
+.se-add-slide { border-radius: 999px; }
+.se-stage-wrap { background: transparent; }
+.se-stage { box-shadow: 0 1px 3px rgba(60, 64, 67, 0.18), 0 6px 24px rgba(60, 64, 67, 0.12); }
+.se-props input[type="number"], .se-props select, .se-props textarea { background: var(--se-btn); border-radius: 10px; }
+.se-seg label:has(input:checked) { background: var(--se-panel); box-shadow: 0 1px 3px rgba(60, 64, 67, 0.2); }
+.se-tabs button { border-radius: 999px; }
+.se-tabs button.is-on { background: var(--se-on); color: var(--se-accent); }
+.se-tile .se-tr-demo, .se-tile .se-an-demo { background: #dfe3eb; }
+.se-an-demo { background: #e8eaed !important; }
+.se-seq-n { background: var(--se-btn); }
+.se-status { background: var(--se-bg); border-top: 0; }
+.se-status.is-ok { color: #137333; }
+.se-status.is-error { color: #c5221f; }
+.se-loader { background: rgba(240, 244, 249, 0.88); color: var(--se-ink); }
+.se-start { background: var(--se-panel); }
+.se-recent-open { border-radius: 16px; }
+.se-app .pdf-sample-btn { border-radius: 999px; padding: 6px 12px; text-decoration: none; }
+.se-app .pdf-sample-btn:hover { background: var(--se-hover); }
+.se-app .se-points { margin-top: 18px; }

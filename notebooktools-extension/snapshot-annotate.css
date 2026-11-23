@@ -110,3 +110,10 @@
   pointer-events: none;
   opacity: 0.85;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.primary { border-radius: 999px !important; }
+/* end pill */
+#notebooktools-snapshot-annotate button.primary { background: #1f1f1f; border-color: transparent; color: #fff; }
+#notebooktools-snapshot-annotate button.primary:hover { background: #3c4043; }

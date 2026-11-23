@@ -404,3 +404,16 @@
 .ntc-backdrop.is-dark .ntc-empty.is-error {
   color: #f2b8b5;
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.ntc-btn,
+.ntc-seg-btn { border-radius: 999px !important; }
+/* end pill */
+
+/* Segmented controls hold pills, so they are pills too */
+.ntc-seg { border-radius: 999px !important; }
+/* The one primary button across NotebookTools: a dark pill (light on dark pages) */
+.ntc-btn.is-primary { background: #1f1f1f; border-color: transparent; color: #fff; }
+.ntc-btn.is-primary:hover:not(:disabled) { background: #3c4043; }
+.ntc-backdrop.is-dark .ntc-btn.is-primary { background: #e8eaed; color: #1f1f1f; }

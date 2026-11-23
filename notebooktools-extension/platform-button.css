@@ -209,3 +209,8 @@ body.notebooktools-platform-bar-active {
     padding: 0 12px 0 10px;
   }
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.notebooktools-platform-action { border-radius: 999px !important; }
+/* end pill */

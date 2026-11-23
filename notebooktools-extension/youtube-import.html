@@ -9,26 +9,25 @@
     <link rel="stylesheet" href="shared.css">
   </head>
   <body>
-    <main class="app embedded">
+    <main class="app embedded nt-panel">
       <section class="card">
-        <header class="import-header-compact">
-          <img class="import-header-icon" src="icons/icon16.png" alt="" width="16" height="16">
-          <div class="import-header-copy">
-            <p class="import-header-title">Import to NotebookLM</p>
-            <p id="videoTitle" class="import-header-meta">YouTube video</p>
+        <header class="ntp-head">
+          <img src="icons/icon16.png" alt="" width="18" height="18">
+          <div class="ntp-head-copy">
+            <p class="import-header-title ntp-title">Send to NotebookLM</p>
+            <p id="videoTitle" class="ntp-meta">YouTube video</p>
           </div>
         </header>
 
-        <input id="notebookSearch" type="search" placeholder="Search notebooks..." autocomplete="off" aria-label="Search notebooks">
-
+        <span class="ntp-label">Add to</span>
+        <input id="notebookSearch" type="search" placeholder="Search notebooks" autocomplete="off" aria-label="Search notebooks">
         <select id="notebookLmSelect" aria-label="Notebook">
           <option value="">Loading notebooks...</option>
         </select>
-
-        <input id="newNotebookLmName" type="text" placeholder="Or create new notebook" aria-label="New notebook name">
+        <input id="newNotebookLmName" type="text" placeholder="Or create a new notebook" aria-label="New notebook name">
 
         <div id="studioOptions" class="studio-options" hidden>
-          <label for="studioArtifactType">Create</label>
+          <label for="studioArtifactType">Also create in Studio</label>
           <select id="studioArtifactType" aria-label="Studio output type"></select>
           <label class="embedded-toggle" for="studioOpenTabToggle">
             <input type="checkbox" id="studioOpenTabToggle" checked>
@@ -37,10 +36,10 @@
           </label>
         </div>
 
-        <button class="button" id="importButton" type="button">Send to notebook</button>
+        <button class="button ntp-primary" id="importButton" type="button">Send to notebook</button>
 
-        <div class="footer-row">
-          <button class="text-button" id="refreshButton" type="button">Refresh</button>
+        <div class="ntp-foot">
+          <button class="text-button" id="refreshButton" type="button">Refresh list</button>
           <a class="text-button" id="openNotebookLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open notebook</a>
         </div>
 

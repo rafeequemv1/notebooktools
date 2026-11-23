@@ -4087,3 +4087,54 @@ html[data-theme="dark"] .src-refresh-btn.is-stale {
 .prompts-head p { color: var(--nt-muted, #5f6368); font-size: 14px; margin: 0; }
 .prompts-view .pl-section-label { font-size: 13px; }
 .prompts-view .pl-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.button,
+.detail-back-btn,
+.dup-skip-btn,
+.dup-source-action,
+.folder-back-btn,
+.folder-pill,
+.folder-pill-add,
+.icon-btn,
+.manage-folder-pill,
+.nb-menu-btn,
+.nb-pin-btn,
+.nb-star-btn,
+.nb-tag-pill,
+.nb-tool-btn,
+.nbx-bulk-btn,
+.nbx-chip,
+.nbx-chip-clear,
+.nbx-columns-btn,
+.nbx-iconbtn,
+.nbx-primary,
+.nbx-seg-btn,
+.podcast-control-btn,
+.pres-btn,
+.profile-btn,
+.sl-dupe-chip,
+.src-filter-pill,
+.src-menu-btn,
+.src-refresh-btn,
+.src-tool-btn,
+.studio-artifact-btn,
+.studio-option-pill,
+.studio-tool-btn,
+.studio-type-pill,
+.tag-pill,
+.tag-pill-add,
+.view-toggle-btn { border-radius: 999px !important; }
+/* end pill */
+
+/* Segmented controls hold pills, so they are pills too */
+.view-toggle, .nbx-seg { border-radius: 999px !important; }
+
+/* Small selects in the dashboard: a quiet pill with its own chevron, like the buttons around them */
+.nbx-sort { letter-spacing: 0; text-transform: none; }
+.nbx-sort select, .notebooks-body select.sort-select {
+  appearance: none; -webkit-appearance: none; background: var(--nt-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23747775' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid var(--nt-line); border-radius: 999px; font-weight: 500; height: 32px; padding: 0 30px 0 12px;
+}
+.nbx-sort select:hover { border-color: var(--nt-line-strong); }

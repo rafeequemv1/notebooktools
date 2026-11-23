@@ -47,3 +47,8 @@
 /* On a slide deck's row in the Studio list: a small pill before its ⋮ */
 .ntde-btn.is-row { align-self: center; font-size: 13px; gap: 5px; height: 28px; margin: 0 4px 0 0; padding: 0 10px 0 8px; }
 .ntde-btn.is-row > svg { width: 14px; height: 14px; }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.ntde-btn { border-radius: 999px !important; }
+/* end pill */

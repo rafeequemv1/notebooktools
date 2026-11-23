@@ -700,3 +700,11 @@
 .ntr-menu-item.is-quiet span {
   color: var(--ntr-muted);
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.is-secondary,
+.ntr-btn,
+.ntr-chip,
+.ntr-pill { border-radius: 999px !important; }
+/* end pill */

@@ -461,3 +461,8 @@
 .nts-edit { background: var(--nts-accent); border-color: var(--nts-accent); color: var(--nts-bg); cursor: pointer; font-family: inherit; }
 .nts-edit:hover { filter: brightness(1.08); background: var(--nts-accent); }
 .nts-backdrop.is-dark .nts-edit { color: #062e6f; }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.nts-btn { border-radius: 999px !important; }
+/* end pill */

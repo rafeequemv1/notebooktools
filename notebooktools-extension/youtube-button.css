@@ -138,3 +138,8 @@ html[dark] .notebooktools-youtube-panel {
     height: 380px;
   }
 }
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.notebooktools-youtube-action { border-radius: 999px !important; }
+/* end pill */
