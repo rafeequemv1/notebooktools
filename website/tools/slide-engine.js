@@ -475,6 +475,25 @@ window.NTSlides = (() => {
     return Math.sqrt(lums.reduce((a, v) => a + (v - mean) ** 2, 0) / lums.length);
   }
 
+  // Spread of each side of the ring alone (robust: median distance from its
+  // median), the largest of the four. A box's own border or a table line along
+  // one side is even along that side; a photo isn't even along any side.
+  function ringSides(img, b, pad, others = []) {
+    const { data, width, height } = img;
+    const inText = (x, y) => others.some((o) => o !== b && x >= o.x0 - 2 && x <= o.x1 + 2 && y >= o.y0 - 2 && y <= o.y1 + 2);
+    const lum = (x, y) => { const i = (y * width + x) * 4; return 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]; };
+    const sides = [[], [], [], []];
+    for (let x = b.x0 - pad; x <= b.x1 + pad; x += 3) for (const [k, y] of [[0, b.y0 - pad], [1, b.y1 + pad]]) if (x >= 0 && y >= 0 && x < width && y < height && !inText(x, y)) sides[k].push(lum(x, y));
+    for (let y = b.y0 - pad; y <= b.y1 + pad; y += 3) for (const [k, x] of [[2, b.x0 - pad], [3, b.x1 + pad]]) if (x >= 0 && y >= 0 && x < width && y < height && !inText(x, y)) sides[k].push(lum(x, y));
+    let worst = 0;
+    for (const v of sides) {
+      if (v.length < 4) continue;
+      const m = median(v);
+      worst = Math.max(worst, 1.4826 * median(v.map((u) => Math.abs(u - m))));
+    }
+    return worst;
+  }
+
   function weightedMedian(pairs) {
     const sorted = [...pairs].sort((a, b) => a[0] - b[0]);
     const half = sorted.reduce((n, p) => n + p[1], 0) / 2;
@@ -1574,7 +1593,11 @@ window.NTSlides = (() => {
       const x1 = Math.max(...group.map((g) => g.x1));
       const y1 = Math.max(...group.map((g) => g.y1));
       // Text over a photo or strong gradient: keep it in the picture (removing it would leave patches).
-      const behind = ringSpread(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o)));
+      let behind = ringSpread(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o)));
+      // (a header cell's lines close around its words aren't a picture)
+      // (only for real words, clearly read: marks in a drawing can read as "IN")
+      const letters = group.map((g) => g.text).join("").replace(/[^A-Za-z]/g, "").length;
+      if (behind > 45 && letters >= 5 && Math.min(...group.map((g) => g.conf)) >= 75 && ringSides(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o))) < 12) behind = 0;
       // ...unless it's a texture (micrograph, photo grain): that is repaired from the picture itself
       const onTexture = behind > 45 && behind <= 70 && !!texturedAround(img.data, slide.w, slide.h, { x0: Math.round(x0), y0: Math.round(y0), x1: Math.round(x1), y1: Math.round(y1) }, (x, y) => segs.some((o) => !group.includes(o) && x >= o.x0 - 2 && x <= o.x1 + 2 && y >= o.y0 - 2 && y <= o.y1 + 2));
       if (behind > 45 && !group[0].badge && !onTexture) { dropped.push(`on a picture: ${group[0].text}`); continue; }
@@ -1903,7 +1926,7 @@ window.NTSlides = (() => {
       }
       // A lattice of straight lines (a table grid, a frame, panel borders, a callout
       // outline) is background; what it holds becomes pictures of its own
-      const inner = w >= 50 && h >= 30 ? latticeContents(pix, x0, y0, w, h, sw, latticeLine, sd) : null;
+      const inner = w >= 50 && h >= 30 ? latticeContents(pix, x0, y0, w, h, sw, latticeLine, sd, paintedHalf) : null;
       if (inner) {
         // (leave out what's only the edges of painted-out text, e.g. a header cell's label)
         for (const p of inner) {
@@ -1912,7 +1935,13 @@ window.NTSlides = (() => {
             const j = y * sw + x;
             if (!busy[j] || latticeLine[j]) continue;
             all += 1;
-            if (paintedHalf[j]) painted += 1;
+            // (on or just beside painted-out text: its halo)
+            let near = 0;
+            for (let dy = -3; dy <= 3 && !near; dy += 1) for (let dx = -3; dx <= 3; dx += 1) {
+              const xx = x + dx, yy = y + dy;
+              if (xx >= 0 && yy >= 0 && xx < sw && yy < sh && paintedHalf[yy * sw + xx]) { near = 1; break; }
+            }
+            painted += near;
           }
           if (!all || painted < all * 0.85) parts.push(p);
         }
@@ -1973,12 +2002,26 @@ window.NTSlides = (() => {
     // 4. Parts close together are one picture (text is already gone, so labels
     //    don't glue pictures together).
     const GAP = 14;
+    // (never across a table/frame line: what's in one panel or cell is its own picture)
+    const lineBetween = (A, B) => {
+      for (const horiz of [true, false]) {
+        const [a0, a1, b0, b1, o0, o1] = horiz ? [A.x0, A.x1, B.x0, B.x1, Math.max(A.y0, B.y0), Math.min(A.y1, B.y1)] : [A.y0, A.y1, B.y0, B.y1, Math.max(A.x0, B.x0), Math.min(A.x1, B.x1)];
+        if (o1 - o0 < 4 || !(a1 < b0 || b1 < a0)) continue;
+        const g0 = Math.min(a1, b1) + 1, g1 = Math.max(a0, b0) - 1;
+        for (let g = g0; g <= g1; g += 1) {
+          let n = 0;
+          for (let o = o0; o <= o1; o += 1) if (latticeLine[horiz ? o * sw + g : g * sw + o]) n += 1;
+          if (n >= (o1 - o0 + 1) * 0.85) return true;
+        }
+      }
+      return false;
+    };
     let merged = true;
     while (merged) {
       merged = false;
       for (let a = 0; a < boxes.length && !merged; a += 1) for (let b = a + 1; b < boxes.length && !merged; b += 1) {
         const A = boxes[a], B = boxes[b];
-        if (A.x0 <= B.x1 + GAP && B.x0 <= A.x1 + GAP && A.y0 <= B.y1 + GAP && B.y0 <= A.y1 + GAP) {
+        if (A.x0 <= B.x1 + GAP && B.x0 <= A.x1 + GAP && A.y0 <= B.y1 + GAP && B.y0 <= A.y1 + GAP && !lineBetween(A, B)) {
           boxes[a] = { x0: Math.min(A.x0, B.x0), y0: Math.min(A.y0, B.y0), x1: Math.max(A.x1, B.x1), y1: Math.max(A.y1, B.y1), n: A.n + B.n, chart: A.chart || B.chart };
           boxes.splice(b, 1);
           merged = true;
@@ -2145,53 +2188,133 @@ window.NTSlides = (() => {
   // least two long horizontal and two long vertical lines (a table, a frame,
   // panel borders, a callout outline). Returns what's left once those lines are
   // taken away, as separate parts; null when the group isn't a lattice.
-  function latticeContents(pix, x0, y0, w, h, sw, lineOut, sd) {
+  function latticeContents(pix, x0, y0, w, h, sw, lineOut, sd, painted) {
     const mask = new Uint8Array(w * h);
     for (const j of pix) mask[(((j / sw) | 0) - y0) * w + (j % sw) - x0] = 1;
     const line = new Uint8Array(w * h);
-    const markLen = Math.max(24, Math.round(Math.min(w, h) * 0.25));
     const colourAt = (x, y) => { const i = (y * sw + x) * 4; return [sd[i], sd[i + 1], sd[i + 2]]; };
+    const dist = (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
     const sh2 = sd.length / 4 / sw;
-    // A drawn line has the same colour on both sides (a table rule, a frame); the
-    // edge of a filled shape (a train's roof) has a different colour on each side
-    const drawn = (pairs) => {
-      const diffs = pairs.filter(([a, b]) => a && b).map(([a, b]) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]));
-      return diffs.length >= 3 && median(diffs) < 45;
+    // A drawn line has the same colour on both sides (a table rule, a frame), or
+    // is a colour of its own between two others (the rule under a header cell's
+    // fill); the edge of a filled shape (a train's roof) is only the step from
+    // one side's colour to the other's
+    const drawn = (samples) => {
+      const ok = samples.filter(([a, , b]) => a && b);
+      if (ok.length < 3) return false;
+      if (median(ok.map(([a, , b]) => dist(a, b))) < 45) return true;
+      return ok.filter(([a, c, b]) => dist(c, a) > 60 && dist(c, b) > 60 && dist(c, a) + dist(c, b) > 1.4 * dist(a, b)).length >= ok.length * 0.6;
     };
+    const MINRUN = 20;
+    // Straight runs of busy pixels along each row (column), grouped into bands
+    // across neighbouring rows. Every run counts, not only the longest: a card's
+    // top edge broken by the icon sitting on it is two runs. (A thin line's busy
+    // edge can be two rows with a quiet row between: still one band.)
     const bands = (horizontal) => {
       const L = horizontal ? h : w, M = horizontal ? w : h;
-      const runAt = new Array(L).fill(null);
-      for (let a = 0; a < L; a += 1) {
-        let st = -1, best = null;
-        for (let b = 0; b <= M; b += 1) {
-          const on = b < M && (horizontal ? mask[a * w + b] : mask[b * w + a]);
-          if (on && st < 0) st = b;
-          if (!on && st >= 0) { if (b - st >= Math.max(markLen, M * 0.25) && (!best || b - st > best[1] - best[0])) best = [st, b]; st = -1; }
-        }
-        runAt[a] = best;
-      }
-      const out = [];
-      for (let a = 0; a < L; a += 1) {
-        if (!runAt[a]) continue;
-        const startA = a;
-        let from = runAt[a][0], to = runAt[a][1];
-        while (a + 1 < L && runAt[a + 1]) { a += 1; from = Math.min(from, runAt[a][0]); to = Math.max(to, runAt[a][1]); }
-        if (a - startA > 6) continue; // a thick band is a filled shape, not a line
-        const pairs = [];
+      const open = [], out = [];
+      const close = (bd) => {
+        if (bd.a1 - bd.a0 > 7) return; // a thick band is a filled shape, not a line
+        // straight: one row of it runs (nearly) its whole length; the steep side of
+        // a chart's peak or a slanted stroke is a staircase of short runs
+        if (bd.best < 0.7 * (bd.to - bd.from)) return;
+        const samples = [];
+        const mid = Math.round((bd.a0 + bd.a1) / 2);
         for (let t = 0.1; t <= 0.9; t += 0.2) {
-          const b = Math.round(from + (to - from) * t);
-          const p = startA - 2, q = a + 2;
-          if (horizontal) pairs.push([y0 + p >= 0 ? colourAt(x0 + b, y0 + p) : null, y0 + q < sh2 ? colourAt(x0 + b, y0 + q) : null]);
-          else pairs.push([x0 + p >= 0 ? colourAt(x0 + p, y0 + b) : null, x0 + q < sw ? colourAt(x0 + q, y0 + b) : null]);
+          const c = Math.round(bd.from + (bd.to - bd.from) * t);
+          const p = bd.a0 - 2, q = bd.a1 + 2;
+          const at = (r) => (horizontal ? colourAt(x0 + c, y0 + r) : colourAt(x0 + r, y0 + c));
+          const A = (horizontal ? y0 : x0) + p >= 0 ? at(p) : null, B = (horizontal ? y0 + q < sh2 : x0 + q < sw) ? at(q) : null;
+          // the line itself: the row of the band least like either side
+          let C = at(mid);
+          if (A && B) for (let r = bd.a0; r <= bd.a1; r += 1) { const v = at(r); if (Math.min(dist(v, A), dist(v, B)) > Math.min(dist(C, A), dist(C, B))) C = v; }
+          samples.push([A, C, B]);
         }
-        out.push({ a0: startA, a1: a, from, to, long: to - from >= M * 0.6, drawn: drawn(pairs) });
+        if (drawn(samples)) out.push({ a0: bd.a0, a1: bd.a1, from: bd.from, to: bd.to, len: bd.to - bd.from, long: bd.to - bd.from >= M * 0.6 });
+      };
+      for (let a = 0; a <= L; a += 1) {
+        const runs = [];
+        if (a < L) {
+          let st = -1;
+          for (let b = 0; b <= M; b += 1) {
+            const on = b < M && (horizontal ? mask[a * w + b] : mask[b * w + a]);
+            if (on && st < 0) st = b;
+            if (!on && st >= 0) { if (b - st >= MINRUN) runs.push([st, b]); st = -1; }
+          }
+        }
+        for (const [f, t] of runs) {
+          const bd = open.find((o) => o.a1 >= a - 3 && Math.min(o.to, t) - Math.max(o.from, f) >= 0.5 * Math.min(o.to - o.from, t - f));
+          if (bd) { bd.a1 = a; bd.from = Math.min(bd.from, f); bd.to = Math.max(bd.to, t); bd.best = Math.max(bd.best, t - f); } else open.push({ a0: a, a1: a, from: f, to: t, best: t - f });
+        }
+        for (let i = open.length - 1; i >= 0; i -= 1) if (open[i].a1 < a - 3 || a === L) { close(open[i]); open.splice(i, 1); }
       }
       return out;
     };
-    const hb = bands(true).filter((b) => b.drawn), vb = bands(false).filter((b) => b.drawn);
-    if (hb.filter((b) => b.long).length < 2 || vb.filter((b) => b.long).length < 2) return null;
-    for (const b of hb) for (let y = b.a0; y <= b.a1; y += 1) for (let x = b.from; x < b.to; x += 1) if (mask[y * w + x]) line[y * w + x] = 1;
-    for (const b of vb) for (let x = b.a0; x <= b.a1; x += 1) for (let y = b.from; y < b.to; y += 1) if (mask[y * w + x]) line[y * w + x] = 1;
+    const hb = bands(true), vb = bands(false);
+    if (hb.length < 2 || vb.length < 2) return null;
+    // Which lines are structure: the edges of cells (boxes, table cells, panels,
+    // callouts, cards) that hold text. A drawing made of straight lines (a cube,
+    // a house) holds none, so it stays a picture.
+    const lines = (list) => {
+      const groups = [];
+      for (const b of list.slice().sort((p, q) => p.a0 - q.a0)) {
+        const at = (b.a0 + b.a1) / 2;
+        const g = groups.find((o) => Math.abs(o.at - at) <= 4);
+        if (g) g.bands.push(b); else groups.push({ at, bands: [b] });
+      }
+      return groups;
+    };
+    const rows = lines(hb), cols = lines(vb);
+    const cover = (g, p, q) => {
+      const segs = g.bands.map((b) => [Math.max(p, b.from), Math.min(q, b.to)]).filter(([f, t]) => t > f).sort((u, v) => u[0] - v[0]);
+      let sum = 0, end = p;
+      for (const [f, t] of segs) { if (t <= end) continue; sum += t - Math.max(f, end); end = t; }
+      return sum / Math.max(1, q - p);
+    };
+    const pieces = (g, p, q) => g.bands.filter((b) => b.to > p + 6 && b.from < q - 6).length;
+    const reach = (g, p) => g.bands.some((b) => b.from - 12 <= p && b.to + 12 >= p);
+    const textIn = (ax, ay, bx, by) => {
+      if (!painted) return false;
+      let n = 0;
+      for (let y = ay + 3; y <= by - 3; y += 1) for (let x = ax + 3; x <= bx - 3; x += 1) if (painted[(y0 + y) * sw + x0 + x] && ++n >= 20) return true;
+      return false;
+    };
+    const keep = new Set();
+    const big = w * h >= sw * sh2 * 0.25;
+    let chart = false;
+    if (rows.length <= 40 && cols.length <= 40) {
+      for (let r1 = 0; r1 < rows.length; r1 += 1) for (let r2 = r1 + 1; r2 < rows.length; r2 += 1) {
+        const ya = rows[r1].at, yb = rows[r2].at;
+        if (yb - ya < 12) continue;
+        for (let c1 = 0; c1 < cols.length; c1 += 1) for (let c2 = c1 + 1; c2 < cols.length; c2 += 1) {
+          const xa = cols[c1].at, xb = cols[c2].at;
+          if (xb - xa < 20) continue;
+          if (cover(rows[r1], xa, xb) < 0.4 || cover(rows[r2], xa, xb) < 0.4 || cover(cols[c1], ya, yb) < 0.4 || cover(cols[c2], ya, yb) < 0.4) continue;
+          // its four sides meet at the corners (a label box or a leader line on a
+          // picture doesn't make a cell with the frame around it)
+          if (!reach(rows[r1], xa) || !reach(rows[r1], xb) || !reach(rows[r2], xa) || !reach(rows[r2], xb) || !reach(cols[c1], ya) || !reach(cols[c1], yb) || !reach(cols[c2], ya) || !reach(cols[c2], yb)) continue;
+          // a side broken into three or more pieces is a chart's curve between its
+          // peaks, not a table line (an icon on a card's edge breaks it once)
+          if (pieces(rows[r1], xa, xb) > 2 || pieces(rows[r2], xa, xb) > 2 || pieces(cols[c1], ya, yb) > 2 || pieces(cols[c2], ya, yb) > 2) continue;
+          // ...and a frame holding such a curve is a chart's frame (the chart is a picture)
+          // (all of it: no part of a chart is a table)
+          if (rows.some((g) => g.at > ya + 4 && g.at < yb - 4 && pieces(g, xa, xb) > 2 && cover(g, xa, xb) >= 0.5) || cols.some((g) => g.at > xa + 4 && g.at < xb - 4 && pieces(g, ya, yb) > 2 && cover(g, ya, yb) >= 0.5)) {
+            if ((xb - xa) * (yb - ya) >= w * h * 0.4) chart = true;
+            continue;
+          }
+          // (in a big frame, a big cell holding only a drawing is a panel too)
+          if (!(big && (xb - xa) * (yb - ya) >= sw * sh2 * 0.04) && !textIn(Math.round(xa), Math.round(ya), Math.round(xb), Math.round(yb))) continue;
+          for (const g of [rows[r1], rows[r2]]) for (const b of g.bands) if (b.to > xa - 6 && b.from < xb + 6) keep.add(b);
+          for (const g of [cols[c1], cols[c2]]) for (const b of g.bands) if (b.to > ya - 6 && b.from < yb + 6) keep.add(b);
+        }
+      }
+    }
+    if (chart) return null;
+    // A big frame of long lines (comic panels without words) is structure too
+    if (!keep.size && hb.filter((b) => b.long).length >= 2 && vb.filter((b) => b.long).length >= 2 && w * h >= sw * sh2 * 0.25) for (const b of [...hb, ...vb]) if (b.long) keep.add(b);
+    if (!keep.size) return null;
+    for (const b of hb) if (keep.has(b)) for (let y = b.a0; y <= b.a1; y += 1) for (let x = b.from; x < b.to; x += 1) if (mask[y * w + x]) line[y * w + x] = 1;
+    for (const b of vb) if (keep.has(b)) for (let x = b.a0; x <= b.a1; x += 1) for (let y = b.from; y < b.to; y += 1) if (mask[y * w + x]) line[y * w + x] = 1;
     if (lineOut) for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) if (line[y * w + x]) lineOut[(y0 + y) * sw + x0 + x] = 1;
     // what's left: not on a line, nor right next to one (the busy halo of a line)
     const rest = new Uint8Array(w * h);

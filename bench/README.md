@@ -57,6 +57,7 @@ The overall score is the weighted average. Speed (seconds per slide) is reported
 | 05-italic | italic quotes, captions, titles |
 | 06-styles | styled words, super/subscripts, badges, shadowed photos, labels on textures |
 | 07-structure | tables, framed comic panels, speech bubbles, cards with dividers and arrows, a chart, a framed slide |
+| 08-panels | panels sharing a border, a 2×2 storyboard, callouts touching their drawing, cards with an icon on the edge, a flowchart, a table with pictures touching its lines; a cube drawn with lines (must stay one picture) |
 
 ## Adding or changing a set
 

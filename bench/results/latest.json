@@ -1,6 +1,6 @@
 {
- "date": "2026-11-23T09:14:10.937Z",
- "commit": "dee6f9e",
+ "date": "2026-11-23T09:49:29.694Z",
+ "commit": "29c7f4d",
  "sets": {
   "01-business": {
    "score": 96.86804661474774,
@@ -69,7 +69,7 @@
       5448734
      ]
     },
-    "ms": 10621.299999999814,
+    "ms": 10748.899999999441,
     "slides": 8
    },
    "misses": []
@@ -141,7 +141,7 @@
       5413398
      ]
     },
-    "ms": 6909.500000000931,
+    "ms": 6975.0999999996275,
     "slides": 8
    },
    "misses": [
@@ -221,7 +221,7 @@
       5433986
      ]
     },
-    "ms": 7350.999999999069,
+    "ms": 7398.499999999069,
     "slides": 8
    },
    "misses": [
@@ -297,7 +297,7 @@
       3765185
      ]
     },
-    "ms": 8300.200000001118,
+    "ms": 7540.600000000559,
     "slides": 6
    },
    "misses": [
@@ -377,7 +377,7 @@
       2664488
      ]
     },
-    "ms": 3514.9000000003725,
+    "ms": 3471.2000000001863,
     "slides": 4
    },
    "misses": [
@@ -451,7 +451,7 @@
       3832094
      ]
     },
-    "ms": 8587.199999999255,
+    "ms": 8487.799999998882,
     "slides": 6
    },
    "misses": [
@@ -460,16 +460,16 @@
    ]
   },
   "07-structure": {
-   "score": 86.66137701689038,
+   "score": 95.57142857142857,
    "categories": {
     "textFound": 100,
     "textAccuracy": 100,
     "textStyle": 95.71428571428571,
     "labels": 60,
-    "pictures": 61.904761904761905,
+    "pictures": 100,
     "textRemoved": 100,
     "picturesLifted": 100,
-    "structureKept": 68.04234159747534,
+    "structureKept": 100,
     "noDamage": 100
    },
    "counts": {
@@ -506,8 +506,8 @@
      0
     ],
     "realPics": 16,
-    "wholePics": 13,
-    "falsePics": 5,
+    "wholePics": 16,
+    "falsePics": 0,
     "px": {
      "text": [
       61655,
@@ -518,7 +518,7 @@
       324890
      ],
      "structure": [
-      58430,
+      85873,
       85873
      ],
      "page": [
@@ -526,96 +526,164 @@
       3818782
      ]
     },
-    "ms": 9951.500000001863,
+    "ms": 9049.199999998324,
     "slides": 6
    },
    "misses": [
     "slide 1: styling on \"Ways\" that the original doesn't have",
-    "slide 1: a picture cut out where there is none (96,208,1254,20)",
-    "slide 1: a picture cut out where there is none (96,145,1254,17)",
-    "slide 3: a picture cut out where there is none (102,525,587,199)",
-    "slide 3: a picture cut out where there is none (904,525,587,199)",
     "slide 4: serif wrong on \"Sync two clocks\"",
     "slide 4: serif wrong on \"in the lab.\"",
     "slide 4: serif wrong on \"after landing.\"",
     "slide 4: serif wrong on \"Each step took about a week.\"",
-    "slide 4: picture not cut out whole (best overlap 2%)",
-    "slide 4: picture not cut out whole (best overlap 2%)",
-    "slide 4: picture not cut out whole (best overlap 2%)",
-    "slide 4: a picture cut out where there is none (93,220,1401,355)",
     "slide 5: label on a picture not editable: \"faster at the top\"",
     "slide 6: label on a picture not editable: \"Atomic clock\""
+   ]
+  },
+  "08-panels": {
+   "score": 98.29491259090055,
+   "categories": {
+    "textFound": 100,
+    "textAccuracy": 99.29834054834053,
+    "textStyle": 97.85714285714286,
+    "labels": 100,
+    "pictures": 100,
+    "textRemoved": 99.02873439517865,
+    "picturesLifted": 99.60144116564018,
+    "structureKept": 87.51438375335621,
+    "noDamage": 99.99982583035379
+   },
+   "counts": {
+    "lines": 28,
+    "found": 28,
+    "chars": 27.80353535353535,
+    "bold": [
+     26,
+     28
+    ],
+    "italic": [
+     28,
+     28
+    ],
+    "serif": [
+     27,
+     28
+    ],
+    "colour": [
+     28,
+     28
+    ],
+    "styled": [
+     2,
+     2
+    ],
+    "falseStyled": 0,
+    "labels": [
+     2,
+     2
+    ],
+    "badges": [
+     0,
+     0
+    ],
+    "realPics": 16,
+    "wholePics": 16,
+    "falsePics": 0,
+    "px": {
+     "text": [
+      36807,
+      37168
+     ],
+     "picture": [
+      137947,
+      138499
+     ],
+     "structure": [
+      84419,
+      96463
+     ],
+     "page": [
+      4019063,
+      4019070
+     ]
+    },
+    "ms": 5190.699999999255,
+    "slides": 6
+   },
+   "misses": [
+    "slide 1: serif wrong on \"Each panel is its own picture.\"",
+    "slide 4: bold wrong on \"Build\"",
+    "slide 5: bold wrong on \"Answer\""
    ]
   }
  },
  "categories": {
   "textFound": 100,
-  "textAccuracy": 100,
-  "textStyle": 94.56938483547926,
-  "labels": 89.36170212765957,
-  "pictures": 77.77777777777777,
-  "textRemoved": 99.96634086161616,
-  "picturesLifted": 99.688703395856,
-  "structureKept": 95.5922284315241,
-  "noDamage": 100
+  "textAccuracy": 99.924726189094,
+  "textStyle": 94.53128991060025,
+  "labels": 89.79591836734694,
+  "pictures": 100,
+  "textRemoved": 99.91856342592973,
+  "picturesLifted": 99.67960516757117,
+  "structureKept": 98.2589225132311,
+  "noDamage": 99.99997964864076
  },
- "score": 94.58450263188017,
- "secondsPerSlide": 1.2007739130435309,
+ "score": 98.20713784926407,
+ "secondsPerSlide": 1.1319615384614488,
  "counts": {
-  "lines": 233,
-  "found": 233,
-  "chars": 233,
+  "lines": 261,
+  "found": 261,
+  "chars": 260.8035353535353,
   "bold": [
-   227,
-   233
+   253,
+   261
   ],
   "italic": [
-   233,
-   233
+   261,
+   261
   ],
   "serif": [
-   220,
-   233
+   247,
+   261
   ],
   "colour": [
-   232,
-   233
+   260,
+   261
   ],
   "styled": [
-   17,
-   17
+   19,
+   19
   ],
   "falseStyled": 2,
   "labels": [
-   42,
-   47
+   44,
+   49
   ],
   "badges": [
    3,
    3
   ],
-  "realPics": 31,
-  "wholePics": 28,
-  "falsePics": 5,
+  "realPics": 47,
+  "wholePics": 47,
+  "falsePics": 0,
   "px": {
    "text": [
-    692001,
-    692234
+    728808,
+    729402
    ],
    "picture": [
-    1186158,
-    1189862
+    1324105,
+    1328361
    ],
    "structure": [
-    612208,
-    640437
+    724070,
+    736900
    ],
    "page": [
-    30376667,
-    30376667
+    34395730,
+    34395737
    ]
   },
-  "ms": 55235.60000000242,
-  "slides": 46
+  "ms": 58861.99999999534,
+  "slides": 52
  }
 }

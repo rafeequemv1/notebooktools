@@ -1,0 +1,298 @@
+[
+ [
+  {
+   "text": "Home and Away",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "At home",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "On the road",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": true,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Each panel is its own picture.",
+   "bold": false,
+   "color": "#5f6368",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Four Steps",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "1. Set the time",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "2. Make a wish",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "3. Go home",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "4. Rest",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Who Said What",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Clock: I keep the same",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "Clock:",
+     "at": 0,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "time for everyone.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Star: my light took",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false,
+   "styled": [
+    {
+     "text": "Star:",
+     "at": 0,
+     "b": 1
+    }
+   ]
+  },
+  {
+   "text": "years to reach you.",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "Plan, Build, Ship",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Plan",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Write the brief",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Build",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Make the first version",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Ship",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Release and listen",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "From Idea to Answer",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Question",
+   "bold": false,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Experiment",
+   "bold": false,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Answer",
+   "bold": false,
+   "color": "#1a237e",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ],
+ [
+  {
+   "text": "What Each Clock Shows",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Clock",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "What it shows",
+   "bold": true,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Time on the ground",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  },
+  {
+   "text": "Time on a fast plane",
+   "bold": false,
+   "color": "#1f1f1f",
+   "serif": false,
+   "fig": false,
+   "label": false,
+   "italic": false
+  }
+ ]
+]
