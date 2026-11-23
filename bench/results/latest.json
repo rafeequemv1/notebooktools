@@ -1,6 +1,6 @@
 {
- "date": "2026-11-23T14:24:55.388Z",
- "commit": "186327a",
+ "date": "2026-11-23T14:27:20.439Z",
+ "commit": "37e8400",
  "sets": {
   "01-business": {
    "score": 96.86804661474774,
@@ -69,7 +69,7 @@
       5448734
      ]
     },
-    "ms": 11519.700000001118,
+    "ms": 12716.699999997392,
     "slides": 8
    },
    "misses": []
@@ -141,7 +141,7 @@
       5413398
      ]
     },
-    "ms": 7247.29999999702,
+    "ms": 7439.900000002235,
     "slides": 8
    },
    "misses": [
@@ -221,7 +221,7 @@
       5433986
      ]
     },
-    "ms": 8065.69999999553,
+    "ms": 8122.300000000745,
     "slides": 8
    },
    "misses": [
@@ -231,11 +231,11 @@
    ]
   },
   "04-figures": {
-   "score": 97.4349145039316,
+   "score": 97.26824783726492,
    "categories": {
     "textFound": 100,
     "textAccuracy": 100,
-    "textStyle": 91.33333333333334,
+    "textStyle": 89.66666666666667,
     "labels": 90,
     "pictures": 100,
     "textRemoved": 100,
@@ -256,7 +256,7 @@
      15
     ],
     "serif": [
-     13,
+     12,
      15
     ],
     "colour": [
@@ -297,7 +297,7 @@
       3765185
      ]
     },
-    "ms": 9511.89999999851,
+    "ms": 8993.199999997392,
     "slides": 6
    },
    "misses": [
@@ -306,6 +306,7 @@
     "slide 5: bold wrong on \"Spectrum of a Single Layer\"",
     "slide 5: label on a picture not editable: \"G peak\"",
     "slide 6: serif wrong on \"Optical image of a flake on silicon.\"",
+    "slide 6: serif wrong on \"Thin flakes show up as faint\"",
     "slide 6: serif wrong on \"purple patches on the wafer.\"",
     "slide 6: label on a picture not editable: \"Monolayer\""
    ]
@@ -377,7 +378,7 @@
       2664488
      ]
     },
-    "ms": 3796.400000002235,
+    "ms": 3572.0999999996275,
     "slides": 4
    },
    "misses": [
@@ -451,7 +452,7 @@
       3832094
      ]
     },
-    "ms": 11963.60000000149,
+    "ms": 12009,
     "slides": 6
    },
    "misses": [
@@ -460,11 +461,11 @@
    ]
   },
   "07-structure": {
-   "score": 95.57142857142857,
+   "score": 95.74285714285713,
    "categories": {
     "textFound": 100,
     "textAccuracy": 100,
-    "textStyle": 95.71428571428571,
+    "textStyle": 97.42857142857142,
     "labels": 60,
     "pictures": 100,
     "textRemoved": 100,
@@ -485,7 +486,7 @@
      35
     ],
     "serif": [
-     31,
+     34,
      35
     ],
     "colour": [
@@ -526,14 +527,11 @@
       3818782
      ]
     },
-    "ms": 12899.600000005215,
+    "ms": 12623.799999998882,
     "slides": 6
    },
    "misses": [
     "slide 1: styling on \"Ways\" that the original doesn't have",
-    "slide 4: serif wrong on \"Sync two clocks\"",
-    "slide 4: serif wrong on \"in the lab.\"",
-    "slide 4: serif wrong on \"after landing.\"",
     "slide 4: serif wrong on \"Each step took about a week.\"",
     "slide 5: label on a picture not editable: \"faster at the top\"",
     "slide 6: label on a picture not editable: \"Atomic clock\""
@@ -606,7 +604,7 @@
       4019070
      ]
     },
-    "ms": 6085.9000000003725,
+    "ms": 5695.10000000149,
     "slides": 6
    },
    "misses": [
@@ -619,7 +617,7 @@
  "categories": {
   "textFound": 100,
   "textAccuracy": 99.924726189094,
-  "textStyle": 94.53128991060025,
+  "textStyle": 94.65900383141764,
   "labels": 89.79591836734694,
   "pictures": 100,
   "textRemoved": 99.91856342592973,
@@ -627,8 +625,8 @@
   "structureKept": 98.2589225132311,
   "noDamage": 99.99997964864076
  },
- "score": 98.20713784926407,
- "secondsPerSlide": 1.3671173076923362,
+ "score": 98.21990924134579,
+ "secondsPerSlide": 1.3686942307691878,
  "counts": {
   "lines": 261,
   "found": 261,
@@ -642,7 +640,7 @@
    261
   ],
   "serif": [
-   247,
+   249,
    261
   ],
   "colour": [
@@ -683,7 +681,7 @@
     34395737
    ]
   },
-  "ms": 71090.10000000149,
+  "ms": 71172.09999999776,
   "slides": 52
  }
 }
