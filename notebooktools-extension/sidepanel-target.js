@@ -129,17 +129,20 @@
     const list = items.length
       ? items.map((n) => `
           <button type="button" class="sp-target-item${n.id === current.id && !current.newName ? " is-active" : ""}" data-pick="${esc(n.id)}">
+            <svg class="sp-target-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M9 8h6M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             <span class="sp-target-item-name">${esc(n.title)}</span>
             ${n.count != null ? `<span class="sp-target-item-count">${n.count}</span>` : ""}
+            ${n.id === current.id && !current.newName ? '<b class="sp-target-check">✓</b>' : ""}
           </button>`).join("")
-      : `<p class="sp-target-empty">${notebooks.length ? "No notebook matches." : loadingState() === "signin" ? "Sign in to NotebookLM in this browser, then refresh." : "No notebooks yet."}</p>`;
+      : `<p class="sp-target-empty">${notebooks.length ? "No notebook matches." : loadingState() === "loading" ? "Loading your notebooks…" : loadingState() === "signin" ? "Sign in to NotebookLM in this browser, then refresh." : "No notebooks yet."}</p>`;
     return `
       <div class="sp-target-menu" role="dialog" aria-label="Choose a notebook">
         <input type="search" class="sp-target-search" placeholder="Search notebooks" value="${esc(query)}" aria-label="Search notebooks">
+        <p class="sp-target-title">Add to notebook</p>
         <div class="sp-target-list">${list}</div>
         ${creating
           ? `<form class="sp-target-create" data-create-form><input type="text" class="sp-target-create-input" placeholder="New notebook name" maxlength="80" aria-label="New notebook name"><button type="submit" class="sp-target-create-btn">Use</button></form>`
-          : `<button type="button" class="sp-target-item is-new" data-new>＋ New notebook…</button>`}
+          : `<button type="button" class="sp-target-item is-new" data-new><svg class="sp-target-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>New notebook…</span></button>`}
         <div class="sp-target-foot" data-autoopen-slot></div>
         <button type="button" class="sp-target-refresh" data-refresh>Refresh list</button>
       </div>`;

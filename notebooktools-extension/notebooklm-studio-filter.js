@@ -1,10 +1,9 @@
 /* ==========================================================================
-   Type filter and sort for NotebookLM's own Studio list (free). Two small
-   dropdowns in the ribbon's Studio bar. Types come from the notebook's
-   Studio items (plus its mind maps), and the sort groups rows by file type
-   in the order of NotebookLM's Studio buttons. Each row's file type comes
-   from NotebookLM's own list (the title is only used to find the row). Nothing is deleted or moved in NotebookLM: other
-   types are hidden, and sorting only changes the visual order (CSS order).
+   Type filter for NotebookLM's own Studio list (free): one small dropdown in
+   the ribbon's Studio bar. Types come from the notebook's Studio items (plus
+   its mind maps). Each row's file type comes from NotebookLM's own list (the
+   title is only used to find the row). Nothing is deleted or moved in
+   NotebookLM: other types are only hidden.
    ========================================================================== */
 (function () {
   "use strict";
@@ -81,7 +80,7 @@
     try {
       const saved = JSON.parse(sessionStorage.getItem(`ntrStudioView:${notebookId}`) || "{}");
       type = saved.type || "all";
-      sort = SORTS.some(([k]) => k === saved.sort) ? saved.sort : "newest";
+      sort = "newest"; // the Studio list keeps NotebookLM's own order
     } catch (_error) {
       type = "all";
       sort = "newest";
@@ -126,13 +125,9 @@
     if (type !== "all" && !list.some(([t]) => t === type)) type = "all";
     // Short names so they fit the narrow Studio bar (the menus say it in full)
     const typeLabel = type === "all" ? "Type" : type;
-    const sortLabel = { newest: "Sort", oldest: "Oldest", type: "By type" }[sort] || "Sort";
     slot.innerHTML = `
       <button type="button" class="ntr-btn has-caret ntr-sf${type !== "all" ? " is-on" : ""}" data-sf="type" title="Show one type of Studio file"${items.length ? "" : " disabled"}>
         ${type === "all" ? svg("all") : svg(type, 16, tint(type))}<span class="ntr-label">${esc(typeLabel)}</span>${svg("caret", 13)}
-      </button>
-      <button type="button" class="ntr-btn has-caret ntr-sf${sort !== "newest" ? " is-on" : ""}" data-sf="sort" title="Sort the Studio list by date or by file type"${items.length ? "" : " disabled"}>
-        ${svg("sort")}<span class="ntr-label">${esc(sortLabel)}</span>${svg("caret", 13)}
       </button>`;
   }
 

@@ -315,19 +315,6 @@
     });
   }
 
-  // One Import button: links (pasted, YouTube, playlists) or open tabs, both
-  // handled in the toolbar dropdown's Bulk tab.
-  function importMenu(anchor) {
-    const items = [
-      ["links", "link", "Paste links or YouTube URLs"],
-      ["tabs", "tabs", "Add my open tabs"]
-    ].map(([value, ic, label]) => `<button type="button" class="ntr-menu-item" data-value="${value}">${icon(ic, 15)}<span>${esc(label)}</span></button>`).join("");
-    openMenu(anchor, `<p class="ntr-menu-title">Import to this notebook</p>${items}`, (value) => {
-      closeMenu();
-      send({ type: "notebooktools-ribbon-open-panel", query: value === "tabs" ? "panel=bulk&tabs=1" : "panel=bulk" });
-    });
-  }
-
   // Create: things NotebookTools makes from this notebook. Each item runs the
   // same action (and Pro check) its old button did.
   function createMenu(anchor, ribbon) {
@@ -410,7 +397,6 @@
         return renderOrganize(ribbon);
       case "copy": return copyChat();
       case "export": return exportMenu(button);
-      case "import": return importMenu(button);
       case "add-links": return send({ type: "notebooktools-ribbon-open-panel", query: "panel=bulk" });
       case "from-tabs": return send({ type: "notebooktools-ribbon-open-panel", query: "panel=bulk&tabs=1" });
       case "manage-sources":
@@ -455,7 +441,6 @@
       <div class="ntr-seg" data-seg="sources" role="group" aria-label="Sources tools">
         <div class="ntr-brand" title="NotebookTools"><img src="${chrome.runtime.getURL("icons/icon48.png")}" alt="" width="18" height="18"></div>
         <div class="ntr-group" data-group="Sources"><div class="ntr-items">
-          <button type="button" class="ntr-btn has-caret" data-ntr="import" title="Import links, YouTube videos or your open tabs">${icon("plus")}<span class="ntr-label">Import</span>${icon("caret", 13)}</button>
           ${btn("manage-sources", "list", "Manage", "Search, filter, de-duplicate, refresh and delete sources")}
         </div></div>
         <div class="ntr-group" data-group="Filter"><div class="ntr-items" data-ntr-typefilter></div></div>

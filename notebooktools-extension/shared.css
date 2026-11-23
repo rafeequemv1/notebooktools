@@ -1769,3 +1769,88 @@ html.is-popup .sidepanel-tabs {
 .sp-gacct-icon { align-items: center; color: var(--nt-muted); display: inline-flex; height: 28px; justify-content: center; width: 28px; }
 .sp-gacct-sep { background: var(--nt-line); height: 1px; margin: 6px 4px; }
 .sp-gacct-empty { color: var(--nt-muted); font-size: 12.5px; line-height: 1.45; margin: 4px 10px 8px; }
+
+/* ==========================================================================
+   Toolbar popup and side panel, in NotebookLM's own look: one screen, the
+   notebook menu styled like NotebookLM's menus, dark colours that match the
+   menus on the NotebookLM page.
+   ========================================================================== */
+:root[data-theme="dark"]:not([data-tone="midnight"]) .sidepanel-body {
+  --nt-bg: #1b1c1d;
+  --nt-surface: #232427;
+  --nt-ink: #e8eaed;
+  --nt-muted: #bdc1c6;
+  --nt-subtle: #9aa0a6;
+  --nt-line: rgba(255, 255, 255, 0.1);
+  --nt-line-soft: rgba(255, 255, 255, 0.06);
+  --nt-line-strong: rgba(255, 255, 255, 0.18);
+  --nt-accent: #8ab4f8;
+  --nt-accent-soft: rgba(138, 180, 248, 0.14);
+  background: var(--nt-bg);
+}
+.sidepanel-body { --sp-hover: rgba(11, 87, 208, 0.07); font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; }
+:root[data-theme="dark"] .sidepanel-body { --sp-hover: rgba(138, 180, 248, 0.12); }
+
+/* Bulk import / Snapshots view: Back button and title */
+.sp-viewbar { align-items: center; display: flex; gap: 6px; margin: -2px 0 10px -6px; }
+.sp-viewbar[hidden] { display: none; }
+.sp-back {
+  align-items: center; background: transparent; border: 0; border-radius: 999px; color: var(--nt-muted); cursor: pointer;
+  display: inline-flex; height: 32px; justify-content: center; padding: 0; width: 32px;
+}
+.sp-back:hover { background: var(--sp-hover); color: var(--nt-ink); }
+.sp-viewbar-title { color: var(--nt-ink); font-family: "Google Sans", Roboto, Arial, sans-serif; font-size: 15px; font-weight: 500; }
+
+/* Bulk import and Snapshots: two buttons under Add */
+.sp-tools { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+.sp-tool {
+  align-items: center; background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 12px; color: var(--nt-ink);
+  cursor: pointer; display: flex; font: 500 13px/1.2 inherit; font-family: inherit; gap: 8px; height: 40px; justify-content: center; padding: 0 10px;
+}
+.sp-tool svg { color: var(--nt-muted); flex: none; }
+.sp-tool:hover { background: var(--sp-hover); border-color: var(--nt-line-strong); }
+.sp-tool .sp-pro-tag { margin-left: 2px; }
+
+/* Notebook menu, like NotebookLM's menus */
+.sidepanel-body .sp-target-btn { background: var(--nt-surface); border-color: var(--nt-line); border-radius: 12px; height: 38px; }
+.sidepanel-body .sp-target-menu {
+  background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  gap: 2px; padding: 6px; top: 44px;
+}
+.sidepanel-body .sp-target-search {
+  background: var(--nt-line-soft); border: 1px solid transparent; border-radius: 8px; color: var(--nt-ink); height: 32px; margin-bottom: 2px;
+}
+.sidepanel-body .sp-target-search:focus { border-color: var(--nt-accent); outline: none; }
+.sp-target-title { color: var(--nt-subtle); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; margin: 6px 8px 4px; text-transform: uppercase; }
+.sidepanel-body .sp-target-list { max-height: 240px; padding-top: 0; }
+.sidepanel-body .sp-target-item { border-radius: 8px; gap: 10px; min-height: 32px; padding: 4px 10px; }
+.sidepanel-body .sp-target-item:hover { background: var(--sp-hover); }
+.sidepanel-body .sp-target-item.is-active { background: transparent; color: var(--nt-ink); font-weight: 500; }
+.sp-target-ic { color: var(--nt-subtle); flex: none; }
+.sp-target-check { color: var(--nt-accent); flex: none; font-size: 13px; }
+.sidepanel-body .sp-target-item-count { background: transparent; color: var(--nt-subtle); padding: 0; }
+.sidepanel-body .sp-target-item.is-new { border-top: 1px solid var(--nt-line-soft); border-radius: 8px; color: var(--nt-accent); margin-top: 4px; }
+.sidepanel-body .sp-target-item.is-new .sp-target-ic { color: var(--nt-accent); }
+.sidepanel-body .sp-target-foot { border-top: 1px solid var(--nt-line-soft); margin-top: 2px; padding: 8px 8px 2px; }
+.sidepanel-body .sp-target-refresh { padding: 4px 8px; }
+.sidepanel-body .sp-target-create-input { background: var(--nt-line-soft); border-color: transparent; color: var(--nt-ink); }
+
+/* Web / YouTube: NotebookLM chips */
+.sidepanel-body .sidepanel-panel .import-modes { background: transparent; border: 0; gap: 6px; padding: 0; }
+.sidepanel-body .sidepanel-panel .import-mode {
+  background: transparent; border: 1px solid var(--nt-line); border-radius: 8px; color: var(--nt-muted); flex: none; font-size: 12.5px; font-weight: 500; height: 28px; padding: 0 12px;
+}
+.sidepanel-body .sidepanel-panel .import-mode.is-active { background: var(--nt-accent-soft); border-color: transparent; color: var(--nt-accent); }
+.sidepanel-body .sidepanel-app .sp-card { background: var(--nt-surface); border: 1px solid var(--nt-line); }
+.sidepanel-body .sp-actions { margin-top: -2px; }
+/* (the old tab look doesn't apply to these) */
+.sidepanel-body .sp-tool.sidepanel-tab,
+.sidepanel-body .sp-back.sidepanel-tab { border-bottom: 1px solid var(--nt-line); flex: none; margin-bottom: 0; min-height: 0; transition: background 0.15s, border-color 0.15s; }
+.sidepanel-body .sp-tool.sidepanel-tab { border: 1px solid var(--nt-line); border-radius: 12px; color: var(--nt-ink); font-size: 13px; font-weight: 500; padding: 0 10px; }
+.sidepanel-body .sp-tool.sidepanel-tab:hover { background: var(--sp-hover); border-color: var(--nt-line-strong); }
+.sidepanel-body .sp-back.sidepanel-tab { border: 0; border-radius: 999px; color: var(--nt-muted); padding: 0; }
+.sidepanel-body .sp-back.sidepanel-tab:hover { background: var(--sp-hover); color: var(--nt-ink); }
+.sidepanel-body .sp-viewbar-title { flex: 1; }
+/* Plan chip: readable on light and dark (it was white on white in light) */
+.sidepanel-body .sp-account-chip[data-plan="pro"] { background: var(--nt-accent-soft); border-color: transparent; color: var(--nt-accent); }
+.sidepanel-body .sp-account-chip[data-plan="free"] { background: transparent; color: var(--nt-muted); }

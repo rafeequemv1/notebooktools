@@ -682,7 +682,7 @@ async function startSnapshotCapture(tab) {
     throw new Error("No active tab to capture.");
   }
 
-  // Snapshots are saved to the Snapshots tab of the toolbar dropdown. The
+  // Snapshots are saved to the Snapshots view of the toolbar dropdown. The
   // dropdown isn't opened here: it would close as soon as the user clicks
   // the page to draw the capture area.
   await NotebookToolsSnapshotCapture.startOverlay(tab.id);

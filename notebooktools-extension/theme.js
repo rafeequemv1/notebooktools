@@ -4,9 +4,15 @@ const THEMES = ["light", "dark", "midnight"];
 const THEME_LABELS = { light: "White", dark: "Dark", midnight: "Midnight blue" };
 
 const NotebookToolsTheme = {
+  // Until a theme is chosen in Settings, follow the system's light/dark setting
+  // (as NotebookLM does)
+  systemTheme() {
+    return typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  },
+
   async get() {
     const stored = await chrome.storage.local.get(THEME_KEY);
-    return THEMES.includes(stored[THEME_KEY]) ? stored[THEME_KEY] : "light";
+    return THEMES.includes(stored[THEME_KEY]) ? stored[THEME_KEY] : this.systemTheme();
   },
 
   async set(theme) {
@@ -69,9 +75,14 @@ if (typeof window !== "undefined") {
 
   if (chrome?.storage?.local) {
     chrome.storage.local.get(THEME_KEY, (stored) => {
-      if (stored[THEME_KEY] === "dark" || stored[THEME_KEY] === "midnight") {
+      const chosen = THEMES.includes(stored[THEME_KEY]) ? stored[THEME_KEY] : null;
+      const value = chosen || NotebookToolsTheme.systemTheme();
+      if (value !== "light") {
         document.documentElement.dataset.theme = "dark";
-        document.documentElement.dataset.tone = stored[THEME_KEY];
+        document.documentElement.dataset.tone = value;
+      }
+      if (!chosen && typeof matchMedia === "function") {
+        matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => NotebookToolsTheme.apply(NotebookToolsTheme.systemTheme()));
       }
     });
   }

@@ -483,10 +483,16 @@ async function getActiveTab() {
 
 function setActivePanel(panelName) {
   panelTabs.forEach((tab) => {
-    const isActive = tab.dataset.panel === panelName;
-    tab.classList.toggle("is-active", isActive);
-    tab.setAttribute("aria-selected", isActive ? "true" : "false");
+    tab.classList.toggle("is-active", tab.dataset.panel === panelName);
   });
+  // Bulk import and Snapshots are their own view, with a Back button
+  const viewbar = document.querySelector("#spViewbar");
+  if (viewbar) {
+    viewbar.hidden = panelName === "import";
+    const title = document.querySelector("#spViewbarTitle");
+    if (title) title.textContent = panelName === "snapshots" ? "Snapshots" : "Bulk import";
+  }
+  document.documentElement.dataset.view = panelName;
 
   Object.entries(panels).forEach(([name, panel]) => {
     if (!panel) {
