@@ -1124,6 +1124,13 @@
       path: "/features/carousel",
       demo: null
     },
+    "notebook-tools": {
+      title: "NotebookLM Tools Inside Every Notebook | NotebookTools",
+      description: "One ribbon inside every NotebookLM notebook: manage and filter sources and Studio files, copy the chat, prompts, folders and tags.",
+      name: "In-notebook tools",
+      path: "/features/notebook-tools",
+      demo: "ribbon"
+    },
     "snapshots": {
       title: "Snapshots & PDF capture — NotebookTools",
       description: "Capture webpage snapshots with NotebookTools, annotate them, and assemble PDF or guide exports for NotebookLM workflows.",

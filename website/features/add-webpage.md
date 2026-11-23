@@ -50,7 +50,7 @@ The NotebookTools popup adds the page in your current tab to a NotebookLM notebo
 
 1. Open the article or page you want to keep.
 2. Click the NotebookTools icon in the Chrome toolbar. The popup shows the current tab, ready to add.
-3. Pick a notebook, or type a name to create a new one.
+3. Pick a notebook, or type a name to create a new one. Signed in to NotebookLM with more than one Google account? Choose which one under **NotebookLM account**.
 4. Click **Add page to notebook**. The page is added as a source. With Pro, **Also create in Studio** makes a mind map, report or other Studio output in the same step.
 
 ### Why it helps

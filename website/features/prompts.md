@@ -30,33 +30,34 @@ How it works
 ## From install to done
 
 1. 1
-  **Open a notebook in NotebookLM**
-  NotebookTools works inside the chat box.
+  **Save your prompts**
+  In the dashboard's **Prompts** tab, or from a notebook: **Prompts** → **Save chat box text as a prompt**.
 2. 2
-  **Type /**
-  A menu shows ready-made prompts and slide deck templates.
+  **Tag them**
+  Add tags like Study or Slides, then filter your list by tag.
 3. 3
-  **Filter and pick**
-  Keep typing to filter; use ↑ ↓ and Enter.
+  **Type /**
+  In any NotebookLM chat, your prompts come first, then the slide deck templates.
 4. 4
-  **Send**
-  The full prompt is inserted, ready to edit or send.
+  **Pick and send**
+  Keep typing to filter (tags work too); Enter inserts the whole prompt.
 
 ## A NotebookLM prompt library inside the chat box
 
-NotebookTools adds a prompt library to NotebookLM. Type **/** in the chat box and a menu shows ready-made prompts and slide deck templates. Pick one and the full prompt is inserted, ready to edit or send. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog, so you can pick a look before the deck is made.
+NotebookTools adds a prompt library to NotebookLM. Save the prompts you use often, organise them with tags, and insert any of them by typing **/** in a NotebookLM chat: your prompts come first, then slide deck templates. Your prompts live in the dashboard's **Prompts** tab, a simple table you can search and filter by tag, and you can save the text in a notebook's chat box as a new prompt from the ribbon. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog.
 
 ### How to use it
 
 1. Open a notebook in NotebookLM.
-2. Type **/** in the chat box to open the prompt menu.
-3. Keep typing to filter, use ↑ ↓ to move and Enter to choose.
-4. Edit the inserted prompt if you need to, then send it.
-5. When you create a slide deck in Studio, pick one of the style cards NotebookTools adds to the dialog.
+2. Add a prompt in the dashboard's **Prompts** tab (**New prompt**: a title, the prompt and tags), or in a notebook click **Prompts** in the ribbon, then **Save chat box text as a prompt**.
+3. Type **/** in the chat box to open the prompt menu: your prompts first, then slide deck templates.
+4. Keep typing to filter by title or tag (**/study**), use ↑ ↓ to move and Enter to choose.
+5. Edit the inserted prompt if you need to, then send it.
+6. When you create a slide deck in Studio, pick one of the style cards NotebookTools adds to the dialog.
 
 ### Why it helps
 
-Good NotebookLM output depends on a precise prompt: the audience, the format, the length and what to cite. Retyping a long study-guide or slide prompt in every notebook is slow, and the wording that worked gets lost. Ready-made prompts keep good wording one keystroke away, in every notebook, and the slide templates and style cards give you deck styles to start from instead of a blank box.
+Good NotebookLM output depends on a precise prompt: the audience, the format, the length and what to cite. Retyping a long study-guide or slide prompt in every notebook is slow, and the wording that worked gets lost. Saved prompts keep the wording that worked one keystroke away, in every notebook, and tags keep a growing collection easy to find. The slide templates and style cards give you deck styles to start from instead of a blank box.
 
 **Pro.** The prompt library and / commands are part of NotebookTools Pro ($49 one-time, lifetime). [See plans](https://www.notebooktools.com/#pricing)
 
@@ -70,11 +71,11 @@ Good NotebookLM output depends on a precise prompt: the audience, the format, th
 
 ### How do I use slash commands in NotebookLM?
 
-Install NotebookTools, open a notebook and type / in the chat box. A menu lists ready-made prompts and slide templates; pick one with the arrow keys and Enter to insert it.
+Install NotebookTools, open a notebook and type / in the chat box. A menu lists your saved prompts and the slide templates; pick one with the arrow keys and Enter to insert it.
 
-### Does it help with NotebookLM slide decks?
+### Can I save my own NotebookLM prompts?
 
-Yes. The / menu has slide deck templates, and the slide deck dialog in Studio gets style cards with thumbnails. To change a deck after it is made, use the [slide editor](https://www.notebooktools.com/features/slide-editor).
+Yes. Add them in the dashboard's Prompts tab with a title and tags, or save the text in a notebook's chat box from the ribbon. They appear first in the / menu in every notebook. For slide decks there are templates in the / menu and style cards in the slide deck dialog.
 
 ### Is the prompt library free?
 

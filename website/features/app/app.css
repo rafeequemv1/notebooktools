@@ -6881,6 +6881,85 @@ textarea {
 /* toolbar buttons keep their label on one line */
 .notebooks-app .button, .notebooks-app .nbx-primary, .notebooks-app .src-tool-btn, .notebooks-app .detail-actions .button { white-space: nowrap; }
 
+/* ==========================================================================
+   Prompts tab: your prompts in a calm table, tags to organise them
+   ========================================================================== */
+.prompts-view { padding: 4px 0 56px; }
+.pv-wrap { margin: 0 auto; max-width: 960px; }
+.pv-head { align-items: flex-end; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; margin: 8px 0 18px; }
+.pv-title { color: var(--nt-ink); font-family: "Google Sans", Roboto, Arial, sans-serif; font-size: 24px; font-weight: 400; margin: 0 0 4px; }
+.pv-sub { color: var(--nt-muted); font-size: 14px; margin: 0; }
+.pv-sub b { color: var(--nt-ink); font-weight: 600; }
+.pv-seg { background: var(--nt-line-soft); border-radius: 999px; display: inline-flex; padding: 3px; }
+.pv-seg-btn { background: transparent; border: 0; border-radius: 999px; color: var(--nt-muted); cursor: pointer; font: 500 13px/1 inherit; font-family: inherit; padding: 8px 14px; }
+.pv-seg-btn.is-on { background: var(--nt-surface); box-shadow: 0 1px 3px rgba(60, 64, 67, 0.16); color: var(--nt-ink); }
+.pv-toolbar { align-items: center; display: flex; gap: 10px; margin-bottom: 12px; }
+.pv-search { align-items: center; background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-subtle); display: flex; flex: 1; gap: 8px; height: 40px; padding: 0 14px; }
+.pv-search:focus-within { border-color: var(--nt-accent); }
+.pv-search input { background: transparent; border: 0; color: var(--nt-ink); flex: 1; font: 400 14px inherit; font-family: inherit; height: 100%; outline: none; padding: 0; }
+.pv-new { align-items: center; background: var(--nt-ink); border: 0; border-radius: 999px; color: var(--nt-surface); cursor: pointer; display: inline-flex; flex: none; font: 500 14px/1 inherit; font-family: inherit; gap: 6px; height: 40px; padding: 0 16px 0 12px; }
+.pv-new:hover { opacity: 0.88; }
+.pv-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.pv-chip { background: transparent; border: 1px solid var(--nt-line); border-radius: 999px; color: var(--nt-muted); cursor: pointer; font: 500 12.5px/1 inherit; font-family: inherit; padding: 7px 12px; }
+.pv-chip em { color: var(--nt-subtle); font-style: normal; margin-left: 4px; }
+.pv-chip:hover { border-color: var(--nt-line-strong); }
+.pv-chip.is-on { background: var(--nt-accent-soft); border-color: transparent; color: var(--nt-accent); }
+.pv-chip.is-on em { color: var(--nt-accent); }
+.pv-table { background: var(--nt-surface); border: 1px solid var(--nt-line); border-radius: 20px; overflow: hidden; }
+.pv-row { align-items: center; border-top: 1px solid var(--nt-line-soft); display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) minmax(120px, 0.45fr) 96px 112px; min-height: 64px; padding: 8px 12px 8px 20px; }
+.pv-row:first-child { border-top: 0; }
+.pv-row:not(.pv-row-head):hover { background: color-mix(in srgb, var(--nt-accent) 4%, transparent); }
+.pv-row-head { color: var(--nt-subtle); font-size: 12px; font-weight: 500; min-height: 40px; }
+.pv-cell-main { background: none; border: 0; color: inherit; cursor: pointer; display: flex; flex-direction: column; font: inherit; gap: 3px; min-width: 0; padding: 0; text-align: left; }
+.pv-name { color: var(--nt-ink); font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pv-preview { color: var(--nt-subtle); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pv-cell-tags { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+.pv-tag { align-items: center; background: var(--nt-line-soft); border: 0; border-radius: 999px; color: var(--nt-muted); cursor: pointer; display: inline-flex; font: 500 12px/1 inherit; font-family: inherit; gap: 4px; padding: 5px 10px; }
+.pv-tag:hover { color: var(--nt-accent); }
+.pv-none { color: var(--nt-subtle); }
+.pv-cell-date { color: var(--nt-subtle); font-size: 12.5px; }
+.pv-cell-actions { display: flex; gap: 2px; justify-content: flex-end; opacity: 0.55; transition: opacity 0.15s; }
+.pv-row:hover .pv-cell-actions, .pv-cell-actions:focus-within { opacity: 1; }
+.pv-icon { align-items: center; background: transparent; border: 0; border-radius: 999px; color: var(--nt-muted); cursor: pointer; display: inline-flex; height: 34px; justify-content: center; width: 34px; }
+.pv-icon:hover { background: var(--nt-line-soft); color: var(--nt-ink); }
+.pv-icon.is-danger:hover { color: var(--nt-danger); }
+.pv-nomatch { color: var(--nt-muted); font-size: 13px; margin: 0; padding: 22px 20px; }
+.pv-empty { align-items: center; display: flex; flex-direction: column; gap: 8px; padding: 48px 24px; text-align: center; }
+.pv-empty-title { color: var(--nt-ink); font-family: "Google Sans", Roboto, Arial, sans-serif; font-size: 18px; margin: 0; }
+.pv-empty-text { color: var(--nt-muted); font-size: 13.5px; line-height: 1.55; margin: 0 0 8px; max-width: 460px; }
+.pv-templates .pl-my-section, .pv-templates .pl-divider { display: none !important; }
+.pv-templates .pl-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+@media (max-width: 760px) {
+  .pv-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .pv-cell-tags, .pv-cell-date, .pv-row-head span:nth-child(2), .pv-row-head span:nth-child(3) { display: none; }
+}
+/* editor */
+.pv-editor { inset: 0; position: fixed; z-index: 60; }
+.pv-editor-backdrop { background: rgba(32, 33, 36, 0.4); inset: 0; position: absolute; }
+.pv-editor-card { background: var(--nt-surface); border-radius: 28px; box-shadow: 0 24px 56px rgba(0, 0, 0, 0.22); display: flex; flex-direction: column; gap: 14px; left: 50%; max-height: calc(100vh - 48px); max-width: 560px; overflow: auto; padding: 24px; position: absolute; top: 50%; transform: translate(-50%, -50%); width: calc(100% - 32px); }
+.pv-editor-head { align-items: center; display: flex; justify-content: space-between; }
+.pv-editor-head h3 { color: var(--nt-ink); font-family: "Google Sans", Roboto, Arial, sans-serif; font-size: 22px; font-weight: 400; margin: 0; }
+.pv-field { display: flex; flex-direction: column; gap: 6px; letter-spacing: 0; margin: 0; text-transform: none; }
+.pv-field > span { color: var(--nt-muted); font-size: 12.5px; font-weight: 500; }
+.pv-field input[type="text"], .pv-field textarea { background: var(--nt-line-soft); border: 1px solid transparent; border-radius: 12px; box-sizing: border-box; color: var(--nt-ink); font: 400 14px/1.45 inherit; font-family: inherit; padding: 10px 12px; width: 100%; }
+.pv-field textarea { min-height: 132px; resize: vertical; }
+.pv-field input:focus, .pv-field textarea:focus { background: var(--nt-surface); border-color: var(--nt-accent); outline: none; }
+.pv-tag-input { align-items: center; background: var(--nt-line-soft); border: 1px solid transparent; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 6px; min-height: 42px; padding: 6px 8px; }
+.pv-tag-input:focus-within { background: var(--nt-surface); border-color: var(--nt-accent); }
+.pv-tag-input .pv-tag { background: var(--nt-accent-soft); color: var(--nt-accent); cursor: default; }
+.pv-tag-input .pv-tag button { background: none; border: 0; color: inherit; cursor: pointer; display: inline-flex; padding: 0; }
+.pv-tag-input input { background: transparent !important; border: 0 !important; flex: 1; min-width: 140px; padding: 4px !important; }
+.pv-suggest { display: flex; flex-wrap: wrap; gap: 6px; }
+.pv-suggest-tag { background: transparent; border: 1px dashed var(--nt-line-strong); border-radius: 999px; color: var(--nt-muted); cursor: pointer; font: 500 12px/1 inherit; font-family: inherit; padding: 5px 10px; }
+.pv-suggest-tag:hover { border-color: var(--nt-accent); color: var(--nt-accent); }
+.pv-editor-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.pv-ghost { background: transparent; border: 0; border-radius: 999px; color: var(--nt-accent); cursor: pointer; font: 500 14px/1 inherit; font-family: inherit; height: 40px; padding: 0 16px; }
+.pv-ghost:hover { background: var(--nt-accent-soft); }
+.pv-save { background: var(--nt-ink); border: 0; border-radius: 999px; color: var(--nt-surface); cursor: pointer; font: 500 14px/1 inherit; font-family: inherit; height: 40px; padding: 0 20px; }
+.pv-save:hover { opacity: 0.88; }
+.pv-toast { background: #1f1f1f; border-radius: 999px; bottom: 24px; color: #fff; font-size: 13px; left: 50%; opacity: 0; padding: 10px 18px; pointer-events: none; position: fixed; transform: translate(-50%, 8px); transition: opacity 0.2s, transform 0.2s; z-index: 70; }
+.pv-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
 /* prompt-library.css */
 .pl-section-label {
   color: var(--nt-ink);
@@ -7644,3 +7723,718 @@ textarea {
 .pl-rename-btn,
 .pl-view-btn { border-radius: 999px !important; }
 /* end pill */
+
+/* notebooklm-ribbon.css */
+/* NotebookTools ribbon inside Gemini Notebook. Scoped to .ntr / .ntr-*. */
+.ntr {
+  --ntr-bg: #ffffff;
+  --ntr-line: rgba(31, 31, 31, 0.1);
+  --ntr-ink: #1f1f1f;
+  --ntr-muted: #5f6368;
+  --ntr-hover: rgba(11, 87, 208, 0.07);
+  --ntr-accent: #0b57d0;
+  --ntr-pill: #1f1f1f;
+  --ntr-pill-ink: #ffffff;
+  align-items: center;
+  background: var(--ntr-bg);
+  border: 1px solid var(--ntr-line);
+  border-radius: 16px;
+  box-sizing: border-box;
+  color: var(--ntr-ink);
+  display: flex;
+  flex: 0 0 auto;
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 2px;
+  height: 46px;
+  margin: 0 16px 10px;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 6px 0 8px;
+  position: relative;
+  scrollbar-width: none;
+  z-index: 3;
+}
+
+.ntr::-webkit-scrollbar {
+  display: none;
+}
+
+.ntr.is-dark {
+  --ntr-bg: #1b1c1e;
+  --ntr-line: rgba(255, 255, 255, 0.08);
+  --ntr-ink: #e8eaed;
+  --ntr-muted: #9aa0a6;
+  --ntr-hover: rgba(138, 180, 248, 0.1);
+  --ntr-accent: #8ab4f8;
+  --ntr-pill: #e8eaed;
+  --ntr-pill-ink: #1b1c1e;
+}
+
+.ntr *,
+.ntr-menu * {
+  box-sizing: border-box;
+}
+
+.ntr-brand {
+  align-items: center;
+  border-radius: 9px;
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 30px;
+  justify-content: center;
+  margin-right: 4px;
+  width: 30px;
+}
+
+.ntr-brand img {
+  border-radius: 5px;
+  display: block;
+}
+
+.ntr-group {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+  height: 100%;
+  padding: 0 8px;
+  position: relative;
+}
+
+.ntr-group + .ntr-group::before {
+  background: var(--ntr-line);
+  content: "";
+  height: 20px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+}
+
+.ntr-gname {
+  color: var(--ntr-muted);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 0 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ntr-items {
+  align-items: center;
+  display: flex;
+  gap: 1px;
+}
+
+.ntr-btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: var(--ntr-ink);
+  cursor: pointer;
+  display: inline-flex;
+  font: 500 13px/1 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  gap: 6px;
+  height: 32px;
+  padding: 0 9px;
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.ntr-btn svg {
+  color: var(--ntr-muted);
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+
+.ntr-btn:hover {
+  background: var(--ntr-hover);
+}
+
+.ntr-btn:hover svg {
+  color: var(--ntr-accent);
+}
+
+.ntr-btn:focus-visible {
+  outline: 2px solid var(--ntr-accent);
+  outline-offset: 1px;
+}
+
+.ntr-chip {
+  border: 1px dashed var(--ntr-line);
+  height: 28px;
+  max-width: 190px;
+  padding: 0 8px;
+}
+
+.ntr-chip .ntr-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ntr-icon {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr-icon.is-on svg {
+  color: #f2a600;
+  fill: #f2a600;
+}
+
+.ntr-spacer {
+  flex: 1 0 8px;
+}
+
+.ntr-end {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+.ntr-pill {
+  background: var(--ntr-pill);
+  border-radius: 999px;
+  color: var(--ntr-pill-ink);
+  margin-right: 4px;
+  padding: 0 14px 0 11px;
+}
+
+.ntr-pill svg,
+.ntr-pill:hover svg {
+  color: var(--ntr-pill-ink);
+}
+
+.ntr-pill:hover {
+  background: var(--ntr-accent);
+  color: #fff;
+}
+
+.ntr-pill:hover svg {
+  color: #fff;
+}
+
+.ntr-collapse svg {
+  transition: transform 0.2s;
+}
+
+/* Compact: icons only */
+.ntr.is-collapsed {
+  height: 38px;
+}
+
+.ntr.is-collapsed .ntr-label,
+.ntr.is-collapsed .ntr-gname,
+.ntr.is-collapsed .ntr-chip svg:last-child {
+  display: none;
+}
+
+.ntr.is-collapsed .ntr-btn {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr.is-collapsed .ntr-chip {
+  border: 0;
+}
+
+.ntr.is-collapsed .ntr-collapse svg {
+  transform: rotate(180deg);
+}
+
+/* Auto-fit levels (set by fitRibbon in JS) */
+.ntr-seg[class*="fit-"] .ntr-gname {
+  display: none;
+}
+
+/* Tighter spacing before any name is dropped */
+.ntr-seg.fit-tight .ntr-group {
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.ntr-seg.fit-tight .ntr-btn:not(.ntr-icon) {
+  gap: 4px;
+  padding: 0 6px;
+}
+
+.ntr-seg.fit-3 .ntr-btn.has-caret > svg:last-child {
+  display: none;
+}
+
+.ntr-seg.fit-2 .is-secondary .ntr-label,
+.ntr-seg.fit-3 .is-secondary .ntr-label,
+.ntr-seg.fit-3 .is-tertiary .ntr-label,
+.ntr-seg.fit-4 .ntr-btn:not(.ntr-pill) .ntr-label {
+  display: none;
+}
+
+.ntr-seg.fit-2 .is-secondary,
+.ntr-seg.fit-3 .is-secondary,
+.ntr-seg.fit-3 .is-tertiary,
+.ntr-seg.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr-seg.fit-4 .ntr-chip {
+  padding: 0 6px;
+}
+
+.ntr-seg.fit-4 .ntr-chip svg:last-child {
+  display: none;
+}
+
+/* Menus + toast (appended to body) */
+.ntr-menu {
+  --ntr-bg: #ffffff;
+  --ntr-line: rgba(31, 31, 31, 0.1);
+  --ntr-ink: #1f1f1f;
+  --ntr-muted: #5f6368;
+  --ntr-hover: rgba(11, 87, 208, 0.07);
+  --ntr-accent: #0b57d0;
+  background: var(--ntr-bg);
+  border: 1px solid var(--ntr-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  color: var(--ntr-ink);
+  font-family: "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  max-height: 360px;
+  min-width: 210px;
+  overflow-y: auto;
+  padding: 6px;
+  position: fixed;
+  z-index: 2147483600;
+}
+
+.ntr-menu.is-dark {
+  --ntr-bg: #232427;
+  --ntr-line: rgba(255, 255, 255, 0.1);
+  --ntr-ink: #e8eaed;
+  --ntr-muted: #9aa0a6;
+  --ntr-hover: rgba(138, 180, 248, 0.12);
+  --ntr-accent: #8ab4f8;
+}
+
+.ntr-menu-title {
+  color: var(--ntr-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 4px 8px 6px;
+  text-transform: uppercase;
+}
+
+.ntr-menu-item {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ntr-ink);
+  cursor: pointer;
+  display: flex;
+  font: 400 13px/1.2 inherit;
+  font-family: inherit;
+  gap: 10px;
+  min-height: 32px;
+  padding: 0 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.ntr-menu-item svg {
+  color: var(--ntr-muted);
+  flex-shrink: 0;
+}
+
+.ntr-menu-item span {
+  flex: 1;
+}
+
+.ntr-menu-item:hover {
+  background: var(--ntr-hover);
+}
+
+.ntr-menu-item.is-active {
+  color: var(--ntr-accent);
+  font-weight: 500;
+}
+
+.ntr-menu-item.is-active svg {
+  color: var(--ntr-accent);
+}
+
+.ntr-check {
+  color: var(--ntr-accent);
+  font-size: 12px;
+}
+
+.ntr-menu-empty {
+  color: var(--ntr-muted);
+  font-size: 12.5px;
+  margin: 4px 10px 8px;
+}
+
+.ntr-menu-new {
+  border-top: 1px solid var(--ntr-line);
+  margin-top: 6px;
+  padding: 6px 2px 2px;
+}
+
+.ntr-menu-new input {
+  background: transparent;
+  border: 1px solid var(--ntr-line);
+  border-radius: 8px;
+  color: var(--ntr-ink);
+  font: inherit;
+  font-size: 13px;
+  height: 32px;
+  outline: none;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.ntr-menu-new input:focus {
+  border-color: var(--ntr-accent);
+}
+
+.ntr-toast {
+  background: #1f1f1f;
+  border-radius: 10px;
+  bottom: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font: 500 13px/1.3 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  left: 50%;
+  padding: 10px 16px;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 2147483600;
+}
+
+.ntr-toast.is-dark {
+  background: #e8eaed;
+  color: #1f1f1f;
+}
+
+.ntr-toast.is-error {
+  background: #b3261e;
+  color: #fff;
+}
+
+/* The old chat-box bars are folded into the ribbon. Hidden from the first
+   paint (not only once the ribbon has mounted), so they never flash in;
+   the ribbon still opens their menus, anchored under its own buttons. */
+#notebooktools-nlm-export-bar {
+  display: none !important;
+}
+
+#notebooktools-blog-workflow-bar,
+#notebooktools-snapshot-workflow-bar {
+  height: 1px !important;
+  left: var(--ntr-anchor-left, 50%) !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+  position: fixed !important;
+  top: var(--ntr-anchor-top, 0) !important;
+  width: 1px !important;
+}
+
+/* Three bars: Sources, Chat and Studio tools, each above its own panel */
+.ntr-seg {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  height: 100%;
+  min-width: 0;
+}
+
+.ntr:not(.is-split) .ntr-seg + .ntr-seg {
+  border-left: 1px solid var(--ntr-line);
+  margin-left: 6px;
+  padding-left: 6px;
+}
+
+.ntr:not(.is-split) .ntr-seg[data-seg="chat"] {
+  flex: 1 1 auto;
+}
+
+.ntr.is-split {
+  background: transparent;
+  border: 0;
+  overflow: visible;
+  padding: 0;
+}
+
+.ntr.is-split .ntr-seg {
+  background: var(--ntr-bg);
+  border: 1px solid var(--ntr-line);
+  border-radius: 16px;
+  bottom: 0;
+  overflow: hidden;
+  padding: 0 6px;
+  position: absolute;
+  top: 0;
+}
+
+.ntr.is-split .ntr-group:first-child {
+  padding-left: 2px;
+}
+
+/* Type filter (Sources bar): filters NotebookLM's own Sources list */
+.ntr-typefilter {
+  align-items: center;
+  border: 1px solid var(--ntr-line);
+  border-radius: 9px;
+  color: var(--ntr-muted);
+  display: inline-flex;
+  gap: 4px;
+  height: 30px;
+  padding: 0 4px 0 8px;
+}
+
+.ntr-typefilter.is-on {
+  border-color: var(--ntr-accent);
+  color: var(--ntr-accent);
+}
+
+.ntr-typefilter select {
+  appearance: auto;
+  background: transparent;
+  border: 0;
+  color: var(--ntr-ink);
+  cursor: pointer;
+  font: 500 13px/1 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
+  max-width: 130px;
+  outline: none;
+  padding: 0 2px;
+}
+
+.ntr-typefilter select option {
+  background: var(--ntr-bg);
+  color: var(--ntr-ink);
+}
+
+.ntr-typefilter select:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.ntr-seg.fit-4 .ntr-typefilter select {
+  max-width: 84px;
+}
+
+/* Split layout: every pixel of the Sources bar goes to its tools */
+.ntr.is-split .ntr-brand {
+  display: none;
+}
+
+.ntr.is-split .ntr-typefilter select {
+  max-width: 104px;
+}
+
+/* ==========================================================================
+   Minimal look: each group is one soft rounded bar (like NotebookLM's
+   "+ Add sources" button); controls inside are flat with a hover tint.
+   ========================================================================== */
+.ntr {
+  --ntr-bar: rgba(31, 31, 31, 0.04);
+  --ntr-btn-hover: rgba(31, 31, 31, 0.07);
+  --ntr-btn-on: rgba(11, 87, 208, 0.1);
+}
+
+.ntr.is-dark {
+  --ntr-bar: rgba(255, 255, 255, 0.06);
+  --ntr-btn-hover: rgba(255, 255, 255, 0.09);
+  --ntr-btn-on: rgba(138, 180, 248, 0.16);
+}
+
+/* The bar(s) */
+.ntr:not(.is-split),
+.ntr.is-split .ntr-seg {
+  background: var(--ntr-bar);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+.ntr.is-split {
+  background: transparent;
+}
+
+.ntr.is-split .ntr-seg {
+  gap: 2px;
+  padding: 0 5px;
+}
+
+.ntr:not(.is-split) .ntr-seg + .ntr-seg {
+  border-left: 0;
+}
+
+/* Groups: separated by a faint hairline, no labels */
+.ntr-group {
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.ntr-group + .ntr-group::before {
+  background: var(--ntr-line);
+  height: 16px;
+}
+
+.ntr-items {
+  gap: 2px;
+}
+
+/* Controls: flat, rounded, tint on hover */
+.ntr-btn,
+.ntr-chip,
+.ntr-pill {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  color: var(--ntr-ink);
+  font: 500 13px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+  height: 32px;
+  margin: 0;
+  max-width: 190px;
+  padding: 0 11px;
+}
+
+.ntr-btn svg,
+.ntr-pill svg,
+.ntr-pill:hover svg {
+  color: var(--ntr-ink);
+  opacity: 0.8;
+}
+
+.ntr-btn:hover,
+.ntr-chip:hover,
+.ntr-pill:hover {
+  background: var(--ntr-btn-hover);
+  color: var(--ntr-ink);
+}
+
+.ntr-icon,
+.ntr-collapse {
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.ntr-icon.is-on {
+  background: var(--ntr-btn-on);
+}
+
+/* Type filter: flat like the buttons */
+.ntr-typefilter {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  height: 32px;
+  padding: 0 6px 0 11px;
+}
+
+.ntr-typefilter:hover {
+  background: var(--ntr-btn-hover);
+}
+
+.ntr-typefilter.is-on {
+  background: var(--ntr-btn-on);
+}
+
+.ntr-typefilter select {
+  font: 500 13px/1 "Google Sans", "Google Sans Text", Roboto, Arial, sans-serif;
+}
+
+/* Shrunk to icons: round */
+.ntr-seg.fit-2 .is-secondary,
+.ntr-seg.fit-3 .is-secondary,
+.ntr-seg.fit-3 .is-tertiary,
+.ntr-seg.fit-4 .ntr-btn:not(.ntr-pill):not(.ntr-chip) {
+  padding: 0;
+  width: 32px;
+}
+
+.ntr-menu-hint {
+  color: var(--ntr-muted, #5f6368);
+  font-size: 11.5px;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Studio bar: Export sits at the far right */
+.ntr-seg[data-seg="studio"] .ntr-spacer {
+  flex: 1 1 auto;
+}
+
+/* Studio list: type filter and sort, as ribbon buttons with ribbon menus */
+.ntr-btn.ntr-sf.is-on {
+  background: var(--ntr-hover);
+  color: var(--ntr-accent);
+}
+
+.ntr-btn.ntr-sf.is-on > svg:first-child:not([style]) {
+  color: var(--ntr-accent);
+}
+
+.ntr-btn.ntr-sf:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.ntr-sf-menu .ntr-menu-item {
+  min-height: 34px;
+}
+
+.ntr-sf-count {
+  color: var(--ntr-muted);
+  font-size: 12px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  margin-left: 8px;
+}
+
+.ntr-sf-menu .ntr-check {
+  margin-left: 6px;
+}
+
+/* A second line under a menu item (Prompts menu) */
+.ntr-menu-item small {
+  color: var(--ntr-muted);
+  display: block;
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.ntr-menu-item:has(small) {
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
+.ntr-menu-item.is-quiet span {
+  color: var(--ntr-muted);
+}
+
+/* NT pill buttons */
+/* One shape for every button across NotebookTools: a full pill (icon buttons become circles). */
+.is-secondary,
+.ntr-btn,
+.ntr-chip,
+.ntr-pill { border-radius: 999px !important; }
+/* end pill */
+
+/* One menu shape across NotebookTools */
+.ntr-menu { border-radius: 16px !important; }

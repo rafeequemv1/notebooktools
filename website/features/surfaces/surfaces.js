@@ -248,7 +248,8 @@
         ".app-body{background:var(--nt-bg);color:var(--nt-ink);margin:0;width:auto!important;max-width:none!important;height:auto!important;min-height:100%!important;overflow:visible!important}" +
         ".app.embedded{max-width:none!important;min-width:0!important;width:100%!important}" +
         // the dashboard's dialogs and player stay inside the demo's browser frame
-        ".nt-modal{position:absolute!important}.podcast-player{position:sticky!important}</style>" +
+        ".nt-modal{position:absolute!important}.podcast-player{position:sticky!important}" +
+        ".ntr-menu{left:auto!important;position:relative!important;top:auto!important}#notebooktools-ribbon{margin:0!important}</style>" +
         '<div class="app-body ' + esc(screen.bodyClass || "") + '">' + screen.html + "</div>";
       var map = {};
       try { map = JSON.parse(el.getAttribute("data-app-map") || "{}"); } catch (e) { map = {}; }

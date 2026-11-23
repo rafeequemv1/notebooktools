@@ -38,7 +38,7 @@ NotebookTools puts a **Send to NotebookLM** button on every YouTube watch page, 
 
 1. Install NotebookTools from the Chrome Web Store and sign in to NotebookLM in the same Chrome profile.
 2. Open a YouTube video and click **Send to NotebookLM** under the player.
-3. Search your notebooks and pick one, or type a name to create a new notebook.
+3. Search your notebooks and pick one, or type a name to create a new notebook. With several Google accounts, the NotebookTools popup lets you choose which NotebookLM account to use.
 4. Click **Send to notebook**. The video appears in the notebook's sources, and you can open the notebook from the panel.
 5. For a playlist or channel, open its page and click the NotebookTools icon in the toolbar: the popup lists the videos. Tick the ones you want and click **Import N selected videos**.
 

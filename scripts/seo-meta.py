@@ -32,6 +32,10 @@ META = {
         "Edit NotebookLM Slides: Real Text, Download PowerPoint | NotebookTools",
         "NotebookLM slide decks are flat images. The NotebookTools slide editor turns them into real text boxes and separate pictures you can edit, then saves PowerPoint, PDF or images. Free, runs in your browser.",
     ),
+    "features/notebook-tools.html": (
+        "NotebookLM Tools Inside Every Notebook | NotebookTools",
+        "One slim ribbon inside every NotebookLM notebook: manage and filter sources and Studio files, copy the chat as Markdown, insert and save prompts, create, export, and file notebooks in folders and tags.",
+    ),
     "features/carousel.html": (
         "NotebookLM Slide Deck to LinkedIn & Instagram Carousel | NotebookTools",
         "Turn a NotebookLM slide deck into a LinkedIn PDF carousel or Instagram images, 4:5 or square, with your handle and page numbers on every page.",

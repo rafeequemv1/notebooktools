@@ -334,6 +334,44 @@
 
   // X: one "NotebookLM" pill in the column header → import panel.
   // platform-button.js, platform-import.html/js
+  // In-notebook tools: the extension's real ribbon and menus (captured from the
+  // app) above a NotebookLM notebook. Copy the chat, then Create, Prompts, folder.
+  register("ribbon", function (a) {
+    function menuAt(menuKey, buttonSel) {
+      return a.run(function () {
+        var page = a.el("nlm-page"), btn = a.el(buttonSel), menu = a.el(menuKey);
+        if (!page || !btn || !menu) return;
+        var pr = page.getBoundingClientRect(), br = btn.getBoundingClientRect();
+        var scale = pr.width / page.offsetWidth || 1;
+        menu.style.top = (br.bottom - pr.top) / scale + 6 + "px";
+        menu.hidden = false;
+        // keep the menu inside the page, like the extension does
+        var left = (br.left - pr.left) / scale;
+        menu.style.left = Math.max(8, Math.min(left, page.offsetWidth - menu.offsetWidth - 8)) + "px";
+      });
+    }
+    return [
+      a.wait(500),
+      a.click('[data-ntr="copy"]'),
+      a.show("toast"),
+      a.wait(1300),
+      a.hide("toast"),
+      a.click('[data-ntr="create"]'),
+      menuAt("m-create", '[data-ntr="create"]'),
+      a.wait(1500),
+      a.hide("m-create"),
+      a.click('[data-ntr="prompts"]'),
+      menuAt("m-prompts", '[data-ntr="prompts"]'),
+      a.wait(1500),
+      a.hide("m-prompts"),
+      a.click('[data-ntr="folder"]'),
+      menuAt("m-folder", '[data-ntr="folder"]'),
+      a.wait(1500),
+      a.hide("m-folder"),
+      a.wait(500),
+    ];
+  });
+
   register("xtwitter", function (a) {
     return [
       a.click("x-btn"),

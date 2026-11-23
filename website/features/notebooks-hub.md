@@ -32,7 +32,7 @@ How it works
 
 ## Organize NotebookLM notebooks with folders, tags and favorites
 
-The NotebookTools notebooks hub opens every NotebookLM notebook in one table, in its own browser tab. You can star and pin notebooks, put them in folders, add tags, search by name, and sort by title, number of sources, tags or favorites. Open a notebook from the hub to see its Sources, Studio and Notes, compare or merge two notebooks, highlight passages in a source and keep notes beside them. The **Presentations** tab keeps every slide deck you edited in the slide editor.
+The NotebookTools notebooks hub opens every NotebookLM notebook in one table, in its own browser tab. You can star and pin notebooks, put them in folders, add tags, search by name, and sort by title, number of sources, tags or favorites. Open a notebook from the hub to see its Sources, Studio and Notes, compare or merge two notebooks, highlight passages in a source and keep notes beside them. The **Presentations** tab keeps every slide deck you edited in the slide editor, and the **Prompts** tab holds your saved prompts, organised with tags.
 
 ### How to use it
 

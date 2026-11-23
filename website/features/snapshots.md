@@ -19,16 +19,16 @@ How it works
 
 1. 1
   **Capture**
-  Press Alt+Shift+S or click **Snapshot** in the NotebookTools popup, then drag over any area.
+  An area with Alt+Shift+S, or **Capture continuously**: screen after screen, across tabs.
 2. 2
   **Annotate**
-  Draw boxes, circles, arrows or pencil marks, then Save.
+  Boxes, circles, arrows or pencil marks, plus a note for each snapshot.
 3. 3
-  **Review on your notebook**
-  Open **Snapshots** in the ribbon; each one keeps its action and notes.
+  **Review**
+  Open **Snapshots** in a notebook's ribbon to check and caption them.
 4. 4
-  **Send to a notebook**
-  NotebookLM writes a blog or tutorial with your images inline.
+  **Create**
+  Write an article, a blog post with images or a step-by-step tutorial, or discuss them in chat.
 
 ## Send a screenshot to NotebookLM and get a written guide
 
@@ -36,10 +36,10 @@ Snapshots captures any area of your screen with **Alt+Shift+S**, lets you annota
 
 ### How to use it
 
-1. Press **Alt+Shift+S**, click **Snapshot** in the NotebookTools popup, or right-click and choose **Capture snapshot area**, then drag over any area of the page.
+1. Press **Alt+Shift+S**, click **Snapshot** in the NotebookTools popup, or right-click and choose **Capture snapshot area**, then drag over any area of the page. To record a whole walkthrough, choose **Capture continuously** in the ribbon's **Snapshots** menu: it takes screen after screen, on any tab.
 2. Annotate with boxes, circles, arrows or the pencil, then click **Save**.
 3. Open your notebook and click **Snapshots** in the NotebookTools ribbon to review them; add a caption or notes to each one.
-4. Choose **Create blog with images** or **Create web app tutorial**; for a tutorial, add a title and a short description.
+4. Choose what to make: **Write article** (images placed inline), **Blog post with images** or **Web app tutorial** (step by step), or **Discuss in chat** to ask NotebookLM about them. After NotebookLM replies, **Build DOC from chat** turns the answer and your images into a document.
 5. Send the set to a notebook and let NotebookLM write it up.
 
 ### Why it helps

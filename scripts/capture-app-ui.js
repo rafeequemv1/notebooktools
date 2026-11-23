@@ -160,10 +160,31 @@ const SCREENS = [
     console.log(s.name, html.html.length, 'chars');
     await page.close();
   }
+  // The in-notebook ribbon and its menus, on a stand-in NotebookLM page
+  const NLM_PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Product launch 2026 - NotebookLM</title><style>body{margin:0;background:#f8fafd;font-family:Arial,sans-serif}.row{display:flex;gap:16px;padding:0 16px 16px;height:600px}.p{background:#fff;border-radius:16px;flex:1}.c{flex:2;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}textarea{width:100%;height:56px}</style></head><body><header style="height:64px"></header><div class="row"><section class="p">Sources</section><section class="p c"><textarea aria-label="Query box" placeholder="Start typing..."></textarea></section><section class="p">Studio</section></div></body></html>`;
+  await ctx.route('https://notebooklm.google.com/**', (r) => (r.request().url().includes('/notebook/') ? r.fulfill({ contentType: 'text/html', body: NLM_PAGE }) : r.fulfill({ status: 500, body: '' })));
+  await sw.evaluate(() => chrome.storage.local.set({ notebooktoolsOrganize: undefined }));
+  const nlm = await ctx.newPage();
+  await nlm.setViewportSize({ width: 1240, height: 760 });
+  await nlm.goto('https://notebooklm.google.com/notebook/5a17c0de-demo');
+  await nlm.waitForTimeout(3500);
+  console.log('ribbon present:', await nlm.evaluate(() => !!document.getElementById('notebooktools-ribbon')), nlm.url());
+  await nlm.waitForTimeout(800);
+  const grab = (sel) => nlm.evaluate((q) => document.querySelector(q)?.outerHTML || '', sel);
+  screens['nlm-ribbon'] = { html: await grab('#notebooktools-ribbon'), bodyClass: '' };
+  for (const [name, action, value] of [['nlm-menu-create', 'create'], ['nlm-menu-prompts', 'prompts'], ['nlm-menu-export', 'export'], ['nlm-menu-folder', 'folder']]) {
+    await nlm.click(`#notebooktools-ribbon [data-ntr="${action}"]`);
+    await nlm.waitForTimeout(400);
+    screens[name] = { html: await grab('.ntr-menu'), bodyClass: '' };
+    await nlm.keyboard.press('Escape');
+    await nlm.mouse.click(5, 700);
+    await nlm.waitForTimeout(200);
+  }
+  console.log('nlm ribbon', screens['nlm-ribbon'].html.length, 'chars');
   await ctx.close();
 
   // The extension's CSS, scoped to the demo's shadow root
-  const css = ['shared.css', 'bulk-import.css', 'snapshots.css', 'notebooks.css', 'prompt-library.css']
+  const css = ['shared.css', 'bulk-import.css', 'snapshots.css', 'notebooks.css', 'prompt-library.css', 'notebooklm-ribbon.css']
     .map((f) => `/* ${f} */\n` + fs.readFileSync(path.join(EXT, f), 'utf8'))
     .join('\n')
     .replace(/:root\[data-theme="dark"\]/g, ':host([data-theme="dark"])')
