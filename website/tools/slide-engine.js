@@ -290,15 +290,24 @@ window.NTSlides = (() => {
         if (cur.length) segs.push(cur);
         cur = [];
       };
+      // A gap much wider than the line's own word spacing parts two pieces of text
+      // (labels side by side, columns); a digit's wide side margin doesn't
+      const gaps = words.slice(1).map((w, i) => w.bbox.x0 - words[i].bbox.x1).filter((g) => g > 0);
+      const usual = gaps.length >= 3 ? median(gaps) : 0;
       words.forEach((w, i) => {
         if (/^[|¦]+$/.test(w.text.trim())) { flush(); return; } // diagram lines read as "|"
-        if (i && w.bbox.x0 - words[i - 1].bbox.x1 > Math.max(12, h * 1.1)) flush();
+        const gap = i ? w.bbox.x0 - words[i - 1].bbox.x1 : 0;
+        if (i && gap > Math.max(12, h * 1.1) && !(usual && gap < usual * 3 && gap < h * 1.6)) flush();
         cur.push(w);
       });
       flush();
     }
     return segs.map((ws) => {
       const text = fixText(joinWords(ws)).replace(BULLET_RE, (m) => (m.trim() ? "• " : ""));
+      // A word box far taller than its neighbours (OCR noise) doesn't stretch the line
+      const mh = median(ws.map((w) => w.bbox.y1 - w.bbox.y0));
+      const my0 = median(ws.map((w) => w.bbox.y0)), my1 = median(ws.map((w) => w.bbox.y1));
+      const yb = ws.map((w) => (ws.length >= 3 && w.bbox.y1 - w.bbox.y0 > mh * 1.45 ? [Math.max(w.bbox.y0, my0 - mh * 0.25), Math.min(w.bbox.y1, my1 + mh * 0.25)] : [w.bbox.y0, w.bbox.y1]));
       const real = ws.filter((w) => plausible(w.text));
       const conf = ws.reduce((n, w) => n + (w.confidence ?? 0), 0) / ws.length;
       return {
@@ -309,7 +318,7 @@ window.NTSlides = (() => {
         h: 0, // set below from width
         tx0: 0,
         x0: Math.min(...ws.map((w) => w.bbox.x0)), x1: Math.max(...ws.map((w) => w.bbox.x1)),
-        y0: Math.min(...ws.map((w) => w.bbox.y0)), y1: Math.max(...ws.map((w) => w.bbox.y1))
+        y0: Math.min(...yb.map((v) => v[0])), y1: Math.max(...yb.map((v) => v[1]))
       };
     }).map((sg) => {
       // Comparable "size" for every line: the font size its width implies (letter-independent).
@@ -497,6 +506,49 @@ window.NTSlides = (() => {
     const gain = bestVal / Math.max(1, sharp(0));
     if (withGain) return { deg: gain > 1.05 ? best : 0, gain };
     return gain > 1.05 ? best : 0;
+  }
+
+  // Glyphs of a stretch of text: connected ink (8-connected), pieces of one letter
+  // stacked over each other (the dot of an i) joined. Boxes in slide pixels.
+  function glyphBoxes(img, box, bg) {
+    const { data, width, height } = img;
+    const x0 = Math.max(0, Math.round(box.x0)), x1 = Math.min(width, Math.round(box.x1));
+    const y0 = Math.max(0, Math.round(box.y0)), y1 = Math.min(height, Math.round(box.y1));
+    const w = x1 - x0, h = y1 - y0;
+    if (w < 3 || h < 3) return [];
+    const ink = new Uint8Array(w * h);
+    for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) {
+      const i = ((y0 + y) * width + x0 + x) * 4;
+      if (Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 150) ink[y * w + x] = 1;
+    }
+    const seen = new Uint8Array(w * h), out = [], st = [];
+    for (let s0 = 0; s0 < w * h; s0 += 1) {
+      if (!ink[s0] || seen[s0]) continue;
+      let gx0 = w, gy0 = h, gx1 = -1, gy1 = -1, n = 0;
+      st.push(s0); seen[s0] = 1;
+      while (st.length) {
+        const j = st.pop(), x = j % w, y = (j / w) | 0;
+        n += 1;
+        if (x < gx0) gx0 = x; if (x > gx1) gx1 = x; if (y < gy0) gy0 = y; if (y > gy1) gy1 = y;
+        for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+          const xx = x + dx, yy = y + dy;
+          if (xx < 0 || yy < 0 || xx >= w || yy >= h) continue;
+          const q = yy * w + xx;
+          if (ink[q] && !seen[q]) { seen[q] = 1; st.push(q); }
+        }
+      }
+      if (n >= 2) out.push({ x0: x0 + gx0, y0: y0 + gy0, x1: x0 + gx1 + 1, y1: y0 + gy1 + 1, n });
+    }
+    out.sort((a, b) => a.x0 - b.x0);
+    // join pieces stacked over each other (i, j, ;, %, =)
+    const joined = [];
+    for (const g of out) {
+      const last = joined[joined.length - 1];
+      const ov = last ? Math.min(last.x1, g.x1) - Math.max(last.x0, g.x0) : -1;
+      if (last && ov > Math.min(last.x1 - last.x0, g.x1 - g.x0) * 0.6) Object.assign(last, { x0: Math.min(last.x0, g.x0), y0: Math.min(last.y0, g.y0), x1: Math.max(last.x1, g.x1), y1: Math.max(last.y1, g.y1), n: last.n + g.n });
+      else joined.push({ ...g });
+    }
+    return joined;
   }
 
   // A word leans (italic) when shearing it sharpens its strokes clearly: a short
@@ -758,7 +810,7 @@ window.NTSlides = (() => {
         }
       }
       const w = bx1 - bx0 + 1, h = by1 - by0 + 1;
-      if (big || w < 18 || h < 18 || w / h > 1.6 || h / w > 1.6) continue;
+      if (big || w < 28 || h < 28 || w / h > 1.6 || h / w > 1.6) continue;
       // Marks inside the shape: pixels between its left and right edge on each row that aren't its colour
       let inside = 0, ink = 0, ix0 = W, iy0 = H, ix1 = -1, iy1 = -1;
       const inkPx = [];
@@ -769,13 +821,32 @@ window.NTSlides = (() => {
         if (d > 90) { ink += 1; inkPx.push(x, y); if (x < ix0) ix0 = x; if (x > ix1) ix1 = x; if (y < iy0) iy0 = y; if (y > iy1) iy1 = y; }
       }
       if (inside < w * h * 0.6 || ink < inside * 0.03 || ink > inside * 0.45) continue;
+      // mostly solid fill (a bold letter's strokes with gaps between them are not a badge)
+      if (n < inside * 0.6 || n < w * h * 0.5) continue;
       // The marks sit well inside (not a ring or an outline)
       if (ix0 - bx0 < w * 0.12 || bx1 - ix1 < w * 0.12 || iy0 - by0 < h * 0.12 || by1 - iy1 < h * 0.12) continue;
+      // a badge stands on its own: just outside it is plain background on every
+      // side (atoms joined by bonds in a molecule drawing are not badges)
+      {
+        const ring = [];
+        const add = (x, y) => { if (x >= 0 && y >= 0 && x < W && y < H) { const k = at(x, y); ring.push([data[k], data[k + 1], data[k + 2]]); } };
+        const r = 4;
+        for (let x = bx0 - r; x <= bx1 + r; x += 2) { add(x, by0 - r); add(x, by1 + r); }
+        for (let y = by0 - r; y <= by1 + r; y += 2) { add(bx0 - r, y); add(bx1 + r, y); }
+        const mid = [0, 1, 2].map((c) => median(ring.map((p) => p[c])));
+        const calm = ring.filter((p) => Math.abs(p[0] - mid[0]) + Math.abs(p[1] - mid[1]) + Math.abs(p[2] - mid[2]) < 40).length;
+        if (ring.length < 8 || calm < ring.length * 0.9) continue;
+      }
+      // a letter inside a word the page pass read with confidence ("e" in "Sheet") is not a badge
+      const inWord = segs.some((sg) => sg.words.some((wd) => (wd.confidence ?? 0) >= 70 && (wd.text.match(/\p{L}/gu) || []).length >= 3
+        && Math.min(wd.bbox.x1, bx1) - Math.max(wd.bbox.x0, bx0) > w * 0.5 && Math.min(wd.bbox.y1, by1) - Math.max(wd.bbox.y0, by0) > h * 0.5));
+      if (inWord) continue;
       found.push({ bx0, by0, bx1, by1, ix0, iy0, ix1, iy1, inkPx });
     }
-    for (const b of found.slice(0, 16)) {
+    // Marks drawn dark on white at a given height, read as one line
+    const readAt = async (b, height) => {
       const ih = b.iy1 - b.iy0 + 1, iw = b.ix1 - b.ix0 + 1;
-      const scale = Math.max(1, 52 / ih), pad = 24;
+      const scale = Math.max(1, height / ih), pad = 24;
       const crop = document.createElement("canvas");
       crop.width = Math.round(iw * scale + pad * 2);
       crop.height = Math.round(ih * scale + pad * 2);
@@ -784,13 +855,25 @@ window.NTSlides = (() => {
       cx.fillRect(0, 0, crop.width, crop.height);
       cx.fillStyle = "#000";
       for (let j = 0; j < b.inkPx.length; j += 2) cx.fillRect(pad + (b.inkPx[j] - b.ix0) * scale, pad + (b.inkPx[j + 1] - b.iy0) * scale, Math.ceil(scale), Math.ceil(scale));
-      let words = [];
+      const words = [];
+      const blocks = await P.ocrLine(crop);
+      for (const bl of blocks) for (const pa of bl.paragraphs || []) for (const l of pa.lines || []) for (const wd of l.words || []) if (wd.text && wd.text.trim()) words.push(wd);
+      let text = words.map((wd) => wd.text.trim()).join("").replace(/[.)]$/, "");
+      // "O1" → "01": letters that look like digits, in a number
+      if (/^[0-9OoIl|]{2,3}$/.test(text) && /\d/.test(text)) text = text.replace(/[Oo]/g, "0").replace(/[Il|]/g, "1");
+      return { text, conf: words.length ? Math.min(...words.map((wd) => wd.confidence ?? 0)) : 0 };
+    };
+    for (const b of found.slice(0, 16)) {
+      const ih = b.iy1 - b.iy0 + 1;
+      let text = "", conf = 0;
       try {
-        const blocks = await P.ocrLine(crop);
-        for (const bl of blocks) for (const pa of bl.paragraphs || []) for (const l of pa.lines || []) for (const wd of l.words || []) if (wd.text && wd.text.trim()) words.push(wd);
+        ({ text, conf } = await readAt(b, 52));
+        // unsure: read at two more sizes; two readings out of three that agree on a number count
+        if (conf < 55 && /^\d{1,3}$/.test(text)) {
+          const votes = [text, (await readAt(b, 40)).text, (await readAt(b, 64)).text];
+          if (votes.filter((v) => v === text).length >= 2) conf = 55;
+        }
       } catch (_error) { return; }
-      const text = words.map((wd) => wd.text.trim()).join("").replace(/[.)]$/, "");
-      const conf = words.length ? Math.min(...words.map((wd) => wd.confidence ?? 0)) : 0;
       if (!/^(\d{1,3}|[A-Z])$/.test(text) || conf < 55) continue;
       const box = { x0: b.ix0, y0: b.iy0, x1: b.ix1 + 1, y1: b.iy1 + 1 };
       // Readings of the page pass that took in the badge ("(03) Ship and measure") lose those words
@@ -803,6 +886,112 @@ window.NTSlides = (() => {
         segs.splice(s2, 1, ...again);
       }
       segs.push({ words: [{ text, confidence: conf, bbox: box }], text, conf, quality: 1, badge: true, h: ih / 0.72, tx0: box.x0, ...box });
+    }
+  }
+
+  /* Superscripts and subscripts (cm⁻¹, m², H₂O): small glyphs sitting clearly above
+     or below the line's baseline, right after a letter or digit. OCR misreads them
+     ("cm™", "m?", "H,0"), so each group is read again on its own, enlarged, and put
+     back in its word as plain characters marked sup/sub (sg.scripts). */
+  async function readScripts(slide, segs, img) {
+    if (typeof P.ocrLine !== "function") return;
+    let budget = 12;
+    for (const sg of segs) {
+      if (budget <= 0) break;
+      if (!sg.bg || sg.words.length > 40) continue;
+      const glyphs = glyphBoxes(img, { x0: sg.x0 - 1, y0: sg.y0 - 2, x1: sg.x1 + 1, y1: sg.y1 + 2 }, sg.bg).filter((g) => g.x1 - g.x0 >= 2 || g.y1 - g.y0 >= 2);
+      if (glyphs.length < 3) continue;
+      const hs = glyphs.map((g) => g.y1 - g.y0);
+      const maxH = Math.max(...hs);
+      const body = glyphs.filter((g) => g.y1 - g.y0 >= maxH * 0.55);
+      if (body.length < 2) continue;
+      const B = median(body.map((g) => g.y1)); // baseline
+      // letter height: the taller letters on the baseline (capitals, ascenders, digits)
+      const onBase = body.filter((g) => Math.abs(g.y1 - B) <= 2).map((g) => g.y1 - g.y0).sort((a, b) => a - b);
+      const T = onBase.length ? onBase[Math.min(onBase.length - 1, Math.floor(onBase.length * 0.8))] : maxH;
+      const kind = glyphs.map((g, i) => {
+        const h = g.y1 - g.y0, w = g.x1 - g.x0;
+        const prev = glyphs[i - 1];
+        if (!prev) return null;
+        // (quote marks and apostrophes are smaller than a superscript digit)
+        if (h <= T * 0.75 && h >= T * 0.4 && g.y1 <= B - T * 0.3) return "sup";
+        if (h <= T * 0.75 && h >= T * 0.45 && g.y1 >= B + T * 0.15 && g.y0 >= B - T * 0.55) return "sub";
+        // a minus sign raised to superscript height (cm⁻¹)
+        if (h <= T * 0.2 && w >= h * 1.5 && w <= T * 0.6 && g.y1 <= B - T * 0.45) return "supMinus";
+        return null;
+      });
+      // groups of script glyphs, each right after an ordinary glyph
+      const groups = [];
+      for (let i = 0; i < glyphs.length; i += 1) {
+        if (!kind[i]) continue;
+        const k = kind[i] === "supMinus" ? "sup" : kind[i];
+        const last = groups[groups.length - 1];
+        if (last && last.end === i - 1 && last.kind === k) { last.end = i; continue; }
+        const prev = glyphs[i - 1];
+        if (kind[i - 1] || glyphs[i].x0 - prev.x1 > T * 0.6) continue;
+        groups.push({ start: i, end: i, kind: k });
+      }
+      // the minus must lead a group of digits, not stand alone
+      const real = groups.filter((gr) => !(gr.start === gr.end && kind[gr.start] === "supMinus"));
+      if (!real.length) continue;
+      sg.scripts = sg.scripts || [];
+      // right to left, so offsets in the text stay valid
+      for (const gr of real.reverse()) {
+        if (budget <= 0) break;
+        const parts = glyphs.slice(gr.start, gr.end + 1);
+        const box = { x0: Math.min(...parts.map((g) => g.x0)), y0: Math.min(...parts.map((g) => g.y0)), x1: Math.max(...parts.map((g) => g.x1)), y1: Math.max(...parts.map((g) => g.y1)) };
+        const word = sg.words.find((w) => (box.x0 + box.x1) / 2 >= w.bbox.x0 - 2 && (box.x0 + box.x1) / 2 <= w.bbox.x1 + 2);
+        if (!word || /°/.test(word.text)) continue;
+        // a piece of a bigger glyph (the ring of a %) overlaps its neighbours sideways
+        const before = glyphs[gr.start - 1], after = glyphs[gr.end + 1];
+        if ((before && before.x1 > box.x0 + 1) || (after && after.x0 < box.x1 - 1)) continue;
+        budget -= 1;
+        // read the group alone: ink drawn dark on white, enlarged
+        const gw = box.x1 - box.x0, gh = box.y1 - box.y0;
+        const scale = Math.max(2, 44 / gh), pad = 22;
+        const small = document.createElement("canvas");
+        small.width = gw; small.height = gh;
+        const sctx = small.getContext("2d");
+        const id2 = sctx.createImageData(gw, gh);
+        for (let y = 0; y < gh; y += 1) for (let x = 0; x < gw; x += 1) {
+          const i = ((box.y0 + y) * img.width + box.x0 + x) * 4, o = (y * gw + x) * 4;
+          const d = Math.abs(img.data[i] - sg.bg[0]) + Math.abs(img.data[i + 1] - sg.bg[1]) + Math.abs(img.data[i + 2] - sg.bg[2]);
+          const v = 255 - Math.min(255, d * 0.6);
+          id2.data[o] = id2.data[o + 1] = id2.data[o + 2] = v; id2.data[o + 3] = 255;
+        }
+        sctx.putImageData(id2, 0, 0);
+        const crop = document.createElement("canvas");
+        crop.width = Math.round(gw * scale + pad * 2); crop.height = Math.round(gh * scale + pad * 2);
+        const cx = crop.getContext("2d");
+        cx.fillStyle = "#fff"; cx.fillRect(0, 0, crop.width, crop.height);
+        cx.imageSmoothingQuality = "high";
+        cx.drawImage(small, pad, pad, gw * scale, gh * scale);
+        let read = "";
+        try {
+          const blocks = await P.ocrLine(crop);
+          for (const bl of blocks) for (const pa of bl.paragraphs || []) for (const l of pa.lines || []) for (const wd of l.words || []) if ((wd.confidence ?? 0) >= 40) read += (wd.text || "").trim();
+        } catch (_error) { return; }
+        read = read.replace(/[−–—]/g, "-").replace(/[oO]/g, "0").replace(/[lI|]/g, "1").replace(/[zZ]/g, "2").replace(/[sS]/g, "5");
+        if (kind[gr.start] === "supMinus" && !/^-/.test(read)) read = `-${read}`;
+        if (!/^[-+]?\d{1,3}[-+]?$/.test(read)) continue;
+        const degree = false;
+        // where the group sits in its word: glyphs before and after it
+        const inWord = glyphs.filter((g) => (g.x0 + g.x1) / 2 >= word.bbox.x0 - 2 && (g.x0 + g.x1) / 2 <= word.bbox.x1 + 2);
+        const nb = inWord.filter((g) => g.x1 <= box.x0 + 1).length, na = inWord.filter((g) => g.x0 >= box.x1 - 1).length;
+        const old = word.text.trim();
+        const junk = old.length - nb - na;
+        if (junk < 0 || junk > 2) continue;
+        let fresh = old.slice(0, nb) + read + old.slice(old.length - na);
+        // a chemical formula: O read as zero right after a subscript (H₂O)
+        if (gr.kind === "sub" && /[A-Z]$/.test(old.slice(0, nb))) fresh = fresh.slice(0, nb + read.length) + fresh.slice(nb + read.length).replace(/^0/, "O");
+        const at = sg.text.indexOf(old);
+        if (at < 0) continue;
+        sg.text = sg.text.slice(0, at) + fresh + sg.text.slice(at + old.length);
+        word.text = fresh;
+        const delta = fresh.length - old.length;
+        for (const sc of sg.scripts) if (sc.start >= at) { sc.start += delta; sc.end += delta; }
+        if (!degree) sg.scripts.push({ start: at + nb, end: at + nb + read.length, [gr.kind]: true });
+      }
     }
   }
 
@@ -1111,11 +1300,12 @@ window.NTSlides = (() => {
     segs.push(...kept);
     slide.debugDropped = dropped;
     segs.forEach((sg) => lineStyle(img, sg));
+    await readScripts(slide, segs, img);
     // The slide's regular weight: what its longer lines (mostly body text) measure
     const long = segs.filter((sg) => sg.text.length >= 15 && sg.weight > 0);
     const baseWeight = long.length >= 2 ? weightedMedian(long.map((sg) => [sg.weight, sg.text.length])) : 0.95;
     segs.forEach((sg) => { sg.bold = sg.weight > baseWeight * BOLD_STEP; });
-    if (options.debug) slide.debugSegs = segs.map((sg) => ({ text: sg.text, weight: sg.weight, base: baseWeight, words: sg.words.map((w, k) => [w.text, sg.wordLooks?.[k] && { c: sg.wordLooks[k].color, w: +sg.wordLooks[k].weight.toFixed(2), s: sg.wordLooks[k].slant && `${sg.wordLooks[k].slant.deg}/${sg.wordLooks[k].slant.gain.toFixed(2)}` }]) }));
+    if (options.debug) slide.debugSegs = segs.map((sg) => ({ box: [sg.x0, sg.y0, sg.x1, sg.y1], glyphs: glyphBoxes(img, { x0: sg.x0, y0: sg.y0 - (sg.y1 - sg.y0) * 0.3, x1: sg.x1, y1: sg.y1 + (sg.y1 - sg.y0) * 0.3 }, sg.bg), wb: sg.words.map((w) => [w.text, w.bbox.x0, w.bbox.y0, w.bbox.x1, w.bbox.y1]), text: sg.text, weight: sg.weight, base: baseWeight, words: sg.words.map((w, k) => [w.text, sg.wordLooks?.[k] && { c: sg.wordLooks[k].color, w: +sg.wordLooks[k].weight.toFixed(2), s: sg.wordLooks[k].slant && `${sg.wordLooks[k].slant.deg}/${sg.wordLooks[k].slant.gain.toFixed(2)}` }]) }));
 
 
     const converted = new Set(); // lines turned into text boxes (the rest stay in the picture)
@@ -1206,6 +1396,7 @@ window.NTSlides = (() => {
       let lineOff = 0;
       const lineTexts = group.map((g) => {
         const sc = scriptRuns(g.text);
+        for (const r of g.scripts || []) runs.push({ ...r, start: r.start + lineOff, end: r.end + lineOff });
         for (const r of lineMarks(g, { bold: font.bold, italic, color: style.color, label: !!label }, baseWeight)) runs.push({ ...r, start: r.start + lineOff, end: r.end + lineOff });
         for (const r of sc.runs) runs.push({ ...r, start: r.start + lineOff, end: r.end + lineOff });
         lineOff += sc.text.length + 1;
@@ -2559,5 +2750,5 @@ window.NTSlides = (() => {
     return files.length;
   }
 
-  return { exportPictures, layoutLines, stylePieces, remapRuns, applyStyle, clearRunProp, _test: { segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { exportPictures, layoutLines, stylePieces, remapRuns, applyStyle, clearRunProp, _test: { glyphBoxes: (...a) => glyphBoxes(...a), segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
