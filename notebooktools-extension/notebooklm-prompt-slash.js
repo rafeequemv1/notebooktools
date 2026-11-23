@@ -65,6 +65,7 @@
             id: item.id || `custom-${item.title}`,
             title: item.title || "Untitled prompt",
             prompt: item.prompt,
+            tags: Array.isArray(item.tags) ? item.tags : [],
             group: "My prompts"
           }));
 
@@ -104,7 +105,8 @@
 
     return allPrompts
       .filter((item) => {
-        const haystack = `${item.title} ${item.group}`.toLowerCase();
+        // (your tags count too: type "/study" or "/#study")
+        const haystack = `${item.title} ${item.group} ${(item.tags || []).map((t) => `${t} #${t}`).join(" ")}`.toLowerCase();
         return haystack.includes(query);
       })
       .slice(0, 12);

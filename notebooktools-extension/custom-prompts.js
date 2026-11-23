@@ -16,7 +16,23 @@ function normalizePromptType(value) {
   return PROMPT_TYPES.includes(cleaned) ? cleaned : DEFAULT_PROMPT_TYPE;
 }
 
+// Tags: short labels to organise prompts ("Study", "Slides"), up to 6 each
+function normalizeTags(value) {
+  const list = Array.isArray(value) ? value : String(value || "").split(",");
+  const seen = new Set();
+  const out = [];
+  for (const raw of list) {
+    const tag = String(raw || "").replace(/^#/, "").replace(/\s+/g, " ").trim().slice(0, 24);
+    if (!tag || seen.has(tag.toLowerCase())) continue;
+    seen.add(tag.toLowerCase());
+    out.push(tag);
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+
 const NotebookToolsCustomPrompts = {
+  normalizeTags,
   PROMPT_TYPES,
   DEFAULT_PROMPT_TYPE,
   PROMPT_TYPE_LABELS,
@@ -33,13 +49,15 @@ const NotebookToolsCustomPrompts = {
       .filter((item) => item && item.id && item.prompt)
       .map((item) => ({
         ...item,
-        type: normalizePromptType(item.type)
+        type: normalizePromptType(item.type),
+        tags: normalizeTags(item.tags)
       }))
       .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   },
 
-  async save({ title, prompt, id = null, type = DEFAULT_PROMPT_TYPE }) {
+  async save({ title, prompt, id = null, type = DEFAULT_PROMPT_TYPE, tags }) {
     const cleanedTitle = String(title || "").trim() || "Untitled prompt";
+    const cleanedTags = normalizeTags(tags);
     const cleanedPrompt = String(prompt || "").trim();
     const cleanedType = normalizePromptType(type);
 
@@ -62,6 +80,7 @@ const NotebookToolsCustomPrompts = {
         title: cleanedTitle,
         prompt: cleanedPrompt,
         type: cleanedType,
+        ...(tags !== undefined ? { tags: cleanedTags } : {}),
         updatedAt: now
       };
     } else {
@@ -70,6 +89,7 @@ const NotebookToolsCustomPrompts = {
         title: cleanedTitle,
         prompt: cleanedPrompt,
         type: cleanedType,
+        tags: cleanedTags,
         createdAt: now,
         updatedAt: now
       });
