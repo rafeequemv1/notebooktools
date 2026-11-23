@@ -867,6 +867,8 @@
         <span class="se-sep"></span>
         <button type="button" class="se-btn" data-act="replace-image" title="Swap in another picture, same place and size">${ico("image")}<span>Replace</span></button>
         <button type="button" class="se-btn" data-act="fit-image" title="Restore the picture's own proportions">Reset shape</button>
+        <button type="button" class="se-btn" data-act="merge-image" title="Merge this picture with another one: click this, then the other picture">Merge</button>
+        <button type="button" class="se-btn" data-act="split-image" title="Cut this picture into its separate parts">Split</button>
         ${tail(el)}`;
     }
   }
@@ -1204,6 +1206,27 @@
     "add-arrow": () => addElement({ id: S.id(), type: "line", ...centerBox(520, 0), stroke: "#0b57d0", strokeWidth: 5, arrow: true, opacity: 1 }),
     "add-image": () => { replacing = false; $("#seImageInput").click(); },
     "replace-image": () => { replacing = true; $("#seImageInput").click(); },
+    "split-image": async () => {
+      const el = find(selected);
+      if (!el || el.type !== "image") return;
+      let parts = null;
+      try { parts = await S.splitPicture(el); } catch (_error) { parts = null; }
+      if (!parts) { status("This picture is one piece, so there's nothing to split."); return; }
+      commit();
+      const list = slide().elements;
+      list.splice(list.indexOf(el), 1, ...parts);
+      selected = parts[0].id;
+      renderStage();
+      renderPanels();
+      refreshThumbSoon();
+      status(`Split into ${parts.length} pictures.`);
+    },
+    "merge-image": () => {
+      const el = find(selected);
+      if (!el || el.type !== "image") return;
+      mergeFrom = el.id;
+      status("Now click the picture to merge it with (Esc cancels).");
+    },
     "fit-image": () => {
       const el = find(selected);
       if (!el || el.type !== "image") return;
@@ -1386,8 +1409,34 @@
     stopEditing();
     if (selected) select(null);
   });
+  let mergeFrom = null; // picture waiting for a second one to merge with
+  async function finishMerge(otherId) {
+    const a = find(mergeFrom), b = find(otherId);
+    mergeFrom = null;
+    if (!a || !b || a === b) return;
+    if (b.type !== "image") { status("Merging works on pictures only."); return; }
+    const list = slide().elements;
+    const ordered = [a, b].sort((p, q) => list.indexOf(p) - list.indexOf(q));
+    let merged;
+    try { merged = await S.mergePictures(ordered); } catch (error) { status(error.message || "These pictures couldn't be merged."); return; }
+    commit();
+    const at = list.indexOf(ordered[1]);
+    list.splice(at, 1, merged);
+    list.splice(list.indexOf(ordered[0]), 1);
+    selected = merged.id;
+    renderStage();
+    renderPanels();
+    refreshThumbSoon();
+    status("Merged into one picture.");
+  }
   $("#seStage").addEventListener("pointerdown", (event) => {
     const node = event.target.closest(".se-el");
+    if (mergeFrom) {
+      event.preventDefault();
+      if (node && node.dataset.id !== mergeFrom) { finishMerge(node.dataset.id); return; }
+      if (!node) { mergeFrom = null; status(""); }
+      return;
+    }
     if (!node) {
       stopEditing();
       if (selected) select(null);
@@ -1564,6 +1613,7 @@
     const el = selected && find(selected);
     if (mod && key === "z" && !typing) { event.preventDefault(); event.shiftKey ? redo() : undo(); return; }
     if (mod && key === "y" && !typing) { event.preventDefault(); redo(); return; }
+    if (event.key === "Escape" && mergeFrom) { mergeFrom = null; status(""); return; }
     if (event.key === "Escape") { if (!$("#sePop").hidden) closePop(); else if (editing) stopEditing(); else if (selected) select(null); else app.classList.remove("is-full"); return; }
     if (event.key === "F5") { event.preventDefault(); present(event.shiftKey ? cur : 0); return; }
     // Text styling works while typing too (whole box).

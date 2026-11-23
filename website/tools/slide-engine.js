@@ -494,6 +494,10 @@ window.NTSlides = (() => {
         letters
       };
     });
+    // The line's weight is its words' typical weight, so a few bold words in a regular
+    // line don't make the whole line bold
+    const measured = sg.wordLooks.map((L, i) => [L, i]).filter(([L, i]) => L && L.weight > 0 && (!hasLabel || i > sg.words.indexOf(words[colon])));
+    if (measured.length >= 3) sg.weight = weightedMedian(measured.map(([L]) => [L.weight, L.letters]));
     sg.label = null;
     if (hasLabel) {
       const lb = boxOf(words.slice(0, colon + 1));
@@ -2591,6 +2595,17 @@ window.NTSlides = (() => {
     return name;
   }
 
+  // One set of paragraph settings per paragraph: PptxGenJS writes them before every
+  // run, so a paragraph with styled words would carry several (not valid in PowerPoint)
+  function oneParaProps(xml) {
+    return xml.replace(/<a:p>([\s\S]*?)<\/a:p>/g, (whole, body) => {
+      let seen = false;
+      const fixed = body.replace(/<a:pPr\b[^>]*?(?:\/>|>[\s\S]*?<\/a:pPr>)/g, (pp) => (seen ? "" : ((seen = true), pp)));
+      return `<a:p>${fixed}</a:p>`;
+    });
+  }
+
+  // Finish the file: paragraph settings tidied, transitions and animations added.
   async function addMotion(buffer, deck) {
     const JSZip = window.JSZip;
     if (!JSZip) return new Blob([buffer]);
@@ -2600,7 +2615,8 @@ window.NTSlides = (() => {
       const path = `ppt/slides/slide${i + 1}.xml`;
       const file = zip.file(path);
       if (!file) continue;
-      let xml = await file.async("string");
+      const raw = await file.async("string");
+      let xml = oneParaProps(raw);
       let extra = "";
       const tr = slide.transition;
       if (tr && tr.type && tr.type !== "none" && TRANSITION_XML[tr.type]) {
@@ -2620,7 +2636,7 @@ window.NTSlides = (() => {
           extra += `<p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst><p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>${clicks.join("")}</p:childTnLst></p:cTn><p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst><p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq></p:childTnLst></p:cTn></p:par></p:tnLst></p:timing>`;
         }
       }
-      if (!extra) continue;
+      if (!extra) { if (xml !== raw) zip.file(path, xml); continue; }
       // Order in <p:sld>: cSld, clrMapOvr, transition, timing, extLst.
       if (xml.includes("</p:clrMapOvr>")) xml = xml.replace("</p:clrMapOvr>", `</p:clrMapOvr>${extra}`);
       else xml = xml.replace("</p:cSld>", `</p:cSld>${extra}`);
@@ -2721,8 +2737,6 @@ window.NTSlides = (() => {
       if (slide.notes) s.addNotes(slide.notes);
     });
     onProgress(deck.slides.length, deck.slides.length);
-    const hasMotion = deck.slides.some((sl) => (sl.transition && sl.transition.type && sl.transition.type !== "none") || sl.elements.some((e) => e.anim && e.anim.type && e.anim.type !== "none"));
-    if (!hasMotion) return pptx.writeFile({ fileName: filename });
     const buffer = await pptx.write({ outputType: "arraybuffer" });
     P.saveBlob(await addMotion(buffer, Object.assign(Object.create(deck), { __names: allNames })), filename);
   }
@@ -2824,6 +2838,93 @@ window.NTSlides = (() => {
   }
 
   // Every picture in the deck, as its own file (PNG with transparency, JPEG for photos).
+  /* ---------- Picture tools ---------- */
+  const loadImage = (src) => new Promise((resolve, reject) => { const im = new Image(); im.onload = () => resolve(im); im.onerror = reject; im.src = src; });
+
+  // Split a picture into its separate pieces (parts with clear space between them).
+  // Returns new picture elements in slide coordinates, or null when it's one piece.
+  async function splitPicture(el) {
+    const im = await loadImage(el.src);
+    const W = im.naturalWidth, H = im.naturalHeight;
+    const c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    const x = c.getContext("2d", { willReadFrequently: true });
+    x.drawImage(im, 0, 0);
+    const d = x.getImageData(0, 0, W, H).data;
+    // coarse grid: a cell is on when any pixel in it shows; cells a few pixels wide
+    // bridge hairline gaps (anti-aliasing) but not real space between parts
+    const g = Math.max(3, Math.round(Math.min(W, H) * 0.015));
+    const gw = Math.ceil(W / g), gh = Math.ceil(H / g);
+    const on = new Uint8Array(gw * gh);
+    let shown = 0;
+    for (let y = 0; y < H; y += 1) for (let x2 = 0; x2 < W; x2 += 1) if (d[(y * W + x2) * 4 + 3] > 24) { on[((y / g) | 0) * gw + ((x2 / g) | 0)] = 1; shown += 1; }
+    if (shown >= W * H * 0.97) return null; // an opaque picture is one piece
+    const lab = new Int32Array(gw * gh).fill(-1);
+    const parts = [];
+    for (let i0 = 0; i0 < gw * gh; i0 += 1) {
+      if (!on[i0] || lab[i0] >= 0) continue;
+      const id2 = parts.length, st = [i0];
+      lab[i0] = id2;
+      const p = { x0: gw, y0: gh, x1: -1, y1: -1, cells: 0 };
+      while (st.length) {
+        const j = st.pop(), cx = j % gw, cy = (j / gw) | 0;
+        p.cells += 1;
+        if (cx < p.x0) p.x0 = cx; if (cx > p.x1) p.x1 = cx; if (cy < p.y0) p.y0 = cy; if (cy > p.y1) p.y1 = cy;
+        for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+          const xx = cx + dx, yy = cy + dy;
+          if (xx < 0 || yy < 0 || xx >= gw || yy >= gh) continue;
+          const q = yy * gw + xx;
+          if (on[q] && lab[q] < 0) { lab[q] = id2; st.push(q); }
+        }
+      }
+      parts.push(p);
+    }
+    // specks join the nearest real part
+    const big = parts.filter((p) => p.cells >= Math.max(2, parts.reduce((n, q) => n + q.cells, 0) * 0.01));
+    if (big.length < 2) return null;
+    const owner = parts.map((p) => {
+      if (big.includes(p)) return big.indexOf(p);
+      let best = 0, bd = Infinity;
+      big.forEach((b, k) => { const dd = Math.max(0, b.x0 - p.x1, p.x0 - b.x1) + Math.max(0, b.y0 - p.y1, p.y0 - b.y1); if (dd < bd) { bd = dd; best = k; } });
+      return best;
+    });
+    const sx = el.w / W, sy = el.h / H;
+    return big.map((b, k) => {
+      const mine = parts.filter((_p, i) => owner[i] === k);
+      const X0 = Math.min(...mine.map((p) => p.x0)) * g, Y0 = Math.min(...mine.map((p) => p.y0)) * g;
+      const X1 = Math.min(W, (Math.max(...mine.map((p) => p.x1)) + 1) * g), Y1 = Math.min(H, (Math.max(...mine.map((p) => p.y1)) + 1) * g);
+      const out = document.createElement("canvas");
+      out.width = X1 - X0; out.height = Y1 - Y0;
+      const o = out.getContext("2d");
+      const id3 = o.createImageData(out.width, out.height);
+      for (let y = Y0; y < Y1; y += 1) for (let x2 = X0; x2 < X1; x2 += 1) {
+        const cell = ((y / g) | 0) * gw + ((x2 / g) | 0);
+        if (lab[cell] < 0 || owner[lab[cell]] !== k) continue;
+        const i = (y * W + x2) * 4, t = ((y - Y0) * out.width + (x2 - X0)) * 4;
+        id3.data[t] = d[i]; id3.data[t + 1] = d[i + 1]; id3.data[t + 2] = d[i + 2]; id3.data[t + 3] = d[i + 3];
+      }
+      o.putImageData(id3, 0, 0);
+      const { anim, ...rest } = el;
+      void anim;
+      return { ...rest, id: id(), src: encodePicture(out), x: el.x + X0 * sx, y: el.y + Y0 * sy, w: out.width * sx, h: out.height * sy };
+    });
+  }
+
+  // Merge pictures into one (drawn in the given order, first at the back).
+  async function mergePictures(els) {
+    if (els.some((e) => e.rotate)) throw new Error("Rotated pictures can't be merged. Set their rotation to 0 first.");
+    const ims = await Promise.all(els.map((e) => loadImage(e.src)));
+    const X0 = Math.min(...els.map((e) => e.x)), Y0 = Math.min(...els.map((e) => e.y));
+    const X1 = Math.max(...els.map((e) => e.x + e.w)), Y1 = Math.max(...els.map((e) => e.y + e.h));
+    // keep the sharpest picture's resolution
+    const scale = Math.min(4, Math.max(1, ...els.map((e, i) => ims[i].naturalWidth / Math.max(1, e.w))));
+    const c = document.createElement("canvas");
+    c.width = Math.max(1, Math.round((X1 - X0) * scale)); c.height = Math.max(1, Math.round((Y1 - Y0) * scale));
+    const x = c.getContext("2d");
+    els.forEach((e, i) => { x.globalAlpha = e.opacity ?? 1; x.drawImage(ims[i], (e.x - X0) * scale, (e.y - Y0) * scale, e.w * scale, e.h * scale); });
+    return { ...els[0], id: id(), type: "image", src: encodePicture(c), x: X0, y: Y0, w: X1 - X0, h: Y1 - Y0, opacity: 1, detected: els.every((e) => e.detected) };
+  }
+
   async function exportPictures(deck, baseName) {
     const files = [];
     deck.slides.forEach((slide, i) => {
@@ -2839,5 +2940,5 @@ window.NTSlides = (() => {
     return files.length;
   }
 
-  return { exportPictures, layoutLines, stylePieces, remapRuns, applyStyle, clearRunProp, _test: { glyphBoxes: (...a) => glyphBoxes(...a), segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
+  return { splitPicture, mergePictures, exportPictures, layoutLines, stylePieces, remapRuns, applyStyle, clearRunProp, _test: { glyphBoxes: (...a) => glyphBoxes(...a), segmentsOf: (...a) => segmentsOf(...a), strokeRatio: (...a) => strokeRatio(...a), sampleStyle: (...a) => sampleStyle(...a), serifScore: (...a) => serifScore(...a), contrastMap: (...a) => contrastMap(...a), slantOf: (...a) => slantOf(...a) }, lineRuns, shapePath, lineEnds, W, id, loadPdf, renderOriginal, newSlide, blankSlide, analyze, skipAnalysis, drawSlide, slideCanvas, cssFamily, exportPptx, exportPdf, exportPngs };
 })();
