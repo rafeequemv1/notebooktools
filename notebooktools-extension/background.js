@@ -207,7 +207,29 @@ chrome.storage.local.get("notebooktoolsDevReloadTabs", ({ notebooktoolsDevReload
 
 void devCheck();
 
+// NotebookLM calls for the import panels shown inside other sites (YouTube, …).
+// Inside youtube.com Chrome treats their requests to NotebookLM as third-party and
+// often holds back the Google sign-in cookies; from here they are first-party.
+const NLM_BRIDGE_METHODS = new Set([
+  "listNotebookLmNotebooks", "createNotebookLmNotebook", "listNotebookLmSources", "getNotebookLmSourceCount",
+  "addYoutubeToNotebookLm", "addWebpageToNotebookLm", "addTextToNotebookLm",
+  "waitForYoutubeSourceReady", "waitForWebSourceReady",
+  "createNotebookLmArtifact", "waitForNotebookLmArtifactReady"
+]);
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === "notebooktools-nlm") {
+    const fn = NLM_BRIDGE_METHODS.has(message.method) ? globalThis[message.method] : null;
+    if (typeof fn !== "function") {
+      sendResponse({ ok: false, error: "That NotebookLM action isn't available here." });
+      return false;
+    }
+    Promise.resolve()
+      .then(() => fn(...(Array.isArray(message.args) ? message.args : [])))
+      .then((result) => sendResponse({ ok: true, result }), (error) => sendResponse({ ok: false, error: error?.message || String(error) }));
+    return true;
+  }
+
   // Usage counters (stats.js): pages and content scripts report successful imports here.
   if (message?.type === "notebooktools-record-import") {
     if (!NotebookToolsStats.isAllowedKey(message.key)) {

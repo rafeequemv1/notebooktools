@@ -173,10 +173,7 @@
   }
 
   function areButtonsInPlace(insertPoint) {
-    return (
-      isButtonInPlace(watchButton, insertPoint) &&
-      isButtonInPlace(studioButton, insertPoint)
-    );
+    return isButtonInPlace(watchButton, insertPoint);
   }
 
   function getDropdown() {
@@ -248,7 +245,7 @@
       "mousedown",
       (event) => {
         const wrapper = document.getElementById(WATCH_BTN_ID);
-        const mapWrapper = document.getElementById(MINDMAP_BTN_ID);
+        const mapWrapper = null;
         const dropdown = document.getElementById(DROPDOWN_ID);
         const target = event.target;
 
@@ -403,14 +400,13 @@
     return studioButton;
   }
 
+  // One button under the video: NotebookLM (import this video)
   function placeWatchButton(insertPoint) {
     const importButton = ensureWatchButton();
-    const mapButton = ensureStudioButton();
+    document.getElementById(STUDIO_BTN_ID)?.remove();
 
-    for (const button of [importButton, mapButton]) {
-      if (button.parentElement && button.parentElement !== insertPoint.node) {
-        button.remove();
-      }
+    if (importButton.parentElement && importButton.parentElement !== insertPoint.node) {
+      importButton.remove();
     }
 
     if (areButtonsInPlace(insertPoint)) {
@@ -418,10 +414,8 @@
     }
 
     if (insertPoint.mode === "prepend") {
-      insertPoint.node.prepend(mapButton);
       insertPoint.node.prepend(importButton);
     } else {
-      insertPoint.node.before(mapButton);
       insertPoint.node.before(importButton);
     }
   }
@@ -580,13 +574,10 @@
 
     const insertPoint = getWatchInsertPoint();
     const importButton = document.getElementById(WATCH_BTN_ID);
-    const mapButton = document.getElementById(MINDMAP_BTN_ID);
 
     if (
       !importButton ||
-      !mapButton ||
       !isElementVisible(importButton) ||
-      !isElementVisible(mapButton) ||
       (insertPoint && !areButtonsInPlace(insertPoint))
     ) {
       scheduleRender();

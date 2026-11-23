@@ -2240,7 +2240,7 @@ async function refreshNotebookLmSource(notebookId, sourceId, options = {}) {
 
 function sleepMs(ms) {
   return new Promise((resolve) => {
-    window.setTimeout(resolve, ms);
+    setTimeout(resolve, ms); // (also runs in the background worker, which has no window)
   });
 }
 
