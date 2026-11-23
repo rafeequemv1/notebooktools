@@ -219,6 +219,92 @@ window.NTSlides = (() => {
 
   /* --- Segments: OCR lines split at big gaps, junk words dropped --- */
   const BULLET_RE = /^(?:[»«•·●▪◦*®©¢]|eo|[eoc](?=\s+[A-Z]))\s*/;
+  /* Text removed from a textured picture (a micrograph, a photo): the smooth fill
+     paintOut leaves would show as a flat patch, so the hole is filled from the
+     picture itself. Chunk by chunk, the nearby stretch whose surroundings match the
+     chunk's own surroundings best is copied in. Flat and gradient backgrounds keep
+     the smooth fill. */
+  // Is the picture around a box a texture (a micrograph, photo grain): bright and
+  // dark all round with fine detail, not flat and not one clean edge? hole(x, y)
+  // marks pixels to ignore (other removed text).
+  function texturedAround(d, W, H, r, hole = () => false) {
+    const L = (x, y) => { const i = (Math.min(H - 1, Math.max(0, y)) * W + Math.min(W - 1, Math.max(0, x))) * 4; return 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]; };
+    const ring = [];
+    for (let x = r.x0 - 6; x < r.x1 + 6; x += 2) for (const y of [r.y0 - 5, r.y0 - 9, r.y1 + 4, r.y1 + 8]) if (x >= 0 && y >= 0 && x < W && y < H && !hole(x, y)) ring.push(L(x, y));
+    for (let y = r.y0; y < r.y1; y += 2) for (const x of [r.x0 - 5, r.x0 - 9, r.x1 + 4, r.x1 + 8]) if (x >= 0 && x < W && y >= 0 && y < H && !hole(x, y)) ring.push(L(x, y));
+    if (ring.length < 20) return false;
+    const mean = ring.reduce((a, v) => a + v, 0) / ring.length;
+    const sd = Math.sqrt(ring.reduce((a, v) => a + (v - mean) ** 2, 0) / ring.length);
+    // fine detail both above and below (text on a flat band beside a drawing is not on a texture)
+    const detail = (y) => {
+      let tex = 0, tn = 0;
+      for (let x = r.x0 - 6; x < r.x1 + 6; x += 3) {
+        if (x < 0 || y < 0 || x >= W || y >= H || hole(x, y)) continue;
+        // brightness changing along the row (an edge running beside the text doesn't)
+        tex += Math.abs(L(x + 2, y) - L(x - 2, y)) > 12 ? 1 : 0;
+        tn += 1;
+      }
+      return tn >= 4 ? tex / tn : 0;
+    };
+    // the brightness spread (for judging seams), 0 when not a texture
+    return sd >= 14 && detail(r.y0 - 7) >= 0.25 && detail(r.y1 + 6) >= 0.25 ? sd : 0;
+  }
+
+  function fillTextured(cctx, boxes, W, H) {
+    const img = cctx.getImageData(0, 0, W, H);
+    const d = img.data;
+    const hole = new Uint8Array(W * H), filled = new Uint8Array(W * H);
+    const rects = boxes.map((b) => ({ x0: Math.max(0, Math.floor(b.x0)), y0: Math.max(0, Math.floor(b.y0)), x1: Math.min(W, Math.ceil(b.x1)), y1: Math.min(H, Math.ceil(b.y1)) })).filter((r) => r.x1 > r.x0 && r.y1 > r.y0);
+    for (const r of rects) for (let y = r.y0; y < r.y1; y += 1) hole.fill(1, y * W + r.x0, y * W + r.x1);
+    let changed = false;
+    for (const r of rects) {
+      const bh = r.y1 - r.y0, bw = r.x1 - r.x0;
+      const grain = texturedAround(d, W, H, r, (x, y) => hole[y * W + x] === 1);
+      if (!grain) continue;
+      const cw = Math.max(16, Math.min(bw, Math.round(bh * 1.5)));
+      const reach = Math.max(40, bh * 3), step = Math.max(2, Math.round(bh / 10)), R = 3;
+      for (let cx0 = r.x0; cx0 < r.x1; cx0 += cw) {
+        const cx1 = Math.min(r.x1, cx0 + cw), cy0 = r.y0, cy1 = r.y1;
+        // the chunk's known surroundings (real pixels, or chunks already filled)
+        const ringPts = [];
+        for (let y = cy0 - R; y < cy1 + R; y += 1) for (let x = cx0 - R; x < cx1 + R; x += 1) {
+          if (x >= cx0 && x < cx1 && y >= cy0 && y < cy1) continue;
+          if (x < 0 || y < 0 || x >= W || y >= H) continue;
+          const j = y * W + x;
+          if (hole[j] && !filled[j]) continue;
+          if ((x + y) % 2) continue;
+          ringPts.push(x - cx0, y - cy0);
+        }
+        if (ringPts.length < 12) continue;
+        let best = null, bestCost = Infinity;
+        for (let dy = -reach; dy <= reach; dy += step) for (let dx = -reach - cw; dx <= reach + cw; dx += step) {
+          const sx0 = cx0 + dx, sy0 = cy0 + dy;
+          if (sx0 - R < 0 || sy0 - R < 0 || sx0 + (cx1 - cx0) + R > W || sy0 + (cy1 - cy0) + R > H) continue;
+          // the source must be real picture: no removed text in it (checked on a grid)
+          let clash = false;
+          for (let y = sy0 - R; y < sy0 + (cy1 - cy0) + R && !clash; y += 3) for (let x = sx0 - R; x < sx0 + (cx1 - cx0) + R; x += 3) if (hole[y * W + x]) { clash = true; break; }
+          if (clash) continue;
+          let cost = 0;
+          for (let k = 0; k < ringPts.length && cost < bestCost; k += 2) {
+            const t = ((cy0 + ringPts[k + 1]) * W + cx0 + ringPts[k]) * 4, q = ((sy0 + ringPts[k + 1]) * W + sx0 + ringPts[k]) * 4;
+            cost += Math.abs(d[t] - d[q]) + Math.abs(d[t + 1] - d[q + 1]) + Math.abs(d[t + 2] - d[q + 2]);
+          }
+          if (cost < bestCost) { bestCost = cost; best = [dx, dy]; }
+        }
+        // only a patch whose edges really continue the surroundings (else the smooth fill stays)
+        // (a grainy texture differs a lot pixel by pixel even where it matches)
+        if (!best || bestCost / (Math.ceil(ringPts.length / 4) * 3) > Math.max(24, grain * 1.5)) continue;
+        for (let y = cy0; y < cy1; y += 1) for (let x = cx0; x < cx1; x += 1) {
+          const t = (y * W + x) * 4, q = ((y + best[1]) * W + x + best[0]) * 4;
+          d[t] = d[q]; d[t + 1] = d[q + 1]; d[t + 2] = d[q + 2];
+          filled[y * W + x] = 1;
+        }
+        changed = true;
+      }
+    }
+    if (changed) cctx.putImageData(img, 0, 0);
+  }
+
   function plausible(word) {
     const w = word.replace(/^[("'“‘\[]+|[)"'”’\].,:;!?]+$/g, "");
     if (!w) return false;
@@ -1319,7 +1405,9 @@ window.NTSlides = (() => {
       const y1 = Math.max(...group.map((g) => g.y1));
       // Text over a photo or strong gradient: keep it in the picture (removing it would leave patches).
       const behind = ringSpread(img, { x0, y0, x1, y1 }, 10, segs.filter((o) => !group.includes(o)));
-      if (behind > 45 && !group[0].badge) { dropped.push(`on a picture: ${group[0].text}`); continue; }
+      // ...unless it's a texture (micrograph, photo grain): that is repaired from the picture itself
+      const onTexture = behind > 45 && behind <= 70 && !!texturedAround(img.data, slide.w, slide.h, { x0: Math.round(x0), y0: Math.round(y0), x1: Math.round(x1), y1: Math.round(y1) }, (x, y) => segs.some((o) => !group.includes(o) && x >= o.x0 - 2 && x <= o.x1 + 2 && y >= o.y0 - 2 && y <= o.y1 + 2));
+      if (behind > 45 && !group[0].badge && !onTexture) { dropped.push(`on a picture: ${group[0].text}`); continue; }
       // Short one-line labels stay in the picture when they're part of a figure:
       // a fragment ("onduction"), a label OCR only half read ("Dirac Point (E"),
       // or a label among a chart's numbers and ticks.
@@ -1500,6 +1588,7 @@ window.NTSlides = (() => {
     const cctx = clean.getContext("2d", { willReadFrequently: true });
     cctx.drawImage(slide.original, 0, 0);
     paintOut(cctx, boxes, slide.w, slide.h);
+    fillTextured(cctx, boxes, slide.w, slide.h);
     slide._painted = boxes; // where text was removed (pictures stay see-through there)
     slide.clean = clean;
     slide.elements = [...elements, ...added];
