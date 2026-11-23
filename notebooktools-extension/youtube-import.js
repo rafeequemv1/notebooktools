@@ -149,11 +149,11 @@ async function initStudioOptions() {
 }
 
 if (headerTitle && !isStudioMode) {
-  headerTitle.textContent = "Import to NotebookLM";
+  headerTitle.textContent = "Send to NotebookLM";
 }
 
 if (importButton && !isStudioMode) {
-  importButton.textContent = "Import";
+  importButton.textContent = "Send to notebook";
 }
 
 importButton.addEventListener("click", runImport);

@@ -7,6 +7,9 @@ import NotebooksTable from './demos/NotebooksTable'
 import RibbonExport from './demos/RibbonExport'
 import SlidesToBlog from './demos/SlidesToBlog'
 import SnapshotsGuide from './demos/SnapshotsGuide'
+import AIChatImport from './demos/AIChatImport'
+import SlideEditor from './demos/SlideEditor'
+import Carousel from './demos/Carousel'
 
 // Every Stageshow demo the website can mount: <div data-stage="youtube"></div>
 const DEMOS: Record<string, ComponentType> = {
@@ -15,6 +18,9 @@ const DEMOS: Record<string, ComponentType> = {
   'chat-export': RibbonExport,
   'slides-to-blog': SlidesToBlog,
   snapshots: SnapshotsGuide,
+  'ai-chats': AIChatImport,
+  'slide-editor': SlideEditor,
+  carousel: Carousel,
 }
 
 function Host({ Demo, label }: { Demo: ComponentType; label: string }) {

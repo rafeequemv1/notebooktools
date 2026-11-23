@@ -1,6 +1,6 @@
-# NotebookLM Slides to Blog Post, with Every Slide Image
+# NotebookLM Slide Deck to Blog Post with Images | NotebookTools
 
-> Turn NotebookLM slides into a blog post: the Auto blog workflow imports the deck PDF, has NotebookLM write the article and places every slide image in it.
+> Turn a NotebookLM (Gemini Notebook) slide deck into a full blog post or handout with every slide embedded as an image. Download as HTML, Word, PDF or Markdown.
 > Source: https://www.notebooktools.com/features/slides-to-blog
 
 Feature

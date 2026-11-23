@@ -1027,7 +1027,7 @@
       demo: "youtube"
     },
     "bulk-import": {
-      title: "Bulk import queue – NotebookTools",
+      title: "Bulk import – NotebookTools",
       description: "Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.",
       name: "Bulk import",
       path: "/features/bulk-import",
@@ -1102,6 +1102,27 @@
       name: "Manage sources",
       path: "/features/manage-sources",
       demo: "manage"
+    },
+    "ai-chats": {
+      title: "Send ChatGPT, Gemini & Claude Chats to NotebookLM | NotebookTools",
+      description: "Save ChatGPT, Gemini, Claude, Perplexity, Grok and Kimi conversations, Reddit threads, LinkedIn posts and Google Docs to NotebookLM in one click.",
+      name: "AI chats & posts",
+      path: "/features/ai-chats",
+      demo: null
+    },
+    "slide-editor": {
+      title: "Edit NotebookLM Slides: Real Text, Download PowerPoint | NotebookTools",
+      description: "Turn NotebookLM slide decks into real text boxes and separate pictures, edit them, then save PowerPoint, PDF or images.",
+      name: "Slide editor",
+      path: "/features/slide-editor",
+      demo: null
+    },
+    "carousel": {
+      title: "NotebookLM Slide Deck to LinkedIn & Instagram Carousel | NotebookTools",
+      description: "Turn a NotebookLM slide deck into a LinkedIn PDF carousel or Instagram images with your handle on every page.",
+      name: "Carousel maker",
+      path: "/features/carousel",
+      demo: null
     },
     "snapshots": {
       title: "Snapshots & PDF capture — NotebookTools",

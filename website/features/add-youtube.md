@@ -1,6 +1,6 @@
-# YouTube to NotebookLM: Add Videos & Playlists in One Click
+# Add YouTube Videos & Playlists to NotebookLM | NotebookTools
 
-> Send YouTube to NotebookLM in one click: a NotebookLM button on every watch page adds the video as a source, and whole playlists load in one go. Free.
+> Import a YouTube video, a whole playlist or a channel into NotebookLM (Gemini Notebook) with one click from the watch page. Free Chrome extension.
 > Source: https://www.notebooktools.com/features/add-youtube
 
 Feature
@@ -19,28 +19,28 @@ How it works
 
 1. 1
   **Open a YouTube video**
-  NotebookTools adds **NotebookLM** and **Studio** buttons next to Like and Share.
+  NotebookTools adds a **Send to NotebookLM** button next to Like and Share.
 2. 2
-  **Click NotebookLM**
+  **Click Send to NotebookLM**
   A small panel opens under the button with your notebooks.
 3. 3
   **Pick a notebook**
   Search, choose one, or type a name to create a new notebook.
 4. 4
-  **Click Import**
+  **Click Send to notebook**
   The video is added as a source. Open the notebook from the panel.
 
 ## Send YouTube to NotebookLM in one click
 
-NotebookTools puts a **NotebookLM** button on every YouTube watch page, next to Like and Share. Click it, pick a notebook, and the video is added as a source in NotebookLM (now Gemini Notebook), ready to chat with, summarize or turn into an Audio Overview. For a whole playlist or channel, the side panel loads every video at once.
+NotebookTools puts a **Send to NotebookLM** button on every YouTube watch page, next to Like and Share. Click it, pick a notebook, and the video is added as a source in NotebookLM (now Gemini Notebook), ready to chat with, summarize or turn into an Audio Overview. For a whole playlist or channel, the NotebookTools popup lists every video so you can add them at once.
 
 ### How to use it
 
 1. Install NotebookTools from the Chrome Web Store and sign in to NotebookLM in the same Chrome profile.
-2. Open a YouTube video and click the **NotebookLM** button under the player.
+2. Open a YouTube video and click **Send to NotebookLM** under the player.
 3. Search your notebooks and pick one, or type a name to create a new notebook.
-4. Click **Import**. The video appears in the notebook's sources, and you can open the notebook from the panel.
-5. For a playlist or channel, open its page, then click **Load from tab** in the side panel's Bulk tab, tick the videos and import them.
+4. Click **Send to notebook**. The video appears in the notebook's sources, and you can open the notebook from the panel.
+5. For a playlist or channel, open its page and click the NotebookTools icon in the toolbar: the popup lists the videos. Tick the ones you want and click **Import N selected videos**.
 
 ### Why it helps
 
@@ -62,7 +62,7 @@ Yes. NotebookLM accepts a YouTube link as a source and works from the video's tr
 
 ### How do I add a whole YouTube playlist to NotebookLM?
 
-Open the playlist page, open the NotebookTools side panel, go to the Bulk tab and click Load from tab. Tick the videos you want, pick a notebook and click Import. Playlists with more than 50 videos are split across notebooks.
+Open the playlist page and click the NotebookTools icon in the toolbar. The popup lists the videos: tick the ones you want, pick a notebook and click Import selected videos. Playlists with more than 50 videos are split across notebooks.
 
 ### Is the YouTube to NotebookLM import free?
 

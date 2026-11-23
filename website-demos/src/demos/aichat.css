@@ -1,0 +1,89 @@
+.nt-ai .ss-stage { overflow: hidden; }
+
+/* Hero: the browser, inset to leave a margin column for the satellite, off right and bottom */
+.nt-ai .nt-ai__win { box-shadow: var(--ss-shadow-hero); height: 600px; left: 168px; position: absolute; top: 32px; width: 900px; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__win { height: 520px; left: 16px; top: 24px; width: 420px; }
+
+.nt-ai .nt-ai__page { background: var(--ss-surface); display: flex; height: 100%; }
+
+/* The chat app's own sidebar: filler, under the satellite */
+.nt-ai .nt-ai__side { background: #f9f9f9; border-right: 1px solid rgba(0,0,0,.06); display: flex; flex: 0 0 210px; flex-direction: column; gap: 4px; padding: 14px 10px; }
+.nt-ai .nt-ai__new { align-items: center; border-radius: 10px; color: var(--ss-text-strong); display: flex; font-size: 13.5px; font-weight: 500; gap: 8px; height: 34px; padding: 0 10px; }
+.nt-ai .nt-ai__new svg { color: var(--ss-icon); }
+.nt-ai .nt-ai__side-label { color: #8e8e8e; font-size: 12px; font-weight: 500; margin: 12px 10px 4px; }
+.nt-ai .nt-ai__chat { align-items: center; border-radius: 10px; color: var(--ss-text-strong); display: flex; font-size: 13px; height: 32px; overflow: hidden; padding: 0 10px; text-overflow: ellipsis; white-space: nowrap; }
+.nt-ai .nt-ai__chat.is-active { background: #ececec; }
+
+.nt-ai .nt-ai__main { display: flex; flex: 0 0 520px; flex-direction: column; min-width: 0; position: relative; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__main { flex-basis: 326px; }
+
+.nt-ai .nt-ai__top { align-items: center; display: flex; gap: 10px; height: 52px; padding: 0 14px 0 20px; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__top { padding: 0 10px 0 14px; }
+.nt-ai .nt-ai__title { color: var(--ss-text-strong); font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__title { font-size: 13.5px; }
+.nt-ai .nt-ai__spacer { flex: 1; }
+
+/* The NotebookTools pill, in the chat's top bar as the extension mounts it */
+.nt-ai .nt-ai__pill {
+  align-items: center; background: #f4f4f4; border: 1px solid rgba(0,0,0,.08); border-radius: 999px; color: #0d0d0d;
+  display: inline-flex; flex: none; font: 500 13px/1 var(--ss-font); gap: 7px; height: 32px; padding: 0 13px 0 10px; transition: background .15s;
+}
+.nt-ai .nt-ai__pill img { border-radius: 4px; display: block; }
+.nt-ai .nt-ai__pill[data-hover], .nt-ai .nt-ai__pill[data-open] { background: #e8e8e8; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__pill { font-size: 12px; height: 30px; padding: 0 10px 0 8px; }
+.nt-ai .nt-ai__ghost { flex: none; }
+
+.nt-ai .nt-ai__thread { display: flex; flex: 1; flex-direction: column; gap: 18px; padding: 18px 28px 0; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__thread { padding: 14px 14px 0; }
+.nt-ai .nt-ai__ask { align-self: flex-end; background: #f0f0f0; border-radius: 18px; color: #0d0d0d; font-size: 14px; line-height: 1.4; max-width: 78%; padding: 10px 14px; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__ask { font-size: 13px; }
+.nt-ai .nt-ai__answer { display: flex; flex-direction: column; gap: 14px; }
+.nt-ai .nt-ai__lead { color: #0d0d0d; font-size: 14px; line-height: 1.4; }
+.nt-ai .nt-ai__point { display: flex; gap: 12px; }
+.nt-ai .nt-ai__num { align-items: center; background: #f0f0f0; border-radius: 50%; color: var(--ss-text-strong); display: inline-flex; flex: none; font-size: 12px; font-weight: 600; height: 22px; justify-content: center; width: 22px; }
+.nt-ai .nt-ai__point-body { display: flex; flex: 1; flex-direction: column; gap: 7px; min-width: 0; }
+.nt-ai .nt-ai__point-body b { color: #0d0d0d; font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+
+.nt-ai .nt-ai__composer { align-items: center; border: 1px solid rgba(0,0,0,.1); border-radius: 26px; box-shadow: 0 2px 10px rgba(0,0,0,.05); display: flex; height: 50px; margin: 0 24px 96px; padding: 0 8px 0 18px; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__composer { margin: 0 12px 70px; }
+.nt-ai .nt-ai__composer-text { color: #8e8e8e; flex: 1; font-size: 14px; }
+.nt-ai .nt-ai__send { align-items: center; background: #0d0d0d; border-radius: 50%; color: #fff; display: inline-flex; height: 34px; justify-content: center; width: 34px; }
+
+/* The NotebookTools panel */
+.nt-ai .nt-ai__picker { --ss-popover-bg: var(--ss-surface); display: flex; flex-direction: column; gap: 10px; padding: 14px; position: absolute; z-index: 3; }
+.nt-ai .nt-ai__picker-head { align-items: flex-start; display: flex; gap: 10px; }
+.nt-ai .nt-ai__picker-head img { border-radius: 4px; display: block; flex: none; margin-top: 2px; }
+.nt-ai .nt-ai__picker-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.nt-ai .nt-ai__picker-text b { color: var(--ss-text-strong); font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+.nt-ai .nt-ai__picker-text em { color: var(--ss-text); font-size: 12px; font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-ai .nt-ai__label { color: var(--ss-text); font-size: 12px; font-weight: 500; margin-top: 2px; }
+.nt-ai .nt-ai__select { align-items: center; border: 1px solid #dadce0; border-radius: 10px; display: flex; gap: 8px; height: 40px; padding: 0 12px; }
+.nt-ai .nt-ai__select-emoji { font-size: 15px; }
+.nt-ai .nt-ai__select-name { color: var(--ss-text-strong); flex: 1; font-size: 13.5px; }
+.nt-ai .nt-ai__select-caret { color: var(--ss-icon); }
+.nt-ai .nt-ai__go { align-items: center; background: #1f1f1f; border: 0; border-radius: 999px; color: #fff; display: flex; font: 500 13.5px/1 var(--ss-font); height: 38px; justify-content: center; transition: background .2s; }
+.nt-ai .nt-ai__go[data-hover] { background: #333; }
+.nt-ai .nt-ai__go[data-phase="done"] { background: #0b57d0; }
+.nt-ai .nt-ai__go-row { align-items: center; display: inline-flex; gap: 8px; }
+.nt-ai .nt-ai__go .ss-check__fill { fill: #fff; }
+.nt-ai .nt-ai__go .ss-check__tick { stroke: #0b57d0; }
+
+/* Satellite: the notebook's Sources card */
+.nt-ai .nt-ai__sources { background: var(--ss-raised); border-radius: 16px; box-shadow: var(--ss-shadow-satellite); box-sizing: border-box; left: 32px; padding: 16px; position: absolute; top: 318px; width: 262px; }
+.nt-ai .nt-ai__sources-head { align-items: center; display: flex; gap: 10px; margin-bottom: 12px; }
+.nt-ai .nt-ai__sources-emoji { align-items: center; background: #eef2fb; border-radius: 10px; display: inline-flex; font-size: 17px; height: 36px; justify-content: center; width: 36px; }
+.nt-ai .nt-ai__sources-name { flex: 1; min-width: 0; }
+.nt-ai .nt-ai__sources-title { color: var(--ss-text-strong); font-size: 14px; font-weight: 600; line-height: 1.3; }
+.nt-ai .nt-ai__sources-sub { color: var(--ss-text); font-size: 12.5px; line-height: 1.3; margin-top: 2px; }
+.nt-ai .nt-ai__gn { align-self: flex-start; display: block; flex: none; }
+.nt-ai .nt-ai__list { display: flex; flex-direction: column; }
+.nt-ai .nt-ai__list .ss-collapse { grid-template-columns: minmax(0, 1fr); }
+.nt-ai .nt-ai__src { align-items: center; border-radius: 10px; display: flex; gap: 10px; height: 36px; min-width: 0; padding: 0 8px; }
+.nt-ai .nt-ai__src.is-new { background: var(--ss-accent-soft); }
+.nt-ai .nt-ai__src-ico { color: var(--ss-icon); flex: none; }
+.nt-ai .nt-ai__src-ico.is-pdf { color: #d93025; }
+.nt-ai .nt-ai__src-ico.is-chat { color: #0b57d0; }
+.nt-ai .nt-ai__src-name { color: var(--ss-text-strong); flex: 1; font-size: 13px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.nt-ai .nt-ai__rest { left: 760px; position: absolute; top: 470px; }
+.nt-ai .ss-stage[data-layout="compact"] .nt-ai__rest { left: 300px; top: 470px; }

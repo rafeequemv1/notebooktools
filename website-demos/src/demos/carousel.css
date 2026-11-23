@@ -1,0 +1,37 @@
+.nt-ca .nt-ca__menu { --ss-popover-bg: var(--ss-surface); display: flex; flex-direction: column; gap: 2px; padding: 8px; position: absolute; width: 250px; z-index: 3; }
+.nt-ca .nt-ca__menu-title { color: #80868b; font-size: 11px; font-weight: 500; letter-spacing: .06em; padding: 6px 10px 4px; text-transform: uppercase; }
+.nt-ca .nt-ca__item { align-items: center; border-radius: 10px; display: flex; gap: 10px; padding: 8px 10px; transition: background .15s; }
+.nt-ca .nt-ca__item svg { color: var(--ss-icon); flex: none; }
+.nt-ca .nt-ca__item[data-hover] { background: rgba(11,87,208,.08); }
+.nt-ca .nt-ca__item span { display: flex; flex-direction: column; gap: 2px; }
+.nt-ca .nt-ca__item b { color: var(--ss-text-strong); font-size: 13.5px; font-weight: 500; }
+.nt-ca .nt-ca__item em { color: var(--ss-text); font-size: 12px; font-style: normal; }
+
+.nt-ca .nt-ca__dialog { --ss-popover-bg: var(--ss-surface); box-shadow: 0 18px 50px rgba(15,30,60,.25); display: flex; flex-direction: column; gap: 14px; padding: 20px; position: absolute; z-index: 4; }
+.nt-ca .nt-ca__dialog-title { color: var(--ss-text-strong); font: 500 17px/1.2 "Google Sans", var(--ss-font); }
+.nt-ca .nt-ca__row { align-items: center; display: flex; gap: 12px; }
+.nt-ca .nt-ca__label { color: var(--ss-text); flex: 0 0 82px; font-size: 13px; }
+.ss-stage[data-layout="compact"] .nt-ca__label { flex-basis: 70px; font-size: 12px; }
+.nt-ca .nt-ca__seg { background: #f1f3f4; border-radius: 999px; display: inline-flex; padding: 3px; }
+.nt-ca .nt-ca__seg i { border-radius: 999px; color: var(--ss-text); font-size: 12.5px; font-style: normal; font-weight: 500; padding: 6px 12px; white-space: nowrap; }
+.nt-ca .ss-stage[data-layout="compact"] .nt-ca__seg i { font-size: 11px; padding: 5px 8px; }
+.nt-ca .nt-ca__seg i.is-on { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); color: var(--ss-text-strong); }
+.nt-ca .nt-ca__field { align-items: center; border: 1px solid #dadce0; border-radius: 10px; color: var(--ss-text-strong); display: flex; flex: 1; font-size: 13.5px; height: 36px; padding: 0 12px; }
+.nt-ca .nt-ca__field em { color: #9aa0a6; font-style: normal; }
+
+.nt-ca .nt-ca__pages { background: #f4f7fc; border-radius: 12px; display: flex; gap: 12px; justify-content: center; padding: 14px; }
+.nt-ca .ss-stage[data-layout="compact"] .nt-ca__pages { gap: 8px; padding: 10px; }
+.nt-ca .nt-ca__page { background: #0b1f45; border-radius: 6px; box-shadow: 0 4px 12px rgba(15,30,60,.2); display: flex; flex-direction: column; justify-content: center; padding: 8px; position: relative; }
+.nt-ca .nt-ca__page-slide { display: block; }
+.nt-ca .nt-ca__page-foot { align-items: center; bottom: 7px; color: rgba(255,255,255,.85); display: flex; font-size: 9px; justify-content: space-between; left: 8px; position: absolute; right: 8px; }
+.nt-ca .ss-stage[data-layout="compact"] .nt-ca__page-foot { font-size: 7px; }
+.nt-ca .nt-ca__handle { font-weight: 600; min-height: 1em; }
+.nt-ca .nt-ca__swipe { color: rgba(255,255,255,.7); position: absolute; right: 4px; top: calc(50% - 6px); }
+
+.nt-ca .nt-ca__actions { display: flex; gap: 8px; justify-content: flex-end; }
+.nt-ca .nt-ca__ghost { align-items: center; border-radius: 999px; color: #0b57d0; display: inline-flex; font-size: 13.5px; font-weight: 500; height: 36px; padding: 0 14px; }
+.nt-ca .nt-ca__go { align-items: center; background: #0b57d0; border-radius: 999px; color: #fff; display: inline-flex; font-size: 13.5px; font-weight: 500; height: 36px; padding: 0 20px; transition: background .15s; }
+.nt-ca .nt-ca__go[data-hover] { background: #0842a0; }
+
+.nt-ca .nt-ca__rest { left: 760px; position: absolute; top: 520px; }
+.nt-ca .ss-stage[data-layout="compact"] .nt-ca__rest { left: 300px; top: 500px; }

@@ -55,6 +55,16 @@ NotebookTools is a free Chrome extension for Google NotebookLM: bulk import (You
 - Drive refresh demo: https://www.notebooktools.com/features/drive-refresh
 - Studio & podcasts demo: https://www.notebooktools.com/features/studio-podcasts
 - Prompt library demo: https://www.notebooktools.com/features/prompts
+- AI chats & posts to NotebookLM (ChatGPT, Gemini, Claude, Perplexity, Grok, Kimi, Reddit, LinkedIn, Google Docs): https://www.notebooktools.com/features/ai-chats
+- Add webpage demo: https://www.notebooktools.com/features/add-webpage
+- X / Twitter import demo: https://www.notebooktools.com/features/x-twitter
+- Highlights demo: https://www.notebooktools.com/features/highlights
+- Manage sources demo: https://www.notebooktools.com/features/manage-sources
+- Chat, answer and whole-notebook export demo: https://www.notebooktools.com/features/chat-export
+- Slide editor (edit NotebookLM slides, download PowerPoint): https://www.notebooktools.com/features/slide-editor
+- Slides to blog demo: https://www.notebooktools.com/features/slides-to-blog
+- Carousel maker (LinkedIn PDF, Instagram images): https://www.notebooktools.com/features/carousel
+- Snapshots demo: https://www.notebooktools.com/features/snapshots
 - Blog hub: https://www.notebooktools.com/blog
 - Support: https://www.notebooktools.com/support
 - Privacy: https://www.notebooktools.com/privacy

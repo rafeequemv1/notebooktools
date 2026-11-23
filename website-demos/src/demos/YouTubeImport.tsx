@@ -73,7 +73,7 @@ export default function YouTubeImport() {
                 {layout === 'compact' && (
                   <button type="button" className="nt-yt__pill is-solo" data-target="nt-pill" data-cursor="pointer" data-open={s.open || undefined}>
                     <img src={LOGO} alt="" width={18} height={18} />
-                    NotebookLM
+                    Send to NotebookLM
                   </button>
                 )}
                 <div className="nt-yt__meta">
@@ -86,11 +86,10 @@ export default function YouTubeImport() {
                   {layout === 'wide' && (
                     <button type="button" className="nt-yt__pill" data-target="nt-pill" data-cursor="pointer" data-open={s.open || undefined}>
                       <img src={LOGO} alt="" width={18} height={18} />
-                      NotebookLM
+                      Send to NotebookLM
                     </button>
                   )}
                   {layout === 'wide' && <Bar className="nt-yt__ghost" w={88} h={34} r={17} tone={1} />}
-                  {layout === 'wide' && <Bar className="nt-yt__ghost" w={64} h={34} r={17} tone={1} />}
                 </div>
                 <div className="nt-yt__desc">
                   <Bar w="72%" h={6} tone={2} />
@@ -116,7 +115,7 @@ export default function YouTubeImport() {
 
           {/* The picker opens under its button, as the extension draws it */}
           <Popover show={s.open} origin="top right" className="nt-yt__picker" style={pickerAt(rect("nt-pill"), layout)}>
-            <div className="nt-yt__picker-head">Add to notebook</div>
+            <div className="nt-yt__picker-head">Send to NotebookLM</div>
             <div className="nt-yt__select">
               <span className="nt-yt__select-emoji" aria-hidden>🤖</span>
               <span className="nt-yt__select-name">{NOTEBOOK}</span>
@@ -126,8 +125,8 @@ export default function YouTubeImport() {
               <States
                 value={s.phase}
                 states={{
-                  idle: <span>Import video</span>,
-                  busy: <span className="nt-yt__import-row"><Spinner size={14} /> Importing</span>,
+                  idle: <span>Send to notebook</span>,
+                  busy: <span className="nt-yt__import-row"><Spinner size={14} /> Sending</span>,
                   done: <span className="nt-yt__import-row"><Check on={s.phase === 'done'} size={15} /> Added to notebook</span>,
                 }}
               />

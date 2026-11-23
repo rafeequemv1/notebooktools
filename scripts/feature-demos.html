@@ -11,6 +11,7 @@
         <select id="md-feature-select" class="md-mobile-select" aria-label="Choose a feature">
           <option value="overview" selected>Overview</option>
           <option value="add-youtube">Add YouTube</option>
+          <option value="ai-chats">AI chats &amp; posts</option>
           <option value="bulk-import">Bulk import</option>
           <option value="notebooks-hub">Notebooks hub</option>
           <option value="manage-sources">Manage sources</option>
@@ -21,7 +22,9 @@
           <option value="x-twitter">X / Twitter</option>
           <option value="highlights">Highlights</option>
           <option value="chat-export">Chat export</option>
+          <option value="slide-editor">Slide editor</option>
           <option value="slides-to-blog">Slides to blog</option>
+          <option value="carousel">Carousel maker</option>
           <option value="snapshots">Snapshots</option>
         </select>
       </div>
@@ -46,18 +49,25 @@
               <span class="md-nav-desc">One click on any watch page — video lands in your notebo…</span>
             </span>
           </a>
+          <a class="md-nav-item" href="/features/ai-chats" data-feature="ai-chats">
+            <span class="md-nav-icon md-icon-aichats"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v6A2.5 2.5 0 0116.5 15H11l-4 3.5V15h0A2 2 0 015 13V6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9.5h6M9 12h3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">AI chats & posts</span>
+              <span class="md-nav-desc">ChatGPT, Gemini, Claude, Reddit and more in one click.</span>
+            </span>
+          </a>
           <a class="md-nav-item" href="/features/bulk-import" data-feature="bulk-import">
             <span class="md-nav-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Bulk import</span>
-              <span class="md-nav-desc">Queue tabs, playlists, and pasted URLs — import dozens w…</span>
+              <span class="md-nav-desc">Open tabs in one click, playlists, links from a page.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/notebooks-hub" data-feature="notebooks-hub">
             <span class="md-nav-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Notebooks hub</span>
-              <span class="md-nav-desc">Pin, star, folder, and search every notebook in one calm…</span>
+              <span class="md-nav-desc">Every notebook in one table: folders, tags, merge.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/manage-sources" data-feature="manage-sources">
@@ -85,21 +95,21 @@
             <span class="md-nav-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Prompt library</span>
-              <span class="md-nav-desc">Curated prompts in the side panel — type / in NotebookLM…</span>
+              <span class="md-nav-desc">Type / in NotebookLM chat for ready-made prompts.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/add-webpage" data-feature="add-webpage">
             <span class="md-nav-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Add webpage</span>
-              <span class="md-nav-desc">Import the current tab URL from the side panel into any notebook.</span>
+              <span class="md-nav-desc">Add the page you are reading to any notebook in one click.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/x-twitter" data-feature="x-twitter">
             <span class="md-nav-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">X / Twitter</span>
-              <span class="md-nav-desc">Import threads and posts as clean text sources.</span>
+              <span class="md-nav-desc">Send posts and threads as clean text sources.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/highlights" data-feature="highlights">
@@ -113,7 +123,14 @@
             <span class="md-nav-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Chat export</span>
-              <span class="md-nav-desc">Export NotebookLM conversations — Markdown, text, or PDF.</span>
+              <span class="md-nav-desc">Export an answer, the whole chat or the whole notebook.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/slide-editor" data-feature="slide-editor">
+            <span class="md-nav-icon md-icon-slideeditor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h6M7 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 20.5l5-5 1.5 1.5-5 5h-1.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Slide editor</span>
+              <span class="md-nav-desc">Edit the text on NotebookLM slides, save PowerPoint.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/slides-to-blog" data-feature="slides-to-blog">
@@ -121,6 +138,13 @@
             <span class="md-nav-text">
               <span class="md-nav-title">Slides to blog</span>
               <span class="md-nav-desc">Turn a NotebookLM slide deck into a blog or guide with images.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/carousel" data-feature="carousel">
+            <span class="md-nav-icon md-icon-carousel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="4.5" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 7v9M20.5 7v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Carousel maker</span>
+              <span class="md-nav-desc">A slide deck as a LinkedIn or Instagram carousel.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/snapshots" data-feature="snapshots">
@@ -140,7 +164,7 @@
           <div class="md-panel-intro">
             <p class="eyebrow">NotebookTools</p>
             <h1>See every major feature</h1>
-            <p class="lead">Interactive demos recreating NotebookLM’s UI — Sources, chat, and Studio — so you can visualize how NotebookTools fits your research flow. Pick a feature on the left; demos play here.</p>
+            <p class="lead">Everything NotebookTools adds to NotebookLM: one-click import from YouTube, AI chats and any webpage, a dashboard for every notebook, a slide editor, makers and exports. Pick a feature on the left to watch it work.</p>
             <div class="feature-hero-cta">
               <a class="button button-primary button-lg" href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer"><svg class="chrome-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 1a11 11 0 0 1 9.53 5.5H12a5.5 5.5 0 0 0-4.76 2.75L3.47 4.5A11 11 0 0 1 12 1Z" fill="#EA4335"/><path d="M21.53 6.5A11 11 0 0 1 12 23l4.76-8.25A5.5 5.5 0 0 0 16.76 9.25 5.5 5.5 0 0 0 12 6.5h9.53Z" fill="#FBBC04"/><path d="M12 23A11 11 0 0 1 3.47 4.5l4.77 8.25A5.5 5.5 0 0 0 16.76 14.75L12 23Z" fill="#34A853"/><circle cx="12" cy="12" r="4.4" fill="#4285F4" stroke="#fff" stroke-width="1.6"/></svg>Add to Chrome — free</a>
               <a class="button button-ghost button-lg" href="/#pricing">View pricing</a>
@@ -154,18 +178,25 @@
                 <span>One click on any watch page — video lands in your notebook Sources.</span>
               </span>
             </button>
+            <button type="button" class="md-overview-card" data-feature="ai-chats" data-action="select-feature">
+              <span class="md-overview-icon md-icon-aichats"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v6A2.5 2.5 0 0116.5 15H11l-4 3.5V15h0A2 2 0 015 13V6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9.5h6M9 12h3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Send AI chats to NotebookLM</strong>
+                <span>ChatGPT, Gemini, Claude, Perplexity, Grok, Kimi, Reddit, LinkedIn and Google Docs, one click each.</span>
+              </span>
+            </button>
             <button type="button" class="md-overview-card" data-feature="bulk-import" data-action="select-feature">
               <span class="md-overview-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
               <span class="md-overview-body">
-                <strong>Bulk import queue</strong>
-                <span>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</span>
+                <strong>Bulk import</strong>
+                <span>All open tabs in one click, YouTube playlists, and every link on a page with live progress.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="notebooks-hub" data-action="select-feature">
               <span class="md-overview-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
               <span class="md-overview-body">
                 <strong>Notebooks hub</strong>
-                <span>Pin, star, folder, and search every notebook in one calm dashboard.</span>
+                <span>Every notebook in one table: folders, tags, search, compare and merge, saved presentations.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="manage-sources" data-action="select-feature">
@@ -193,21 +224,21 @@
               <span class="md-overview-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
               <span class="md-overview-body">
                 <strong>Prompt library</strong>
-                <span>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</span>
+                <span>Type / in NotebookLM chat for ready-made prompts and slide templates.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="add-webpage" data-action="select-feature">
               <span class="md-overview-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
               <span class="md-overview-body">
                 <strong>Add webpage</strong>
-                <span>Import the current tab URL from the side panel — any article or docs page.</span>
+                <span>Add the page you are reading from the popup: any article or docs page.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="x-twitter" data-action="select-feature">
               <span class="md-overview-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
               <span class="md-overview-body">
                 <strong>X / Twitter import</strong>
-                <span>Import threads and posts as clean text sources with one click.</span>
+                <span>Send posts and threads as clean text sources with one click.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="highlights" data-action="select-feature">
@@ -221,7 +252,14 @@
               <span class="md-overview-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
               <span class="md-overview-body">
                 <strong>Chat export</strong>
-                <span>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</span>
+                <span>Export the last answer, the whole chat, or every source and note as a ZIP.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="slide-editor" data-action="select-feature">
+              <span class="md-overview-icon md-icon-slideeditor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h6M7 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 20.5l5-5 1.5 1.5-5 5h-1.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Edit NotebookLM slides</strong>
+                <span>Slides become real text boxes and pictures. Edit, then download PowerPoint or PDF.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="slides-to-blog" data-action="select-feature">
@@ -229,6 +267,13 @@
               <span class="md-overview-body">
                 <strong>Slides to blog</strong>
                 <span>Turn a Studio slide deck into a blog or guide with slide images and export formats.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="carousel" data-action="select-feature">
+              <span class="md-overview-icon md-icon-carousel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="4.5" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 7v9M20.5 7v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Carousel maker</strong>
+                <span>Turn a slide deck into a LinkedIn PDF or Instagram images with your handle on every page.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="snapshots" data-action="select-feature">
@@ -261,20 +306,20 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open a YouTube video</strong><p>NotebookTools adds <b>NotebookLM</b> and <b>Studio</b> buttons next to Like and Share.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click NotebookLM</strong><p>A small panel opens under the button with your notebooks.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Search, choose one, or type a name to create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import</strong><p>The video is added as a source. Open the notebook from the panel.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a YouTube video</strong><p>NotebookTools adds a <b>Send to NotebookLM</b> button next to Like and Share.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Send to NotebookLM</strong><p>A small panel opens under the button with your notebooks.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Search, choose one, or type a name to create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Send to notebook</strong><p>The video is added as a source. Open the notebook from the panel.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-add-youtube">
           <div class="feature-seo-inner">
             <h2 id="seo-add-youtube">Send YouTube to NotebookLM in one click</h2>
-            <p class="feature-seo-lead">NotebookTools puts a <b>NotebookLM</b> button on every YouTube watch page, next to Like and Share. Click it, pick a notebook, and the video is added as a source in NotebookLM (now Gemini Notebook), ready to chat with, summarize or turn into an Audio Overview. For a whole playlist or channel, the side panel loads every video at once.</p>
+            <p class="feature-seo-lead">NotebookTools puts a <b>Send to NotebookLM</b> button on every YouTube watch page, next to Like and Share. Click it, pick a notebook, and the video is added as a source in NotebookLM (now Gemini Notebook), ready to chat with, summarize or turn into an Audio Overview. For a whole playlist or channel, the NotebookTools popup lists every video so you can add them at once.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Install NotebookTools from the Chrome Web Store and sign in to NotebookLM in the same Chrome profile.</li>
-              <li>Open a YouTube video and click the <b>NotebookLM</b> button under the player.</li>
+              <li>Open a YouTube video and click <b>Send to NotebookLM</b> under the player.</li>
               <li>Search your notebooks and pick one, or type a name to create a new notebook.</li>
-              <li>Click <b>Import</b>. The video appears in the notebook's sources, and you can open the notebook from the panel.</li>
-              <li>For a playlist or channel, open its page, then click <b>Load from tab</b> in the side panel's Bulk tab, tick the videos and import them.</li>
+              <li>Click <b>Send to notebook</b>. The video appears in the notebook's sources, and you can open the notebook from the panel.</li>
+              <li>For a playlist or channel, open its page and click the NotebookTools icon in the toolbar: the popup lists the videos. Tick the ones you want and click <b>Import N selected videos</b>.</li>
             </ol>
             <h3>Why it helps</h3>
             <p>Without the extension you copy each link, switch to NotebookLM, open the add-source dialog and paste it. That is fine for one video and slow for a 30-lecture course. The playlist loader skips videos already in the queue, and when a playlist has more than 50 videos it splits them across notebooks, so you stay within the free per-notebook source limit.</p>
@@ -292,11 +337,64 @@
             </div>
             <div class="feature-seo-q">
               <h3>How do I add a whole YouTube playlist to NotebookLM?</h3>
-              <p>Open the playlist page, open the NotebookTools side panel, go to the Bulk tab and click Load from tab. Tick the videos you want, pick a notebook and click Import. Playlists with more than 50 videos are split across notebooks.</p>
+              <p>Open the playlist page and click the NotebookTools icon in the toolbar. The popup lists the videos: tick the ones you want, pick a notebook and click Import selected videos. Playlists with more than 50 videos are split across notebooks.</p>
             </div>
             <div class="feature-seo-q">
               <h3>Is the YouTube to NotebookLM import free?</h3>
               <p>Yes. Single videos, playlists and channels all import on the free plan. Pro ($49 once) is only needed for tools such as the notebooks dashboard, Studio files and chat export.</p>
+            </div>
+          </div>
+        </section>
+        </article>
+        <article class="md-panel" data-panel="ai-chats" id="panel-ai-chats" hidden>
+          <h1 class="sr-only">Send AI chats to NotebookLM</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="ai-chats" data-stage-label="AI chat import"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a chat</strong><p>ChatGPT, Gemini, Claude, Perplexity, Grok or Kimi. A <b>Send to NotebookLM</b> button appears in the chat.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Send to NotebookLM</strong><p>The panel shows the chat's title and how many messages it found.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one, or type a name to create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Send to notebook</strong><p>The whole conversation is saved as one text source.</p></div></li>
+        </ol>
+      </section>
+        <section class="feature-seo" aria-labelledby="seo-ai-chats">
+          <div class="feature-seo-inner">
+            <h2 id="seo-ai-chats">Send ChatGPT, Gemini, Claude and other AI chats to NotebookLM</h2>
+            <p class="feature-seo-lead">NotebookTools adds a <b>Send to NotebookLM</b> button to AI chats and social posts. One click saves the whole conversation, with who said what, to a NotebookLM notebook as a clean text source. It works on ChatGPT, Gemini, Claude, Perplexity (with its list of sources), Grok and Kimi, and on Reddit threads, LinkedIn posts and articles, X posts and Google Docs.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>Open a conversation in ChatGPT, Gemini, Claude, Perplexity, Grok or Kimi. Shared chat links work too.</li>
+              <li>Click <b>Send to NotebookLM</b>: in the chat's top bar on ChatGPT and Gemini, at the top right on the others.</li>
+              <li>Check the title and the number of messages in the panel.</li>
+              <li>Pick a notebook, or type a name to create a new one.</li>
+              <li>Click <b>Send to notebook</b>. The chat is saved as a source titled with its app, for example <b>[CHATGPT] …</b>.</li>
+              <li>On a Reddit thread you get the post and its first 50 top-level comments; on LinkedIn the post or article; in Google Docs, <b>Copy text to NotebookLM</b> saves a text copy of the document.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>Good answers end up scattered across several AI apps, and none of them can be searched together. Saved in a notebook, the conversation sits next to your papers, videos and notes, where NotebookLM can cite it, compare it with other sources and turn it into a report or an Audio Overview.</p>
+            <p>Only what is loaded on the page is saved, so scroll through very long chats or threads first. The button follows the site's light or dark theme and stays out of the way on pages without a conversation.</p>
+            <p class="feature-seo-plan"><strong>Free.</strong> Sending AI chats, Reddit threads, LinkedIn posts, X posts and Google Docs is part of the free plan. <a href="/#pricing">See plans</a></p>
+            <h3>Related guides</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/blog/best-ways-import-content-notebooklm">Every way to add sources to NotebookLM</a></li>
+              <li><a href="/blog/what-is-notebooktools">What the NotebookTools extension does</a></li>
+              <li><a href="/features/x-twitter">Send X (Twitter) posts and threads to NotebookLM</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">AI chats: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>Can I add a ChatGPT conversation to NotebookLM?</h3>
+              <p>Yes. Open the chat, click <b>Send to NotebookLM</b> at the top, pick a notebook and click <b>Send to notebook</b>. The conversation is saved as one text source, with your questions and ChatGPT's answers labelled.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Which sites does it work on?</h3>
+              <p>ChatGPT, Gemini, Claude, Perplexity, Grok and Kimi, plus Reddit, LinkedIn, X and Google Docs. YouTube videos have their own <b>Send to NotebookLM</b> button under the player.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Does a Google Doc stay in sync?</h3>
+              <p>No. <b>Copy text to NotebookLM</b> saves a text copy. For a source that stays in sync, add the document from Google Drive in NotebookLM itself.</p>
             </div>
           </div>
         </section>
@@ -310,7 +408,7 @@
         <div class="demo-shell" data-scene="bulk">
           <div class="br-window" data-surface="browser" data-tabs='[{"title": "Retrieval-augmented generation - Wikipedia", "url": "en.wikipedia.org/wiki/Retrieval-augmented_generation", "icon": "web", "active": true}, {"title": "Introducing NotebookLM Video Overviews", "url": "youtube.com/watch?v=Qv3jF0sXc2Y", "icon": "yt"}, {"title": "Evaluating RAG pipelines", "url": "blog.langchain.dev/evaluating-rag-pipelines", "icon": "web"}, {"title": "Long-context vs RAG — talk", "url": "youtube.com/watch?v=8nX2kq1ZpQe", "icon": "yt"}, {"title": "Chunking strategies that work", "url": "pinecone.io/learn/chunking-strategies", "icon": "web"}]'>
             <div class="br-page"><div class="pg-article"><span class="pg-kicker">Wikipedia</span><h2>Retrieval-augmented generation</h2><div class="pg-meta">From Wikipedia, the free encyclopedia</div><p><b>Retrieval-augmented generation</b> (RAG) is a technique that grants generative models the ability to retrieve and incorporate new information before responding.</p><p>Instead of relying only on what a model learned in training, RAG first searches a set of documents, then passes the most relevant passages to the model as context.</p><p>The approach reduces hallucinations and lets answers cite their sources, which is why research tools such as NotebookLM ground every answer in your uploads.</p></div></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div><div class="br-page"></div>
-            <aside data-surface="sidepanel" data-tab="Bulk" data-tagline="Bulk import queue">
+            <aside data-surface="sidepanel" data-tab="Bulk" data-tagline="Links from this page">
               <section class="sp-card"><h4 class="sp-card-title">Playlist / channel</h4><p class="sp-hint">Open a playlist or channel /videos page, then import in one click.</p><span class="sp-btn">Load from tab</span></section>
               <section class="sp-card"><h4 class="sp-card-title">Add links</h4>
                 <div class="sp-grid-2"><span class="sp-btn">Extract from page</span><span class="sp-btn" data-s="open-tabs">Open tabs</span><span class="sp-btn">Paste links</span></div>
@@ -335,23 +433,24 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open the side panel</strong><p>Click the NotebookTools icon, then the <b>Bulk</b> tab.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Build the queue</strong><p>Add open tabs, paste links, extract links from a page, or load a playlist.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Choose a notebook</strong><p>Pick an existing notebook or create a new one.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import N sources</strong><p>Watch each item import with live progress and a final summary.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open tabs: one click</strong><p>Click the NotebookTools icon, then <b>Add open tabs</b>. Every website tab goes to the notebook.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>A playlist or channel</strong><p>On its page, the popup lists the videos: tick them and click <b>Import N selected videos</b>.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Links on a page</strong><p>Right-click and choose <b>Extract links to Notebook</b>: the links open in a queue.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Import the queue</strong><p>Untick what you don't want and click <b>Import queue</b>; watch the progress.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-bulk-import">
           <div class="feature-seo-inner">
             <h2 id="seo-bulk-import">Bulk import to NotebookLM: dozens of sources in one run</h2>
-            <p class="feature-seo-lead">The <b>Bulk</b> tab in the NotebookTools side panel builds a queue of links and imports them into one NotebookLM notebook in a single run. Add your open tabs, paste a list of URLs, extract the links from an article, or load a YouTube playlist or channel. Each item shows its type and status, and failed items can be retried.</p>
+            <p class="feature-seo-lead">NotebookTools adds many sources to one NotebookLM notebook in a single run. <b>Add open tabs</b> in the popup sends every website tab in the window in one click. On a YouTube playlist or channel, the popup lists its videos to tick. And right-clicking any page with <b>Extract links to Notebook</b> opens a queue of its links, where you can also paste more URLs. Each item shows its type and status, and failed items can be retried.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
-              <li>Click the NotebookTools icon in the Chrome toolbar and open the <b>Bulk</b> tab.</li>
-              <li>Build the queue with <b>Open tabs</b>, <b>Paste links</b> (one per line), <b>Extract from page</b>, or <b>Load from tab</b> on a YouTube playlist.</li>
+              <li>To add your open tabs, click the NotebookTools icon in the Chrome toolbar, pick a notebook and click <b>Add open tabs</b>. YouTube tabs go in as videos, the rest as web pages.</li>
+              <li>For a YouTube playlist or channel, open its page and click the icon: tick the videos in the list and click <b>Import N selected videos</b>.</li>
+              <li>For the links in an article or reading list, right-click the page and choose <b>Extract links to Notebook</b>. The queue opens with every link; paste more URLs (one per line) if you like.</li>
               <li>Untick anything you don't want, or select items and click <b>Remove</b>.</li>
               <li>Pick an existing notebook or create a new one.</li>
               <li>Click <b>Import queue</b> and watch the progress bar until the summary appears.</li>
             </ol>
             <h3>Why it helps</h3>
-            <p>Adding sources by hand means one dialog per link, which is a lot of clicking for a reading list of 40 articles. The queue imports them in one go, skips links that are already in it, and warns you when it would push a notebook past its source limit (50 sources on a free Google account, 300 on Google AI Pro). You can also right-click any page and choose <b>Extract links to Notebook</b> to queue every link in it.</p>
+            <p>Adding sources by hand means one dialog per link, which is a lot of clicking for a reading list of 40 articles. The queue imports them in one go, skips links that are already in it, and warns you when it would push a notebook past its source limit (50 sources on a free Google account, 300 on Google AI Pro).</p>
             <p class="feature-seo-plan"><strong>Free.</strong> Bulk import, open tabs, pasted links, link extraction and playlists are all part of the free plan. <a href="/#pricing">See plans</a></p>
             <h3>Related guides</h3>
             <ul class="feature-seo-links">
@@ -386,24 +485,25 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open notebooks</strong><p>In the side panel, click <b>Open notebooks</b> to open the hub in a new tab.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Star and pin</strong><p>Favorite notebooks and pin the ones you use most to the top.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Organize</strong><p>Filter by folder or tag, sort by title, sources, tags or favorites.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Clean up</strong><p>Click <b>Select</b>, tick notebooks, and delete them in one go.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open all notebooks</strong><p>Click <b>All notebooks</b> in the NotebookTools popup or the ribbon; the hub opens in a new tab.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Star and pin</strong><p>Favorite notebooks and pin the ones you use most to the top.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Organize</strong><p>Filter by folder or tag, sort by title, sources, tags or favorites.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Clean up</strong><p>Click <b>Select</b>, tick notebooks, and delete them in one go.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-notebooks-hub">
           <div class="feature-seo-inner">
             <h2 id="seo-notebooks-hub">Organize NotebookLM notebooks with folders, tags and favorites</h2>
-            <p class="feature-seo-lead">The NotebookTools notebooks hub opens every NotebookLM notebook in one table, in its own browser tab. You can star and pin notebooks, put them in folders, add tags, search by name, and sort by title, number of sources, tags or favorites. Open a notebook from the hub to see its Sources, Studio and Notes.</p>
+            <p class="feature-seo-lead">The NotebookTools notebooks hub opens every NotebookLM notebook in one table, in its own browser tab. You can star and pin notebooks, put them in folders, add tags, search by name, and sort by title, number of sources, tags or favorites. Open a notebook from the hub to see its Sources, Studio and Notes, compare or merge two notebooks, highlight passages in a source and keep notes beside them. The <b>Presentations</b> tab keeps every slide deck you edited in the slide editor.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
-              <li>Open the NotebookTools side panel and click <b>Open notebooks</b>. The hub opens in a new tab.</li>
+              <li>Click <b>All notebooks</b> (the grid icon) in the NotebookTools popup, or in the ribbon inside a notebook. The hub opens in a new tab.</li>
               <li>Star your favorites and pin the notebooks you use most so they stay at the top.</li>
               <li>Create folders and add tags, then filter the list by folder or tag.</li>
               <li>Sort by title, sources, tags or favorites, or type in the search box.</li>
               <li>To clean up, click <b>Select</b>, tick old notebooks and delete them together.</li>
+              <li>To combine research, compare two notebooks side by side, copy the sources you tick across, or merge both into a new notebook.</li>
             </ol>
             <h3>Why it helps</h3>
             <p>A free Google account can hold 100 notebooks and Google AI Pro 500, so classes, client projects and side research soon blur together in a grid of cards. Folders and tags give each notebook a place, and the sources column shows at a glance which notebooks are close to their limit. Bulk delete clears out test notebooks in seconds instead of one menu at a time.</p>
-            <p class="feature-seo-plan"><strong>Pro.</strong> The notebooks hub, folders, tags and favorites are part of NotebookTools Pro: $49 once, for life. <a href="/#pricing">See plans</a></p>
+            <p class="feature-seo-plan"><strong>Pro.</strong> The notebooks hub, folders, tags, favorites, compare and merge, and source notes are part of NotebookTools Pro: $49 once, for life. <a href="/#pricing">See plans</a></p>
             <h3>Related guides</h3>
             <ul class="feature-seo-links">
               <li><a href="/blog/what-is-notebooktools">What NotebookTools adds to NotebookLM</a></li>
@@ -727,23 +827,23 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in NotebookLM</strong><p>NotebookTools works inside the chat box.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Type /</strong><p>A menu shows your saved prompts first, then the slide templates.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Filter and pick</strong><p>Keep typing to filter; use ↑ ↓ and Enter.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Send</strong><p>The full prompt is inserted, ready to send. Manage prompts in the side panel's Prompts tab.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook in NotebookLM</strong><p>NotebookTools works inside the chat box.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Type /</strong><p>A menu shows ready-made prompts and slide deck templates.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Filter and pick</strong><p>Keep typing to filter; use ↑ ↓ and Enter.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Send</strong><p>The full prompt is inserted, ready to edit or send.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-prompts">
           <div class="feature-seo-inner">
             <h2 id="seo-prompts">A NotebookLM prompt library inside the chat box</h2>
-            <p class="feature-seo-lead">NotebookTools adds a prompt library to NotebookLM. Type <b>/</b> in the chat box and a menu shows your saved prompts first, then ready-made slide deck templates. Pick one and the full prompt is inserted, ready to edit or send.</p>
+            <p class="feature-seo-lead">NotebookTools adds a prompt library to NotebookLM. Type <b>/</b> in the chat box and a menu shows ready-made prompts and slide deck templates. Pick one and the full prompt is inserted, ready to edit or send. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog, so you can pick a look before the deck is made.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Open a notebook in NotebookLM.</li>
               <li>Type <b>/</b> in the chat box to open the prompt menu.</li>
               <li>Keep typing to filter, use &#8593; &#8595; to move and Enter to choose.</li>
               <li>Edit the inserted prompt if you need to, then send it.</li>
-              <li>Add, edit or delete your own prompts in the side panel's <b>Prompts</b> tab.</li>
+              <li>When you create a slide deck in Studio, pick one of the style cards NotebookTools adds to the dialog.</li>
             </ol>
             <h3>Why it helps</h3>
-            <p>Good NotebookLM output depends on a precise prompt: the audience, the format, the length and what to cite. Retyping a long study-guide or slide prompt in every notebook is slow, and the wording that worked gets lost. Saved prompts keep that wording one keystroke away, and the slide templates give you deck styles to start from instead of a blank box. Your saved prompts work in every notebook, so a prompt you refine for one project is ready for the next.</p>
+            <p>Good NotebookLM output depends on a precise prompt: the audience, the format, the length and what to cite. Retyping a long study-guide or slide prompt in every notebook is slow, and the wording that worked gets lost. Ready-made prompts keep good wording one keystroke away, in every notebook, and the slide templates and style cards give you deck styles to start from instead of a blank box.</p>
             <p class="feature-seo-plan"><strong>Pro.</strong> The prompt library and / commands are part of NotebookTools Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
             <h3>Related guides</h3>
             <ul class="feature-seo-links">
@@ -754,11 +854,11 @@
             <h2 class="feature-seo-faq-title">Prompt library: frequently asked questions</h2>
             <div class="feature-seo-q">
               <h3>How do I use slash commands in NotebookLM?</h3>
-              <p>Install NotebookTools, open a notebook and type / in the chat box. A menu lists your saved prompts and slide templates; pick one with the arrow keys and Enter to insert it.</p>
+              <p>Install NotebookTools, open a notebook and type / in the chat box. A menu lists ready-made prompts and slide templates; pick one with the arrow keys and Enter to insert it.</p>
             </div>
             <div class="feature-seo-q">
-              <h3>Can I save my own NotebookLM prompts?</h3>
-              <p>Yes. Add them in the Prompts tab of the NotebookTools side panel. They appear at the top of the / menu in every notebook.</p>
+              <h3>Does it help with NotebookLM slide decks?</h3>
+              <p>Yes. The / menu has slide deck templates, and the slide deck dialog in Studio gets style cards with thumbnails. To change a deck after it is made, use the <a href="/features/slide-editor">slide editor</a>.</p>
             </div>
             <div class="feature-seo-q">
               <h3>Is the prompt library free?</h3>
@@ -780,7 +880,7 @@
               <section class="sp-card"><div class="sp-modes"><span class="is-active">Web</span><span>YouTube</span></div>
                 <div class="sp-preview"><span class="br-tab-ico"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ff6719"/><path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h12l-6 4z" fill="#fff"/></svg></span><div>The state of AI research assistants<small>stratechery.example.com/2026/ai-research-assistants</small></div></div></section>
               <div data-surface="picker" data-variant="card" data-selected="Product launch (8)"></div>
-              <span class="sp-primary" data-s="wp-add">Add to NotebookLM</span>
+              <span class="sp-primary" data-s="wp-add">Add page to notebook</span>
               <div class="sp-links" style="justify-content:center"><span>Refresh</span><span data-s="wp-open" hidden>Open notebook</span></div>
               <p class="sp-status" data-s="wp-status" hidden></p>
             </aside>
@@ -794,22 +894,22 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open any article</strong><p>Docs, blogs, news or research pages.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Open the side panel</strong><p>Click the NotebookTools icon in the toolbar.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one or create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Add to NotebookLM</strong><p>The page is added as a source.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open any article</strong><p>Docs, blogs, news or research pages.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click the NotebookTools icon</strong><p>The popup opens with the current tab ready to add.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one or create a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Add page to notebook</strong><p>The page is added as a source.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-add-webpage">
           <div class="feature-seo-inner">
             <h2 id="seo-add-webpage">Add any website to NotebookLM in one click</h2>
-            <p class="feature-seo-lead">The NotebookTools side panel adds the page in your current tab to a NotebookLM notebook as a web source. It works on articles, documentation, blog posts, news and research pages, and you never leave the page or copy the URL.</p>
+            <p class="feature-seo-lead">The NotebookTools popup adds the page in your current tab to a NotebookLM notebook as a web source. It works on articles, documentation, blog posts, news and research pages, and you never leave the page or copy the URL.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Open the article or page you want to keep.</li>
-              <li>Click the NotebookTools icon in the Chrome toolbar to open the side panel.</li>
+              <li>Click the NotebookTools icon in the Chrome toolbar. The popup shows the current tab, ready to add.</li>
               <li>Pick a notebook, or type a name to create a new one.</li>
-              <li>Click <b>Add to NotebookLM</b>. The page is added as a source.</li>
+              <li>Click <b>Add page to notebook</b>. The page is added as a source. With Pro, <b>Also create in Studio</b> makes a mind map, report or other Studio output in the same step.</li>
             </ol>
             <h3>Why it helps</h3>
-            <p>Adding a URL in NotebookLM means switching tabs, opening the add-source dialog, choosing the website option and pasting the link. With research spread across many tabs, that context switch adds up. From the side panel it is one click while you read. For many tabs at once, the <a href="/features/bulk-import">bulk import queue</a> adds them all, and to keep just one passage you can <a href="/features/highlights">send highlighted text</a> instead. The source keeps the page link, so NotebookLM's citations lead you back to the original article whenever you need to check the context.</p>
+            <p>Adding a URL in NotebookLM means switching tabs, opening the add-source dialog, choosing the website option and pasting the link. With research spread across many tabs, that context switch adds up. From the popup it is one click while you read. For many tabs at once, <a href="/features/bulk-import">Add open tabs</a> adds them all, and to keep just one passage you can <a href="/features/highlights">send highlighted text</a> instead. The source keeps the page link, so NotebookLM's citations lead you back to the original article whenever you need to check the context.</p>
             <p class="feature-seo-plan"><strong>Free.</strong> Adding webpages is free, like every import option in NotebookTools. <a href="/#pricing">See plans</a></p>
             <h3>Related guides</h3>
             <ul class="feature-seo-links">
@@ -854,7 +954,7 @@
                   <span class="sf-select"><span class="sf-select-value">Research — AI tools (12)</span><span class="nlm-ms sf-ms" aria-hidden="true">expand_more</span></span>
                   <span class="sp-hint">or create new</span>
                   <span class="sf-input sf-ph">Notebook name</span>
-                  <span class="sp-primary" data-s="x-import">Import</span>
+                  <span class="sp-primary" data-s="x-import">Send to notebook</span>
                   <p class="nt-drop-status" data-s="x-status"></p>
                   <div class="nt-drop-links"><span>Refresh list</span></div>
                 </div>
@@ -872,20 +972,20 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open a post or thread on X</strong><p>A <b>NotebookLM</b> button appears in the column header.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click NotebookLM</strong><p>The panel shows the thread title and how many posts it found.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one or name a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import</strong><p>The thread is saved as a clean text source.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a post or thread on X</strong><p>A <b>Send to NotebookLM</b> button appears in the column header.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Send to NotebookLM</strong><p>The panel shows the thread title and how many posts it found.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose one or name a new notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Send to notebook</strong><p>The thread is saved as a clean text source.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-x-twitter">
           <div class="feature-seo-inner">
             <h2 id="seo-x-twitter">Import X (Twitter) to NotebookLM as clean text</h2>
-            <p class="feature-seo-lead">NotebookTools reads the X post, thread or X Article you have open and saves it to a NotebookLM notebook as one clean text source. A <b>NotebookLM</b> button appears in the column header on X, and the panel shows the thread title and how many posts it found before you import.</p>
+            <p class="feature-seo-lead">NotebookTools reads the X post, thread or X Article you have open and saves it to a NotebookLM notebook as one clean text source. A <b>Send to NotebookLM</b> button appears in the column header on X, and the panel shows the thread title and how many posts it found before you import.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Open a post or thread on X.</li>
-              <li>Click the <b>NotebookLM</b> button in the column header.</li>
+              <li>Click <b>Send to NotebookLM</b> in the column header.</li>
               <li>Check the thread title and the number of posts in the panel.</li>
               <li>Pick a notebook, or name a new one.</li>
-              <li>Click <b>Import</b>. The thread is saved as a text source.</li>
+              <li>Click <b>Send to notebook</b>. The thread is saved as a text source. The same button works on ChatGPT, Gemini, Claude, Reddit, LinkedIn and more: see <a href="/features/ai-chats">AI chats &amp; posts</a>.</li>
             </ol>
             <h3>Why it helps</h3>
             <p>Threads are where many researchers, founders and engineers post their best explanations, but they are hard to quote and easy to lose. Pasting an X link into NotebookLM may bring in little useful text, because X loads posts with scripts and often asks you to sign in. Saved as text, a thread can be searched, cited and combined with your papers and videos in the same notebook. You can then ask NotebookLM to summarize the argument, pull out the claims, or compare the thread with other sources on the same topic.</p>
@@ -924,7 +1024,7 @@
               <section class="sp-card"><div class="sp-modes three"><span>Web</span><span>YouTube</span><span class="is-active">Text</span></div>
                 <blockquote class="sp-quote">Teams that review sources together make better decisions than teams that rely on summaries alone....</blockquote></section>
               <div data-surface="picker" data-variant="card" data-selected="Research — AI tools (12)"></div>
-              <span class="sp-primary" data-s="hl-import">Import text</span>
+              <span class="sp-primary" data-s="hl-import">Add text to notebook</span>
               <p class="sp-status" data-s="hl-status" hidden></p>
             </aside>
           </div>
@@ -937,19 +1037,19 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Select text on any page</strong><p>Highlight the passage you want to keep.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Right-click → Add to NotebookLM</strong><p>The side panel opens with your selection.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose where the quote should go.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Import text</strong><p>It is saved as a text source titled with the page name.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Select text on any page</strong><p>Highlight the passage you want to keep.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Right-click → Add to NotebookLM</strong><p>The NotebookTools popup opens with your selection.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a notebook</strong><p>Choose where the quote should go.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Click Add text to notebook</strong><p>It is saved as a text source titled with the page name.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-highlights">
           <div class="feature-seo-inner">
             <h2 id="seo-highlights">Save highlighted text to NotebookLM from any page</h2>
-            <p class="feature-seo-lead">Select a passage on any web page, right-click and choose <b>Add to NotebookLM</b>. NotebookTools opens the side panel with your selection, you pick a notebook, and the text is saved as a source titled with the page name.</p>
+            <p class="feature-seo-lead">Select a passage on any web page, right-click and choose <b>Add to NotebookLM</b>. NotebookTools opens its popup with your selection, you pick a notebook, and the text is saved as a source titled with the page name.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Highlight the passage you want to keep on any page.</li>
-              <li>Right-click and choose <b>Add to NotebookLM</b>. The side panel opens with your selection.</li>
+              <li>Right-click and choose <b>Add to NotebookLM</b>. The NotebookTools popup opens with your selection.</li>
               <li>Pick the notebook the quote should go to.</li>
-              <li>Click <b>Import text</b>. It is saved as a text source titled with the page name.</li>
+              <li>Click <b>Add text to notebook</b>. It is saved as a text source titled with the page name.</li>
             </ol>
             <h3>Why it helps</h3>
             <p>Adding a whole page brings in menus, comments and sidebars along with the paragraph you cared about. A highlight keeps only the quote, so NotebookLM's answers and citations point at exactly that text. Because the text comes from the page you already have open, it also works on pages NotebookLM can't fetch from a link, such as ones you are signed in to. Collect quotes from several articles into one notebook, then ask NotebookLM to compare them, build a reading summary, or turn them into flashcards for review.</p>
@@ -962,7 +1062,7 @@
             <h2 class="feature-seo-faq-title">Highlights: frequently asked questions</h2>
             <div class="feature-seo-q">
               <h3>How do I add selected text to NotebookLM?</h3>
-              <p>Highlight the text, right-click and choose Add to NotebookLM. Pick a notebook in the side panel and click Import text.</p>
+              <p>Highlight the text, right-click and choose Add to NotebookLM. Pick a notebook in the popup and click Add text to notebook.</p>
             </div>
             <div class="feature-seo-q">
               <h3>Does each highlight count as a source?</h3>
@@ -986,23 +1086,23 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook chat</strong><p>NotebookTools adds an <b>Export chat</b> button above the chat box.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Export chat</strong><p>Choose Markdown, Plain text, JSON, CSV, HTML or PDF.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Download</strong><p>The file is named after your notebook.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>PDF</strong><p>Opens a print-ready page; choose Save as PDF.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook</strong><p>The NotebookTools ribbon sits at the top of the notebook.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Export</strong><p>Choose the last answer, the whole chat or the whole notebook.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a format</strong><p>PDF, Word or Markdown for an answer; Markdown, text, JSON, CSV, HTML or PDF for the chat.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Download</strong><p>The file is named after your notebook; the whole notebook comes as a ZIP.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-chat-export">
           <div class="feature-seo-inner">
             <h2 id="seo-chat-export">Export NotebookLM chat to PDF, Markdown and more</h2>
-            <p class="feature-seo-lead">NotebookTools adds an <b>Export chat</b> button above the NotebookLM chat box. It saves the whole conversation as Markdown, plain text, JSON, CSV, HTML or PDF, with the file named after your notebook. You can also export just the last answer as a print-ready PDF, a Word file or Markdown.</p>
+            <p class="feature-seo-lead">The <b>Export</b> button in the NotebookTools ribbon saves your NotebookLM work three ways: the <b>last answer</b> as a print-ready PDF, a Word file or Markdown; the <b>whole chat</b> as Markdown, plain text, JSON, CSV, HTML or PDF; or the <b>whole notebook</b>, every source's text and every note, as a ZIP of files. Files are named after your notebook.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Open a notebook and its chat in NotebookLM.</li>
-              <li>Click <b>Export chat</b> above the chat box.</li>
-              <li>Choose Markdown, Plain text, JSON, CSV, HTML or PDF.</li>
+              <li>Click <b>Export</b> in the NotebookTools ribbon at the top of the notebook.</li>
+              <li>Under <b>Last answer only</b>, choose PDF, Word or Markdown; under <b>Whole chat</b>, Markdown, Plain text, JSON, CSV, HTML or PDF; under <b>Whole notebook</b>, <b>Sources and notes (ZIP)</b>.</li>
               <li>For PDF, a print-ready page opens: choose <b>Save as PDF</b> in Chrome's print dialog. Other formats download straight away.</li>
             </ol>
             <h3>Why it helps</h3>
             <p>A good NotebookLM session is a research trail: the questions you asked and the cited answers you got. Exporting keeps a copy you can share, file with a project or paste into a report. Markdown suits note apps, CSV and JSON suit spreadsheets and scripts, and PDF suits handouts and records. The single-answer export keeps headings, lists, tables and bold text, which helps when the answer is a worksheet, exam paper or lesson plan you want to print. Citation chips and buttons are left out, so the file reads like a normal document.</p>
-            <p class="feature-seo-plan"><strong>Pro.</strong> Chat export and answer export are part of NotebookTools Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
+            <p class="feature-seo-plan"><strong>Pro.</strong> Chat, answer and whole-notebook export are part of NotebookTools Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
             <h3>Related guides</h3>
             <ul class="feature-seo-links">
               <li><a href="/blog/how-to-use-notebooklm-to-study">Using NotebookLM chat to study</a></li>
@@ -1012,7 +1112,7 @@
             <h2 class="feature-seo-faq-title">Chat export: frequently asked questions</h2>
             <div class="feature-seo-q">
               <h3>Can you export a NotebookLM chat to PDF?</h3>
-              <p>Yes, with NotebookTools. Click Export chat, choose PDF, and a print-ready page opens; pick Save as PDF in Chrome's print dialog.</p>
+              <p>Yes, with NotebookTools. Click Export in the ribbon, choose PDF under Whole chat, and a print-ready page opens; pick Save as PDF in Chrome's print dialog.</p>
             </div>
             <div class="feature-seo-q">
               <h3>Can I export a single NotebookLM answer?</h3>
@@ -1021,6 +1121,58 @@
             <div class="feature-seo-q">
               <h3>Is NotebookLM chat export free?</h3>
               <p>No. It is part of NotebookTools Pro, a one-time $49 payment. Every import option stays free.</p>
+            </div>
+          </div>
+        </section>
+        </article>
+        <article class="md-panel" data-panel="slide-editor" id="panel-slide-editor" hidden>
+          <h1 class="sr-only">Edit NotebookLM slides</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="slide-editor" data-stage-label="slide editor"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a slide deck</strong><p>In NotebookLM's Studio, open a deck and click <b>Edit</b>, or drop its PDF into the online editor.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Let it read the slides</strong><p>Text becomes text boxes and charts and drawings become pictures you can move.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Edit</strong><p>Change words, fonts and colours, move or replace pictures, add text, shapes and speaker notes.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Download</strong><p>Get a PowerPoint file, a PDF with real text or PNG images.</p></div></li>
+        </ol>
+      </section>
+        <section class="feature-seo" aria-labelledby="seo-slide-editor">
+          <div class="feature-seo-inner">
+            <h2 id="seo-slide-editor">Edit NotebookLM slide decks: real text, real PowerPoint</h2>
+            <p class="feature-seo-lead">NotebookLM's slide decks are pictures: every slide is one flat image, so you can't fix a typo or a date. The NotebookTools slide editor reads each slide on your computer and rebuilds it with real text boxes, keeping the look of the original. Pictures, charts and icons are cut out as separate pictures, and the background behind removed text is filled in. Then download PowerPoint, a PDF with selectable text, or images.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>In NotebookLM, open the slide deck in Studio and click <b>Edit</b> next to it. Without the extension, download the deck as a PDF and open it in the <a href="/tools/edit-notebooklm-slides">online slide editor</a>.</li>
+              <li>Wait a few seconds per slide while it reads the text. Click <b>Original</b> any time to compare with the slide as NotebookLM made it.</li>
+              <li>Click any text to edit it: words, font, size, bold, italic, colour, even single words inside a line. Drag pictures, split a picture into its parts or merge two, and add text boxes, shapes and speaker notes.</li>
+              <li>Click <b>Download PowerPoint</b>, or use the menu beside it for a PDF with real text, PNG images or every picture as a ZIP.</li>
+              <li>Your edits are saved in your browser. Reopen any deck from the <b>Presentations</b> tab in the notebooks dashboard.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>Re-generating a whole deck to fix one word rarely gives you the same slides back. Editing the deck you already have keeps the parts you liked and lets you add your own data, logo and notes before you present or share it.</p>
+            <p>Everything runs in your browser: the slides are never uploaded. A benchmark of test slides with known answers checks every change to the text reading and picture separation.</p>
+            <p class="feature-seo-plan"><strong>Free.</strong> Editing decks with the <b>Edit</b> button and the online editor is free. The ribbon's <b>Create → Edit a slide deck</b> shortcut is part of Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
+            <h3>Related guides</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/tools/edit-notebooklm-slides">Online editor: edit NotebookLM slides from a PDF</a></li>
+              <li><a href="/notebooklm-slide-styles">Slide styles for better NotebookLM decks</a></li>
+              <li><a href="/features/slides-to-blog">Turn a slide deck into a blog post</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">Slide editor: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>Can I edit the text on NotebookLM slides?</h3>
+              <p>Not in NotebookLM itself, because each slide is an image. The NotebookTools slide editor reads the text and turns it into real text boxes you can edit, then saves PowerPoint or PDF.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Will it look like the original?</h3>
+              <p>Close to it. Fonts, sizes, bold, italic, colours, superscripts and number badges are matched, and pictures keep their place. Click <b>Original</b> to compare, and fix anything by hand.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Are my slides uploaded anywhere?</h3>
+              <p>No. Reading the slides, editing and exporting all happen in your browser.</p>
             </div>
           </div>
         </section>
@@ -1074,6 +1226,57 @@
           </div>
         </section>
         </article>
+        <article class="md-panel" data-panel="carousel" id="panel-carousel" hidden>
+          <h1 class="sr-only">Carousel maker</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-stage" data-stage="carousel" data-stage-label="carousel maker"></div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open a notebook with a slide deck</strong><p>Click <b>Create</b> in the NotebookTools ribbon, then <b>Carousel</b>.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Choose the format</strong><p>LinkedIn PDF or Instagram images, portrait or square.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Add your handle</strong><p>It goes on every page with page numbers and a swipe hint.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Download</strong><p>One PDF for LinkedIn, or a ZIP of images for Instagram.</p></div></li>
+        </ol>
+      </section>
+        <section class="feature-seo" aria-labelledby="seo-carousel">
+          <div class="feature-seo-inner">
+            <h2 id="seo-carousel">Turn a NotebookLM slide deck into a LinkedIn or Instagram carousel</h2>
+            <p class="feature-seo-lead">The carousel maker turns a slide deck from NotebookLM's Studio into a post-ready carousel: a LinkedIn document carousel as one PDF, or Instagram images as a ZIP of JPGs, at 1080 × 1350 or 1080 × 1080. Your handle, page numbers and a swipe hint go on every page, and the first page can show the deck's title.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>Open a notebook that has a slide deck in Studio.</li>
+              <li>Click <b>Create</b> in the NotebookTools ribbon and choose <b>Carousel</b>.</li>
+              <li>Pick the deck, then choose <b>LinkedIn PDF</b> or <b>Instagram images</b> and the size.</li>
+              <li>Type your handle, choose the background (match each slide, light or dark) and whether to show page numbers.</li>
+              <li>Click <b>Download</b>.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>Slide decks are already made of short, visual points, which is exactly what performs as a carousel. Re-making them in a design tool takes an hour; the carousel maker does it in a few seconds and keeps the slides sharp.</p>
+            <p class="feature-seo-plan"><strong>Pro.</strong> The carousel maker is part of Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
+            <h3>Related guides</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/features/slides-to-blog">Turn a slide deck into a blog post</a></li>
+              <li><a href="/features/slide-editor">Edit NotebookLM slides before you post them</a></li>
+              <li><a href="/creators">NotebookTools for creators</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">Carousel maker: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>What sizes does it make?</h3>
+              <p>1080 × 1350 (portrait, 4:5) or 1080 × 1080 (square), as one PDF for LinkedIn or a ZIP of JPG images for Instagram.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Can I change a slide first?</h3>
+              <p>Yes. Edit the deck in the slide editor, then make the carousel from it.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Is the carousel maker free?</h3>
+              <p>No, it is part of Pro, a one-time $49 for life.</p>
+            </div>
+          </div>
+        </section>
+        </article>
         <article class="md-panel" data-panel="snapshots" id="panel-snapshots" hidden>
           <h1 class="sr-only">Snapshots</h1>
           <section class="feature-demo-section md-demo">
@@ -1085,7 +1288,7 @@
           <h2>From install to done</h2>
         </div>
         <ol class="how-steps">
-          <li class="how-step"><span class="how-num">1</span><div><strong>Capture</strong><p>Press Alt+Shift+S or click <b>Drag to capture</b>, then drag over any area.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Annotate</strong><p>Draw boxes, circles, arrows or pencil marks, then Save.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Review in the side panel</strong><p>Each snapshot keeps its recorded action and optional notes.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Send to a notebook</strong><p>NotebookLM writes a blog or tutorial with your images inline.</p></div></li>
+          <li class="how-step"><span class="how-num">1</span><div><strong>Capture</strong><p>Press Alt+Shift+S or click <b>Snapshot</b> in the NotebookTools popup, then drag over any area.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Annotate</strong><p>Draw boxes, circles, arrows or pencil marks, then Save.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Review on your notebook</strong><p>Open <b>Snapshots</b> in the ribbon; each one keeps its action and notes.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Send to a notebook</strong><p>NotebookLM writes a blog or tutorial with your images inline.</p></div></li>
         </ol>
       </section>
         <section class="feature-seo" aria-labelledby="seo-snapshots">
@@ -1094,9 +1297,9 @@
             <p class="feature-seo-lead">Snapshots captures any area of your screen with <b>Alt+Shift+S</b>, lets you annotate it, and sends the set to a NotebookLM notebook. NotebookLM then writes a blog post or a step-by-step web app tutorial with your images placed inline.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
-              <li>Press <b>Alt+Shift+S</b> or click <b>Drag to capture</b>, then drag over any area of the page.</li>
+              <li>Press <b>Alt+Shift+S</b>, click <b>Snapshot</b> in the NotebookTools popup, or right-click and choose <b>Capture snapshot area</b>, then drag over any area of the page.</li>
               <li>Annotate with boxes, circles, arrows or the pencil, then click <b>Save</b>.</li>
-              <li>Review your snapshots in the side panel and add a caption or notes to each one.</li>
+              <li>Open your notebook and click <b>Snapshots</b> in the NotebookTools ribbon to review them; add a caption or notes to each one.</li>
               <li>Choose <b>Create blog with images</b> or <b>Create web app tutorial</b>; for a tutorial, add a title and a short description.</li>
               <li>Send the set to a notebook and let NotebookLM write it up.</li>
             </ol>
@@ -1111,7 +1314,7 @@
             <h2 class="feature-seo-faq-title">Snapshots: frequently asked questions</h2>
             <div class="feature-seo-q">
               <h3>How do I take a snapshot?</h3>
-              <p>Press Alt+Shift+S, or click Drag to capture in the side panel, then drag over the area you want. You can change the shortcut at chrome://extensions/shortcuts.</p>
+              <p>Press Alt+Shift+S, or click Snapshot in the NotebookTools popup, then drag over the area you want. You can change the shortcut at chrome://extensions/shortcuts.</p>
             </div>
             <div class="feature-seo-q">
               <h3>What can NotebookLM write from my screenshots?</h3>
@@ -1128,18 +1331,22 @@
       </div>
       <noscript class="md-noscript-seo">
         <ul>
-          <li><h2>Add YouTube to NotebookLM</h2><p>Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.</p><p>One click on any watch page — video lands in your notebook Sources.</p></li>
-          <li><h2>Bulk import queue</h2><p>Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.</p><p>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</p></li>
-          <li><h2>Notebooks hub</h2><p>NotebookTools notebooks hub — a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.</p><p>Pin, star, folder, and search every notebook in one calm dashboard.</p></li>
-          <li><h2>Google Drive source refresh</h2><p>Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.</p><p>See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</p></li>
-          <li><h2>Studio & podcasts</h2><p>NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.</p><p>Generate Audio Overviews and play podcasts across every notebook in one player.</p></li>
-          <li><h2>Prompt library</h2><p>NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.</p><p>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</p></li>
-          <li><h2>Add webpage</h2><p>Add any webpage to NotebookLM from the NotebookTools side panel. One click imports the current tab URL as a source.</p><p>Import the current tab URL from the side panel — any article or docs page.</p></li>
-          <li><h2>X / Twitter import</h2><p>Import X (Twitter) posts and threads into NotebookLM as clean text sources with the NotebookTools in-page button.</p><p>Import threads and posts as clean text sources with one click.</p></li>
-          <li><h2>Highlights</h2><p>Select text on any page, right-click, and add the highlight to NotebookLM as a text source with NotebookTools.</p><p>Select text → right-click → Add to NotebookLM as a clean text source.</p></li>
-          <li><h2>Chat export</h2><p>Export NotebookLM conversations from the page with NotebookTools. Download Markdown, plain text, or open a printable PDF view.</p><p>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</p></li>
-          <li><h2>Slides to blog</h2><p>Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.</p><p>Turn a Studio slide deck into a blog or guide with slide images and export formats.</p></li>
-          <li><h2>Snapshots</h2><p>Capture webpage snapshots with NotebookTools, annotate them, and assemble PDF or guide exports for NotebookLM workflows.</p><p>Capture screen areas (Alt+Shift+S), annotate, and assemble PDF or guide exports.</p></li>
+          <li><h2>Add YouTube to NotebookLM</h2><p>Send YouTube videos, playlists and channels to NotebookLM with the Send to NotebookLM button under the player.</p></li>
+          <li><h2>Send AI chats to NotebookLM</h2><p>Send ChatGPT, Gemini, Claude, Perplexity, Grok and Kimi conversations, Reddit threads, LinkedIn posts and Google Docs to NotebookLM as clean text sources.</p></li>
+          <li><h2>Bulk import</h2><p>Add every open tab in one click, tick the videos in a YouTube playlist, or queue every link on a page with Extract links to Notebook.</p></li>
+          <li><h2>Notebooks hub</h2><p>Every NotebookLM notebook in one table with folders, tags, favorites, search, bulk delete, compare and merge, source highlights and notes, and saved presentations.</p></li>
+          <li><h2>Manage sources</h2><p>Select all, delete, filter by type and organize Sources and Studio files into folders.</p></li>
+          <li><h2>Google Drive source refresh</h2><p>See Update available on Google Docs, Slides, Sheets and Drive PDFs and re-sync them in one click.</p></li>
+          <li><h2>Studio &amp; podcasts</h2><p>Generate Audio Overviews and play podcasts from every notebook in one player.</p></li>
+          <li><h2>Prompt library</h2><p>Type / in NotebookLM chat for ready-made prompts and slide deck templates, plus style cards in the slide deck dialog.</p></li>
+          <li><h2>Add webpage</h2><p>Add the page you are reading to any notebook from the NotebookTools popup.</p></li>
+          <li><h2>X / Twitter import</h2><p>Send X posts, threads and Articles to NotebookLM as clean text sources.</p></li>
+          <li><h2>Highlights</h2><p>Select text, right-click and choose Add to NotebookLM to save it as a text source.</p></li>
+          <li><h2>Chat export</h2><p>Export the last answer, the whole chat, or every source and note of a notebook as a ZIP.</p></li>
+          <li><h2>Slide editor</h2><p>Edit NotebookLM slide decks: text becomes real text boxes and pictures separate. Download PowerPoint, PDF or images.</p></li>
+          <li><h2>Slides to blog</h2><p>Turn a Studio slide deck into a blog post or guide with the slide images in place.</p></li>
+          <li><h2>Carousel maker</h2><p>Turn a slide deck into a LinkedIn PDF carousel or Instagram images with your handle on every page.</p></li>
+          <li><h2>Snapshots</h2><p>Capture screen areas (Alt+Shift+S), annotate them, and have NotebookLM write a blog or tutorial with your images.</p></li>
         </ul>
       </noscript>
     </main>

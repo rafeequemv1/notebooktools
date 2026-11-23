@@ -137,13 +137,10 @@
         '<div class="sp-chrome">' + extIcon(16) + '<span>' + esc(SURFACES.extName) + "</span>" + ms("keep", "sp-chrome-pin") + ms("close") + "</div>" +
         '<div class="sp-scroll">' +
         '<div class="sp-header"><img class="sp-wordmark" src="' + SURFACES.wordmark + '" alt="' + esc(SURFACES.extName) + '">' +
-        '<span class="sp-header-actions"><span class="sp-icon-btn">' + ms("settings") + '</span><span class="sp-icon-btn">' + ms("light_mode") + "</span>" +
-        '<span class="sp-switch-wrap"><i class="sp-switch"></i>' + esc(s.autoOpen.toUpperCase()) + "</span></span></div>" +
-        '<p class="sp-tagline">' + esc(tagline) + "</p>" +
-        '<span class="sp-btn sp-open-notebooks">' + esc(s.openNotebooks) + "</span>" +
-        '<div class="sp-tabs">' + s.tabs.map(function (t) {
-          return '<span class="sp-tab' + (t === tab ? " is-active" : "") + '">' + esc(t) + "</span>";
-        }).join("") + "</div>" +
+        '<span class="sp-header-actions"><span class="sp-icon-btn" title="All notebooks">' + ms("apps") + '</span><span class="sp-icon-btn">' + ms("light_mode") + "</span></span></div>" +
+        // The popup has no tabs: other screens (the links queue) open with a back bar
+        (tab === "Import" ? "" : '<div class="sp-viewbar"><span class="sp-icon-btn">' + ms("arrow_back") + "</span><b>" + esc(tagline) + "</b></div>") +
+        (tab === "Import" ? '<p class="sp-tagline">' + esc(tagline) + "</p>" : "") +
         "</div>";
       el.querySelector(".sp-scroll").appendChild(content);
     },

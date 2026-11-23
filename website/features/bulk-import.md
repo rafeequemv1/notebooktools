@@ -1,6 +1,6 @@
-# Bulk Import to NotebookLM: Links, Tabs & Playlists
+# Bulk Import Links, Tabs & Playlists into NotebookLM | NotebookTools
 
-> Bulk import to NotebookLM from one queue: add open tabs, pasted links, links from a page or a YouTube playlist, then import them all in a single run. Free.
+> Add all your open tabs in one click, tick the videos in a YouTube playlist, or queue every link on a page, and import them into NotebookLM (Gemini Notebook) in one run, with the source limit tracked for you.
 > Source: https://www.notebooktools.com/features/bulk-import
 
 Feature
@@ -54,33 +54,34 @@ How it works
 ## From install to done
 
 1. 1
-  **Open the side panel**
-  Click the NotebookTools icon, then the **Bulk** tab.
+  **Open tabs: one click**
+  Click the NotebookTools icon, then **Add open tabs**. Every website tab goes to the notebook.
 2. 2
-  **Build the queue**
-  Add open tabs, paste links, extract links from a page, or load a playlist.
+  **A playlist or channel**
+  On its page, the popup lists the videos: tick them and click **Import N selected videos**.
 3. 3
-  **Choose a notebook**
-  Pick an existing notebook or create a new one.
+  **Links on a page**
+  Right-click and choose **Extract links to Notebook**: the links open in a queue.
 4. 4
-  **Click Import N sources**
-  Watch each item import with live progress and a final summary.
+  **Import the queue**
+  Untick what you don't want and click **Import queue**; watch the progress.
 
 ## Bulk import to NotebookLM: dozens of sources in one run
 
-The **Bulk** tab in the NotebookTools side panel builds a queue of links and imports them into one NotebookLM notebook in a single run. Add your open tabs, paste a list of URLs, extract the links from an article, or load a YouTube playlist or channel. Each item shows its type and status, and failed items can be retried.
+NotebookTools adds many sources to one NotebookLM notebook in a single run. **Add open tabs** in the popup sends every website tab in the window in one click. On a YouTube playlist or channel, the popup lists its videos to tick. And right-clicking any page with **Extract links to Notebook** opens a queue of its links, where you can also paste more URLs. Each item shows its type and status, and failed items can be retried.
 
 ### How to use it
 
-1. Click the NotebookTools icon in the Chrome toolbar and open the **Bulk** tab.
-2. Build the queue with **Open tabs**, **Paste links** (one per line), **Extract from page**, or **Load from tab** on a YouTube playlist.
-3. Untick anything you don't want, or select items and click **Remove**.
-4. Pick an existing notebook or create a new one.
-5. Click **Import queue** and watch the progress bar until the summary appears.
+1. To add your open tabs, click the NotebookTools icon in the Chrome toolbar, pick a notebook and click **Add open tabs**. YouTube tabs go in as videos, the rest as web pages.
+2. For a YouTube playlist or channel, open its page and click the icon: tick the videos in the list and click **Import N selected videos**.
+3. For the links in an article or reading list, right-click the page and choose **Extract links to Notebook**. The queue opens with every link; paste more URLs (one per line) if you like.
+4. Untick anything you don't want, or select items and click **Remove**.
+5. Pick an existing notebook or create a new one.
+6. Click **Import queue** and watch the progress bar until the summary appears.
 
 ### Why it helps
 
-Adding sources by hand means one dialog per link, which is a lot of clicking for a reading list of 40 articles. The queue imports them in one go, skips links that are already in it, and warns you when it would push a notebook past its source limit (50 sources on a free Google account, 300 on Google AI Pro). You can also right-click any page and choose **Extract links to Notebook** to queue every link in it.
+Adding sources by hand means one dialog per link, which is a lot of clicking for a reading list of 40 articles. The queue imports them in one go, skips links that are already in it, and warns you when it would push a notebook past its source limit (50 sources on a free Google account, 300 on Google AI Pro).
 
 **Free.** Bulk import, open tabs, pasted links, link extraction and playlists are all part of the free plan. [See plans](https://www.notebooktools.com/#pricing)
 

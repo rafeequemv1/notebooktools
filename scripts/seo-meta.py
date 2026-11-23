@@ -22,7 +22,19 @@ META = {
     ),
     "features/index.html": (
         "NotebookTools Features: Import, Organise & Export for NotebookLM",
-        "Every NotebookTools feature with live demos: one-click YouTube and webpage import, bulk import, notebooks table, Drive refresh, Studio files, prompt library, chat export, slides to blog and snapshots.",
+        "Every NotebookTools feature with live demos: one-click import from YouTube, AI chats and webpages, bulk import, notebooks table, slide editor, Drive refresh, Studio files, prompts, exports, slides to blog, carousels and snapshots.",
+    ),
+    "features/ai-chats.html": (
+        "Send ChatGPT, Gemini & Claude Chats to NotebookLM | NotebookTools",
+        "Save ChatGPT, Gemini, Claude, Perplexity, Grok and Kimi conversations, Reddit threads, LinkedIn posts and Google Docs to NotebookLM (Gemini Notebook) in one click. Free Chrome extension.",
+    ),
+    "features/slide-editor.html": (
+        "Edit NotebookLM Slides: Real Text, Download PowerPoint | NotebookTools",
+        "NotebookLM slide decks are flat images. The NotebookTools slide editor turns them into real text boxes and separate pictures you can edit, then saves PowerPoint, PDF or images. Free, runs in your browser.",
+    ),
+    "features/carousel.html": (
+        "NotebookLM Slide Deck to LinkedIn & Instagram Carousel | NotebookTools",
+        "Turn a NotebookLM slide deck into a LinkedIn PDF carousel or Instagram images, 4:5 or square, with your handle and page numbers on every page.",
     ),
     "features/add-webpage.html": (
         "Add Any Webpage to NotebookLM in One Click | NotebookTools",
@@ -34,7 +46,7 @@ META = {
     ),
     "features/bulk-import.html": (
         "Bulk Import Links, Tabs & Playlists into NotebookLM | NotebookTools",
-        "Paste a list of links, add all your open tabs or a YouTube playlist, and import them into NotebookLM (Gemini Notebook) in one run, with the 50-source limit tracked for you.",
+        "Add all your open tabs in one click, tick the videos in a YouTube playlist, or queue every link on a page, and import them into NotebookLM (Gemini Notebook) in one run, with the source limit tracked for you.",
     ),
     "features/chat-export.html": (
         "Export NotebookLM Answers to PDF, Word or Markdown | NotebookTools",

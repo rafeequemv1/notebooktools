@@ -1,6 +1,6 @@
 # NotebookTools Features: Import, Organise & Export for NotebookLM
 
-> Every NotebookTools feature with live demos: one-click YouTube and webpage import, bulk import, notebooks table, Drive refresh, Studio files, prompt library, chat export, slides to blog and snapshots.
+> Every NotebookTools feature with live demos: one-click import from YouTube, AI chats and webpages, bulk import, notebooks table, slide editor, Drive refresh, Studio files, prompts, exports, slides to blog, carousels and snapshots.
 > Source: https://www.notebooktools.com/features
 
 Feature
@@ -15,7 +15,7 @@ NotebookTools
 
 # See every major feature
 
-Interactive demos recreating NotebookLM’s UI — Sources, chat, and Studio — so you can visualize how NotebookTools fits your research flow. Pick a feature on the left; demos play here.
+Everything NotebookTools adds to NotebookLM: one-click import from YouTube, AI chats and any webpage, a dashboard for every notebook, a slide editor, makers and exports. Pick a feature on the left to watch it work.
 
 [Add to Chrome — free](https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj) [View pricing](https://www.notebooktools.com/#pricing)
 

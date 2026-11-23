@@ -2514,3 +2514,7 @@
   background: var(--nt-ink);
   border-color: var(--nt-ink);
 }
+
+/* The popup's back bar for screens like the links queue (no tabs any more) */
+.sp-viewbar { align-items: center; display: flex; gap: 6px; margin: 2px 0 10px; }
+.sp-viewbar b { color: var(--sp-text, #1f1f1f); font-size: 13.5px; font-weight: 500; }

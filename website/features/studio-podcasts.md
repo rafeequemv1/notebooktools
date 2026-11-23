@@ -1,6 +1,6 @@
-# NotebookLM Audio Overview Player & Studio Files
+# NotebookLM Studio Files & Podcasts in One Place | NotebookTools
 
-> A NotebookLM Audio Overview player that finds every podcast across your notebooks and remembers your place, plus each notebook's Studio files in one tab.
+> Browse, play, rename and download every NotebookLM (Gemini Notebook) Audio Overview, slide deck and Studio file across all your notebooks.
 > Source: https://www.notebooktools.com/features/studio-podcasts
 
 Feature

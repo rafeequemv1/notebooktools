@@ -1,6 +1,6 @@
-# Save Highlighted Text to NotebookLM (Right-Click)
+# Send Highlighted Text to NotebookLM from Any Page | NotebookTools
 
-> Save highlighted text to NotebookLM: select a passage on any page, right-click, choose Add to NotebookLM and pick a notebook. Saved as a text source. Free.
+> Highlight a passage on any webpage and send it to a NotebookLM (Gemini Notebook) notebook from the right-click menu, with the page title and link kept as the source.
 > Source: https://www.notebooktools.com/features/highlights
 
 Feature
@@ -34,24 +34,24 @@ How it works
   Highlight the passage you want to keep.
 2. 2
   **Right-click → Add to NotebookLM**
-  The side panel opens with your selection.
+  The NotebookTools popup opens with your selection.
 3. 3
   **Pick a notebook**
   Choose where the quote should go.
 4. 4
-  **Click Import text**
+  **Click Add text to notebook**
   It is saved as a text source titled with the page name.
 
 ## Save highlighted text to NotebookLM from any page
 
-Select a passage on any web page, right-click and choose **Add to NotebookLM**. NotebookTools opens the side panel with your selection, you pick a notebook, and the text is saved as a source titled with the page name.
+Select a passage on any web page, right-click and choose **Add to NotebookLM**. NotebookTools opens its popup with your selection, you pick a notebook, and the text is saved as a source titled with the page name.
 
 ### How to use it
 
 1. Highlight the passage you want to keep on any page.
-2. Right-click and choose **Add to NotebookLM**. The side panel opens with your selection.
+2. Right-click and choose **Add to NotebookLM**. The NotebookTools popup opens with your selection.
 3. Pick the notebook the quote should go to.
-4. Click **Import text**. It is saved as a text source titled with the page name.
+4. Click **Add text to notebook**. It is saved as a text source titled with the page name.
 
 ### Why it helps
 
@@ -68,7 +68,7 @@ Adding a whole page brings in menus, comments and sidebars along with the paragr
 
 ### How do I add selected text to NotebookLM?
 
-Highlight the text, right-click and choose Add to NotebookLM. Pick a notebook in the side panel and click Import text.
+Highlight the text, right-click and choose Add to NotebookLM. Pick a notebook in the popup and click Add text to notebook.
 
 ### Does each highlight count as a source?
 

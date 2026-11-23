@@ -1,6 +1,6 @@
-# Sync Google Drive Sources in NotebookLM in One Click
+# Refresh Google Drive Sources in NotebookLM | NotebookTools
 
-> Sync Google Drive sources in NotebookLM: see which Docs, Slides, Sheets and Drive PDFs changed since import and refresh every stale source in one click.
+> See which Google Docs, Sheets and Slides sources in NotebookLM (Gemini Notebook) are out of date and refresh them in bulk, so answers use the latest version.
 > Source: https://www.notebooktools.com/features/drive-refresh
 
 Feature

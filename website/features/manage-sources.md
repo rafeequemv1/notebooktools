@@ -1,6 +1,6 @@
-# Manage NotebookLM Sources & Delete Duplicates
+# Manage NotebookLM Sources in Bulk | NotebookTools
 
-> Manage NotebookLM sources in bulk: select many at once, delete them, sort them into folders, and find duplicate sources with a fast or deep content scan.
+> Search, sort, select and delete NotebookLM (Gemini Notebook) sources in bulk, find duplicate sources and organise them into folders. Free Chrome extension.
 > Source: https://www.notebooktools.com/features/manage-sources
 
 Feature

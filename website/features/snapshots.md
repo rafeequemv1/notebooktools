@@ -1,6 +1,6 @@
-# Screenshot to NotebookLM: Capture, Annotate, Guide
+# Screenshot to How-To Guide for NotebookLM | NotebookTools Snapshots
 
-> Send a screenshot to NotebookLM with Snapshots: press Alt+Shift+S, drag over any area, annotate it, and have NotebookLM write a guide with your images inline.
+> Capture each step of a task with Alt+Shift+S, then turn the screenshots into a written how-to guide with every image in place, using NotebookLM (Gemini Notebook).
 > Source: https://www.notebooktools.com/features/snapshots
 
 Feature
@@ -19,13 +19,13 @@ How it works
 
 1. 1
   **Capture**
-  Press Alt+Shift+S or click **Drag to capture**, then drag over any area.
+  Press Alt+Shift+S or click **Snapshot** in the NotebookTools popup, then drag over any area.
 2. 2
   **Annotate**
   Draw boxes, circles, arrows or pencil marks, then Save.
 3. 3
-  **Review in the side panel**
-  Each snapshot keeps its recorded action and optional notes.
+  **Review on your notebook**
+  Open **Snapshots** in the ribbon; each one keeps its action and notes.
 4. 4
   **Send to a notebook**
   NotebookLM writes a blog or tutorial with your images inline.
@@ -36,9 +36,9 @@ Snapshots captures any area of your screen with **Alt+Shift+S**, lets you annota
 
 ### How to use it
 
-1. Press **Alt+Shift+S** or click **Drag to capture**, then drag over any area of the page.
+1. Press **Alt+Shift+S**, click **Snapshot** in the NotebookTools popup, or right-click and choose **Capture snapshot area**, then drag over any area of the page.
 2. Annotate with boxes, circles, arrows or the pencil, then click **Save**.
-3. Review your snapshots in the side panel and add a caption or notes to each one.
+3. Open your notebook and click **Snapshots** in the NotebookTools ribbon to review them; add a caption or notes to each one.
 4. Choose **Create blog with images** or **Create web app tutorial**; for a tutorial, add a title and a short description.
 5. Send the set to a notebook and let NotebookLM write it up.
 
@@ -57,7 +57,7 @@ Writing documentation usually means taking screenshots, cropping them and then d
 
 ### How do I take a snapshot?
 
-Press Alt+Shift+S, or click Drag to capture in the side panel, then drag over the area you want. You can change the shortcut at chrome://extensions/shortcuts.
+Press Alt+Shift+S, or click Snapshot in the NotebookTools popup, then drag over the area you want. You can change the shortcut at chrome://extensions/shortcuts.
 
 ### What can NotebookLM write from my screenshots?
 

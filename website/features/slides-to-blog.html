@@ -17,25 +17,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/features/features.css">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&amp;family=Google+Sans+Text:wght@400;500;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&amp;family=Google+Sans+Text:wght@400;500;700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&amp;icon_names=add,apps,arrow_back,arrow_forward,arrow_upward,auto_fix,bar_chart,brush,chat_bubble,chevron_right,close,content_copy,dark_mode,data_usage,delete,dock_to_left,dock_to_right,edit,expand_more,extension,favorite,feedback,flowchart,folder,format_list_bulleted,forum,grid_view,help,home,info,ios_share,keep,language,license,light_mode,mail,more_horiz,more_vert,notifications,open_in_new,picture_as_pdf,play_arrow,quiz,refresh,repeat,search,settings,share,side_navigation,sort,stacked_bar_chart,star,subdirectory_arrow_right,thumb_down,thumb_up,trending_up,tune,videocam,view_list&amp;display=block" rel="stylesheet">
     <link rel="stylesheet" href="/features/nlm/nlm-ui.css">
     <link rel="stylesheet" href="/features/surfaces/surfaces.css">
     <link rel="stylesheet" href="/features/stage/stage.css">
     <link rel="stylesheet" href="/theme.css">
-    <title>NotebookLM Slides to Blog Post, with Every Slide Image</title>
-    <meta name="description" content="Turn NotebookLM slides into a blog post: the Auto blog workflow imports the deck PDF, has NotebookLM write the article and places every slide image in it.">
+    <title>NotebookLM Slide Deck to Blog Post with Images | NotebookTools</title>
+    <meta name="description" content="Turn a NotebookLM (Gemini Notebook) slide deck into a full blog post or handout with every slide embedded as an image. Download as HTML, Word, PDF or Markdown.">
     <link rel="canonical" href="https://www.notebooktools.com/features/slides-to-blog">
     <link rel="alternate" type="text/markdown" href="/features/slides-to-blog.md">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
-    <meta property="og:title" content="NotebookLM Slides to Blog Post, with Every Slide Image">
-    <meta property="og:description" content="Turn NotebookLM slides into a blog post: the Auto blog workflow imports the deck PDF, has NotebookLM write the article and places every slide image in it.">
+    <meta property="og:title" content="NotebookLM Slide Deck to Blog Post with Images | NotebookTools">
+    <meta property="og:description" content="Turn a NotebookLM (Gemini Notebook) slide deck into a full blog post or handout with every slide embedded as an image. Download as HTML, Word, PDF or Markdown.">
     <meta property="og:url" content="https://www.notebooktools.com/features/slides-to-blog">
     <meta property="og:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NotebookLM Slides to Blog Post, with Every Slide Image">
-    <meta name="twitter:description" content="Turn NotebookLM slides into a blog post: the Auto blog workflow imports the deck PDF, has NotebookLM write the article and places every slide image in it.">
+    <meta name="twitter:title" content="NotebookLM Slide Deck to Blog Post with Images | NotebookTools">
+    <meta name="twitter:description" content="Turn a NotebookLM (Gemini Notebook) slide deck into a full blog post or handout with every slide embedded as an image. Download as HTML, Word, PDF or Markdown.">
     <meta name="twitter:image" content="https://www.notebooktools.com/assets/og-image.png">
     <meta name="robots" content="index, follow">
     <script type="application/ld+json">
@@ -49,7 +49,7 @@
           "operatingSystem": "Chrome",
           "url": "https://www.notebooktools.com/features/slides-to-blog",
           "downloadUrl": "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj",
-          "description": "Turn NotebookLM slides into a blog post: the Auto blog workflow imports the deck PDF, has NotebookLM write the article and places every slide image in it.",
+          "description": "Turn a NotebookLM (Gemini Notebook) slide deck into a full blog post or handout with every slide embedded as an image. Download as HTML, Word, PDF or Markdown.",
           "offers": [
             {
               "@type": "Offer",
@@ -167,6 +167,7 @@
         <select id="md-feature-select" class="md-mobile-select" aria-label="Choose a feature">
           <option value="overview">Overview</option>
           <option value="add-youtube">Add YouTube</option>
+          <option value="ai-chats">AI chats &amp; posts</option>
           <option value="bulk-import">Bulk import</option>
           <option value="notebooks-hub">Notebooks hub</option>
           <option value="manage-sources">Manage sources</option>
@@ -177,7 +178,9 @@
           <option value="x-twitter">X / Twitter</option>
           <option value="highlights">Highlights</option>
           <option value="chat-export">Chat export</option>
+          <option value="slide-editor">Slide editor</option>
           <option value="slides-to-blog" selected>Slides to blog</option>
+          <option value="carousel">Carousel maker</option>
           <option value="snapshots">Snapshots</option>
         </select>
       </div>
@@ -202,18 +205,25 @@
               <span class="md-nav-desc">One click on any watch page — video lands in your notebo…</span>
             </span>
           </a>
+          <a class="md-nav-item" href="/features/ai-chats" data-feature="ai-chats">
+            <span class="md-nav-icon md-icon-aichats"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v6A2.5 2.5 0 0116.5 15H11l-4 3.5V15h0A2 2 0 015 13V6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9.5h6M9 12h3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">AI chats & posts</span>
+              <span class="md-nav-desc">ChatGPT, Gemini, Claude, Reddit and more in one click.</span>
+            </span>
+          </a>
           <a class="md-nav-item" href="/features/bulk-import" data-feature="bulk-import">
             <span class="md-nav-icon md-icon-bulk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h12M4 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Bulk import</span>
-              <span class="md-nav-desc">Queue tabs, playlists, and pasted URLs — import dozens w…</span>
+              <span class="md-nav-desc">Open tabs in one click, playlists, links from a page.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/notebooks-hub" data-feature="notebooks-hub">
             <span class="md-nav-icon md-icon-hub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Notebooks hub</span>
-              <span class="md-nav-desc">Pin, star, folder, and search every notebook in one calm…</span>
+              <span class="md-nav-desc">Every notebook in one table: folders, tags, merge.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/manage-sources" data-feature="manage-sources">
@@ -241,21 +251,21 @@
             <span class="md-nav-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15.5l4 2.5v-9l-4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Prompt library</span>
-              <span class="md-nav-desc">Curated prompts in the side panel — type / in NotebookLM…</span>
+              <span class="md-nav-desc">Type / in NotebookLM chat for ready-made prompts.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/add-webpage" data-feature="add-webpage">
             <span class="md-nav-icon md-icon-webpage"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18M8 4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Add webpage</span>
-              <span class="md-nav-desc">Import the current tab URL from the side panel into any notebook.</span>
+              <span class="md-nav-desc">Add the page you are reading to any notebook in one click.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/x-twitter" data-feature="x-twitter">
             <span class="md-nav-icon md-icon-xtwitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">X / Twitter</span>
-              <span class="md-nav-desc">Import threads and posts as clean text sources.</span>
+              <span class="md-nav-desc">Send posts and threads as clean text sources.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/highlights" data-feature="highlights">
@@ -269,7 +279,14 @@
             <span class="md-nav-icon md-icon-chatexport"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 017.5 4h9A2.5 2.5 0 0119 6.5v7A2.5 2.5 0 0116.5 16H10l-4 3v-3H7.5A2.5 2.5 0 015 13.5v-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
             <span class="md-nav-text">
               <span class="md-nav-title">Chat export</span>
-              <span class="md-nav-desc">Export NotebookLM conversations — Markdown, text, or PDF.</span>
+              <span class="md-nav-desc">Export an answer, the whole chat or the whole notebook.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/slide-editor" data-feature="slide-editor">
+            <span class="md-nav-icon md-icon-slideeditor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h6M7 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 20.5l5-5 1.5 1.5-5 5h-1.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Slide editor</span>
+              <span class="md-nav-desc">Edit the text on NotebookLM slides, save PowerPoint.</span>
             </span>
           </a>
           <a class="md-nav-item is-active" aria-current="page" href="/features/slides-to-blog" data-feature="slides-to-blog">
@@ -277,6 +294,13 @@
             <span class="md-nav-text">
               <span class="md-nav-title">Slides to blog</span>
               <span class="md-nav-desc">Turn a NotebookLM slide deck into a blog or guide with images.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/carousel" data-feature="carousel">
+            <span class="md-nav-icon md-icon-carousel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="4.5" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 7v9M20.5 7v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Carousel maker</span>
+              <span class="md-nav-desc">A slide deck as a LinkedIn or Instagram carousel.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/snapshots" data-feature="snapshots">
@@ -345,18 +369,22 @@
       </div>
       <noscript class="md-noscript-seo">
         <ul>
-          <li><h2>Add YouTube to NotebookLM</h2><p>Add YouTube videos to NotebookLM with one click. See the NotebookTools button on watch pages and watch the source appear in a NotebookLM-style Sources panel.</p><p>One click on any watch page — video lands in your notebook Sources.</p></li>
-          <li><h2>Bulk import queue</h2><p>Bulk import into NotebookLM: open tabs, YouTube playlists, paste URLs, or extract article links. Watch a progress queue fill sources into a notebook.</p><p>Queue tabs, playlists, and pasted URLs — import dozens with live progress.</p></li>
-          <li><h2>Notebooks hub</h2><p>NotebookTools notebooks hub — a NotebookLM-style grid with folders, pin, favorites, search, and multi-select cleanup.</p><p>Pin, star, folder, and search every notebook in one calm dashboard.</p></li>
-          <li><h2>Google Drive source refresh</h2><p>Refresh Google Drive sources in NotebookLM when Docs, Slides, Sheets, or PDFs change. NotebookTools shows Update available and re-syncs with one click.</p><p>See Update available on Docs, Slides, Sheets & Drive PDFs — re-sync in one click.</p></li>
-          <li><h2>Studio & podcasts</h2><p>NotebookLM Studio tools in NotebookTools — generate audio overviews, open artifacts, and play podcasts across notebooks in one player.</p><p>Generate Audio Overviews and play podcasts across every notebook in one player.</p></li>
-          <li><h2>Prompt library</h2><p>NotebookLM prompt library from NotebookTools. Browse curated prompts and insert them with / slash commands in chat.</p><p>Curated prompts in the side panel — type / in NotebookLM chat to insert instantly.</p></li>
-          <li><h2>Add webpage</h2><p>Add any webpage to NotebookLM from the NotebookTools side panel. One click imports the current tab URL as a source.</p><p>Import the current tab URL from the side panel — any article or docs page.</p></li>
-          <li><h2>X / Twitter import</h2><p>Import X (Twitter) posts and threads into NotebookLM as clean text sources with the NotebookTools in-page button.</p><p>Import threads and posts as clean text sources with one click.</p></li>
-          <li><h2>Highlights</h2><p>Select text on any page, right-click, and add the highlight to NotebookLM as a text source with NotebookTools.</p><p>Select text → right-click → Add to NotebookLM as a clean text source.</p></li>
-          <li><h2>Chat export</h2><p>Export NotebookLM conversations from the page with NotebookTools. Download Markdown, plain text, or open a printable PDF view.</p><p>Export NotebookLM conversations — keep your research trail as Markdown, text, or PDF.</p></li>
-          <li><h2>Slides to blog</h2><p>Turn a NotebookLM Studio slide deck into a blog or guide with NotebookTools. Extract slide images, generate copy, and export Markdown, HTML, or Docs.</p><p>Turn a Studio slide deck into a blog or guide with slide images and export formats.</p></li>
-          <li><h2>Snapshots</h2><p>Capture webpage snapshots with NotebookTools, annotate them, and assemble PDF or guide exports for NotebookLM workflows.</p><p>Capture screen areas (Alt+Shift+S), annotate, and assemble PDF or guide exports.</p></li>
+          <li><h2>Add YouTube to NotebookLM</h2><p>Send YouTube videos, playlists and channels to NotebookLM with the Send to NotebookLM button under the player.</p></li>
+          <li><h2>Send AI chats to NotebookLM</h2><p>Send ChatGPT, Gemini, Claude, Perplexity, Grok and Kimi conversations, Reddit threads, LinkedIn posts and Google Docs to NotebookLM as clean text sources.</p></li>
+          <li><h2>Bulk import</h2><p>Add every open tab in one click, tick the videos in a YouTube playlist, or queue every link on a page with Extract links to Notebook.</p></li>
+          <li><h2>Notebooks hub</h2><p>Every NotebookLM notebook in one table with folders, tags, favorites, search, bulk delete, compare and merge, source highlights and notes, and saved presentations.</p></li>
+          <li><h2>Manage sources</h2><p>Select all, delete, filter by type and organize Sources and Studio files into folders.</p></li>
+          <li><h2>Google Drive source refresh</h2><p>See Update available on Google Docs, Slides, Sheets and Drive PDFs and re-sync them in one click.</p></li>
+          <li><h2>Studio &amp; podcasts</h2><p>Generate Audio Overviews and play podcasts from every notebook in one player.</p></li>
+          <li><h2>Prompt library</h2><p>Type / in NotebookLM chat for ready-made prompts and slide deck templates, plus style cards in the slide deck dialog.</p></li>
+          <li><h2>Add webpage</h2><p>Add the page you are reading to any notebook from the NotebookTools popup.</p></li>
+          <li><h2>X / Twitter import</h2><p>Send X posts, threads and Articles to NotebookLM as clean text sources.</p></li>
+          <li><h2>Highlights</h2><p>Select text, right-click and choose Add to NotebookLM to save it as a text source.</p></li>
+          <li><h2>Chat export</h2><p>Export the last answer, the whole chat, or every source and note of a notebook as a ZIP.</p></li>
+          <li><h2>Slide editor</h2><p>Edit NotebookLM slide decks: text becomes real text boxes and pictures separate. Download PowerPoint, PDF or images.</p></li>
+          <li><h2>Slides to blog</h2><p>Turn a Studio slide deck into a blog post or guide with the slide images in place.</p></li>
+          <li><h2>Carousel maker</h2><p>Turn a slide deck into a LinkedIn PDF carousel or Instagram images with your handle on every page.</p></li>
+          <li><h2>Snapshots</h2><p>Capture screen areas (Alt+Shift+S), annotate them, and have NotebookLM write a blog or tutorial with your images.</p></li>
         </ul>
       </noscript>
     </main>

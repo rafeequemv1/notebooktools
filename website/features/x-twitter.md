@@ -1,6 +1,6 @@
-# X (Twitter) to NotebookLM: Import Posts & Threads
+# Import X (Twitter) Posts and Threads into NotebookLM | NotebookTools
 
-> Send X (Twitter) to NotebookLM: click the NotebookLM button on any post or thread and it is saved to your notebook as a clean text source. Free extension.
+> Add an X (Twitter) post or a whole thread to NotebookLM (Gemini Notebook) as a clean source in one click. Free Chrome extension.
 > Source: https://www.notebooktools.com/features/x-twitter
 
 Feature
@@ -13,7 +13,7 @@ Features
 
 # X / Twitter
 
-**Post** NotebookLM
+**Post** Send to NotebookLM
 
 **Maya Chen**
 
@@ -35,28 +35,28 @@ How it works
 
 1. 1
   **Open a post or thread on X**
-  A **NotebookLM** button appears in the column header.
+  A **Send to NotebookLM** button appears in the column header.
 2. 2
-  **Click NotebookLM**
+  **Click Send to NotebookLM**
   The panel shows the thread title and how many posts it found.
 3. 3
   **Pick a notebook**
   Choose one or name a new notebook.
 4. 4
-  **Click Import**
+  **Click Send to notebook**
   The thread is saved as a clean text source.
 
 ## Import X (Twitter) to NotebookLM as clean text
 
-NotebookTools reads the X post, thread or X Article you have open and saves it to a NotebookLM notebook as one clean text source. A **NotebookLM** button appears in the column header on X, and the panel shows the thread title and how many posts it found before you import.
+NotebookTools reads the X post, thread or X Article you have open and saves it to a NotebookLM notebook as one clean text source. A **Send to NotebookLM** button appears in the column header on X, and the panel shows the thread title and how many posts it found before you import.
 
 ### How to use it
 
 1. Open a post or thread on X.
-2. Click the **NotebookLM** button in the column header.
+2. Click **Send to NotebookLM** in the column header.
 3. Check the thread title and the number of posts in the panel.
 4. Pick a notebook, or name a new one.
-5. Click **Import**. The thread is saved as a text source.
+5. Click **Send to notebook**. The thread is saved as a text source. The same button works on ChatGPT, Gemini, Claude, Reddit, LinkedIn and more: see [AI chats & posts](https://www.notebooktools.com/features/ai-chats).
 
 ### Why it helps
 
