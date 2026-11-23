@@ -9,7 +9,7 @@ const refreshButton = document.querySelector("#refreshButton");
 const statusBox = document.querySelector("#status");
 
 const isGoogleDocs = new URLSearchParams(window.location.search).get("platform") === "googledocs";
-const IMPORT_LABEL = isGoogleDocs ? "Copy text to NotebookLM" : "Import";
+const IMPORT_LABEL = isGoogleDocs ? "Copy text to NotebookLM" : "Send to notebook";
 
 let notebookLmNotebooks = [];
 let importPayload = null;

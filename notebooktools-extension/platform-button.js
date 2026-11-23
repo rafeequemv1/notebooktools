@@ -43,6 +43,8 @@ const CONVERSATION_PLATFORMS = new Set(["chatgpt", "gemini", "claude", "perplexi
 const BAR_FALLBACK_PLATFORMS = new Set(["x"]);
 // Google Docs is imported as a pasted-text copy, so say so on the button.
 const GOOGLE_DOCS_LABEL = "Copy text to NotebookLM";
+// What the pill says everywhere else: the action, not just the app's name
+const SEND_LABEL = "Send to NotebookLM";
 const GOOGLE_DOCS_NOTE = "Saved as text and won't sync. For a synced source, add it from Google Drive in NotebookLM.";
 // Floating pill position per platform (default: top-right, below the site header).
 const FLOAT_BOTTOM_PLATFORMS = new Set(["googledocs"]);
@@ -249,7 +251,7 @@ async function openPanel(wrapper) {
 
   panel.id = PLATFORM_PANEL_ID;
   panel.className = "notebooktools-platform-panel";
-  panel.title = platform === "googledocs" ? GOOGLE_DOCS_LABEL : "Import to NotebookLM";
+  panel.title = platform === "googledocs" ? GOOGLE_DOCS_LABEL : SEND_LABEL;
   panel.src = frameUrl.toString();
   panel.addEventListener("load", () => {
     sendPayloadToPanel(panel);
@@ -299,14 +301,14 @@ function createButton() {
   mark.append(markImg);
   text.className = "notebooktools-platform-text";
   const isGoogleDocs = currentPlatform === "googledocs";
-  text.textContent = isGoogleDocs ? GOOGLE_DOCS_LABEL : "NotebookLM";
+  text.textContent = isGoogleDocs ? GOOGLE_DOCS_LABEL : SEND_LABEL;
 
   button.type = "button";
   button.title = isGoogleDocs
     ? `${GOOGLE_DOCS_LABEL}. ${GOOGLE_DOCS_NOTE}`
     : CONVERSATION_PLATFORMS.has(currentPlatform)
-      ? "Import this conversation to NotebookLM"
-      : "Import this page to NotebookLM";
+      ? "Send this conversation to a NotebookLM notebook as a source"
+      : "Send this page to a NotebookLM notebook as a source";
   button.setAttribute("aria-expanded", "false");
   button.append(mark, text);
   wrapper.append(button);

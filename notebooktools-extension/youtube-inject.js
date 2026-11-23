@@ -368,8 +368,8 @@
   function createWatchButton() {
     return createActionButton({
       id: WATCH_BTN_ID,
-      label: "NotebookLM",
-      title: "Import this video to NotebookLM",
+      label: "Send to NotebookLM",
+      title: "Send this video to a NotebookLM notebook as a source",
       mode: "import"
     });
   }
