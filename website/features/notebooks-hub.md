@@ -32,14 +32,14 @@ How it works
 
 ## Organize NotebookLM notebooks with folders, tags and favorites
 
-The NotebookTools notebooks hub opens every NotebookLM notebook in one table, in its own browser tab. You can star and pin notebooks, put them in folders, add tags, search by name, and sort by title, number of sources, tags or favorites. Open a notebook from the hub to see its Sources, Studio and Notes, compare or merge two notebooks, highlight passages in a source and keep notes beside them. The **Presentations** tab keeps every slide deck you edited in the slide editor, and the **Prompts** tab holds your saved prompts, organised with tags.
+The NotebookTools notebooks hub opens every NotebookLM notebook in one table, in its own browser tab. You can star and pin notebooks, put them in folders, add tags, search by name or inside every notebook (sources, notes and Studio files), and sort by title, number of sources, tags or favorites. Open a notebook from the hub to see its Sources, Studio and Notes, compare or merge two notebooks, highlight passages in a source and keep notes beside them. The **Presentations** tab keeps every slide deck you edited in the slide editor, and the **Prompts** tab holds your saved prompts, organised with tags.
 
 ### How to use it
 
 1. Click **All notebooks** (the grid icon) in the NotebookTools popup, or in the ribbon inside a notebook. The hub opens in a new tab.
 2. Star your favorites and pin the notebooks you use most so they stay at the top.
 3. Create folders and add tags, then filter the list by folder or tag.
-4. Sort by title, sources, tags or favorites, or type in the search box.
+4. Sort by title, sources, tags or favorites, or type in the search box. Click **Search inside notebooks** once and the same box also finds words in every notebook's source titles and links, notes and Studio files; click a result to open that notebook.
 5. To clean up, click **Select**, tick old notebooks and delete them together.
 6. To combine research, compare two notebooks side by side, copy the sources you tick across, or merge both into a new notebook.
 
@@ -60,6 +60,10 @@ A free Google account can hold 100 notebooks and Google AI Pro 500, so classes, 
 ### How do I put NotebookLM notebooks in folders?
 
 Open the NotebookTools notebooks hub, create a folder and add notebooks to it. Folders and tags are saved by NotebookTools in your Chrome profile; your notebooks and sources in NotebookLM are not changed.
+
+### Can I search across all my NotebookLM notebooks?
+
+Yes. The hub's search box finds notebooks by name and, once you click Search inside notebooks, also searches every notebook's source titles and links, notes and Studio files. The index is kept on your computer; click Update index to refresh it.
 
 ### Can I delete several NotebookLM notebooks at once?
 

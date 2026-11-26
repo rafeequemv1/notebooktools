@@ -964,7 +964,9 @@ function emptyState() {
   if (!notebooks.length) {
     return `<div class="nbx-empty"><strong>No notebooks yet</strong><p>Sign in to Gemini Notebook in this browser, then refresh. Or create your first notebook.</p></div>`;
   }
-  return `<div class="nbx-empty"><strong>No notebooks match</strong><p>Try another search, or clear the filters.</p><button type="button" class="nbx-ghost" data-clear-filters>Clear filters</button></div>`;
+  // (with a search, matches inside notebooks are listed above: say it's the names that don't match)
+  const inside = (searchInput?.value || "").trim().length >= 2 && window.NotebookToolsSearch;
+  return `<div class="nbx-empty"><strong>${inside ? "No notebook names match" : "No notebooks match"}</strong><p>${inside ? "Matches inside notebooks are listed above." : "Try another search, or clear the filters."}</p><button type="button" class="nbx-ghost" data-clear-filters>Clear filters</button></div>`;
 }
 
 function moreButton(total) {
@@ -1145,6 +1147,7 @@ async function clearFilters() {
   activeFolder = "all";
   activeTag = "all";
   if (searchInput) searchInput.value = "";
+  window.NotebookToolsSearch?.refresh();
   await store.setActiveTag("all");
   renderLimit = PAGE_SIZE;
   renderAll();
@@ -1214,7 +1217,7 @@ function renderFilterChips() {
         activeTag = "all";
         await store.setActiveTag("all");
       }
-      if (key === "search" && searchInput) searchInput.value = "";
+      if (key === "search" && searchInput) { searchInput.value = ""; window.NotebookToolsSearch?.refresh(); }
       renderAll();
     });
   });
@@ -1927,6 +1930,7 @@ document.addEventListener("keydown", (event) => {
 
   if (event.key === "Escape" && event.target === searchInput && searchInput.value) {
     searchInput.value = "";
+    window.NotebookToolsSearch?.refresh();
     renderMain();
     return;
   }
@@ -1963,6 +1967,19 @@ document.addEventListener("click", (event) => {
     closeMenus();
   }
 });
+
+// Search inside every notebook (sources, notes, Studio files) from the same box
+function attachSearchEverything() {
+  const bar = document.querySelector("#notebooksListChrome .nbx-bar");
+  if (!window.NotebookToolsSearch || !searchInput || !bar) return;
+  void window.NotebookToolsSearch.attach({
+    input: searchInput,
+    mount: bar,
+    getNotebooks: () => notebooks,
+    getAuthOptions: () => authUserOption(activeAccount),
+    openNotebook: (notebook, tab) => openNotebookInApp(notebook, tab)
+  });
+}
 
 async function init() {
   // The notebooks dashboard is a Pro feature (plan-gate.js). Free users see a
@@ -2040,6 +2057,7 @@ async function init() {
 
   await initAccounts();
   notebooks = await cache.get(activeAccount?.authUser);
+  attachSearchEverything();
 
   if (notebooks.length) {
     renderAll();

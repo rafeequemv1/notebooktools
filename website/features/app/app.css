@@ -6964,6 +6964,42 @@ textarea {
 .pv-toast { background: #1f1f1f; border-radius: 999px; bottom: 24px; color: #fff; font-size: 13px; left: 50%; opacity: 0; padding: 10px 18px; pointer-events: none; position: fixed; transform: translate(-50%, 8px); transition: opacity 0.2s, transform 0.2s; z-index: 70; }
 .pv-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
 
+/* Search everything: matches inside notebooks (notebooks-search.js) */
+.nsx { background: var(--nt-surface, #fff); border: 1px solid var(--nt-line, rgba(31, 31, 31, 0.1)); border-radius: 20px; margin: 4px 0 14px; padding: 14px 16px; }
+.nsx[hidden] { display: none; }
+.nsx mark { background: rgba(251, 188, 4, 0.35); border-radius: 3px; color: inherit; padding: 0 1px; }
+.nsx-head { align-items: center; display: flex; gap: 10px; }
+.nsx-status { align-items: center; color: var(--nt-muted, #5f6368); display: flex; flex: 1; font-size: 13px; gap: 8px; margin: 0; }
+.nsx-link { background: none; border: 0; border-radius: 999px; color: var(--nt-accent, #0b57d0); cursor: pointer; font: 500 13px/1 inherit; padding: 6px 10px; white-space: nowrap; }
+.nsx-link:hover { background: var(--sp-hover, rgba(11, 87, 208, 0.07)); }
+.nsx-spin { animation: nsx-spin 0.9s linear infinite; border: 2px solid currentColor; border-radius: 50%; border-right-color: transparent; display: inline-block; height: 12px; width: 12px; }
+@keyframes nsx-spin { to { transform: rotate(360deg); } }
+.nsx-groups { display: grid; gap: 14px; margin-top: 10px; }
+.nsx-group-title { color: var(--nt-ink, #1f1f1f); font: 500 13px/1.3 "Google Sans", Roboto, Arial, sans-serif; margin: 0 0 4px; }
+.nsx-group-title span { color: var(--nt-muted, #5f6368); font-weight: 400; margin-left: 4px; }
+.nsx-list { display: flex; flex-direction: column; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.nsx-hit { align-items: center; background: none; border: 0; border-radius: 12px; color: var(--nt-ink, #1f1f1f); cursor: pointer; display: flex; font: inherit; gap: 12px; padding: 8px 10px; text-align: left; width: 100%; }
+.nsx-hit:hover, .nsx-hit:focus-visible { background: var(--sp-hover, rgba(11, 87, 208, 0.07)); outline: none; }
+.nsx-hit-ic { align-items: center; background: var(--nt-accent-soft, #e8f0fe); border-radius: 10px; color: var(--nt-accent, #0b57d0); display: inline-flex; flex: none; height: 30px; justify-content: center; width: 30px; }
+.nsx-hit-ic.is-notes { color: #b06000; }
+.nsx-hit-ic.is-studio { color: #7b1fa2; }
+.nsx-hit-main { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+.nsx-hit-title { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nsx-hit-snip { color: var(--nt-muted, #5f6368); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nsx-hit-meta { align-items: center; display: flex; flex: none; gap: 8px; max-width: 38%; }
+.nsx-type { background: var(--nt-accent-soft, #e8f0fe); border-radius: 999px; color: var(--nt-muted, #5f6368); font-size: 11.5px; padding: 2px 8px; white-space: nowrap; }
+.nsx-nb { color: var(--nt-muted, #5f6368); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nsx-more { background: none; border: 0; border-radius: 999px; color: var(--nt-accent, #0b57d0); cursor: pointer; font: 500 13px/1 inherit; margin: 4px 0 0 52px; padding: 6px 10px; }
+.nsx-more:hover { background: var(--sp-hover, rgba(11, 87, 208, 0.07)); }
+.nsx-invite { align-items: center; display: flex; gap: 14px; }
+.nsx-invite-ic { align-items: center; background: var(--nt-accent-soft, #e8f0fe); border-radius: 50%; color: var(--nt-accent, #0b57d0); display: inline-flex; flex: none; height: 38px; justify-content: center; width: 38px; }
+.nsx-invite > div { flex: 1; min-width: 0; }
+.nsx-invite-title { color: var(--nt-ink, #1f1f1f); font: 500 14.5px/1.3 "Google Sans", Roboto, Arial, sans-serif; margin: 0 0 2px; }
+.nsx-invite-sub { color: var(--nt-muted, #5f6368); font-size: 13px; line-height: 1.45; margin: 0; }
+.nsx-build { background: var(--nt-ink, #1f1f1f); border: 0; border-radius: 999px !important; color: var(--nt-surface, #fff); cursor: pointer; flex: none; font: 500 13.5px/1 inherit; height: 36px; padding: 0 18px; white-space: nowrap; }
+.nsx-build:hover { opacity: 0.88; }
+@media (max-width: 720px) { .nsx-invite { align-items: flex-start; flex-direction: column; } .nsx-hit-meta { display: none; } }
+
 /* prompt-library.css */
 .pl-section-label {
   color: var(--nt-ink);
