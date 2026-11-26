@@ -1513,3 +1513,9 @@
 .se-install-never:hover { color: #1f1f1f; text-decoration: underline; }
 @keyframes se-install-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (max-width: 560px) { .se-install { bottom: 12px; left: 12px; right: 12px; max-width: none; } }
+
+/* Editor page languages (English · Español · Português · 繁體中文) */
+.tools-langs { color: #5f6368; font-size: 13.5px; margin: 10px 0 0; }
+.tools-langs a { color: #0b57d0; text-decoration: none; }
+.tools-langs a:hover { text-decoration: underline; }
+.tools-langs [aria-current] { color: #1f1f1f; font-weight: 500; }

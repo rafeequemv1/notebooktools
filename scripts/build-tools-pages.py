@@ -13,8 +13,13 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import shutil
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from editor_locales import EDITOR_LOCALES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "website"
@@ -240,7 +245,7 @@ TOOLS = [
             ("Can you edit NotebookLM slide decks?", "Not inside NotebookLM: its slide decks are generated as images, so the text can't be changed. This editor reads the text with OCR and turns it into real text boxes you can edit."),
             ("How do I convert NotebookLM slides to PowerPoint?", "Download the slide deck as a PDF from NotebookLM's Studio panel, open it here and click Download PowerPoint. Each slide keeps its design as the background, and the text comes back as editable text boxes."),
             ("Will it look exactly like the original?", "Close, not identical. Fonts are matched to the nearest common font, and the area behind the old text is filled from the surrounding colours: clean on flat or gradient backgrounds, but busy photos can show faint marks. Use Original to compare, and fix anything in the editor."),
-            ("What about charts and diagrams?", "Text inside charts, diagrams and pictures is usually left as part of the image so the graphic stays intact. You can add your own text boxes on top."),
+            ("What about charts and diagrams?", "Labels on diagrams (in pills, boxes and beside drawings) are read as editable text, and the drawings become separate pictures you can move. Text inside number-heavy charts usually stays part of the image so the chart stays intact; you can add your own text boxes on top."),
             ("Can I move or delete the pictures on a slide?", "Yes, on slides with a plain background (most NotebookLM decks). Illustrations, photos and icons become separate pictures with a transparent background, and solid lines and bars become shapes, so you can drag, resize or delete them; they export to PowerPoint as separate objects. Slides with a full-bleed photo or strong gradient behind everything keep a single background picture."),
             ("Does it work in Google Slides?", "Yes. In Google Slides choose File → Import slides (or open the .pptx from Drive); the text boxes stay editable."),
             ("Is my deck uploaded?", "No. pdf.js, Tesseract OCR, pdf-lib and PptxGenJS all run in your browser. The deck never leaves your device."),
@@ -602,11 +607,15 @@ GROUPS = [
 # ---------------------------------------------------------------------------
 # Page parts
 # ---------------------------------------------------------------------------
-def head(title: str, description: str, path: str, schema: dict) -> str:
+def head(title: str, description: str, path: str, schema: dict, lang: str = "en", og: str = "en_US", alternates=None, md: str | None = "") -> str:
     url = f"{BASE}{path}"
-    md = f"{path}.md" if path != "/tools" else "/tools/index.md"
+    if md == "":
+        md = f"{path}.md" if path != "/tools" else "/tools/index.md"
+    alts = alternates or [("en", url), ("x-default", url)]
+    alt_links = "\n    ".join(f'<link rel="alternate" hreflang="{h}" href="{u}">' for h, u in alts)
+    md_link = f'\n    <link rel="alternate" type="text/markdown" href="{md}" title="Markdown version">' if md else ""
     return f"""<!doctype html>
-<html lang="en">
+<html lang="{lang}">
   <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2BJP0Q9LL"></script>
     <script>
@@ -622,12 +631,10 @@ def head(title: str, description: str, path: str, schema: dict) -> str:
     <meta name="description" content="{E(description)}">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="{url}">
-    <link rel="alternate" hreflang="en" href="{url}">
-    <link rel="alternate" hreflang="x-default" href="{url}">
-    <link rel="alternate" type="text/markdown" href="{md}" title="Markdown version">
+    {alt_links}{md_link}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NotebookTools">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="{og}">
     <meta property="og:title" content="{E(title)}">
     <meta property="og:description" content="{E(description)}">
     <meta property="og:url" content="{url}">
@@ -701,6 +708,7 @@ def tool_page(t: dict) -> str:
         breadcrumb([("Home", "/"), ("Free tools", "/tools"), (t["name"], path)]),
     ]}
     scripts = "".join(f'\n    <script src="/tools/{s}"></script>' for s in ["tools.js", *t.get("extra_scripts", []), t["script"]])
+    alternates = editor_alternates() if t["slug"] == "edit-notebooklm-slides" else None
     if t.get("raw_app"):
         app_html = t["raw_app"]
     else:
@@ -708,7 +716,7 @@ def tool_page(t: dict) -> str:
     steps = "".join(f"<li>{E(s)}</li>" for s in t["steps"])
     faq = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in t["faq"])
     links = "".join(f'<li><a href="{h}">{E(l)}</a></li>' for h, l in t["links"])
-    return f"""{head(t['title'], t['description'], path, schema)}
+    return f"""{head(t['title'], t['description'], path, schema, alternates=alternates)}
   <body>
     <header class="site-header"></header>
 
@@ -718,7 +726,7 @@ def tool_page(t: dict) -> str:
         <p class="eyebrow">Free tool</p>
         <h1>{E(t['h1'])}</h1>
         <div class="post-answer"><p class="post-answer-label">Short answer</p><p>{E(t['answer'])}</p></div>
-        {BADGES}
+        {BADGES}{editor_languages("en") if t["slug"] == "edit-notebooklm-slides" else ""}
       </section>
 
       {app_html}
@@ -737,6 +745,87 @@ def tool_page(t: dict) -> str:
 
       <section class="tools-more" aria-label="More free tools">
         <h2>More free tools</h2>
+        <div class="tools-grid">
+          {other_tools(t['slug'])}
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"></footer>
+{scripts}
+  </body>
+</html>
+"""
+
+
+def editor_languages(current: str) -> str:
+    """'English · Español · Português · 繁體中文' under the editor's title; the current one isn't a link."""
+    items = [("en", "English", "/tools/edit-notebooklm-slides")] + [(l["lang"], l["native"], l["path"]) for l in EDITOR_LOCALES]
+    parts = [f'<span aria-current="true">{E(n)}</span>' if c == current else f'<a href="{h}" hreflang="{c}" lang="{c}">{E(n)}</a>' for c, n, h in items]
+    return '<p class="tools-langs">' + ' <span aria-hidden="true">·</span> '.join(parts) + '</p>'
+
+
+def editor_alternates():
+    en = f"{BASE}/tools/edit-notebooklm-slides"
+    return [("en", en)] + [(loc["lang"], f"{BASE}{loc['path']}") for loc in EDITOR_LOCALES] + [("x-default", en)]
+
+
+def editor_locale_page(t: dict, loc: dict) -> str:
+    """The slide editor page in another language (EDITOR_LOCALES)."""
+    L = loc["labels"]
+    path = loc["path"]
+    schema = {"@context": "https://schema.org", "@graph": [
+        {"@type": "WebApplication", "name": loc["name"], "url": f"{BASE}{path}", "description": loc["description"], "inLanguage": loc["lang"],
+         "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (runs in the browser)",
+         "isAccessibleForFree": True, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+         "dateModified": UPDATED, "publisher": {"@type": "Organization", "name": "NotebookTools", "url": BASE}},
+        {"@type": "HowTo", "name": L["howto_name"], "step": [
+            {"@type": "HowToStep", "position": i + 1, "text": st} for i, st in enumerate(loc["steps"])]},
+        faq_schema(loc["faq"]),
+        breadcrumb([(L["home"], "/"), (L["tools"], "/tools"), (loc["name"], path)]),
+    ]}
+    # editor-i18n.js translates the editor's interface; it loads before the editor builds it
+    scripts = "".join(f'\n    <script src="/tools/{x}"></script>' for x in ["tools.js", *t.get("extra_scripts", []), "editor-i18n.js", t["script"]])
+    steps = "".join(f"<li>{E(x)}</li>" for x in loc["steps"])
+    faq = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in loc["faq"])
+    links = "".join(f'<li><a href="{h}">{E(l)}</a></li>' for h, l in loc["links"])
+    badges = f"""<div class="tools-badges">
+          <span class="tools-badge">{CHECK}{E(L['free'])}</span>
+          <span class="tools-badge">{LOCK}{E(L['private'])}</span>
+          <span class="tools-badge">{E(L['updated'])} <time datetime="{UPDATED}">{E(L['updated_label'])}</time></span>
+        </div>"""
+    app_html = t["raw_app"].replace("Loading the editor…", E(L["loading"])).replace('aria-label="NotebookLM slide editor"', f'aria-label="{E(loc["name"])}"')
+    return f"""{head(loc['title'], loc['description'], path, schema, lang=loc['lang'], og=loc['og'], alternates=editor_alternates(), md=None)}
+  <body>
+    <header class="site-header"></header>
+
+    <main class="tools-main">
+      <nav class="blog-breadcrumb" aria-label="Breadcrumb"><a href="/">{E(L['home'])}</a> <span aria-hidden="true">/</span> <a href="/tools">{E(L['tools'])}</a> <span aria-hidden="true">/</span> <span>{E(loc['name'])}</span></nav>
+      <section class="tools-hero">
+        <p class="eyebrow">{E(L['eyebrow'])}</p>
+        <h1>{E(loc['h1'])}</h1>
+        <div class="post-answer"><p class="post-answer-label">{E(L['answer'])}</p><p>{E(loc['answer'])}</p></div>
+        {badges}{editor_languages(loc["lang"])}
+      </section>
+
+      {app_html}
+
+      <aside class="tool-cta" aria-label="NotebookTools Chrome extension">
+        <p>{loc['cta']}</p>
+        <a class="button" href="{CHROME_STORE}" target="_blank" rel="noopener noreferrer">{E(L['add'])}</a>
+      </aside>
+
+      <article class="tools-copy">
+        <h2 id="how-to">{E(L['howto'])}</h2>
+        <ol>{steps}</ol>
+        <h2 id="faq">{E(L['faq'])}</h2>
+        {faq}
+        <h2 id="related">{E(L['related'])}</h2>
+        <ul>{links}</ul>
+      </article>
+
+      <section class="tools-more" aria-label="{E(L['more'])}">
+        <h2>{E(L['more'])}</h2>
         <div class="tools-grid">
           {other_tools(t['slug'])}
         </div>
@@ -1027,6 +1116,24 @@ def main() -> None:
     for t in TOOLS:
         (OUT / f"{t['slug']}.html").write_text(tool_page(t), encoding="utf-8")
         (OUT / f"{t['slug']}.md").write_text(tool_md(t), encoding="utf-8")
+    editor = next(t for t in TOOLS if t["slug"] == "edit-notebooklm-slides")
+    for loc in EDITOR_LOCALES:
+        dest = SITE / (loc["path"].lstrip("/") + ".html")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        page = editor_locale_page(editor, loc)
+        if loc.get("chrome_from"):
+            # the language's own translated header and footer (sync-site-chrome.py leaves these folders alone)
+            ref = (SITE / loc["chrome_from"]).read_text(encoding="utf-8")
+            for pat in (r'<header class="site-header">.*?</header>', r'<footer class="site-footer">.*?</footer>'):
+                m = re.search(pat, ref, re.S)
+                if m:
+                    page = re.sub(pat, lambda _: m.group(0), page, count=1, flags=re.S)
+            for tag in ('<link rel="stylesheet" href="/theme.css">',):
+                if tag not in page:
+                    page = page.replace('<link rel="stylesheet" href="/tools/tools.css">', '<link rel="stylesheet" href="/tools/tools.css">\n    ' + tag, 1)
+            if '<script src="/site.js" defer></script>' not in page:
+                page = page.replace("</body>", '  <script src="/site.js" defer></script>\n  </body>', 1)
+        dest.write_text(page, encoding="utf-8")
     data = load_prompts()
     PROMPT_DIR.mkdir(exist_ok=True)
     for p in data["prompts"]:

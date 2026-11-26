@@ -32,7 +32,7 @@ Close, not identical. Fonts are matched to the nearest common font, and the area
 
 ### What about charts and diagrams?
 
-Text inside charts, diagrams and pictures is usually left as part of the image so the graphic stays intact. You can add your own text boxes on top.
+Labels on diagrams (in pills, boxes and beside drawings) are read as editable text, and the drawings become separate pictures you can move. Text inside number-heavy charts usually stays part of the image so the chart stays intact; you can add your own text boxes on top.
 
 ### Can I move or delete the pictures on a slide?
 
