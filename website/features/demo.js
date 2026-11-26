@@ -1124,6 +1124,13 @@
       path: "/features/carousel",
       demo: null
     },
+    "prompt-queue": {
+      title: "NotebookLM Prompt Queue: Run Prompts One After Another | NotebookTools",
+      description: "Line up several NotebookLM prompts and let NotebookTools send each one when the last answer is done, then copy or download all the answers.",
+      name: "Prompt queue",
+      path: "/features/prompt-queue",
+      demo: "queue"
+    },
     "notebook-tools": {
       title: "NotebookLM Tools Inside Every Notebook | NotebookTools",
       description: "One ribbon inside every NotebookLM notebook: manage and filter sources and Studio files, copy the chat, prompts, folders and tags.",

@@ -2549,3 +2549,11 @@
 .ntr-pop { position: absolute; z-index: 5; }
 .nlm-lite-toast { background: #1f1f1f; border-radius: 999px; bottom: 24px; color: #fff; font-size: 13px; left: 50%; padding: 10px 18px; position: absolute; transform: translateX(-50%); z-index: 6; }
 .app-ribbon-host { flex: none; }
+
+/* Prompt queue demo: the extension's real queue panel over the notebook */
+.nlm-queue-host { bottom: 14px; position: absolute; right: 14px; width: 360px; z-index: 6; }
+.nlm-queue-host[hidden] { display: none; }
+.nlm-lite-panel.is-chat.is-thread { gap: 8px; justify-content: flex-start; overflow: hidden; }
+.nlm-lite-a { background: #fff; border: 1px solid #eef0f4; border-radius: 14px; color: #3c4043; font-size: 12px; line-height: 1.45; padding: 8px 12px; }
+.nlm-lite-thread { display: flex; flex: 1; flex-direction: column; gap: 8px; justify-content: flex-end; min-height: 0; overflow: hidden; }
+.nlm-lite-thread [hidden] { display: none; }

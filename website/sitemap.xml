@@ -342,6 +342,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.notebooktools.com/features/prompt-queue</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.notebooktools.com/features/x-twitter</loc>
     <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>

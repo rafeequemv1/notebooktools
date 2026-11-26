@@ -21,6 +21,7 @@
           <option value="add-webpage">Add webpage</option>
           <option value="x-twitter">X / Twitter</option>
           <option value="highlights">Highlights</option>
+          <option value="prompt-queue">Prompt queue</option>
           <option value="notebook-tools">In-notebook tools</option>
           <option value="chat-export">Chat export</option>
           <option value="slide-editor">Slide editor</option>
@@ -97,6 +98,13 @@
             <span class="md-nav-text">
               <span class="md-nav-title">Prompt library</span>
               <span class="md-nav-desc">Type / in NotebookLM chat for ready-made prompts.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/prompt-queue" data-feature="prompt-queue">
+            <span class="md-nav-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h11M4 12h11M4 18h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15l4 3-4 3z" fill="currentColor"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Prompt queue</span>
+              <span class="md-nav-desc">Run several prompts one after another, automatically.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/add-webpage" data-feature="add-webpage">
@@ -233,6 +241,13 @@
               <span class="md-overview-body">
                 <strong>Prompt library</strong>
                 <span>Type / in NotebookLM chat for ready-made prompts and slide templates.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="prompt-queue" data-action="select-feature">
+              <span class="md-overview-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h11M4 12h11M4 18h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 15l4 3-4 3z" fill="currentColor"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Prompt queue</strong>
+                <span>Line up several prompts; each one is sent when NotebookLM finishes the last answer.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="add-webpage" data-action="select-feature">
@@ -982,6 +997,89 @@
             <div class="feature-seo-q">
               <h3>Is saving highlights to NotebookLM free?</h3>
               <p>Yes. Highlights, webpages, YouTube and X imports are all free in NotebookTools.</p>
+            </div>
+          </div>
+        </section>
+        </article>
+        <article class="md-panel" data-panel="prompt-queue" id="panel-prompt-queue" hidden>
+          <h1 class="sr-only">Prompt queue</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="queue">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "Product launch 2026 - NotebookLM", "url": "notebooklm.google.com/notebook/5a17c0de", "icon": "nlm", "active": true}]'>
+            <div class="br-page"><div class="nlm-lite" data-s="nlm-page">
+              <div class="nlm-lite-head"><span class="nlm-lite-logo"></span><b>Product launch 2026</b></div>
+              <div class="app-ribbon-host" data-app-screen="nlm-ribbon"></div>
+              <div class="nlm-lite-row">
+                <section class="nlm-lite-panel"><b>Sources</b><i></i><i></i><i></i><i class="s"></i></section>
+                <section class="nlm-lite-panel is-chat is-thread"><div class="nlm-lite-thread">
+                  <span class="nlm-lite-q" data-s="q1" hidden>Summarize every source in five bullets, with citations.</span><span class="nlm-lite-a" data-s="a1" hidden>1. The launch moves to 12 May [1]. 2. Pricing stays at three tiers [2]…</span>
+                  <span class="nlm-lite-q" data-s="q2" hidden>What are the three biggest risks to the launch?</span><span class="nlm-lite-a" data-s="a2" hidden>Supplier delays, a late security review and thin support cover [3].</span>
+                  <span class="nlm-lite-q" data-s="q3" hidden>Draft a one-page FAQ for the sales team.</span><span class="nlm-lite-a" data-s="a3" hidden>Q: When can customers order? A: From 12 May, in all regions…</span>
+                  <span class="nlm-lite-q" data-s="q4" hidden>Turn the timeline into a table: date, milestone, owner.</span><span class="nlm-lite-a" data-s="a4" hidden>| 2 Apr | Beta closes | Priya | · | 12 May | Launch | Sam |</span>
+                </div><span class="nlm-lite-box">Start typing...</span></section>
+                <section class="nlm-lite-panel"><b>Studio</b><span class="nlm-lite-tiles"><i></i><i></i><i></i><i></i></span></section>
+              </div>
+              <div class="nlm-queue-host" data-s="q-ready" data-app-screen="nlm-queue" hidden></div>
+              <div class="nlm-queue-host" data-s="q-run" data-app-screen="nlm-queue-run" hidden></div>
+              <div class="nlm-queue-host" data-s="q-done" data-app-screen="nlm-queue-done" hidden></div>
+              <div class="nlm-lite-toast" data-s="toast" hidden>All answers copied as Markdown</div>
+            </div></div>
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Open the queue</strong><p>In a notebook, click <b>Queue</b> in the ribbon, or <b>Prompts</b> → <b>Prompt queue</b>.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Add your prompts</strong><p>Type them, paste a list and add each line, or pick from your saved prompts. Up to 25.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Press Start</strong><p>Each prompt goes in when NotebookLM has finished the answer before it, with the pause you choose.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Keep the answers</strong><p>Copy or download every prompt and answer together as Markdown.</p></div></li>
+        </ol>
+      </section>
+        <section class="feature-seo" aria-labelledby="seo-prompt-queue">
+          <div class="feature-seo-inner">
+            <h2 id="seo-prompt-queue">Run several NotebookLM prompts one after another</h2>
+            <p class="feature-seo-lead">The NotebookTools prompt queue lines up prompts for a NotebookLM notebook and sends them for you, one at a time. Each prompt goes into the chat only when NotebookLM has finished answering the one before it, after a short pause you choose, so you can ask for a summary, a risk list, an FAQ and a table in one go and come back to all the answers. When the queue finishes, copy or download every prompt with its answer as one Markdown document.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>Open a notebook in NotebookLM.</li>
+              <li>Click <b>Queue</b> in the NotebookTools ribbon, or <b>Prompts</b> → <b>Prompt queue</b>.</li>
+              <li>Add prompts: type one and press Enter, paste a list and click <b>Add each line</b>, or click <b>From my prompts</b> to pick saved prompts. Reorder or remove them before you start.</li>
+              <li>Choose the pause between prompts (3 to 30 seconds) and press <b>Start</b>. Keep the tab open while it runs.</li>
+              <li>Press <b>Pause</b> to stop after the current answer, or <b>Stop</b> to stop now. <b>Continue</b> picks up where it left off.</li>
+              <li>When it finishes, click <b>Copy answers</b> or <b>Download</b> to keep every prompt and answer together.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>Getting the most from a notebook usually takes several questions: a summary, then the risks, then a draft, then a table. Asking them one by one means waiting for each answer before typing the next. The queue does the waiting for you and keeps the answers together, so a set of prompts you use for every new notebook (a study routine, a research review, a launch brief) runs in one go.</p>
+            <h3>Built to be used fairly</h3>
+            <p>You start every run and can see it the whole time. It runs only in the open notebook tab and never by itself after a reload, holds up to 25 prompts, pauses between them like a person would, never overwrites text you are typing in the chat box, and stops if NotebookLM says a usage limit has been reached. It sends the same prompts you would type yourself, within NotebookLM's own limits.</p>
+            <p class="feature-seo-plan"><strong>Pro.</strong> The prompt queue is part of NotebookTools Pro ($49 one-time, lifetime). <a href="/#pricing">See plans</a></p>
+            <h3>Related</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/features/prompts">Prompt library: save prompts and insert them with /</a></li>
+              <li><a href="/blog/best-notebooklm-prompts">The best NotebookLM prompts for studying and research</a></li>
+              <li><a href="/blog/20-notebooklm-prompts">20 NotebookLM prompts you can copy</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">Prompt queue: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>Can NotebookLM run several prompts automatically?</h3>
+              <p>Not on its own. With NotebookTools you add prompts to a queue and press Start; each one is sent when NotebookLM has finished the answer before it.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>How does it know an answer is finished?</h3>
+              <p>It waits until NotebookLM's answer has stopped changing and the chat box is ready again, then pauses for the time you chose before sending the next prompt.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Can I use my saved prompts?</h3>
+              <p>Yes. Click From my prompts in the queue to add any prompt from your prompt library.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Does it keep running if I close the tab?</h3>
+              <p>No. The queue runs only while the notebook tab is open, and it never restarts by itself. Your list is saved for that notebook, so you can press Start again later.</p>
             </div>
           </div>
         </section>

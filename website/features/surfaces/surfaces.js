@@ -249,7 +249,8 @@
         ".app.embedded{max-width:none!important;min-width:0!important;width:100%!important}" +
         // the dashboard's dialogs and player stay inside the demo's browser frame
         ".nt-modal{position:absolute!important}.podcast-player{position:sticky!important}" +
-        ".ntr-menu{left:auto!important;position:relative!important;top:auto!important}#notebooktools-ribbon{margin:0!important}</style>" +
+        ".ntr-menu{left:auto!important;position:relative!important;top:auto!important}#notebooktools-ribbon{margin:0!important}" +
+        ".ntq{position:relative!important;right:auto!important;bottom:auto!important;max-height:none!important;width:100%!important;z-index:auto!important}</style>" +
         '<div class="app-body ' + esc(screen.bodyClass || "") + '">' + screen.html + "</div>";
       var map = {};
       try { map = JSON.parse(el.getAttribute("data-app-map") || "{}"); } catch (e) { map = {}; }

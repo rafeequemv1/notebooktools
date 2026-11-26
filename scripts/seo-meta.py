@@ -32,6 +32,10 @@ META = {
         "Edit NotebookLM Slides: Real Text, Download PowerPoint | NotebookTools",
         "NotebookLM slide decks are flat images. The NotebookTools slide editor turns them into real text boxes and separate pictures you can edit, then saves PowerPoint, PDF or images. Free, runs in your browser.",
     ),
+    "features/prompt-queue.html": (
+        "NotebookLM Prompt Queue: Run Prompts One After Another | NotebookTools",
+        "Line up several NotebookLM prompts and NotebookTools sends each one when the last answer is done, with a pause you choose. Pause or stop any time, then copy or download all the answers.",
+    ),
     "features/notebook-tools.html": (
         "NotebookLM Tools Inside Every Notebook | NotebookTools",
         "One slim ribbon inside every NotebookLM notebook: manage and filter sources and Studio files, copy the chat as Markdown, insert and save prompts, create, export, and file notebooks in folders and tags.",

@@ -372,6 +372,53 @@
     ];
   });
 
+  // Prompt queue: the extension's real queue panel (notebooklm-prompt-queue.js),
+  // captured ready, running and finished; the running one is stepped through here
+  register("queue", function (a) {
+    function run() { var h = a.el("q-run"); return h && h.shadowRoot; }
+    function setItem(i, status, label) {
+      return a.run(function () {
+        var r = run(); if (!r) return;
+        var li = r.querySelectorAll(".ntq-item")[i]; if (!li) return;
+        li.className = "ntq-item is-" + status;
+        var chip = li.querySelector(".ntq-chip"); if (chip) chip.textContent = label;
+        var sub = r.querySelector(".ntq-sub");
+        var done = r.querySelectorAll(".ntq-item.is-done").length;
+        if (sub) sub.textContent = done + " of 4 answered" + (status === "answering" ? " \u00b7 answering #" + (i + 1) : "");
+      });
+    }
+    function reset() {
+      return a.run(function () {
+        var r = run(); if (!r) return;
+        r.querySelectorAll(".ntq-item").forEach(function (li) { li.className = "ntq-item is-waiting"; var c = li.querySelector(".ntq-chip"); if (c) c.textContent = "Waiting"; });
+      });
+    }
+    var steps = [
+      a.hide("q-run"), a.hide("q-done"), a.hide("q1"), a.hide("a1"), a.hide("q2"), a.hide("a2"), a.hide("q3"), a.hide("a3"), a.hide("q4"), a.hide("a4"),
+      reset(),
+      a.wait(500),
+      a.click('[data-ntr="queue"]'),
+      a.show("q-ready"),
+      a.wait(1600),
+      a.click('[data-q="start"]'),
+      a.hide("q-ready"),
+      a.show("q-run")
+    ];
+    for (var i = 0; i < 4; i += 1) {
+      steps.push(setItem(i, "answering", "Answering\u2026"), a.show("q" + (i + 1)), a.wait(900), a.show("a" + (i + 1)), a.wait(700), setItem(i, "done", "Done"), a.wait(i < 3 ? 600 : 300));
+    }
+    return steps.concat([
+      a.hide("q-run"),
+      a.show("q-done"),
+      a.wait(900),
+      a.click('[data-q="copy"]'),
+      a.show("toast"),
+      a.wait(1500),
+      a.hide("toast"),
+      a.wait(400)
+    ]);
+  });
+
   register("xtwitter", function (a) {
     return [
       a.click("x-btn"),

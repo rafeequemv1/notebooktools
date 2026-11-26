@@ -112,3 +112,7 @@
 
 .ntq.is-collapsed { border-radius: 999px; width: 340px; }
 .ntq.is-collapsed .ntq-mark { height: 28px; width: 28px; }
+
+/* Own label and select look, whatever page styles are around */
+.ntq-settings label { color: var(--ntq-muted); font-size: 13px; font-weight: 400; letter-spacing: normal; text-transform: none; }
+.ntq-settings select { min-width: 0; width: auto; }
