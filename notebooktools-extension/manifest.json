@@ -86,6 +86,7 @@
       ],
       "js": [
         "plan-gate.js",
+        "lazy-scripts.js",
         "utils.js",
         "notebooks-folders.js",
         "notebooklm-client.js",
@@ -99,7 +100,6 @@
         "workflows/blog-creation/blog-with-deck-images/blog-chat-automation.js",
         "workflows/blog-creation/blog-with-deck-images/blog-doc-export.js",
         "workflows/blog-creation/blog-with-deck-images/blog-history.js",
-        "vendor/pdf-lib/pdf-lib.min.js",
         "workflows/blog-creation/blog-with-deck-images/slide-pdf-images.js",
         "workflows/blog-creation/blog-with-deck-images/workflow.js",
         "workflows/blog-creation/blog-with-deck-images/workflow-ui.js",

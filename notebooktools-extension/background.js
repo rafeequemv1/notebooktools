@@ -217,7 +217,22 @@ const NLM_BRIDGE_METHODS = new Set([
   "createNotebookLmArtifact", "waitForNotebookLmArtifactReady"
 ]);
 
+// Scripts the NotebookLM page needs only now and then (pdf-lib for PDF exports)
+// are added to the tab when first used instead of on every page load.
+const LAZY_FILES = new Set(["vendor/pdf-lib/pdf-lib.min.js"]);
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === "notebooktools-load-scripts") {
+    const files = (Array.isArray(message.files) ? message.files : []).filter((f) => LAZY_FILES.has(f));
+    if (!files.length || !sender.tab?.id) {
+      sendResponse({ ok: false, error: "Nothing to load." });
+      return false;
+    }
+    chrome.scripting.executeScript({ target: { tabId: sender.tab.id, frameIds: [sender.frameId || 0] }, files })
+      .then(() => sendResponse({ ok: true }), (error) => sendResponse({ ok: false, error: error?.message || String(error) }));
+    return true;
+  }
+
   if (message?.type === "notebooktools-nlm") {
     const fn = NLM_BRIDGE_METHODS.has(message.method) ? globalThis[message.method] : null;
     if (typeof fn !== "function") {

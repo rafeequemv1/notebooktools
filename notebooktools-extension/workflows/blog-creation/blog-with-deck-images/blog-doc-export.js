@@ -645,7 +645,7 @@ const NotebookToolsBlogDocExport = {
   },
 
   async buildPdf({ title, blocks }) {
-    const PDFLib = globalThis.PDFLib;
+    const PDFLib = globalThis.PDFLib || await window.NotebookToolsLazy?.pdfLib();
 
     if (!PDFLib?.PDFDocument) {
       throw new Error("PDF export is unavailable. Reload the extension and try again.");

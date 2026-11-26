@@ -376,7 +376,7 @@
     }
 
     if (opts.format === "pdf") {
-      const PDFLib = window.PDFLib;
+      const PDFLib = window.PDFLib || await window.NotebookToolsLazy?.pdfLib();
       if (!PDFLib) throw new Error("PDF export is still loading. Try again in a moment.");
       onProgress("Writing the PDF…");
       const { w, h } = sizeOf(opts.size);
