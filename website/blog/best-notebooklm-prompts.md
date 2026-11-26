@@ -112,7 +112,7 @@ Compare how the papers in this notebook define and measure [CONCEPT]. Present a 
 
 List the 10 concepts my lecturer stresses most across these sources, ranked by how often they appear. For each, give a one-line definition and one question I should be able to answer before the exam.
 
-Want prompts for slides instead? See [NotebookLM slide prompts](https://www.notebooktools.com/blog/notebooklm-slide-prompts) and the [slide deck style gallery](https://www.notebooktools.com/notebooklm-slide-styles). For a full study workflow, read [how to use NotebookLM to study](https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study).
+Want prompts for slides instead? See [NotebookLM slide prompts](https://www.notebooktools.com/blog/notebooklm-slide-prompts) and the [slide deck style gallery](https://www.notebooktools.com/notebooklm-slide-styles); to change the words on a finished deck, open it in the [free slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides) and save an editable PowerPoint. For a full study workflow, read [how to use NotebookLM to study](https://www.notebooktools.com/blog/how-to-use-notebooklm-to-study).
 
 ## Prompt patterns that always help
 

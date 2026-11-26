@@ -177,6 +177,42 @@
     el.textContent = msg || "";
     el.className = `se-status${type ? ` is-${type}` : ""}`;
   };
+  // Usage events on the website (not in the extension's copy of the editor)
+  const onWeb = /^https?:$/.test(location.protocol);
+  const track = (name, props) => { try { if (onWeb && typeof window.piqo === "function") window.piqo(name, props); } catch (_e) { /* analytics never breaks the editor */ } };
+  const STORE_URL = "https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj";
+  // After a download on the website: the extension puts this editor inside NotebookLM
+  function installPrompt(kind) {
+    if (!onWeb || document.querySelector(".se-install")) return;
+    try {
+      if (localStorage.getItem("ntEditorInstallHidden") === "1" || sessionStorage.getItem("ntEditorInstallShown") === "1") return;
+      sessionStorage.setItem("ntEditorInstallShown", "1");
+    } catch (_e) { /* storage blocked: still show once */ }
+    const what = kind === "pptx" ? "Your PowerPoint is downloading." : "Your download has started.";
+    const card = document.createElement("aside");
+    card.className = "se-install";
+    card.setAttribute("role", "status");
+    card.innerHTML = `
+      <img src="/assets/logo-mark-32.png" alt="" width="28" height="28">
+      <div class="se-install-text">
+        <p class="se-install-title">${what} Next time, skip the PDF.</p>
+        <p>The free NotebookTools extension opens NotebookLM slide decks in this editor right inside NotebookLM, and adds bulk import, folders and a prompt library.</p>
+        <div class="se-install-actions">
+          <a class="se-btn is-primary" href="${STORE_URL}" target="_blank" rel="noopener noreferrer" data-install="go">Add to Chrome, free</a>
+          <button type="button" class="se-btn" data-install="later">Not now</button>
+          <button type="button" class="se-install-never" data-install="never">Don't show again</button>
+        </div>
+      </div>`;
+    card.addEventListener("click", (event) => {
+      const act = event.target.closest("[data-install]")?.dataset.install;
+      if (!act) return;
+      track("Editor install prompt", { action: act, format: kind });
+      if (act === "never") { try { localStorage.setItem("ntEditorInstallHidden", "1"); } catch (_e) { /* ignore */ } }
+      card.remove();
+    });
+    (document.querySelector(".se-app") || document.body).append(card);
+    track("Editor install prompt", { action: "shown", format: kind });
+  }
   const elName = (el) => el.type === "text" ? `“${String(el.text).replace(/\s+/g, " ").slice(0, 28)}${el.text.length > 28 ? "…" : ""}”` : { rect: "Rectangle", ellipse: "Ellipse", triangle: "Triangle", line: el.arrow ? "Arrow" : "Line", image: "Picture" }[el.type] || "Item";
   const animsOf = (s) => s.elements.filter((e) => e.anim && e.anim.type && e.anim.type !== "none").sort((a, b) => (a.anim.order || 0) - (b.anim.order || 0));
 
@@ -479,9 +515,12 @@
     } catch (error) {
       loader.hide();
       status(error.message || "That file couldn't be opened. If the PDF has a password, remove it first.", "error");
+      track("Slide deck open failed", { error: String(error?.message || "unknown").slice(0, 80) });
       return;
     }
     loader.hide();
+    const readStart = Date.now();
+    track("Slide deck opened", { slides: deck.slides.length, from: files.some((f) => /pdf/i.test(f.type) || /\.pdf$/i.test(f.name)) ? "pdf" : "images", ocr: ocr ? "on" : "off" });
     renderAll();
     scheduleSave(200);
     status(ocr ? "Reading the text on each slide. You can start editing slides that are ready." : "Opened. Text stays part of the slide image.");
@@ -511,6 +550,7 @@
         if (i === deck.slides.length - 1) {
           showProgress("");
           const failed = deck.slides.filter((x) => x.status === "error").length;
+          if (ocr) track("Slide deck read", { slides: deck.slides.length, failed, seconds: Math.round((Date.now() - readStart) / 1000) });
           const textCount = deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.type === "text").length, 0);
           const objCount = deck.slides.reduce((n, x) => n + x.elements.filter((e) => e.detected).length, 0);
           status(ocr ? `Ready. ${textCount} text boxes${objCount ? ` and ${objCount} picture${objCount === 1 ? "" : "s"}` : ""} found${failed ? `; ${failed} slide${failed === 1 ? "" : "s"} couldn't be read` : ""}. Double-click any text to edit it; drag pictures to move them.` : "Ready.", "ok");
@@ -2036,16 +2076,21 @@
     stopEditing();
     await queue; // wait for OCR to finish
     const prog = (i, n) => status(`Exporting slide ${Math.min(n, i + 1)} of ${n}…`);
+    const started = Date.now();
+    const done = () => track("Slide deck exported", { format: kind, slides: kind === "png-one" ? 1 : deck.slides.length, seconds: Math.round((Date.now() - started) / 1000) });
     try {
       if (kind === "pptx") await S.exportPptx(deck, `${deck.title} (editable).pptx`, prog);
       else if (kind === "pdf") await S.exportPdf(deck, `${deck.title} (edited).pdf`, prog);
       else if (kind === "png") await S.exportPngs(deck, deck.title, prog);
       else if (kind === "png-one") await S.exportPngs({ slides: [slide()] }, `${deck.title} - slide ${cur + 1}`, prog);
-      else if (kind === "pictures") { const n = await S.exportPictures(deck, deck.title); status(`${n} picture${n === 1 ? "" : "s"} downloaded.`, "ok"); return; }
+      else if (kind === "pictures") { const n = await S.exportPictures(deck, deck.title); status(`${n} picture${n === 1 ? "" : "s"} downloaded.`, "ok"); done(); return; }
+      done();
       const motion = deck.slides.some((x) => (x.transition && x.transition.type !== "none") || animsOf(x).length);
       status(kind === "pptx" ? `PowerPoint downloaded${motion ? ", with your transitions and animations" : ""}. Opens in PowerPoint, Keynote or Google Slides (File → Import).` : "Downloaded.", "ok");
+      setTimeout(() => installPrompt(kind), 1200);
     } catch (error) {
       status(error.message || "Export failed.", "error");
+      track("Slide deck export failed", { format: kind, slides: deck.slides.length, error: String(error?.message || "unknown").slice(0, 80) });
     }
   }
 })();

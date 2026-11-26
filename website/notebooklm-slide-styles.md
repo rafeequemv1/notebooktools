@@ -14,7 +14,9 @@ Slide deck styles
 1. 1 **Open Studio** In your notebook, choose Slide deck and open the customise option.
 2. 2 **Paste a style** Copy a prompt below into the description box. With NotebookTools, type / instead.
 3. 3 **Generate** The deck uses that look, with content from your sources.
-4. 4 **Reuse it** Turn the deck into a blog post or a LinkedIn carousel.
+4. 4 **Edit and reuse it** Make it an editable PowerPoint with the [free slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides), or turn it into a blog post or a LinkedIn carousel.
+
+Made a deck? Edit it as PowerPoint NotebookLM saves slide decks as flat images. The free NotebookTools slide editor turns each slide into real text boxes and separate pictures, then downloads an editable PowerPoint. It runs in your browser; nothing is uploaded. [Open the free slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides) [How it works →](https://www.notebooktools.com/features/slide-editor)
 
 ## Business
 

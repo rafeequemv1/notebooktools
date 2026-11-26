@@ -20,6 +20,12 @@ Open your notebook, go to Studio, and start a Slide Deck. Paste a prompt below, 
 
 Want to see the looks before you copy? Browse the [NotebookLM slide style gallery](https://www.notebooktools.com/notebooklm-slide-styles), or save these prompts in the [NotebookTools prompt library for NotebookLM](https://www.notebooktools.com/features/prompts) and insert one by typing / in chat. Slide decks are a Studio output on the [NotebookLM free plan](https://www.notebooktools.com/blog/is-notebooklm-free), within usage limits. Turning class notes into a revision deck? Pair this page with our [NotebookLM prompts for studying](https://www.notebooktools.com/blog/notebooklm-prompts-for-studying).
 
+Got your deck? Make it editable
+
+NotebookLM saves slide decks as flat images. The free NotebookTools slide editor turns each slide into real text boxes and separate pictures, then downloads an editable PowerPoint. It runs in your browser; nothing is uploaded.
+
+[Open the free slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides) [How it works →](https://www.notebooktools.com/features/slide-editor)
+
 ## How to use slide prompts
 
 - **Pick one style** per deck. Mixing two visual languages confuses the output.
@@ -170,6 +176,7 @@ NotebookTools puts these slide styles inside NotebookLM: type / in the chat and 
 - **Feed the notebook first.** Thin sources produce thin slides. Import lectures and articles before generating.
 - **Name slide count.** Add "about 10 slides" if you want a tight deck.
 - **Fix one slide at a time.** Follow up on individual slides instead of regenerating the whole deck.
+- **Edit the words yourself.** Download the deck as PDF and open it in the [free NotebookLM slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides): change any text, move pictures, then save an editable PowerPoint.
 - **Pair with study prompts.** Use our [research prompts](https://www.notebooktools.com/blog/best-notebooklm-prompts) to distill sources, then style the deck here.
 
 ## FAQ

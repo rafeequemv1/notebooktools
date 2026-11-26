@@ -35,7 +35,7 @@ Since September 2026, Google measures chat and Studio use with limits that refre
 
 - **Notebooks and sources.** Up to 100 notebooks, each with up to 50 sources: PDFs, Google Docs and Slides, web pages, YouTube videos, audio files and pasted text.
 - **Cited chat.** Ask questions across everything in a notebook. Every answer links back to the passage it came from, which is the main reason people use it.
-- **Studio.** Audio Overviews (podcast-style recaps), Video Overviews, slide decks, mind maps, reports and study guides, flashcards and quizzes, all from your own sources.
+- **Studio.** Audio Overviews (podcast-style recaps), Video Overviews, slide decks, mind maps, reports and study guides, flashcards and quizzes, all from your own sources. Slide decks download as PDF; the [free slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides) turns them into editable PowerPoint.
 - **Sharing.** Share a notebook with a study group or team so everyone works from the same sources.
 
 For the full rules on sizes and counts, see our [NotebookLM source limits guide](https://www.notebooktools.com/blog/notebooklm-source-limits).

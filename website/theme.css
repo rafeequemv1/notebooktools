@@ -2560,3 +2560,10 @@ a {
   .nav-menu.is-open .nav-menu-panel { display: grid; transform: none; }
   .nav-menu:focus-within .nav-menu-panel { transform: none; }
 }
+
+/* Free slide editor callout (slide prompts post, slide styles page) */
+.tool-cta-mark { align-items: center; background: #e8f0fe; border-radius: 10px; color: #0b57d0; display: inline-flex; height: 40px; justify-content: center; width: 40px; }
+.tool-cta .post-cta-actions .button { color: #fff; text-decoration: none; }
+.tool-cta .post-cta-link { text-decoration: none; }
+.uc-section > .tool-cta { margin: 0; }
+@media (max-width: 640px) { .tool-cta-mark { align-self: start; } }

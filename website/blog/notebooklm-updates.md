@@ -75,7 +75,7 @@ Everything below is available in NotebookLM now. Some features arrived without a
 - **Sources:** PDFs, Google Docs, Slides and Sheets, web URLs, YouTube videos, audio files and pasted text.
 - **Chat with citations** that link to the passages used.
 - **Audio Overviews** and **Video Overviews**.
-- **Slide decks** generated from your sources. See our [slide deck styles gallery](https://www.notebooktools.com/notebooklm-slide-styles).
+- **Slide decks** generated from your sources. See our [slide deck styles gallery](https://www.notebooktools.com/notebooklm-slide-styles), and edit a finished deck as PowerPoint with the [free slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides).
 - **Mind maps** of the topics in a notebook.
 - **Reports and study guides.**
 - **Flashcards and quizzes.**
