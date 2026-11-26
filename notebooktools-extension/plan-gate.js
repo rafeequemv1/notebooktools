@@ -39,6 +39,7 @@
     "carousel-maker": "Carousel maker",
     "snapshots": "Snapshots",
     "prompt-library": "Prompt library",
+    "prompt-queue": "Prompt queue (run prompts one after another)",
     "chat-export": "Chat export",
     "notebook-export": "Export whole notebooks (ZIP)",
     "notebook-merge": "Compare, merge and copy sources between notebooks",

@@ -73,6 +73,7 @@
       "css": [
         "notebooklm-chat-export.css",
         "notebooklm-prompt-slash.css",
+        "notebooklm-prompt-queue.css",
         "workflows/blog-creation/blog-with-deck-images/workflow.css",
         "workflows/carousel/carousel.css",
         "workflows/snapshots/snapshot-workflow.css",
@@ -111,6 +112,7 @@
         "notebooklm-chat-export-inject.js",
         "prompt-library-data.js",
         "notebooklm-prompt-slash.js",
+        "notebooklm-prompt-queue.js",
         "duplicate-sources.js",
         "workflows/sources/sources-modal.js",
         "notebooklm-source-filter.js",

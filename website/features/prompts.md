@@ -44,7 +44,7 @@ How it works
 
 ## A NotebookLM prompt library inside the chat box
 
-NotebookTools adds a prompt library to NotebookLM. Save the prompts you use often, organise them with tags, and insert any of them by typing **/** in a NotebookLM chat: your prompts come first, then slide deck templates. Your prompts live in the dashboard's **Prompts** tab, a simple table you can search and filter by tag, and you can save the text in a notebook's chat box as a new prompt from the ribbon. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog.
+NotebookTools adds a prompt library to NotebookLM. Save the prompts you use often, organise them with tags, and insert any of them by typing **/** in a NotebookLM chat: your prompts come first, then slide deck templates. Your prompts live in the dashboard's **Prompts** tab, a simple table you can search and filter by tag, and you can save the text in a notebook's chat box as a new prompt from the ribbon. The **prompt queue** runs several prompts one after another: add them to the queue and NotebookTools sends each one when NotebookLM has finished answering the one before, then lets you copy or download all the answers together. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog.
 
 ### How to use it
 
@@ -53,7 +53,8 @@ NotebookTools adds a prompt library to NotebookLM. Save the prompts you use ofte
 3. Type **/** in the chat box to open the prompt menu: your prompts first, then slide deck templates.
 4. Keep typing to filter by title or tag (**/study**), use ↑ ↓ to move and Enter to choose.
 5. Edit the inserted prompt if you need to, then send it.
-6. When you create a slide deck in Studio, pick one of the style cards NotebookTools adds to the dialog.
+6. To run several prompts in a row, click **Queue** in the ribbon (or **Prompts** → **Prompt queue**), add your prompts (type them, add each line of a list, or pick from your saved prompts), choose the pause between them and press **Start**. Pause or stop at any time; when it finishes, copy or download all the answers as Markdown.
+7. When you create a slide deck in Studio, pick one of the style cards NotebookTools adds to the dialog.
 
 ### Why it helps
 
@@ -77,6 +78,10 @@ Install NotebookTools, open a notebook and type / in the chat box. A menu lists 
 
 Yes. Add them in the dashboard's Prompts tab with a title and tags, or save the text in a notebook's chat box from the ribbon. They appear first in the / menu in every notebook. For slide decks there are templates in the / menu and style cards in the slide deck dialog.
 
+### Can NotebookLM run several prompts automatically, one after another?
+
+Yes, with the prompt queue. Add up to 25 prompts and press Start: each one is sent when NotebookLM has finished the answer before it, with a pause you choose in between. You start it, can pause or stop it at any time, and it runs only while the notebook tab is open.
+
 ### Is the prompt library free?
 
-The library is part of NotebookTools Pro ($49 one-time). Our blog also has free prompt lists you can copy by hand.
+The library and the prompt queue are part of NotebookTools Pro ($49 one-time). Our blog also has free prompt lists you can copy by hand.

@@ -760,7 +760,7 @@
         <section class="feature-seo" aria-labelledby="seo-prompts">
           <div class="feature-seo-inner">
             <h2 id="seo-prompts">A NotebookLM prompt library inside the chat box</h2>
-            <p class="feature-seo-lead">NotebookTools adds a prompt library to NotebookLM. Save the prompts you use often, organise them with tags, and insert any of them by typing <b>/</b> in a NotebookLM chat: your prompts come first, then slide deck templates. Your prompts live in the dashboard's <b>Prompts</b> tab, a simple table you can search and filter by tag, and you can save the text in a notebook's chat box as a new prompt from the ribbon. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog.</p>
+            <p class="feature-seo-lead">NotebookTools adds a prompt library to NotebookLM. Save the prompts you use often, organise them with tags, and insert any of them by typing <b>/</b> in a NotebookLM chat: your prompts come first, then slide deck templates. Your prompts live in the dashboard's <b>Prompts</b> tab, a simple table you can search and filter by tag, and you can save the text in a notebook's chat box as a new prompt from the ribbon. The <b>prompt queue</b> runs several prompts one after another: add them to the queue and NotebookTools sends each one when NotebookLM has finished answering the one before, then lets you copy or download all the answers together. NotebookTools also adds style cards with thumbnails to NotebookLM's slide deck dialog.</p>
             <h3>How to use it</h3>
             <ol class="feature-seo-steps">
               <li>Open a notebook in NotebookLM.</li>
@@ -768,6 +768,7 @@
               <li>Type <b>/</b> in the chat box to open the prompt menu: your prompts first, then slide deck templates.</li>
               <li>Keep typing to filter by title or tag (<b>/study</b>), use &#8593; &#8595; to move and Enter to choose.</li>
               <li>Edit the inserted prompt if you need to, then send it.</li>
+              <li>To run several prompts in a row, click <b>Queue</b> in the ribbon (or <b>Prompts</b> → <b>Prompt queue</b>), add your prompts (type them, add each line of a list, or pick from your saved prompts), choose the pause between them and press <b>Start</b>. Pause or stop at any time; when it finishes, copy or download all the answers as Markdown.</li>
               <li>When you create a slide deck in Studio, pick one of the style cards NotebookTools adds to the dialog.</li>
             </ol>
             <h3>Why it helps</h3>
@@ -789,8 +790,12 @@
               <p>Yes. Add them in the dashboard's Prompts tab with a title and tags, or save the text in a notebook's chat box from the ribbon. They appear first in the / menu in every notebook. For slide decks there are templates in the / menu and style cards in the slide deck dialog.</p>
             </div>
             <div class="feature-seo-q">
+              <h3>Can NotebookLM run several prompts automatically, one after another?</h3>
+              <p>Yes, with the prompt queue. Add up to 25 prompts and press Start: each one is sent when NotebookLM has finished the answer before it, with a pause you choose in between. You start it, can pause or stop it at any time, and it runs only while the notebook tab is open.</p>
+            </div>
+            <div class="feature-seo-q">
               <h3>Is the prompt library free?</h3>
-              <p>The library is part of NotebookTools Pro ($49 one-time). Our blog also has free prompt lists you can copy by hand.</p>
+              <p>The library and the prompt queue are part of NotebookTools Pro ($49 one-time). Our blog also has free prompt lists you can copy by hand.</p>
             </div>
           </div>
         </section>
@@ -1023,7 +1028,7 @@
             <ol class="feature-seo-steps">
               <li><b>Sources:</b> <b>Manage</b> opens a dialog to search, filter, find duplicates, refresh and delete sources. <b>Type</b> shows only PDFs, web pages, videos or another kind in NotebookLM's Sources panel.</li>
               <li><b>Studio:</b> <b>Manage</b> lists the notebook's Studio files to search, open, download or delete; <b>Type</b> shows one kind of file; <b>Create</b> makes a blog post, a carousel or a snapshot document, or opens a slide deck in the slide editor.</li>
-              <li><b>Chat:</b> <b>Copy</b> puts the whole chat on your clipboard as Markdown; <b>Prompts</b> inserts one of your prompts, saves what's in the chat box as a new one, or opens your prompts; <b>Export</b> saves the last answer, the chat or the whole notebook.</li>
+              <li><b>Chat:</b> <b>Copy</b> puts the whole chat on your clipboard as Markdown; <b>Queue</b> runs several prompts one after another, each when the last answer is done; <b>Prompts</b> inserts one of your prompts, saves what's in the chat box as a new one, or opens your prompts; <b>Export</b> saves the last answer, the chat or the whole notebook.</li>
               <li><b>Organize:</b> <b>Add to folder</b>, <b>Tags</b> and the star file the notebook in the dashboard as you work. <b>All notebooks</b> opens the dashboard.</li>
               <li>Slide decks in Studio also get an <b>Edit</b> button that opens them in the slide editor.</li>
             </ol>

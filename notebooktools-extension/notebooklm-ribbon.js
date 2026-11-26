@@ -32,6 +32,7 @@
     carousel: '<rect x="6.5" y="4.5" width="11" height="15" rx="2"/><path d="M3.5 7v10M20.5 7v10"/>',
     chevron: '<path d="m6 15 6-6 6 6"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
+    queue: '<path d="M4 6h11M4 12h11M4 18h7"/><path d="M17 15l4 3-4 3z" fill="currentColor"/>',
     caret: '<path d="m7 10 5 5 5-5"/>'
   };
 
@@ -363,12 +364,18 @@
     const canSave = Boolean(text) && !text.startsWith("/");
     const item = (value, ic, label, note = "") =>
       `<button type="button" class="ntr-menu-item${value === "save" && !canSave ? " is-quiet" : ""}" data-value="${value}">${icon(ic, 15)}<span>${esc(label)}${note ? `<small>${esc(note)}</small>` : ""}</span></button>`;
-    openMenu(anchor, `<p class="ntr-menu-title">Prompts</p>${item("insert", "copy", "Insert a prompt", "Type / in the chat box")}${item("save", "plus", "Save chat box text as a prompt", canSave ? "" : "Write a prompt in the chat box first")}${item("manage", "grid", "Manage my prompts")}`, (value) => {
+    openMenu(anchor, `<p class="ntr-menu-title">Prompts</p>${item("insert", "copy", "Insert a prompt", "Type / in the chat box")}${item("save", "plus", "Save chat box text as a prompt", canSave ? "" : "Write a prompt in the chat box first")}${item("queue", "queue", "Prompt queue", "Run several prompts one after another")}${item("manage", "grid", "Manage my prompts")}`, (value) => {
       closeMenu();
+      if (value === "queue") return openQueue();
       if (value === "insert") return insertPrompt();
       if (value === "save") return saveChatPrompt();
       if (value === "manage") return send({ type: "notebooktools-ribbon-open-hub", view: "prompts" });
     });
+  }
+
+  function openQueue() {
+    if (!window.NotebookToolsPromptQueue) return toast("Prompt queue is still loading. Try again in a moment.", true);
+    window.NotebookToolsPromptQueue.open();
   }
 
   function insertPrompt() {
@@ -458,6 +465,7 @@
         return window.NotebookToolsCarousel.open(notebookId());
       case "snapdoc": return clickWorkflow(".notebooktools-snapshot-workflow-btn", "Snapshots", button);
       case "prompts": return promptsMenu(button);
+      case "queue": return openQueue();
       case "hub": return send({ type: "notebooktools-ribbon-open-hub" });
       case "collapse":
         collapsed = !collapsed;
@@ -493,6 +501,7 @@
         <div class="ntr-group" data-group="Organize"><div class="ntr-items" data-ntr-organize></div></div>
         <div class="ntr-group" data-group="Chat"><div class="ntr-items">
           ${btn("copy", "copy", "Copy", "Copy the chat as Markdown", " is-tertiary")}
+          ${btn("queue", "queue", "Queue", "Prompt queue: run several prompts one after another, each when the last answer is done", " is-tertiary")}
         </div></div>
         <div class="ntr-spacer"></div>
         <div class="ntr-end">
