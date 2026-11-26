@@ -1028,21 +1028,28 @@ window.NTSlides = (() => {
     return lines;
   }
 
-  async function readLabels(slide, segs, img) {
-    if (!slide._map || typeof P.ocrStack !== "function") return;
-    const area = (b) => Math.max(1, (b.x1 - b.x0) * (b.y1 - b.y0));
-    const inter = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
-    // Lines the page pass already read well are left alone
-    const good = segs.filter((sg) => sg.conf >= 85 && sg.quality >= 0.9);
-    const lines = [];
-    for (const threshold of [90, 120]) {
-      for (const L of labelCandidates(slide._map, threshold)) {
-        if (good.some((sg) => inter(sg, L) > area(L) * 0.6)) continue;
-        if (lines.some((o) => inter(o, L) > Math.max(area(o), area(L)) * 0.7)) continue;
-        lines.push(L);
+  const boxArea = (b) => Math.max(1, (b.x1 - b.x0) * (b.y1 - b.y0));
+  const boxInter = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
+
+  // The candidate lines are found while the page pass runs (it works in its own
+  // worker); after it, only the lines it didn't read well are read here.
+  function startLabels(slide) {
+    if (!slide._map || typeof P.ocrStack !== "function") return null;
+    try {
+      const lines = [];
+      for (const threshold of [90, 120]) {
+        for (const L of labelCandidates(slide._map, threshold)) {
+          if (lines.some((o) => boxInter(o, L) > Math.max(boxArea(o), boxArea(L)) * 0.7)) continue;
+          lines.push(L);
+        }
       }
+      return lines;
+    } catch (_error) {
+      return null;
     }
-    if (!lines.length) return;
+  }
+
+  async function stackAndRead(slide, lines) {
     // Stack the lines: letters only, about 40 px tall, with room between rows
     const rowH = 40, gap = 36, mx = 24;
     const rows = [];
@@ -1080,8 +1087,21 @@ window.NTSlides = (() => {
       sctx.imageSmoothingQuality = "high";
       sctx.drawImage(piece, mx, r.top, r.w, r.h);
     }
-    let blocks;
-    try { blocks = await P.ocrStack(sheet); } catch (_error) { return; }
+    const blocks = await P.ocrStack(sheet);
+    return { blocks, rows, mx };
+  }
+
+  async function readLabels(slide, segs, img, candidates) {
+    if (!candidates || !candidates.length) return;
+    const area = boxArea, inter = boxInter;
+    // Lines the page pass already read well are left alone
+    const good = segs.filter((sg) => sg.conf >= 85 && sg.quality >= 0.9);
+    // (and specks in a photo or a busy drawing: a label has calm space right around it)
+    const lines = candidates.filter((L) => !good.some((sg) => inter(sg, L) > area(L) * 0.6) && ringBusy(img, L, Math.max(2, Math.round((L.y1 - L.y0) * 0.15))) < 0.5);
+    if (!lines.length) return;
+    let read;
+    try { read = await stackAndRead(slide, lines); } catch (_error) { return; }
+    const { blocks, rows, mx } = read;
     // Words back to slide coordinates, one line per row
     // (whole pixels: the colour and stroke samplers index the image with these)
     const back = (r, b) => ({ x0: Math.round(r.bx0 + (b.x0 - mx) / r.s), x1: Math.round(r.bx0 + (b.x1 - mx) / r.s), y0: Math.round(r.by0 + (b.y0 - r.top) / r.s), y1: Math.round(r.by0 + (b.y1 - r.top) / r.s) });
@@ -1706,6 +1726,9 @@ window.NTSlides = (() => {
       if (m.status === "recognizing text") onProgress(m.progress);
     });
     const sparseJob = startSparse(slide);
+    // (a moment later, once the OCR workers have their images: the page pass then
+    // runs in its worker while the label lines are found here)
+    const labelLines = new Promise((resolve) => setTimeout(() => resolve(startLabels(slide)), 400));
     const blocks = await pageJob;
     const octx = slide.original.getContext("2d", { willReadFrequently: true });
     const img = octx.getImageData(0, 0, slide.w, slide.h);
@@ -1718,7 +1741,7 @@ window.NTSlides = (() => {
     const allSegs = segmentsOf(blocks, img);
     await addSparseText(slide, allSegs, img, sparseJob);
     T("sparse");
-    await readLabels(slide, allSegs, img);
+    await readLabels(slide, allSegs, img, await labelLines);
     T("labels");
     await readBadges(slide, allSegs, img);
     joinSameLine(allSegs, img);
