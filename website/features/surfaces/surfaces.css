@@ -2557,3 +2557,7 @@
 .nlm-lite-a { background: #fff; border: 1px solid #eef0f4; border-radius: 14px; color: #3c4043; font-size: 12px; line-height: 1.45; padding: 8px 12px; }
 .nlm-lite-thread { display: flex; flex: 1; flex-direction: column; gap: 8px; justify-content: flex-end; min-height: 0; overflow: hidden; }
 .nlm-lite-thread [hidden] { display: none; }
+
+/* Flashcards & quizzes export demo: the extension's real dialog over the notebook */
+.nlm-study-host { left: 50%; position: absolute; top: 74px; transform: translateX(-50%); width: min(520px, calc(100% - 24px)); z-index: 6; }
+.nlm-study-host[hidden] { display: none; }

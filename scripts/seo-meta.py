@@ -32,6 +32,10 @@ META = {
         "Edit NotebookLM Slides: Real Text, Download PowerPoint | NotebookTools",
         "NotebookLM slide decks are flat images. The NotebookTools slide editor turns them into real text boxes and separate pictures you can edit, then saves PowerPoint, PDF or images. Free, runs in your browser.",
     ),
+    "features/flashcards-export.html": (
+        "Export NotebookLM Flashcards & Quizzes to Anki, Quizlet, Kahoot | NotebookTools",
+        "Send NotebookLM flashcards and quizzes to Anki, Quizlet, Kahoot, Wayground (Quizizz) or Moodle, or save them as CSV, Markdown or a printable worksheet with an answer key. Free Chrome extension.",
+    ),
     "features/prompt-queue.html": (
         "NotebookLM Prompt Queue: Run Prompts One After Another | NotebookTools",
         "Line up several NotebookLM prompts and NotebookTools sends each one when the last answer is done, with a pause you choose. Pause or stop any time, then copy or download all the answers.",

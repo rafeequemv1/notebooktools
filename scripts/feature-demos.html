@@ -22,6 +22,7 @@
           <option value="x-twitter">X / Twitter</option>
           <option value="highlights">Highlights</option>
           <option value="prompt-queue">Prompt queue</option>
+          <option value="flashcards-export">Flashcards &amp; quizzes export</option>
           <option value="notebook-tools">In-notebook tools</option>
           <option value="chat-export">Chat export</option>
           <option value="slide-editor">Slide editor</option>
@@ -105,6 +106,13 @@
             <span class="md-nav-text">
               <span class="md-nav-title">Prompt queue</span>
               <span class="md-nav-desc">Run several prompts one after another, automatically.</span>
+            </span>
+          </a>
+          <a class="md-nav-item" href="/features/flashcards-export" data-feature="flashcards-export">
+            <span class="md-nav-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="7" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 4h11a2 2 0 0 1 2 2v11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 12h5M7 15.5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="md-nav-text">
+              <span class="md-nav-title">Flashcards &amp; quizzes export</span>
+              <span class="md-nav-desc">To Anki, Quizlet, Kahoot, Wayground and Moodle.</span>
             </span>
           </a>
           <a class="md-nav-item" href="/features/add-webpage" data-feature="add-webpage">
@@ -248,6 +256,13 @@
               <span class="md-overview-body">
                 <strong>Prompt queue</strong>
                 <span>Line up several prompts; each one is sent when NotebookLM finishes the last answer.</span>
+              </span>
+            </button>
+            <button type="button" class="md-overview-card" data-feature="flashcards-export" data-action="select-feature">
+              <span class="md-overview-icon md-icon-prompts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="7" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 4h11a2 2 0 0 1 2 2v11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 12h5M7 15.5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="md-overview-body">
+                <strong>Flashcards &amp; quizzes export</strong>
+                <span>Send NotebookLM flashcards and quizzes to Anki, Quizlet, Kahoot, Wayground, Moodle or print.</span>
               </span>
             </button>
             <button type="button" class="md-overview-card" data-feature="add-webpage" data-action="select-feature">
@@ -1088,6 +1103,79 @@
           </div>
         </section>
         </article>
+        <article class="md-panel" data-panel="flashcards-export" id="panel-flashcards-export" hidden>
+          <h1 class="sr-only">Flashcards and quizzes export</h1>
+          <section class="feature-demo-section md-demo">
+<div class="md-demo-toolbar">
+            <button type="button" class="button button-ghost button-sm demo-play-btn" data-action="play-demo">Play demo</button>
+          </div>
+        <div class="demo-shell" data-scene="study">
+          <div class="br-window" data-surface="browser" data-tabs='[{"title": "Biology 101 \u2014 Chapter 3 - NotebookLM", "url": "notebooklm.google.com/notebook/b10c3", "icon": "nlm", "active": true}]'>
+            <div class="br-page"><div class="nlm-lite" data-s="nlm-page">
+              <div class="nlm-lite-head"><span class="nlm-lite-logo"></span><b>Biology 101 — Chapter 3</b></div>
+              <div class="app-ribbon-host" data-app-screen="nlm-ribbon"></div>
+              <div class="nlm-lite-row">
+                <section class="nlm-lite-panel"><b>Sources</b><i></i><i></i><i></i><i class="s"></i></section>
+                <section class="nlm-lite-panel is-chat"><span class="nlm-lite-q">Make flashcards and a quiz for chapter 3</span><i></i><i></i><i class="s"></i><span class="nlm-lite-box">Start typing...</span></section>
+                <section class="nlm-lite-panel"><b>Studio</b><span class="nlm-lite-tiles"><i></i><i></i><i></i><i></i></span></section>
+              </div>
+              <div class="nlm-study-host" data-s="study" data-app-screen="study-export" hidden></div>
+              <div class="nlm-lite-toast" data-s="toast" hidden>Saved Chapter 3 quiz (Kahoot).xlsx</div>
+            </div></div>
+          </div>
+          <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>
+        </div>
+          </section>
+<section class="feature-how">
+        <div class="section-head center">
+          <p class="eyebrow">How it works</p>
+          <h2>From install to done</h2>
+        </div>
+        <ol class="how-steps">
+          <li class="how-step"><span class="how-num">1</span><div><strong>Make them in NotebookLM</strong><p>Create flashcards or a quiz from your sources in the Studio panel, as usual.</p></div></li><li class="how-step"><span class="how-num">2</span><div><strong>Click Flashcards</strong><p>In the NotebookTools ribbon, above Studio. Your decks and quizzes are listed.</p></div></li><li class="how-step"><span class="how-num">3</span><div><strong>Pick a format</strong><p>Anki, Quizlet, Kahoot, Wayground, Moodle, CSV, Markdown, or print.</p></div></li><li class="how-step"><span class="how-num">4</span><div><strong>Import it</strong><p>Open the file in that app; the dialog tells you where its Import button is.</p></div></li>
+        </ol>
+      </section>
+        <section class="feature-seo" aria-labelledby="seo-flashcards-export">
+          <div class="feature-seo-inner">
+            <h2 id="seo-flashcards-export">Export NotebookLM flashcards and quizzes</h2>
+            <p class="feature-seo-lead">NotebookLM makes good flashcards and quizzes from your sources, but keeps them inside NotebookLM. NotebookTools sends them where you study and teach: flashcards to <b>Anki</b> or <b>Quizlet</b>, quizzes to <b>Kahoot</b>, <b>Wayground (Quizizz)</b> or <b>Moodle</b>, any set to CSV or Markdown, and printable fold-over cards or a quiz worksheet with an answer key. It reads the cards and questions exactly as NotebookLM made them, including each answer's explanation, and runs in your browser.</p>
+            <h3>How to use it</h3>
+            <ol class="feature-seo-steps">
+              <li>In a NotebookLM notebook, create flashcards or a quiz in the Studio panel.</li>
+              <li>Click <b>Flashcards</b> in the NotebookTools ribbon (in the Studio group). The notebook's decks and quizzes are listed with their card or question counts.</li>
+              <li>Pick a set, then a format. Flashcards: Anki, Quizlet, CSV, Markdown, Print or PDF. Quizzes: Kahoot, Wayground, Moodle, Anki, CSV, Print or PDF.</li>
+              <li>Import the file: in Anki, File → Import; in Quizlet, Create → Import and paste; in Kahoot, Add question → Import spreadsheet; in Wayground, Import from spreadsheet; in Moodle, Question bank → Import → GIFT.</li>
+              <li>In the notebooks hub, the Studio tab has an <b>Export</b> button on every flashcard deck and quiz too.</li>
+            </ol>
+            <h3>Why it helps</h3>
+            <p>Spaced repetition in Anki, a class game in Kahoot or a graded quiz in Moodle all start from questions you already have in NotebookLM. Retyping them takes longer than making them. With an export, a deck of 40 cards or a 20-question quiz goes to the app you use in a few seconds, with the correct answers marked and the explanations kept.</p>
+            <p class="feature-seo-plan"><strong>Free.</strong> Flashcard and quiz export is free in NotebookTools. <a href="https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj" target="_blank" rel="noopener noreferrer">Add to Chrome</a></p>
+            <h3>Related</h3>
+            <ul class="feature-seo-links">
+              <li><a href="/blog/notebooklm-prompts-for-studying">NotebookLM prompts for studying</a></li>
+              <li><a href="/students">NotebookTools for students</a></li>
+              <li><a href="/teachers">NotebookTools for teachers</a></li>
+            </ul>
+            <h2 class="feature-seo-faq-title">Flashcards and quizzes export: frequently asked questions</h2>
+            <div class="feature-seo-q">
+              <h3>Can I export NotebookLM flashcards to Anki?</h3>
+              <p>Yes. Choose Anki and NotebookTools saves a text file with the deck name and card fields set up; in Anki, choose File → Import and pick it. Line breaks and formatting in the answers are kept.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Can I put a NotebookLM quiz into Kahoot or Wayground?</h3>
+              <p>Yes. Choose Kahoot or Wayground (Quizizz) for a spreadsheet in that app's import layout, with the correct answers marked. Kahoot allows four answers and short text, so longer questions are shortened and you are told how many.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>What about Quizlet?</h3>
+              <p>Quizlet imports by pasting. Choose Quizlet and the cards are copied with a tab between term and definition; in Quizlet, choose Create → Import and paste.</p>
+            </div>
+            <div class="feature-seo-q">
+              <h3>Is it free?</h3>
+              <p>Yes, flashcard and quiz export is free.</p>
+            </div>
+          </div>
+        </section>
+        </article>
         <article class="md-panel" data-panel="notebook-tools" id="panel-notebook-tools" hidden>
           <h1 class="sr-only">In-notebook tools</h1>
           <section class="feature-demo-section md-demo">
@@ -1130,7 +1218,7 @@
             <ol class="feature-seo-steps">
               <li><b>Sources:</b> <b>Manage</b> opens a dialog to search, filter, find duplicates, refresh and delete sources. <b>Type</b> shows only PDFs, web pages, videos or another kind in NotebookLM's Sources panel.</li>
               <li><b>Studio:</b> <b>Manage</b> lists the notebook's Studio files to search, open, download or delete; <b>Type</b> shows one kind of file; <b>Create</b> makes a blog post, a carousel or a snapshot document, or opens a slide deck in the slide editor.</li>
-              <li><b>Chat:</b> <b>Copy</b> puts the whole chat on your clipboard as Markdown; <b>Queue</b> runs several prompts one after another, each when the last answer is done; <b>Prompts</b> inserts one of your prompts, saves what's in the chat box as a new one, or opens your prompts; <b>Export</b> saves the last answer, the chat or the whole notebook.</li>
+              <li><b>Chat:</b> <b>Copy</b> puts the whole chat on your clipboard as Markdown; <b>Queue</b> runs several prompts one after another, each when the last answer is done; <b>Prompts</b> inserts one of your prompts, saves what's in the chat box as a new one, or opens your prompts; <b>Export</b> saves the last answer, the chat or the whole notebook, or copies the last answer with its citations and a list of their sources. <b>Flashcards</b> (in the Studio group) sends the notebook's flashcards and quizzes to Anki, Quizlet, Kahoot, Wayground or Moodle.</li>
               <li><b>Organize:</b> <b>Add to folder</b>, <b>Tags</b> and the star file the notebook in the dashboard as you work. <b>All notebooks</b> opens the dashboard.</li>
               <li>Slide decks in Studio also get an <b>Edit</b> button that opens them in the slide editor.</li>
             </ol>

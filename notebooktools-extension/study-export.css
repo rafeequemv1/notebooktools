@@ -1,0 +1,34 @@
+/* Flashcards & quizzes export dialog (study-export.js). Scoped to .nse / .nse-*. */
+.nse { --nse-bg: #fff; --nse-soft: #f0f4f9; --nse-line: rgba(31, 31, 31, 0.1); --nse-ink: #1f1f1f; --nse-muted: #5f6368; --nse-hover: rgba(11, 87, 208, 0.07); --nse-accent: #0b57d0; --nse-warn: #b3261e; font: 14px/1.4 "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif; inset: 0; position: fixed; z-index: 2147482500; }
+.nse[hidden] { display: none !important; }
+.nse.is-dark { --nse-bg: #1f2023; --nse-soft: #2a2b2f; --nse-line: rgba(255, 255, 255, 0.1); --nse-ink: #e8eaed; --nse-muted: #9aa0a6; --nse-hover: rgba(138, 180, 248, 0.12); --nse-accent: #8ab4f8; --nse-warn: #f28b82; }
+.nse *, .nse *::before, .nse *::after { box-sizing: border-box; }
+.nse-backdrop { background: rgba(32, 33, 36, 0.4); inset: 0; position: absolute; }
+.nse-dialog { background: var(--nse-bg); border-radius: 28px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28); color: var(--nse-ink); display: flex; flex-direction: column; left: 50%; max-height: min(680px, calc(100vh - 48px)); max-width: calc(100vw - 32px); position: absolute; top: 50%; transform: translate(-50%, -50%); width: 560px; }
+.nse-head { align-items: flex-start; display: flex; gap: 12px; padding: 22px 22px 8px 26px; }
+.nse-head > div { flex: 1; min-width: 0; }
+.nse-head h2 { font: 400 22px/1.3 "Google Sans", Roboto, Arial, sans-serif; margin: 0; }
+.nse-head p { color: var(--nse-muted); font-size: 13px; margin: 2px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nse-x { background: none; border: 0; border-radius: 999px; color: var(--nse-muted); cursor: pointer; font-size: 22px; height: 36px; line-height: 1; width: 36px; }
+.nse-x:hover { background: var(--nse-hover); color: var(--nse-ink); }
+.nse-body { display: flex; flex-direction: column; gap: 12px; overflow: auto; padding: 8px 26px 24px; }
+.nse-muted { color: var(--nse-muted); font-size: 13.5px; margin: 0; }
+.nse-warn { color: var(--nse-warn); font-size: 13.5px; margin: 0; }
+.nse-sets { display: flex; flex-direction: column; gap: 4px; max-height: 220px; overflow: auto; }
+.nse-set { align-items: center; background: none; border: 1px solid var(--nse-line); border-radius: 14px; color: var(--nse-ink); cursor: pointer; display: flex; font: inherit; gap: 10px; padding: 10px 12px; text-align: left; }
+.nse-set:hover { background: var(--nse-hover); }
+.nse-set.is-on { background: var(--nse-soft); border-color: var(--nse-accent); }
+.nse-set-ic { align-items: center; background: var(--nse-soft); border-radius: 8px; color: var(--nse-accent); display: inline-flex; flex: none; font-weight: 700; height: 26px; justify-content: center; width: 26px; }
+.nse-set.is-on .nse-set-ic { background: var(--nse-bg); }
+.nse-set-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nse-set-n { color: var(--nse-muted); flex: none; font-size: 12.5px; }
+.nse-label { color: var(--nse-muted); font-size: 13px; font-weight: 500; margin: 4px 0 0; }
+.nse-formats { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+.nse-format { background: var(--nse-soft); border: 1px solid transparent; border-radius: 16px; color: var(--nse-ink); cursor: pointer; display: flex; flex-direction: column; font: inherit; gap: 2px; padding: 12px 14px; text-align: left; }
+.nse-format:hover { border-color: var(--nse-accent); }
+.nse-format b { font: 500 14.5px/1.3 "Google Sans", Roboto, Arial, sans-serif; }
+.nse-format span { color: var(--nse-muted); font-size: 12.5px; line-height: 1.35; }
+.nse-note { color: var(--nse-muted); font-size: 13px; margin: 0; min-height: 1em; }
+.nse-note:empty { display: none; }
+.nse-note.is-warn { color: var(--nse-warn); }
+@media (max-width: 520px) { .nse-formats { grid-template-columns: 1fr; } }

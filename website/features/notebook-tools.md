@@ -46,7 +46,7 @@ Open a notebook and NotebookTools adds one slim ribbon above Sources, chat and S
 
 1. **Sources:** **Manage** opens a dialog to search, filter, find duplicates, refresh and delete sources. **Type** shows only PDFs, web pages, videos or another kind in NotebookLM's Sources panel.
 2. **Studio:** **Manage** lists the notebook's Studio files to search, open, download or delete; **Type** shows one kind of file; **Create** makes a blog post, a carousel or a snapshot document, or opens a slide deck in the slide editor.
-3. **Chat:** **Copy** puts the whole chat on your clipboard as Markdown; **Queue** runs several prompts one after another, each when the last answer is done; **Prompts** inserts one of your prompts, saves what's in the chat box as a new one, or opens your prompts; **Export** saves the last answer, the chat or the whole notebook.
+3. **Chat:** **Copy** puts the whole chat on your clipboard as Markdown; **Queue** runs several prompts one after another, each when the last answer is done; **Prompts** inserts one of your prompts, saves what's in the chat box as a new one, or opens your prompts; **Export** saves the last answer, the chat or the whole notebook, or copies the last answer with its citations and a list of their sources. **Flashcards** (in the Studio group) sends the notebook's flashcards and quizzes to Anki, Quizlet, Kahoot, Wayground or Moodle.
 4. **Organize:** **Add to folder**, **Tags** and the star file the notebook in the dashboard as you work. **All notebooks** opens the dashboard.
 5. Slide decks in Studio also get an **Edit** button that opens them in the slide editor.
 

@@ -116,7 +116,13 @@ const SCREENS = [
         client.listNotebookLmLabels = async () => [];
         client.listNotebookLmNotes = async () => [];
         client.checkNotebookLmSourceFreshness = async (_nb, sourceId) => (STALE.has(sourceId) ? 'stale' : 'fresh');
-        client.listNotebookLmArtifacts = async (id) => (PODCASTS[id] || []).map((a) => ({ ...a, typeCode: 1, type: 'Audio Overview', status: 'ready', mediaUrl: 'https://example.com/a.mp4', createdAt: Date.now() - 3600e3 }));
+        client.listNotebookLmArtifacts = async (id) => (PODCASTS[id] || []).map((a) => ({ ...a, typeCode: 1, type: 'Audio Overview', status: 'ready', mediaUrl: 'https://example.com/a.mp4', createdAt: Date.now() - 3600e3 }))
+          .concat(id === 'nb2' ? [{ id: 'fc2', title: 'Cell division flashcards', typeCode: 4, type: 'Quiz', status: 'ready' }, { id: 'qz2', title: 'Chapter 3 quiz', typeCode: 4, type: 'Quiz', status: 'ready' }] : []);
+        // a flashcard deck and a quiz, as NotebookLM's interactive pages carry them
+        const appData = (o) => JSON.stringify(o).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        client.getNotebookLmArtifactHtml = async (_nb, aid) => `<div data-app-data="${appData(aid === 'fc2'
+          ? { flashcards: Array.from({ length: 24 }, (_, i) => ({ f: `Card ${i + 1}`, b: 'Answer' })) }
+          : { quiz: Array.from({ length: 12 }, (_, i) => ({ question: `Question ${i + 1}`, answerOptions: [{ text: 'A', isCorrect: true }, { text: 'B' }] })) })}"></div>`;
       },
     });
   }, NOTEBOOKS);
@@ -160,6 +166,22 @@ const SCREENS = [
     console.log(s.name, html.html.length, 'chars');
     await page.close();
   }
+  // The flashcards & quizzes export dialog (study-export.js), on a quiz
+  {
+    const page = await ctx.newPage();
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.goto(`chrome-extension://${id}/notebooks.html`);
+    await page.waitForTimeout(1500);
+    await page.evaluate(() => window.NotebookToolsStudyExport.open({ notebookId: 'nb2', notebookTitle: 'Biology 101 — Chapter 3', select: 'qz2' }));
+    await page.waitForSelector('.nse [data-format="kahoot"]', { timeout: 8000 });
+    // the card count of the other set, as after reading it once
+    await page.click('.nse [data-set="fc2"]'); await page.waitForSelector('.nse [data-format="anki"]');
+    await page.click('.nse [data-set="qz2"]'); await page.waitForSelector('.nse [data-format="kahoot"]');
+    screens['study-export'] = { html: await page.evaluate(() => `<div class="nse">${document.querySelector('.nse .nse-dialog').outerHTML}</div>`), bodyClass: '' };
+    console.log('study export', screens['study-export'].html.length, 'chars');
+    await page.close();
+  }
+
   // The in-notebook ribbon and its menus, on a stand-in NotebookLM page
   const NLM_PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Product launch 2026 - NotebookLM</title><style>body{margin:0;background:#f8fafd;font-family:Arial,sans-serif}.row{display:flex;gap:16px;padding:0 16px 16px;height:600px}.p{background:#fff;border-radius:16px;flex:1}.c{flex:2;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}textarea{width:100%;height:56px}</style></head><body><header style="height:64px"></header><div class="row"><section class="p">Sources</section><section class="p c"><textarea aria-label="Query box" placeholder="Start typing..."></textarea></section><section class="p">Studio</section></div></body></html>`;
   await ctx.route('https://notebooklm.google.com/**', (r) => (r.request().url().includes('/notebook/') ? r.fulfill({ contentType: 'text/html', body: NLM_PAGE }) : r.fulfill({ status: 500, body: '' })));
@@ -210,7 +232,7 @@ const SCREENS = [
   await ctx.close();
 
   // The extension's CSS, scoped to the demo's shadow root
-  const css = ['shared.css', 'bulk-import.css', 'snapshots.css', 'notebooks.css', 'prompt-library.css', 'notebooklm-ribbon.css', 'notebooklm-prompt-queue.css']
+  const css = ['shared.css', 'bulk-import.css', 'snapshots.css', 'notebooks.css', 'prompt-library.css', 'notebooklm-ribbon.css', 'notebooklm-prompt-queue.css', 'study-export.css']
     .map((f) => `/* ${f} */\n` + fs.readFileSync(path.join(EXT, f), 'utf8'))
     .join('\n')
     .replace(/:root\[data-theme="dark"\]/g, ':host([data-theme="dark"])')

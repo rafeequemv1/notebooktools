@@ -419,6 +419,24 @@
     ]);
   });
 
+  // Flashcards & quizzes export: the ribbon's Flashcards button opens the real
+  // export dialog (study-export.js); a quiz goes to Kahoot
+  register("study", function (a) {
+    return [
+      a.hide("study"), a.hide("toast"),
+      a.wait(500),
+      a.click('[data-ntr="study"]'),
+      a.show("study"),
+      a.wait(1400),
+      a.click('[data-format="kahoot"]'),
+      a.show("toast"),
+      a.wait(1600),
+      a.hide("toast"),
+      a.hide("study"),
+      a.wait(400)
+    ];
+  });
+
   register("xtwitter", function (a) {
     return [
       a.click("x-btn"),

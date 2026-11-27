@@ -1131,6 +1131,13 @@
       path: "/features/prompt-queue",
       demo: "queue"
     },
+    "flashcards-export": {
+      title: "Export NotebookLM Flashcards & Quizzes to Anki, Quizlet, Kahoot | NotebookTools",
+      description: "Send NotebookLM flashcards and quizzes to Anki, Quizlet, Kahoot, Wayground (Quizizz) or Moodle, or save CSV, Markdown or a printable worksheet. Free.",
+      name: "Flashcards & quizzes export",
+      path: "/features/flashcards-export",
+      demo: "study"
+    },
     "notebook-tools": {
       title: "NotebookLM Tools Inside Every Notebook | NotebookTools",
       description: "One ribbon inside every NotebookLM notebook: manage and filter sources and Studio files, copy the chat, prompts, folders and tags.",

@@ -35,8 +35,19 @@
     return style.display === "none" || style.visibility === "hidden";
   }
 
-  /** The answer's DOM as small, safe HTML: only structural tags, no attributes. */
-  function cleanHtml(node) {
+  // A citation chip in an answer: a small button or span whose text is a number ("3", "2-4")
+  const CITE_TEXT = /^\s*\d{1,3}(\s*[-–,]\s*\d{1,3})*\s*$/;
+  function citationOf(el) {
+    const tag = el.tagName.toLowerCase();
+    const hint = `${typeof el.className === "string" ? el.className : ""} ${el.getAttribute("aria-label") || ""} ${el.getAttribute("data-testid") || ""}`;
+    if (!/citation|source|cite/i.test(hint) && tag !== "button") return "";
+    const text = (el.textContent || "").trim();
+    return CITE_TEXT.test(text) && text.length <= 12 ? text.replace(/\s+/g, "") : "";
+  }
+
+  /** The answer's DOM as small, safe HTML: only structural tags, no attributes.
+      options.citations: keep citation chips as [n] and list them in options.chips */
+  function cleanHtml(node, options = {}) {
     function walk(el) {
       let out = "";
       for (const child of el.childNodes) {
@@ -46,6 +57,14 @@
         }
         if (child.nodeType !== Node.ELEMENT_NODE) continue;
         const tag = child.tagName.toLowerCase();
+        if (options.citations) {
+          const n = citationOf(child);
+          if (n) {
+            out += `[${esc(n)}]`;
+            options.chips?.push({ n, el: child });
+            continue;
+          }
+        }
         if (SKIP.has(tag) || isHidden(child)) continue;
         const cls = typeof child.className === "string" ? child.className : "";
         if (NOISE.test(cls) && !KEEP.has(tag)) continue;
@@ -224,5 +243,60 @@
     return "PDF view opened. Choose Save as PDF.";
   }
 
-  window.NotebookToolsAnswerExport = { exportLastAnswer, cleanHtml, toMarkdown };
+  /* ---------- Copy with citations ---------- */
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const OVERLAY = "[role='tooltip'], .mat-mdc-tooltip, .mdc-tooltip, .cdk-overlay-container, [class*='citation-popover'], [class*='source-popover']";
+
+  // What a chip says about its source: its own labels, or the tooltip it shows on hover
+  async function sourceOf(el) {
+    for (const a of ["aria-label", "title", "data-source-title", "data-tooltip", "mattooltip"]) {
+      const v = (el.getAttribute(a) || "").trim();
+      if (v && !CITE_TEXT.test(v) && v.length > 3) return { title: v.replace(/^\s*(citation|source)\s*\d*\s*[:.-]?\s*/i, "") };
+    }
+    const before = new Set(Array.from(document.querySelectorAll(OVERLAY)).map((n) => n.textContent));
+    for (const type of ["pointerover", "mouseover", "mouseenter", "focus"]) el.dispatchEvent(new Event(type, { bubbles: type !== "mouseenter" }));
+    let found = null;
+    for (let i = 0; i < 6 && !found; i += 1) {
+      await sleep(80);
+      const fresh = Array.from(document.querySelectorAll(OVERLAY)).map((n) => (n.innerText || n.textContent || "").trim()).filter((t) => t && !before.has(t) && !CITE_TEXT.test(t));
+      if (fresh.length) found = fresh.sort((a, b) => b.length - a.length)[0];
+    }
+    for (const type of ["pointerout", "mouseout", "mouseleave", "blur"]) el.dispatchEvent(new Event(type, { bubbles: type !== "mouseleave" }));
+    if (!found) return null;
+    const lines = found.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+    const title = lines.find((l) => l.length >= 3 && l.length <= 160) || lines[0];
+    const quote = lines.filter((l) => l !== title).join(" ").slice(0, 220);
+    return { title: title.slice(0, 160), quote };
+  }
+
+  async function copyWithCitations() {
+    const node = lastAnswerNode();
+    if (!node) throw new Error("No answer yet. Ask Gemini Notebook something first.");
+    const chips = [];
+    const body = cleanHtml(node, { citations: true, chips });
+    if (!body.replace(/<[^>]+>/g, "").trim()) throw new Error("The last answer is empty.");
+    // one entry per citation number, in order
+    const seen = new Map();
+    for (const c of chips) {
+      for (const n of c.n.split(/[,]/)) if (!seen.has(n)) seen.set(n, c.el);
+    }
+    const sources = [];
+    for (const [n, el] of seen) sources.push({ n, ...(await sourceOf(el) || {}) });
+    const named = sources.filter((x) => x.title);
+    const list = named.length
+      ? named.map((x) => `[${x.n}] ${x.title}${x.quote ? ` — “${x.quote}”` : ""}`)
+      : [];
+    const note = seen.size && !named.length ? "Numbers in [ ] are NotebookLM's citations; open the notebook and hover a number to see its passage." : "";
+    const md = toMarkdown(body).trim() + (list.length ? `\n\n**Sources**\n\n${list.map((l) => `- ${l}`).join("\n")}\n` : note ? `\n\n_${note}_\n` : "\n");
+    const html = `${body}${list.length ? `<p><strong>Sources</strong></p><ul>${list.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : note ? `<p><em>${esc(note)}</em></p>` : ""}`;
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ "text/plain": new Blob([md], { type: "text/plain" }), "text/html": new Blob([html], { type: "text/html" }) })]);
+    } catch (_e) {
+      await navigator.clipboard.writeText(md);
+    }
+    if (!seen.size) return "Copied the answer (it has no citations).";
+    return named.length ? `Copied with ${seen.size} citation${seen.size === 1 ? "" : "s"} and their sources. Paste into Docs, Word or Notion.` : `Copied with ${seen.size} citation number${seen.size === 1 ? "" : "s"}.`;
+  }
+
+  window.NotebookToolsAnswerExport = { exportLastAnswer, copyWithCitations, cleanHtml, toMarkdown };
 })();

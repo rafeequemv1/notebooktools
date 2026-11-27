@@ -33,6 +33,7 @@
     chevron: '<path d="m6 15 6-6 6 6"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
     queue: '<path d="M4 6h11M4 12h11M4 18h7"/><path d="M17 15l4 3-4 3z" fill="currentColor"/>',
+    cards: '<rect x="3" y="7" width="13" height="13" rx="2"/><path d="M8 4h11a2 2 0 0 1 2 2v11"/><path d="M7 12h5M7 15.5h3"/>',
     caret: '<path d="m7 10 5 5 5-5"/>'
   };
 
@@ -296,16 +297,23 @@
     const answer = [
       ["answer:pdf", "doc", "PDF (print-ready)"],
       ["answer:word", "doc", "Word (.doc)"],
-      ["answer:markdown", "copy", "Markdown"]
+      ["answer:markdown", "copy", "Markdown"],
+      ["answer:cite", "copy", "Copy with citations"]
     ].map(([v, ic, label]) => `<button type="button" class="ntr-menu-item" data-value="${v}">${icon(ic, 15)}<span>${esc(label)}</span></button>`).join("");
     const items = formats.map((f) => `<button type="button" class="ntr-menu-item" data-value="${esc(f.id)}">${icon("download", 15)}<span>${esc(f.label)}</span></button>`).join("");
     const whole = `<button type="button" class="ntr-menu-item" data-value="notebook:zip">${icon("download", 15)}<span>Sources and notes (ZIP)</span></button>`;
-    openMenu(anchor, `<p class="ntr-menu-title">Last answer only</p>${answer}<p class="ntr-menu-title">Whole chat</p>${items}<p class="ntr-menu-title">Whole notebook</p>${whole}`, async (formatId) => {
+    const study = `<button type="button" class="ntr-menu-item" data-value="study">${icon("copy", 15)}<span>Flashcards &amp; quizzes<small>Anki, Quizlet, Kahoot, Wayground, Moodle, print</small></span></button>`;
+    openMenu(anchor, `<p class="ntr-menu-title">Last answer only</p>${answer}<p class="ntr-menu-title">Whole chat</p>${items}<p class="ntr-menu-title">Whole notebook</p>${whole}${study}`, async (formatId) => {
       closeMenu();
       try {
+        if (formatId === "study") return openStudyExport();
         if (formatId === "notebook:zip") {
           const title = (document.title || "").replace(/\s*[-–|]\s*(NotebookLM|Gemini Notebook).*$/i, "").trim();
           return void window.NotebookToolsNotebookExport?.openDialog([{ id: notebookId(), title: title || "This notebook" }]);
+        }
+        if (formatId === "answer:cite") {
+          if (!window.NotebookToolsAnswerExport?.copyWithCitations) throw new Error("Export is still loading. Try again in a moment.");
+          return toast(await window.NotebookToolsAnswerExport.copyWithCitations());
         }
         if (formatId.startsWith("answer:")) {
           if (!window.NotebookToolsAnswerExport) throw new Error("Export is still loading. Try again in a moment.");
@@ -371,6 +379,13 @@
       if (value === "save") return saveChatPrompt();
       if (value === "manage") return send({ type: "notebooktools-ribbon-open-hub", view: "prompts" });
     });
+  }
+
+  // Free: flashcards and quizzes out to Anki, Quizlet, Kahoot and more (study-export.js)
+  function openStudyExport() {
+    if (!window.NotebookToolsStudyExport) return toast("Flashcard export is still loading. Try again in a moment.", true);
+    const title = (document.title || "").replace(/\s*[-–|]\s*(NotebookLM|Gemini Notebook).*$/i, "").trim();
+    window.NotebookToolsStudyExport.open({ notebookId: notebookId(), notebookTitle: title || "This notebook" }).catch((error) => toast(error.message || "Couldn't open flashcard export.", true));
   }
 
   function openQueue() {
@@ -466,6 +481,7 @@
       case "snapdoc": return clickWorkflow(".notebooktools-snapshot-workflow-btn", "Snapshots", button);
       case "prompts": return promptsMenu(button);
       case "queue": return openQueue();
+      case "study": return openStudyExport();
       case "hub": return send({ type: "notebooktools-ribbon-open-hub" });
       case "collapse":
         collapsed = !collapsed;
@@ -515,6 +531,7 @@
         <div class="ntr-group" data-group="Studio"><div class="ntr-items">
           ${btn("studio-files", "studio", "Manage", "Search, open, download and delete this notebook's Studio files")}
           <button type="button" class="ntr-btn has-caret" data-ntr="create" title="Blog post, carousel or snapshot document from this notebook">${icon("plus")}<span class="ntr-label">Create</span>${icon("caret", 13)}</button>
+          ${btn("study", "cards", "Flashcards", "Export this notebook's flashcards and quizzes to Anki, Quizlet, Kahoot, Wayground, Moodle, CSV or print")}
         </div></div>
         <div class="ntr-group" data-group="Filter"><div class="ntr-items" data-ntr-studiofilter></div></div>
       </div>`;
