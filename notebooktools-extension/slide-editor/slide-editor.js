@@ -46,6 +46,9 @@
   /* ---------- Shell ---------- */
   app.innerHTML = `
     <div class="se-start" id="seStart">
+      <div class="se-ghost" id="seGhost" aria-hidden="true" inert></div>
+      <div class="se-start-card">
+      <p class="se-start-title">Open a slide deck to start editing</p>
       <div id="seDrop"></div>
       <label class="se-ocr-opt"><input type="checkbox" id="seOcr" checked> Make the text editable (reads slides with OCR, English)</label>
       <label class="se-ocr-opt"><input type="checkbox" id="seObjects" checked> Separate pictures and shapes so you can move, resize or delete them</label>
@@ -56,6 +59,7 @@
         <li><b>Download PowerPoint</b> with real text boxes, transitions and animations.</li>
         <li><b>Private</b>: the deck never leaves your browser.</li>
       </ul>
+      </div>
     </div>
     <div class="se-editor" id="seEditor" hidden>
       <header class="se-bar">
@@ -113,6 +117,55 @@
     </div>
     <div class="se-present" id="sePresent" hidden><canvas></canvas><p class="se-present-hint">Click or → for next · ← back · Esc to exit</p></div>
     <input type="file" id="seImageInput" accept="image/*" hidden>`;
+
+  /* ---------- Start screen: a still preview of the full editor behind the drop zone ---------- */
+  function ghostSlide(n) {
+    const t = (x, y, size, text, fill = "#1f1f1f", weight = 500) => `<text x="${x}" y="${y}" font-size="${size}" font-weight="${weight}" fill="${fill}" font-family="Google Sans, Roboto, Arial, sans-serif">${text}</text>`;
+    const slides = [
+      `<rect width="960" height="540" fill="#16233f"/><circle cx="800" cy="120" r="170" fill="#22345c"/><circle cx="880" cy="430" r="110" fill="#2c4373"/><circle cx="760" cy="150" r="54" fill="#f6d36b"/>${t(72, 250, 64, "Sleep and Memory", "#fff", 600)}${t(74, 306, 26, "How the brain files away the day", "#b9c6e4", 400)}<rect x="74" y="352" width="120" height="6" rx="3" fill="#f6d36b"/>`,
+      `<rect width="960" height="540" fill="#fbfaf7"/>${t(64, 104, 44, "Why sleep matters", "#1f1f1f", 600)}${[0, 1, 2].map((i) => `<circle cx="78" cy="${190 + i * 70}" r="7" fill="#0b57d0"/>${t(100, 200 + i * 70, 26, ["Memories settle during deep sleep", "Dreams replay what we learned", "Seven hours keeps recall sharp"][i], "#3c4043", 400)}`).join("")}<rect x="590" y="150" width="310" height="300" rx="22" fill="#dfe8fb"/><circle cx="745" cy="280" r="74" fill="#16233f"/><circle cx="772" cy="262" r="62" fill="#dfe8fb"/><circle cx="660" cy="200" r="6" fill="#0b57d0"/><circle cx="840" cy="390" r="8" fill="#0b57d0"/><circle cx="820" cy="190" r="5" fill="#0b57d0"/>`,
+      `<rect width="960" height="540" fill="#fff"/>${t(64, 100, 40, "Recall after one night", "#1f1f1f", 600)}${[[160, 150, "#c2d5f7", "No sleep"], [360, 250, "#8ab4f8", "4 hours"], [560, 330, "#4c8df6", "7 hours"], [760, 360, "#0b57d0", "9 hours"]].map(([x, h, c, l]) => `<rect x="${x - 50}" y="${450 - h}" width="100" height="${h}" rx="10" fill="${c}"/>${t(x - 44, 488, 20, l, "#5f6368", 400)}`).join("")}<rect x="64" y="450" width="832" height="2" fill="#dadce0"/>`,
+      `<rect width="960" height="540" fill="#f3efe7"/>${t(64, 100, 40, "Three stages of a night", "#1f1f1f", 600)}${[["#f6d36b", "Light"], ["#8ab4f8", "Deep"], ["#e8a0bf", "REM"]].map(([c, l], i) => `<rect x="${80 + i * 280}" y="180" width="240" height="220" rx="24" fill="${c}"/>${t(110 + i * 280, 360, 30, l, "#1f1f1f", 600)}<circle cx="${140 + i * 280}" cy="240" r="26" fill="#fff" opacity="0.7"/>`).join("")}`,
+    ];
+    return `<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">${slides[n]}</svg>`;
+  }
+
+  function buildGhost() {
+    const ghost = $("#seGhost");
+    const editor = $("#seEditor");
+    if (!ghost || !editor) return;
+    const part = (sel) => {
+      const node = editor.querySelector(sel).cloneNode(true);
+      [node, ...node.querySelectorAll("*")].forEach((x) => {
+        [...x.attributes].forEach((a) => { if (a.name === "id" || a.name.startsWith("data-") || a.name === "role" || a.name.startsWith("aria-")) x.removeAttribute(a.name); });
+        if (x.tagName === "BUTTON" || x.tagName === "INPUT") x.tabIndex = -1;
+      });
+      node.querySelector(".se-menu")?.remove();
+      node.querySelectorAll("[hidden]").forEach((x) => x.removeAttribute("hidden"));
+      return node;
+    };
+    const bar = part(".se-bar");
+    const count = bar.querySelector(".se-count");
+    if (count) count.textContent = "4 slides";
+    bar.querySelector(".se-chip")?.remove();
+    const fmt = part(".se-fmt");
+    fmt.innerHTML = `<span class="se-fmt-title">Text</span>
+      <span class="se-ghost-pill" style="width:118px">Google Sans</span><span class="se-ghost-pill" style="width:46px">44</span><span class="se-sep"></span>
+      <span class="se-btn is-icon"><b>B</b></span><span class="se-btn is-icon"><i>I</i></span><span class="se-btn is-icon"><u>U</u></span><span class="se-sep"></span>
+      <span class="se-ghost-dot" style="background:#1f1f1f"></span><span class="se-ghost-dot" style="background:#0b57d0"></span><span class="se-ghost-dot" style="background:#e37400"></span><span class="se-sep"></span>
+      <span class="se-btn is-icon">${ico("text")}</span>`;
+    const body = part(".se-body");
+    body.querySelector(".se-thumbs").innerHTML = [0, 1, 2, 3].map((i) => `<span class="se-thumb${i === 1 ? " is-on" : ""}"><span class="se-thumb-n">${i + 1}</span><span class="se-thumb-img">${ghostSlide(i)}</span></span>`).join("");
+    body.querySelector(".se-stage-wrap").innerHTML = `<div class="se-ghost-stage">${ghostSlide(1)}<span class="se-ghost-sel" style="left:5.6%;top:11%;width:44%;height:12%">${["nw", "ne", "se", "sw"].map((d) => `<i class="se-handle is-${d}"></i>`).join("")}</span></div>`;
+    body.querySelector(".se-props").innerHTML = `
+      <div class="se-tabs"><button type="button" class="is-on">Design</button><button type="button">Motion</button></div>
+      <p class="se-label">Title text</p>
+      <div class="se-field"><span>Text</span><span class="se-ghost-box">Why sleep matters</span></div>
+      <div class="se-field"><span>Position (cm)</span><div class="se-grid2"><span class="se-ghost-box">X 1.90</span><span class="se-ghost-box">Y 1.60</span></div></div>
+      <div class="se-field"><span>Size (cm)</span><div class="se-grid2"><span class="se-ghost-box">W 14.90</span><span class="se-ghost-box">H 2.30</span></div></div>
+      <div class="se-field"><span>Speaker notes</span><span class="se-ghost-box is-tall">Start with the question: how many hours did you sleep?</span></div>`;
+    ghost.replaceChildren(bar, fmt, body);
+  }
 
   function ico(name, size = 16) {
     const d = {
@@ -421,6 +474,7 @@
   }
 
   /* ---------- Open ---------- */
+  buildGhost();
   P.dropZone($("#seDrop"), { label: "Drop a NotebookLM slide deck PDF", hint: "or slide images, or", multiple: true, accept: ".pdf,application/pdf,image/png,image/jpeg,image/webp", sample: "deck" }, openFiles);
 
   /* ---------- Import progress: frames fill in slide by slide ---------- */
