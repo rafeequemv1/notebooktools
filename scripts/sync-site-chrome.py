@@ -54,6 +54,7 @@ AUDIENCES = [
 
 NAV = [
     ("/features", "Features", "features"),
+    ("/tools/edit-notebooklm-slides", "Slide editor", "editor"),
     ("@audiences", "Who it's for", None),
     ("/#pricing", "Pricing", None),
     ("/blog", "Blog", "blog"),
@@ -63,6 +64,8 @@ NAV = [
 
 
 def section_of(rel: str) -> str | None:
+    if rel == "tools/edit-notebooklm-slides.html" or rel.startswith(("es/editar-", "pt/editar-", "zh-tw/edit-")):
+        return "editor"
     if rel.startswith("features/"):
         return "features"
     if rel.startswith("blog/"):

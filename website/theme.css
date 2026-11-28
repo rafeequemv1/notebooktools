@@ -2567,3 +2567,36 @@ a {
 .tool-cta .post-cta-link { text-decoration: none; }
 .uc-section > .tool-cta { margin: 0; }
 @media (max-width: 640px) { .tool-cta-mark { align-self: start; } }
+
+/* Header: tighter link spacing on narrower desktops so every link fits. */
+@media (max-width: 1320px) and (min-width: 861px) {
+  .site-nav > a,
+  .nav-menu-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 861px) {
+  .site-nav > a,
+  .nav-menu-btn {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 861px) {
+  .site-nav > a,
+  .nav-menu-btn {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+/* Translated headers list each audience as its own link; on narrow desktops
+   those move to the footer so the header stays on one line. */
+@media (max-width: 1100px) and (min-width: 861px) {
+  .site-nav[aria-label="Principal"] > a:is([href="/students"], [href="/teachers"], [href="/researchers"], [href="/creators"]) {
+    display: none;
+  }
+}
