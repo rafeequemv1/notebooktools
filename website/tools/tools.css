@@ -1565,3 +1565,15 @@
   .se-app .se-start { padding-top: 320px; }
   .se-start-card { padding: 12px; }
 }
+
+/* Editor page: the editor fills the screen under the header, edge to edge */
+.editor-page { display: block; }
+.se-app.is-wide { border: 0; border-bottom: 1px solid var(--line, rgba(31, 31, 31, 0.1)); border-radius: 0; }
+.se-app.is-wide .se-editor,
+.se-app.is-wide .se-start { height: calc(100vh - 64px); height: calc(100dvh - 64px); min-height: 520px; }
+.se-app.is-wide > .tool-empty { align-items: center; display: flex; height: calc(100dvh - 64px); justify-content: center; margin: 0; }
+.se-app.is-wide.is-full .se-editor { height: 100vh; }
+.editor-page .tools-main { padding-top: 20px; }
+@media (max-width: 640px) {
+  .se-app.is-wide .se-start { height: auto; min-height: calc(100dvh - 64px); }
+}

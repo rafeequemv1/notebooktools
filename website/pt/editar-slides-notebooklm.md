@@ -3,6 +3,8 @@
 > Editor grátis de slides do NotebookLM: abra o PDF da apresentação, o OCR transforma o texto de cada slide em caixas de texto editáveis, mude textos, cores e formas e baixe um PowerPoint (PPTX) editável, PDF ou PNG. Funciona no seu navegador; nada é enviado.
 > Source: https://www.notebooktools.com/pt/editar-slides-notebooklm
 
+Carregando o editor…
+
 Ferramenta grátis
 
 # Editar slides do NotebookLM (PDF para PowerPoint)
@@ -14,8 +16,6 @@ As apresentações do NotebookLM são baixadas como imagens dos slides, então n
 Grátis, sem cadastro Funciona no seu navegador. Nada é enviado. Atualizado 22 de novembro de 2026
 
 [English](https://www.notebooktools.com/tools/edit-notebooklm-slides) [Español](https://www.notebooktools.com/es/editar-diapositivas-notebooklm) Português [繁體中文](https://www.notebooktools.com/zh-tw/edit-notebooklm-slides)
-
-Carregando o editor…
 
 **Edite suas apresentações sem sair do NotebookLM.** A extensão grátis NotebookTools abre as apresentações do NotebookLM neste editor dentro do NotebookLM e adiciona estilos de slides, importação em massa e pastas.
 

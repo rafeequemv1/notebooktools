@@ -716,20 +716,22 @@ def tool_page(t: dict) -> str:
     steps = "".join(f"<li>{E(s)}</li>" for s in t["steps"])
     faq = "".join(f"<h3>{E(q)}</h3><p>{E(a)}</p>" for q, a in t["faq"])
     links = "".join(f'<li><a href="{h}">{E(l)}</a></li>' for h, l in t["links"])
+    wide = t["slug"] == "edit-notebooklm-slides"
+    main_open, main_close = wide_main(app_html) if wide else ('<main class="tools-main">', "</main>")
     return f"""{head(t['title'], t['description'], path, schema, alternates=alternates)}
   <body>
     <header class="site-header"></header>
 
-    <main class="tools-main">
+    {main_open}
       <nav class="blog-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/tools">Free tools</a> <span aria-hidden="true">/</span> <span>{E(t['name'])}</span></nav>
       <section class="tools-hero">
         <p class="eyebrow">Free tool</p>
         <h1>{E(t['h1'])}</h1>
         <div class="post-answer"><p class="post-answer-label">Short answer</p><p>{E(t['answer'])}</p></div>
-        {BADGES}{editor_languages("en") if t["slug"] == "edit-notebooklm-slides" else ""}
+        {BADGES}{editor_languages("en") if wide else ""}
       </section>
 
-      {app_html}
+      {"" if wide else app_html}
 
       {cta(t['cta'])}
 
@@ -749,13 +751,19 @@ def tool_page(t: dict) -> str:
           {other_tools(t['slug'])}
         </div>
       </section>
-    </main>
+    {main_close}
 
     <footer class="site-footer"></footer>
 {scripts}
   </body>
 </html>
 """
+
+
+def wide_main(app_html: str):
+    """The slide editor fills the screen under the header; the page text follows below it."""
+    app = app_html.replace('class="se-app"', 'class="se-app is-wide"', 1)
+    return f'<main class="editor-page">\n      {app}\n      <div class="tools-main">', "</div>\n    </main>"
 
 
 def editor_languages(current: str) -> str:
@@ -795,11 +803,12 @@ def editor_locale_page(t: dict, loc: dict) -> str:
           <span class="tools-badge">{E(L['updated'])} <time datetime="{UPDATED}">{E(L['updated_label'])}</time></span>
         </div>"""
     app_html = t["raw_app"].replace("Loading the editor…", E(L["loading"])).replace('aria-label="NotebookLM slide editor"', f'aria-label="{E(loc["name"])}"')
+    main_open, main_close = wide_main(app_html)
     return f"""{head(loc['title'], loc['description'], path, schema, lang=loc['lang'], og=loc['og'], alternates=editor_alternates(), md=None)}
   <body>
     <header class="site-header"></header>
 
-    <main class="tools-main">
+    {main_open}
       <nav class="blog-breadcrumb" aria-label="Breadcrumb"><a href="/">{E(L['home'])}</a> <span aria-hidden="true">/</span> <a href="/tools">{E(L['tools'])}</a> <span aria-hidden="true">/</span> <span>{E(loc['name'])}</span></nav>
       <section class="tools-hero">
         <p class="eyebrow">{E(L['eyebrow'])}</p>
@@ -807,8 +816,6 @@ def editor_locale_page(t: dict, loc: dict) -> str:
         <div class="post-answer"><p class="post-answer-label">{E(L['answer'])}</p><p>{E(loc['answer'])}</p></div>
         {badges}{editor_languages(loc["lang"])}
       </section>
-
-      {app_html}
 
       <aside class="tool-cta" aria-label="NotebookTools Chrome extension">
         <p>{loc['cta']}</p>
@@ -830,7 +837,7 @@ def editor_locale_page(t: dict, loc: dict) -> str:
           {other_tools(t['slug'])}
         </div>
       </section>
-    </main>
+    {main_close}
 
     <footer class="site-footer"></footer>
 {scripts}
@@ -1128,6 +1135,8 @@ def main() -> None:
                 m = re.search(pat, ref, re.S)
                 if m:
                     page = re.sub(pat, lambda _: m.group(0), page, count=1, flags=re.S)
+            # this page's own link in the translated header is the current page
+            page = page.replace(f'<a href="{loc["path"]}">', f'<a href="{loc["path"]}" aria-current="page">', 1)
             for tag in ('<link rel="stylesheet" href="/theme.css">',):
                 if tag not in page:
                     page = page.replace('<link rel="stylesheet" href="/tools/tools.css">', '<link rel="stylesheet" href="/tools/tools.css">\n    ' + tag, 1)

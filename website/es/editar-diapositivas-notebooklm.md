@@ -3,6 +3,8 @@
 > Editor gratis de diapositivas de NotebookLM: abre el PDF de tu presentación, el OCR convierte el texto de cada diapositiva en cuadros de texto editables, cambia textos, colores y formas, y descarga un PowerPoint (PPTX) editable, PDF o PNG. Funciona en tu navegador; no se sube nada.
 > Source: https://www.notebooktools.com/es/editar-diapositivas-notebooklm
 
+Cargando el editor…
+
 Herramienta gratis
 
 # Editar diapositivas de NotebookLM (PDF a PowerPoint)
@@ -14,8 +16,6 @@ Las presentaciones de NotebookLM se descargan como imágenes de diapositivas, as
 Gratis, sin registro Funciona en tu navegador. No se sube nada. Actualizado 22 de noviembre de 2026
 
 [English](https://www.notebooktools.com/tools/edit-notebooklm-slides) Español [Português](https://www.notebooktools.com/pt/editar-slides-notebooklm) [繁體中文](https://www.notebooktools.com/zh-tw/edit-notebooklm-slides)
-
-Cargando el editor…
 
 **Edita tus presentaciones sin salir de NotebookLM.** La extensión gratuita NotebookTools abre las presentaciones de NotebookLM en este editor dentro de NotebookLM y añade estilos de diapositivas, importación masiva y carpetas.
 

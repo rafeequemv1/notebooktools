@@ -3,6 +3,8 @@
 > 免費的 NotebookLM 投影片編輯器：開啟簡報 PDF，OCR 會把每張投影片上的文字變成可編輯的文字方塊，修改文字、顏色和圖形後，下載可編輯的 PowerPoint（PPTX）、PDF 或 PNG。在瀏覽器中執行，不會上傳任何內容。
 > Source: https://www.notebooktools.com/zh-tw/edit-notebooklm-slides
 
+正在載入編輯器…
+
 免費工具
 
 # 編輯 NotebookLM 投影片（PDF 轉 PowerPoint）
@@ -14,8 +16,6 @@ NotebookLM 產生的簡報下載後是一張張投影片圖片，所以一個字
 免費，免註冊 在瀏覽器中執行，不會上傳任何內容。 更新於 2026 年 11 月 22 日
 
 [English](https://www.notebooktools.com/tools/edit-notebooklm-slides) [Español](https://www.notebooktools.com/es/editar-diapositivas-notebooklm) [Português](https://www.notebooktools.com/pt/editar-slides-notebooklm) 繁體中文
-
-正在載入編輯器…
 
 **不用離開 NotebookLM 就能編輯簡報。**免費的 NotebookTools 擴充功能會在 NotebookLM 裡用這個編輯器開啟簡報，還提供投影片樣式、大量匯入和資料夾。
 
