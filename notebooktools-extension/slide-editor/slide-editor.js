@@ -48,17 +48,12 @@
     <div class="se-start" id="seStart">
       <div class="se-ghost" id="seGhost" aria-hidden="true" inert></div>
       <div class="se-start-card">
-      <p class="se-start-title">Open a slide deck to start editing</p>
       <div id="seDrop"></div>
-      <label class="se-ocr-opt"><input type="checkbox" id="seOcr" checked> Make the text editable (reads slides with OCR, English)</label>
-      <label class="se-ocr-opt"><input type="checkbox" id="seObjects" checked> Separate pictures and shapes so you can move, resize or delete them</label>
+      <div class="se-opts">
+      <label class="se-ocr-opt"><input type="checkbox" id="seOcr" checked> Editable text (OCR)</label>
+      <label class="se-ocr-opt"><input type="checkbox" id="seObjects" checked> Movable pictures and shapes</label>
+      </div>
       <section class="se-recent" id="seRecent" hidden aria-label="Your presentations"></section>
-      <ul class="se-points">
-        <li><b>Edit text</b> right on the slide: click, double-click to type, drag to move.</li>
-        <li><b>Format, animate and add transitions</b>, then present from the browser.</li>
-        <li><b>Download PowerPoint</b> with real text boxes, transitions and animations.</li>
-        <li><b>Private</b>: the deck never leaves your browser.</li>
-      </ul>
       </div>
     </div>
     <div class="se-editor" id="seEditor" hidden>
@@ -475,7 +470,7 @@
 
   /* ---------- Open ---------- */
   buildGhost();
-  P.dropZone($("#seDrop"), { label: "Drop a NotebookLM slide deck PDF", hint: "or slide images, or", multiple: true, accept: ".pdf,application/pdf,image/png,image/jpeg,image/webp", sample: "deck" }, openFiles);
+  P.dropZone($("#seDrop"), { label: "Drop slide PDF or images", hint: "or", multiple: true, accept: ".pdf,application/pdf,image/png,image/jpeg,image/webp", sample: "deck" }, openFiles);
 
   /* ---------- Import progress: frames fill in slide by slide ---------- */
   const loader = {

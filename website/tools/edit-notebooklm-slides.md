@@ -10,7 +10,7 @@
 ## How to use it
 
 1. In NotebookLM, open your slide deck in Studio and download it as a PDF.
-2. Drop the PDF here (or click Try with a sample file). Keep "Make the text editable" on.
+2. Drop the PDF here (or click Try with a sample set). Keep "Editable text (OCR)" on.
 3. Wait a few seconds per slide while the text is read. Slides that are ready can be edited straight away.
 4. Double-click any text to change it. Drag to move, use the handles to resize, and use the panel on the right for font, size, colour and alignment.
 5. Add text, shapes or images from the toolbar, compare with the original, or press Present.

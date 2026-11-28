@@ -1548,3 +1548,20 @@
   .se-start-card { border-radius: 22px; padding: 18px; }
   .se-start-title { font-size: 18px; }
 }
+
+/* Compact open-a-deck card */
+.se-start-card { border-radius: 22px; gap: 10px; max-width: 420px; padding: 14px; }
+.se-start-card .pdf-drop { border-width: 1.5px; border-radius: 14px; gap: 4px; padding: 22px 16px 16px; }
+.se-start-card .pdf-drop svg { height: 24px; width: 24px; }
+.se-start-card .pdf-drop-title { font-size: 15px; margin: 2px 0 4px; }
+.se-start-card .pdf-drop-hint { font-size: 13.5px; }
+.se-start-card .pdf-drop-btn { font-size: 13.5px; min-height: 34px; padding: 0 16px; }
+.se-start-card .pdf-sample-btn { font-size: 13px; }
+.se-start-card .pdf-drop-private { font-size: 12px; margin-top: 2px; }
+.se-opts { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: center; padding: 0 4px 2px; }
+.se-start-card .se-ocr-opt { color: var(--muted, #5f6368); font-size: 13px; gap: 6px; }
+.se-start-card .se-recent { margin-top: 4px; }
+@media (max-width: 640px) {
+  .se-app .se-start { padding-top: 320px; }
+  .se-start-card { padding: 12px; }
+}

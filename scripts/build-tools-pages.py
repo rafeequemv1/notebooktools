@@ -235,7 +235,7 @@ TOOLS = [
         "raw_app": '<section class="se-app" id="seApp" aria-label="NotebookLM slide editor"><p class="tool-empty">Loading the editor…</p></section>',
         "steps": [
             "In NotebookLM, open your slide deck in Studio and download it as a PDF.",
-            "Drop the PDF here (or click Try with a sample file). Keep \"Make the text editable\" on.",
+            "Drop the PDF here (or click Try with a sample set). Keep \"Editable text (OCR)\" on.",
             "Wait a few seconds per slide while the text is read. Slides that are ready can be edited straight away.",
             "Double-click any text to change it. Drag to move, use the handles to resize, and use the panel on the right for font, size, colour and alignment.",
             "Add text, shapes or images from the toolbar, compare with the original, or press Present.",
