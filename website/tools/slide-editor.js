@@ -72,6 +72,7 @@
           <button type="button" class="se-btn" data-act="add-image" title="Add a picture">${ico("image")}<span>Picture</span></button>
           <span class="se-sep"></span>
           <button type="button" class="se-btn" data-act="original" title="Compare with the original slide">${ico("eye")}<span>Original</span></button>
+          <button type="button" class="se-btn" data-pop="translate" title="Translate the slides into another language">${ico("globe")}<span>Translate</span></button>
         </div>
         <div class="se-bar-group">
           <button type="button" class="se-btn" data-act="present" title="Present from this slide (F5)">${ico("play")}<span>Present</span></button>
@@ -210,6 +211,7 @@
       alM: '<path d="M3 12h18M7 6v12h4V6zM14 8.5v7h4v-7z"/>',
       alB: '<path d="M3 20h18M7 4v12h4V4zM14 9v7h4V9z"/>',
       spacing: '<path d="M11 6h9M11 12h9M11 18h9M5 4v16M3 6l2-2 2 2M3 18l2 2 2-2"/>',
+      globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/>',
       motion: '<path d="M4 17c3-8 7-8 9-3s5 5 7-3"/><circle cx="20" cy="8" r="1.4" fill="currentColor"/>',
       design: '<path d="M4 20 15 9M14 4l6 6M12.5 5.5l6 6"/><path d="M4 20l1-4 3 3z"/>',
       sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>'
@@ -266,7 +268,7 @@
 
   /* ---------- History ---------- */
   function snapshot() {
-    return JSON.stringify({ cur, order: deck.slides.map((s) => s.id), slides: deck.slides.map((s) => ({ id: s.id, status: s.status, bgMode: s.bgMode, bgColor: s.bgColor, notes: s.notes, transition: s.transition || null, elements: s.elements })) });
+    return JSON.stringify({ cur, lang: deck.lang || null, order: deck.slides.map((s) => s.id), slides: deck.slides.map((s) => ({ id: s.id, status: s.status, bgMode: s.bgMode, bgColor: s.bgColor, notes: s.notes, transition: s.transition || null, elements: s.elements })) });
   }
   const canvases = new Map(); // slide id → slide (keeps its canvases across undo)
   function commit() {
@@ -289,6 +291,7 @@
       return Object.assign(base, { bgMode: saved.bgMode, bgColor: saved.bgColor, notes: saved.notes, transition: saved.transition, elements });
     });
     cur = Math.min(data.cur, deck.slides.length - 1);
+    deck.lang = data.lang || null;
     selected = null;
     renderAll();
   }
@@ -335,7 +338,7 @@
         }
         const first = deck.slides[0];
         const thumb = S.slideCanvas(first, 320 / first.w, { original: !first.clean }).toDataURL("image/webp", 0.8);
-        await store.save({ id: deck.id, title: deck.title, slideCount: deck.slides.length, createdAt: deck.createdAt, updatedAt: Date.now(), thumb, bytes, source: deck.source || null }, { id: deck.id, slides });
+        await store.save({ id: deck.id, title: deck.title, slideCount: deck.slides.length, createdAt: deck.createdAt, updatedAt: Date.now(), thumb, bytes, source: deck.source || null, lang: deck.lang || null }, { id: deck.id, slides });
       } catch (_error) {
         /* storage full or unavailable: editing goes on, the deck just isn't kept */
       }
@@ -351,6 +354,7 @@
     deck.id = `d${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
     deck.title = title || "slides";
     deck.source = source || null;
+    deck.lang = null;
     deck.createdAt = Date.now();
   }
 
@@ -430,6 +434,7 @@
     deck.id = meta.id;
     deck.title = meta.title;
     deck.source = meta.source || null;
+    deck.lang = meta.lang || null;
     deck.createdAt = meta.createdAt || Date.now();
     deck.slides = slides;
     history = [];
@@ -955,6 +960,163 @@
     renderPanels();
   }
 
+  /* ---------- Translate (Chrome's on-device translator; the deck never leaves the browser) ---------- */
+  // Languages Chrome's translator handles, written left to right.
+  const TR_LANGS = ["bg", "bn", "cs", "da", "de", "el", "en", "es", "fi", "fr", "hi", "hr", "hu", "id", "it", "ja", "kn", "ko", "lt", "mr", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "ta", "te", "th", "tr", "uk", "vi", "zh", "zh-Hant"];
+  const hasTranslator = () => typeof self.Translator === "function" || (typeof self.Translator === "object" && self.Translator !== null);
+  let trNames = null;
+  const langName = (code) => {
+    try {
+      trNames = trNames || new Intl.DisplayNames([document.documentElement.lang || navigator.language || "en"], { type: "language" });
+      const n = trNames.of(code);
+      return n ? n.charAt(0).toUpperCase() + n.slice(1) : code;
+    } catch (_e) { return code; }
+  };
+  let translating = false;
+  function translatePop() {
+    if (!hasTranslator()) {
+      return `<p class="se-pop-title">Translate the slides</p>
+        <p class="se-pop-note">Translation uses the translator built into Chrome on a computer (version 138 or newer), so your slides stay on your device. This browser doesn't have it. Open this page in Chrome on a computer.</p>`;
+    }
+    let last = "";
+    try { last = localStorage.getItem("ntEditorTranslateTo") || ""; } catch (_e) { last = ""; }
+    const from = deck.lang || "en";
+    const mine = (navigator.language || "").split("-")[0];
+    const pick = TR_LANGS.includes(last) && last !== from ? last : TR_LANGS.includes(mine) && mine !== from ? mine : from === "es" ? "en" : "es";
+    const options = TR_LANGS.filter((c) => c !== from).map((c) => [c, langName(c)]).sort((a, b) => a[1].localeCompare(b[1]));
+    return `<p class="se-pop-title">Translate the slides</p>
+      <label class="se-tr-field"><span>Into</span><select id="seTrTo">${options.map(([c, n]) => `<option value="${c}"${c === pick ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
+      <div class="se-seg se-tr-scope"><label><input type="radio" name="seTrScope" value="all" checked>All slides</label><label><input type="radio" name="seTrScope" value="one">This slide</label></div>
+      <label class="se-pop-item se-tr-notes"><input type="checkbox" id="seTrNotes" checked> Speaker notes too</label>
+      <button type="button" class="se-btn is-primary se-tr-go" data-act="translate-go">${ico("globe")}<span>Translate</span></button>
+      <p class="se-pop-note">Runs in Chrome on this computer. Nothing is uploaded. The first time, Chrome downloads the language. Ctrl+Z undoes it.</p>`;
+  }
+
+  // One box's text: paragraph by paragraph, so bullets and line breaks stay where they were.
+  async function translateText(translator, text, cache) {
+    const out = [];
+    for (const para of String(text).split("\n")) {
+      const m = para.match(/^(\s*(?:[•\-–▪◦]|\d{1,2}[.)])\s*)?([\s\S]*)$/);
+      const lead = m[1] || "", body = m[2];
+      if (!/\p{L}/u.test(body)) { out.push(para); continue; }
+      if (!cache.has(body)) cache.set(body, String(await translator.translate(body)).replace(/\s*\n\s*/g, " ").trim());
+      out.push(lead + cache.get(body));
+    }
+    return out.join("\n");
+  }
+
+  // Keep a translated box in its place: smaller type when the words run longer, then a taller box.
+  const fitCtx = document.createElement("canvas").getContext("2d");
+  function fitFont(el) { fitCtx.font = `${el.italic ? "italic " : ""}${el.bold ? 700 : 400} ${el.fontSize}px ${S.cssFamily(el.fontFamily)}`; }
+  function laidLines(el) {
+    fitFont(el);
+    return S.layoutLines(el.text, el.w, (t) => fitCtx.measureText(t).width).length;
+  }
+  const laidHeight = (el) => laidLines(el) * el.fontSize * (el.lineHeight || 1.2);
+  const overlapsY = (a, top, h) => a.y < top + h && a.y + a.h > top;
+  // Keep a translated box in its place: first wider into free space beside it, then taller into
+  // free space under it, and only then smaller type.
+  function fitTranslated(el, s, old) {
+    const margin = s.w * 0.04;
+    // Wider: up to the next item beside it (short lines may take all of it, paragraphs a little)
+    fitFont(el);
+    const want = Math.max(...String(el.text).split("\n").map((t) => fitCtx.measureText(t).width)) * 1.03 + 4;
+    if (want > el.w) {
+      const others = s.elements.filter((o) => o !== el && overlapsY(o, el.y, Math.max(el.h, old.height)));
+      const rightEdge = Math.min(s.w - margin, ...others.filter((o) => o.x >= el.x + el.w - 2).map((o) => o.x - 8));
+      const leftEdge = Math.max(margin, ...others.filter((o) => o.x + o.w <= el.x + 2).map((o) => o.x + o.w + 8));
+      const cap = old.lines <= 1 ? Infinity : el.w * 1.35;
+      const room = el.align === "center" ? 2 * Math.min(el.x + el.w / 2 - leftEdge, rightEdge - el.x - el.w / 2) : el.align === "right" ? el.x + el.w - leftEdge : rightEdge - el.x;
+      const w = Math.max(el.w, Math.min(want, cap, room));
+      if (el.align === "center") el.x -= (w - el.w) / 2;
+      else if (el.align === "right") el.x -= w - el.w;
+      el.w = w;
+    }
+    // Taller: into the free space under it (up to the next item), at most about twice its height
+    const bottom = Math.max(el.h, old.height);
+    const nextTop = Math.min(s.h - 8, ...s.elements.filter((o) => o !== el && o.y >= el.y + bottom * 0.9 && o.x < el.x + el.w && o.x + o.w > el.x).map((o) => o.y - 6));
+    const room = Math.max(bottom * 1.08 + 2, Math.min(nextTop - el.y, bottom * 2.2));
+    // Smaller type
+    const min = el.fontSize * 0.6;
+    while (laidHeight(el) > room && el.fontSize > min) el.fontSize = Math.max(min, Math.round(el.fontSize * 0.94 * 10) / 10);
+  }
+  // Boxes that had the same type size on a slide keep matching sizes (bullets, columns)
+  function evenSizes(fitted) {
+    const groups = new Map();
+    for (const f of fitted) {
+      const k = `${Math.round(f.size)}|${f.el.bold ? 1 : 0}`;
+      groups.set(k, [...(groups.get(k) || []), f]);
+    }
+    for (const list of groups.values()) {
+      const ratio = Math.min(...list.map((f) => f.el.fontSize / f.size));
+      for (const f of list) f.el.fontSize = Math.round(f.size * ratio * 10) / 10;
+    }
+    for (const f of fitted) { const need = laidHeight(f.el); if (need > f.el.h) f.el.h = need; }
+  }
+
+  async function translateDeck(to, scope, withNotes) {
+    if (translating || !hasTranslator()) return;
+    const from = deck.lang || "en";
+    const toName = langName(to);
+    translating = true;
+    let translator = null;
+    try {
+      const avail = await self.Translator.availability({ sourceLanguage: from, targetLanguage: to });
+      if (avail === "unavailable") {
+        status(`Chrome can't translate ${langName(from)} into ${toName} on this computer yet.`, "error");
+        return;
+      }
+      showProgress(avail === "available" ? "Starting the translation…" : `Downloading ${toName} in Chrome…`);
+      translator = await self.Translator.create({
+        sourceLanguage: from,
+        targetLanguage: to,
+        monitor(m) { m.addEventListener("downloadprogress", (e) => showProgress(`Downloading ${toName} in Chrome · ${Math.round((e.loaded || 0) * 100)}%`)); }
+      });
+      // Slides still being read: translate once their text is in
+      if (deck.slides.some((x) => x.status === "pending" || x.status === "working")) showProgress("Waiting for the text on every slide to be read…");
+      await queue.catch(() => {});
+      const targets = scope === "one" ? [slide()] : deck.slides.slice();
+      commit();
+      const cache = new Map();
+      let boxes = 0;
+      for (let i = 0; i < targets.length; i += 1) {
+        const s = targets[i];
+        if (!deck.slides.includes(s)) continue;
+        showProgress(`Translating into ${toName}: slide ${i + 1} of ${targets.length}`);
+        const fitted = [];
+        for (const el of s.elements) {
+          if (el.type !== "text" || !String(el.text).trim()) continue;
+          const text = await translateText(translator, el.text, cache);
+          if (text === el.text) continue;
+          const old = { lines: laidLines(el), height: laidHeight(el) };
+          fitted.push({ el, size: el.fontSize });
+          el.text = text;
+          delete el.runs;
+          delete el._lines;
+          fitTranslated(el, s, old);
+          boxes += 1;
+        }
+        evenSizes(fitted);
+        if (withNotes && String(s.notes || "").trim()) s.notes = await translateText(translator, s.notes, cache);
+        renderThumb(deck.slides.indexOf(s));
+        if (s === slide()) renderStage();
+      }
+      if (scope !== "one") deck.lang = to;
+      selected = null;
+      renderAll();
+      scheduleSave();
+      status(boxes ? `Translated ${boxes} text box${boxes === 1 ? "" : "es"} into ${toName}. Ctrl+Z puts the original words back.` : "There was no text to translate yet.", boxes ? "ok" : "");
+      track("Slide deck translated", { to, from, slides: targets.length, boxes });
+    } catch (error) {
+      status(`The translation stopped: ${error?.message || error}`, "error");
+      track("Slide deck translation failed", { to, from });
+    } finally {
+      showProgress("");
+      try { translator?.destroy?.(); } catch (_e) { /* already gone */ }
+      translating = false;
+    }
+  }
+
   /* ---------- Popovers (colours, shapes, arrange) ---------- */
   let popFor = null; // { kind, prop }
   function closePop() {
@@ -1000,6 +1162,10 @@
         ${item("front", "front", "Bring to front", "Ctrl+Shift+]")}${item("forward", "forward", "Bring forward", "Ctrl+]")}${item("backward", "backward", "Send backward", "Ctrl+[")}${item("back", "back", "Send to back", "Ctrl+Shift+[")}
         <p class="se-pop-sub">Line up with the slide</p>
         <div class="se-row">${[["al-l", "alL", "Left"], ["al-c", "alC", "Centre"], ["al-r", "alR", "Right"], ["al-t", "alT", "Top"], ["al-m", "alM", "Middle"], ["al-b", "alB", "Bottom"]].map(([a, ic, l]) => `<button type="button" class="se-btn is-icon" data-act="${a}" title="Align ${l.toLowerCase()} on slide">${ico(ic)}</button>`).join("")}</div>`;
+      popFor = { kind, btn };
+    }
+    if (kind === "translate") {
+      html = translatePop();
       popFor = { kind, btn };
     }
     pop.innerHTML = html;
@@ -1515,6 +1681,15 @@
     },
     original: (btn) => { showOriginal = !showOriginal; btn.classList.toggle("is-on", showOriginal); selected = null; renderStage(); renderPanels(); },
     present: () => present(cur),
+    "translate-go": () => {
+      const to = $("#seTrTo")?.value;
+      const scope = app.querySelector('#sePop input[name="seTrScope"]:checked')?.value || "all";
+      const notes = Boolean($("#seTrNotes")?.checked);
+      closePop();
+      if (!to) return;
+      try { localStorage.setItem("ntEditorTranslateTo", to); } catch (_e) { /* remembered only when storage works */ }
+      void translateDeck(to, scope, notes);
+    },
     full: () => { app.classList.toggle("is-full"); setTimeout(renderStage, 30); },
     menu: () => { $("#seMenu").hidden = !$("#seMenu").hidden; },
     pptx: () => runExport("pptx"),

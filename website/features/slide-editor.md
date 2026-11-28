@@ -39,8 +39,9 @@ NotebookLM's slide decks are pictures: every slide is one flat image, so you can
 1. In NotebookLM, open the slide deck in Studio and click **Edit** next to it. Without the extension, download the deck as a PDF and open it in the [online slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides).
 2. Wait a few seconds per slide while it reads the text. Click **Original** any time to compare with the slide as NotebookLM made it.
 3. Click any text to edit it: words, font, size, bold, italic, colour, even single words inside a line. Drag pictures, split a picture into its parts or merge two, and add text boxes, shapes and speaker notes.
-4. Click **Download PowerPoint**, or use the menu beside it for a PDF with real text, PNG images or every picture as a ZIP.
-5. Your edits are saved in your browser. Reopen any deck from the **Presentations** tab in the notebooks dashboard.
+4. Click **Translate** to put every slide into one of 36 languages. Each text box keeps its place, font and colour, and the translation runs in Chrome on your computer.
+5. Click **Download PowerPoint**, or use the menu beside it for a PDF with real text, PNG images or every picture as a ZIP.
+6. Your edits are saved in your browser. Reopen any deck from the **Presentations** tab in the notebooks dashboard.
 
 ### Why it helps
 

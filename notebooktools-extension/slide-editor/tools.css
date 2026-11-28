@@ -1577,3 +1577,14 @@
 @media (max-width: 640px) {
   .se-app.is-wide .se-start { height: auto; min-height: calc(100dvh - 64px); }
 }
+
+/* Translate popover */
+.se-pop .se-tr-field { display: grid; gap: 6px; margin: 0 4px 10px; }
+.se-pop .se-tr-field span { color: var(--se-muted); font-size: 12px; }
+.se-pop .se-tr-field select { background: var(--se-btn); border: 1px solid transparent; border-radius: 10px; color: var(--se-ink); font: inherit; font-size: 13.5px; padding: 8px 10px; width: 100%; }
+.se-pop .se-tr-field select:focus { border-color: var(--se-accent); outline: none; }
+.se-pop .se-tr-scope { margin: 0 4px 6px; }
+.se-pop .se-tr-notes input { accent-color: var(--se-accent); }
+.se-pop .se-tr-go { justify-content: center; margin: 6px 4px 8px; width: calc(100% - 8px); }
+.se-pop-note { color: var(--se-muted); font-size: 12px; line-height: 1.45; margin: 0 4px 2px; }
+.se-pop:has(.se-tr-go), .se-pop:has(.se-pop-note) { width: 280px; }

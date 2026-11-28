@@ -42,6 +42,10 @@ Yes, on slides with a plain background (most NotebookLM decks). Illustrations, p
 
 Yes. In Google Slides choose File → Import slides (or open the .pptx from Drive); the text boxes stay editable.
 
+### Can I translate NotebookLM slides into another language?
+
+Yes. Click Translate, pick one of 36 languages, and every text box (and the speaker notes) is translated in place, keeping its position, font and colour; longer text gets a wider box or slightly smaller type. It uses the translator built into Chrome on a computer (version 138 or newer), so nothing is uploaded. Ctrl+Z puts the original words back.
+
 ### Is my deck uploaded?
 
 No. pdf.js, Tesseract OCR, pdf-lib and PptxGenJS all run in your browser. The deck never leaves your device.

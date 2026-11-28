@@ -40,6 +40,10 @@ Não dentro do NotebookLM: as apresentações são geradas como imagens, então 
 
 Baixe a apresentação como PDF no painel Studio do NotebookLM, abra aqui e clique em Baixar PowerPoint. Cada slide mantém o design como fundo e o texto volta como caixas de texto editáveis.
 
+### Posso traduzir os slides do NotebookLM para outro idioma?
+
+Sim. Clique em Traduzir, escolha um de 36 idiomas e cada caixa de texto (e as notas do apresentador) é traduzida no lugar, com a mesma posição, fonte e cor; se o texto ficar mais longo, a caixa se alarga ou a letra diminui um pouco. Usa o tradutor integrado ao Chrome para computador (versão 138 ou mais recente), então nada é enviado. Ctrl+Z traz o texto original de volta.
+
 ### Fica exatamente igual ao original?
 
 Bem parecido, não idêntico. As fontes são trocadas pela fonte comum mais próxima e o fundo atrás do texto antigo é preenchido com as cores ao redor: fica limpo em fundos lisos ou degradês, mas fotos muito cheias podem mostrar marcas leves. Use Original para comparar e ajuste o que quiser no editor.

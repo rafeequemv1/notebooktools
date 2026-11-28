@@ -40,6 +40,10 @@ No dentro de NotebookLM: sus presentaciones se generan como imágenes, así que 
 
 Descarga la presentación como PDF desde el panel Studio de NotebookLM, ábrela aquí y haz clic en Descargar PowerPoint. Cada diapositiva conserva su diseño como fondo y el texto vuelve como cuadros de texto editables.
 
+### ¿Puedo traducir las diapositivas de NotebookLM a otro idioma?
+
+Sí. Haz clic en Traducir, elige uno de 36 idiomas y cada cuadro de texto (y las notas del orador) se traduce en su sitio, con la misma posición, fuente y color; si el texto queda más largo, el cuadro se ensancha o la letra se reduce un poco. Usa el traductor integrado en Chrome para ordenador (versión 138 o posterior), así que no se sube nada. Ctrl+Z recupera el texto original.
+
 ### ¿Quedará exactamente igual que el original?
 
 Muy parecido, no idéntico. Las fuentes se ajustan a la fuente común más cercana y el fondo detrás del texto antiguo se rellena con los colores de alrededor: queda limpio en fondos lisos o degradados, aunque en fotos muy cargadas pueden verse marcas leves. Usa Original para comparar y corrige lo que quieras en el editor.

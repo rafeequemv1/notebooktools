@@ -35,6 +35,7 @@ EDITOR_LOCALES = [
         "faq": [
             ("¿Se pueden editar las presentaciones de NotebookLM?", "No dentro de NotebookLM: sus presentaciones se generan como imágenes, así que el texto no se puede cambiar. Este editor lee el texto con OCR y lo convierte en cuadros de texto reales que puedes editar."),
             ("¿Cómo convierto las diapositivas de NotebookLM a PowerPoint?", "Descarga la presentación como PDF desde el panel Studio de NotebookLM, ábrela aquí y haz clic en Descargar PowerPoint. Cada diapositiva conserva su diseño como fondo y el texto vuelve como cuadros de texto editables."),
+            ("¿Puedo traducir las diapositivas de NotebookLM a otro idioma?", "Sí. Haz clic en Traducir, elige uno de 36 idiomas y cada cuadro de texto (y las notas del orador) se traduce en su sitio, con la misma posición, fuente y color; si el texto queda más largo, el cuadro se ensancha o la letra se reduce un poco. Usa el traductor integrado en Chrome para ordenador (versión 138 o posterior), así que no se sube nada. Ctrl+Z recupera el texto original."),
             ("¿Quedará exactamente igual que el original?", "Muy parecido, no idéntico. Las fuentes se ajustan a la fuente común más cercana y el fondo detrás del texto antiguo se rellena con los colores de alrededor: queda limpio en fondos lisos o degradados, aunque en fotos muy cargadas pueden verse marcas leves. Usa Original para comparar y corrige lo que quieras en el editor."),
             ("¿Y los gráficos y diagramas?", "Las etiquetas de los diagramas se leen como texto editable, y los dibujos se separan en imágenes que puedes mover. El texto dentro de gráficos con muchos números suele quedarse en la imagen para que el gráfico no se rompa."),
             ("¿Funciona con Google Slides?", "Sí. En Google Slides elige Archivo → Importar diapositivas (o abre el .pptx desde Drive); los cuadros de texto siguen siendo editables."),
@@ -72,6 +73,7 @@ EDITOR_LOCALES = [
         "faq": [
             ("Dá para editar as apresentações do NotebookLM?", "Não dentro do NotebookLM: as apresentações são geradas como imagens, então o texto não pode ser alterado. Este editor lê o texto com OCR e o transforma em caixas de texto de verdade que você pode editar."),
             ("Como converter slides do NotebookLM para PowerPoint?", "Baixe a apresentação como PDF no painel Studio do NotebookLM, abra aqui e clique em Baixar PowerPoint. Cada slide mantém o design como fundo e o texto volta como caixas de texto editáveis."),
+            ("Posso traduzir os slides do NotebookLM para outro idioma?", "Sim. Clique em Traduzir, escolha um de 36 idiomas e cada caixa de texto (e as notas do apresentador) é traduzida no lugar, com a mesma posição, fonte e cor; se o texto ficar mais longo, a caixa se alarga ou a letra diminui um pouco. Usa o tradutor integrado ao Chrome para computador (versão 138 ou mais recente), então nada é enviado. Ctrl+Z traz o texto original de volta."),
             ("Fica exatamente igual ao original?", "Bem parecido, não idêntico. As fontes são trocadas pela fonte comum mais próxima e o fundo atrás do texto antigo é preenchido com as cores ao redor: fica limpo em fundos lisos ou degradês, mas fotos muito cheias podem mostrar marcas leves. Use Original para comparar e ajuste o que quiser no editor."),
             ("E os gráficos e diagramas?", "Os rótulos dos diagramas são lidos como texto editável e os desenhos viram imagens separadas que você pode mover. O texto dentro de gráficos cheios de números costuma ficar na imagem para o gráfico não quebrar."),
             ("Funciona no Google Slides?", "Sim. No Google Slides escolha Arquivo → Importar slides (ou abra o .pptx pelo Drive); as caixas de texto continuam editáveis."),
@@ -108,6 +110,7 @@ EDITOR_LOCALES = [
         "faq": [
             ("NotebookLM 的簡報可以編輯嗎？", "在 NotebookLM 裡不行：它的簡報是以圖片產生的，文字無法修改。這個編輯器會用 OCR 讀取文字，轉成可以編輯的真正文字方塊。"),
             ("如何把 NotebookLM 投影片轉成 PowerPoint？", "在 NotebookLM 的 Studio 面板把簡報下載為 PDF，在這裡開啟後按「下載 PowerPoint」。每張投影片會保留原本的設計作為背景，文字則變回可編輯的文字方塊。"),
+            ("可以把 NotebookLM 投影片翻譯成其他語言嗎？", "可以。按「翻譯」，從 36 種語言中選一種，每個文字方塊（以及講者備忘稿）都會在原位翻譯，保留位置、字型和顏色；譯文較長時，方塊會加寬或字體略為縮小。它使用電腦版 Chrome（138 版或更新版本）內建的翻譯器，不會上傳任何內容。按 Ctrl+Z 可還原原文。"),
             ("會和原始簡報一模一樣嗎？", "非常接近，但不完全相同。字型會換成最接近的常見字型，舊文字後方的背景會用周圍的顏色補上：純色或漸層背景很乾淨，但複雜的照片上可能留下淡淡的痕跡。可以用「原始」比較，再在編輯器中修正。"),
             ("圖表和示意圖呢？", "示意圖上的標籤會讀成可編輯的文字，圖畫會分成可以移動的獨立圖片。數字很多的圖表，其中的文字通常會留在圖片裡，以免圖表被破壞。"),
             ("可以在 Google 簡報中使用嗎？", "可以。在 Google 簡報選擇「檔案 → 匯入投影片」（或從雲端硬碟開啟 .pptx），文字方塊仍然可以編輯。"),

@@ -3249,6 +3249,20 @@ window.NTSlides = (() => {
   // Lines as drawn: paragraphs wrapped to the box width. A bulleted paragraph
   // ("• …") keeps its wrapped lines under the text, not under the bullet.
   // Each line: { text, indent, first } (first = first line of its paragraph).
+  // Pieces a line may break between: words and spaces, and for scripts written
+  // without spaces (Chinese, Japanese, Korean runs, Thai) dictionary words or characters.
+  const NO_SPACE_RE = /[\u0e00-\u0e7f\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]/;
+  let wordSegmenter = null;
+  function breakPieces(para) {
+    if (!NO_SPACE_RE.test(para)) return para.split(/(\s+)/);
+    try {
+      wordSegmenter = wordSegmenter || new Intl.Segmenter(undefined, { granularity: "word" });
+      return [...wordSegmenter.segment(para)].map((x) => x.segment);
+    } catch (_error) {
+      return para.match(/\s+|[\u0e00-\u0e7f\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]|[^\s\u0e00-\u0e7f\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]+/g) || [para];
+    }
+  }
+
   function layoutLines(text, maxWidth, measure) {
     // measure(str, start): start = where str begins in the text (styled words measure in their own font)
     const out = [];
@@ -3260,7 +3274,7 @@ window.NTSlides = (() => {
       let first = true;
       let lineStart = base;
       let pos = base;
-      for (const word of para.split(/(\s+)/)) {
+      for (const word of breakPieces(para)) {
         const next = line + word;
         const room = maxWidth - (first ? 0 : indent);
         if (measure(next.trimEnd(), lineStart) > room && line.trim()) {
@@ -3281,7 +3295,7 @@ window.NTSlides = (() => {
     const out = [];
     for (const para of String(text).split("\n")) {
       let line = "";
-      for (const word of para.split(/(\s+)/)) {
+      for (const word of breakPieces(para)) {
         const next = line + word;
         if (measure(next.trimEnd()) > maxWidth && line.trim()) {
           out.push(line.trimEnd());
