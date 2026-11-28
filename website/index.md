@@ -11,6 +11,8 @@ The NotebookLM tools Google left out: import anything in bulk, organize every no
 
 [Add to Chrome — free](https://chromewebstore.google.com/detail/notebooktools-%E2%80%94-import-to/fhjgbniefbimnklnnomlhkkiekcjddmj) [See it in action](https://www.notebooktools.com/features)
 
+[No install Edit a Gemini Notebook slide deck in your browser, free](https://www.notebooktools.com/tools/edit-notebooklm-slides)
+
 Free imports · Pro $49 lifetime
 
 ![A Gemini Notebook (NotebookLM) notebook in Chrome with the NotebookTools toolbar added above Sources, Chat and Studio: manage and filter sources, folders and tags, favorite, copy, prompt queue, prompts and export.](https://www.notebooktools.com/assets/hero-notebook-1440.webp)

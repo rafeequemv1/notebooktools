@@ -2600,3 +2600,20 @@ a {
     display: none;
   }
 }
+
+/* Homepage hero: what to do in this browser, and a way to try without installing */
+.hero-browser-note { color: var(--muted, #5f6368); font-size: 13.5px; line-height: 1.5; margin: 12px auto 0; max-width: 520px; text-align: center; }
+.hero-browser-note b { color: var(--ink, #1f1f1f); font-weight: 500; }
+.hero-try { align-items: center; background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(11, 87, 208, 0.18); border-radius: 999px; color: var(--ink, #1f1f1f); display: inline-flex; font-size: 14px; gap: 10px; margin-top: 18px; max-width: 100%; padding: 6px 14px 6px 6px; text-decoration: none; transition: background 0.15s, border-color 0.15s, box-shadow 0.15s; }
+.hero-try:hover { background: #fff; border-color: rgba(11, 87, 208, 0.4); box-shadow: 0 6px 18px -10px rgba(11, 87, 208, 0.5); }
+.hero-try-badge { background: #0b57d0; border-radius: 999px; color: #fff; flex: none; font-size: 12px; font-weight: 500; padding: 4px 10px; }
+.hero-try-text { min-width: 0; text-align: left; }
+.hero-try-arrow { color: #0b57d0; flex: none; transition: transform 0.15s; }
+.hero-try:hover .hero-try-arrow { transform: translateX(3px); }
+.hero-copy .hero-try + .hero-fine { margin-top: 12px; }
+.nt-send-toast { animation: nt-toast-in 0.2s ease-out; background: #1f1f1f; border-radius: 999px; bottom: 24px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25); color: #fff; font-size: 14px; left: 50%; max-width: calc(100vw - 32px); padding: 10px 18px; position: fixed; transform: translateX(-50%); transition: opacity 0.3s; z-index: 2000; }
+.nt-send-toast.is-leaving { opacity: 0; }
+@keyframes nt-toast-in { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@media (max-width: 520px) { .hero-try { font-size: 13px; } }
+/* Desktop Safari and Firefox: the hero's second button already opens the slide editor */
+[data-browser="other"] .hero-try { display: none; }
