@@ -30,3 +30,7 @@ dist/
 
 # Dev auto-reload stamp (scripts/dev-sync.*)
 notebooktools-extension/dev-stamp.txt
+
+# Python bytecode from running the build scripts
+__pycache__/
+*.pyc
