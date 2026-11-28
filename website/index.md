@@ -23,6 +23,49 @@ Import from
 - Highlights
 - Drive
 
+How it fits together
+
+## Everything flows into your notebook, and back out
+
+NotebookTools brings sources in from anywhere, keeps every notebook in order, and turns what Gemini Notebook makes into files you can use.
+
+Bring in
+
+[YouTube Videos, playlists, channels](https://www.notebooktools.com/features/add-youtube)
+
+[Webpages and open tabs One page or every tab at once](https://www.notebooktools.com/features/add-webpage)
+
+[AI chats ChatGPT, Claude, Gemini, Perplexity](https://www.notebooktools.com/features/ai-chats)
+
+[PDFs, Docs and links Queue dozens in one go](https://www.notebooktools.com/features/bulk-import)
+
+[X threads and Reddit Whole threads as one source](https://www.notebooktools.com/features/x-twitter)
+
+### NotebookTools
+
+inside Gemini Notebook
+
+- Folders
+- Tags
+- Search
+- Prompts
+- Prompt queue
+- Snapshots
+
+Works in the notebook you already use
+
+Take out
+
+[Slide decks to PowerPoint Edit the text, translate, download](https://www.notebooktools.com/tools/edit-notebooklm-slides)
+
+[Flashcards and quizzes Anki, Quizlet, Kahoot, Moodle](https://www.notebooktools.com/features/flashcards-export)
+
+[Carousels LinkedIn and Instagram posts](https://www.notebooktools.com/features/carousel)
+
+[Chats and notes Markdown, PDF, Docs, with citations](https://www.notebooktools.com/features/chat-export)
+
+[Podcasts Every Audio Overview in one player](https://www.notebooktools.com/features/studio-podcasts)
+
 Works with your other AI chats
 
 ## Bring ChatGPT, Claude and Gemini chats into your notebook
@@ -74,6 +117,30 @@ Generate Studio outputs in bulk and play every Audio Overview in one player that
 
 ![Podcast player listing Audio Overviews from every notebook](https://www.notebooktools.com/assets/show-podcasts.webp)
 
+### Edit and translate slide decks
+
+Open a Gemini Notebook slide deck and the text becomes real text boxes. Fix a word, move pictures, translate every slide into one of 36 languages, then download PowerPoint.
+
+[Try the slide editor](https://www.notebooktools.com/tools/edit-notebooklm-slides)
+
+![The NotebookTools slide editor with a deck open, a title selected and the Translate menu set to Spanish](https://www.notebooktools.com/assets/show-editor.webp)
+
+### Study with your flashcards anywhere
+
+Send flashcards and quizzes from Studio to Anki, Quizlet, Kahoot, Wayground or Moodle, or print them with an answer key. Free.
+
+[See flashcard export](https://www.notebooktools.com/features/flashcards-export)
+
+![Flashcards and quizzes window inside Gemini Notebook offering Kahoot, Wayground, Moodle, Anki, CSV and print](https://www.notebooktools.com/assets/show-study.webp)
+
+### Ask a list of questions, hands-free
+
+Line up to 25 prompts and the prompt queue sends each one when the last answer is done. Copy or download every answer at the end.
+
+[See the prompt queue](https://www.notebooktools.com/features/prompt-queue)
+
+![Prompt queue panel in Gemini Notebook with two prompts answered and two waiting](https://www.notebooktools.com/assets/show-queue.webp)
+
 ## And a lot more
 
 - [Bulk import queue](https://www.notebooktools.com/features/bulk-import)
@@ -84,9 +151,9 @@ Generate Studio outputs in bulk and play every Audio Overview in one player that
 - [X / Twitter threads](https://www.notebooktools.com/features/x-twitter)
 - [Prompt library](https://www.notebooktools.com/features/prompts)
 - [Slides to blog](https://www.notebooktools.com/features/slides-to-blog)
-- [Flashcards to Anki & Kahoot](https://www.notebooktools.com/features/flashcards-export)
-- [Prompt queue](https://www.notebooktools.com/features/prompt-queue)
-- [Slide editor (PPTX)](https://www.notebooktools.com/features/slide-editor)
+- [Slide carousels](https://www.notebooktools.com/features/carousel)
+- [AI chats to sources](https://www.notebooktools.com/features/ai-chats)
+- [Notebook toolbar](https://www.notebooktools.com/features/notebook-tools)
 
 New to NotebookLM? [What it is](https://www.notebooktools.com/blog/what-is-notebooklm) · [Beginner tutorial](https://www.notebooktools.com/blog/notebooklm-tutorial-beginners) · [Best prompts](https://www.notebooktools.com/blog/best-notebooklm-prompts) · [All guides →](https://www.notebooktools.com/blog)
 
