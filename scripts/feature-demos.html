@@ -1117,10 +1117,34 @@
               <div class="nlm-lite-row">
                 <section class="nlm-lite-panel"><b>Sources</b><i></i><i></i><i></i><i class="s"></i></section>
                 <section class="nlm-lite-panel is-chat"><span class="nlm-lite-q">Make flashcards and a quiz for chapter 3</span><i></i><i></i><i class="s"></i><span class="nlm-lite-box">Start typing...</span></section>
-                <section class="nlm-lite-panel"><b>Studio</b><span class="nlm-lite-tiles"><i></i><i></i><i></i><i></i></span></section>
+                <section class="nlm-lite-panel"><b>Studio</b>
+                  <div class="nst-tiles">
+                    <div class="nst-tile" data-s="tile-cards" hidden><span class="nst-ic is-cards"></span><span><b>Cell division flashcards</b><em>Flashcards · 24 cards</em></span></div>
+                    <div class="nst-tile" data-s="tile-quiz" hidden><span class="nst-ic is-quiz">?</span><span><b>Chapter 3 quiz</b><em>Quiz · 12 questions</em></span></div>
+                  </div>
+                </section>
               </div>
-              <div class="nlm-study-host" data-s="study" data-app-screen="study-export" hidden></div>
-              <div class="nlm-lite-toast" data-s="toast" hidden>Saved Chapter 3 quiz (Kahoot).xlsx</div>
+              <div class="nlm-study-host" data-s="study-cards" data-app-screen="study-export-cards" hidden></div>
+              <div class="nlm-study-host" data-s="study-quiz" data-app-screen="study-export" hidden></div>
+              <div class="nst-result" data-s="anki" hidden>
+                <p class="nst-result-head"><span class="nst-file">TXT</span><span><b>Cell division flashcards (Anki).txt</b><em>In Anki: File → Import → 24 cards added to the deck</em></span></p>
+                <div class="nst-card" data-s="anki-card"><div class="nst-card-face"><small>Front</small>What is mitosis?</div><div class="nst-card-face is-back"><small>Back</small>Cell division that makes two identical cells.</div></div>
+                <p class="nst-result-foot">Line breaks and formatting kept · deck named after the set</p>
+              </div>
+              <div class="nst-result is-wide" data-s="kahoot" hidden>
+                <p class="nst-result-head"><span class="nst-file is-xlsx">XLSX</span><span><b>Chapter 3 quiz (Kahoot).xlsx</b><em>In Kahoot: Add question → Import spreadsheet</em></span></p>
+                <table class="nst-sheet">
+                  <thead><tr><th>#</th><th>Question</th><th>Answer 1</th><th>Answer 2</th><th>Answer 3</th><th>Answer 4</th><th>Time</th><th>Correct</th></tr></thead>
+                  <tbody>
+                    <tr data-s="row1"><td>1</td><td>Which organelle makes most of the ATP?</td><td>Nucleus</td><td class="is-ok">Mitochondrion</td><td>Ribosome</td><td>Golgi body</td><td>30</td><td>2</td></tr>
+                    <tr data-s="row2"><td>2</td><td>How many cells does meiosis produce?</td><td>2</td><td class="is-ok">4</td><td>8</td><td>1</td><td>30</td><td>2</td></tr>
+                    <tr data-s="row3"><td>3</td><td>When do chromosomes line up in the middle?</td><td>Prophase</td><td class="is-ok">Metaphase</td><td>Anaphase</td><td>Telophase</td><td>30</td><td>2</td></tr>
+                  </tbody>
+                </table>
+                <p class="nst-result-foot">Also: Wayground (Quizizz) spreadsheet · Moodle GIFT · CSV · printable worksheet with answer key</p>
+              </div>
+              <p class="nst-cap" data-s="cap"><span class="nst-cap-n" data-s="cap-n">1</span><span data-s="cap-t">Make flashcards and a quiz in NotebookLM's Studio</span></p>
+              <div class="nlm-lite-toast" data-s="toast" hidden>Saved</div>
             </div></div>
           </div>
           <button type="button" class="demo-reset" data-action="scene-replay" hidden>Replay demo</button>

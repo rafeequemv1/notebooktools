@@ -176,6 +176,7 @@ const SCREENS = [
     await page.waitForSelector('.nse [data-format="kahoot"]', { timeout: 8000 });
     // the card count of the other set, as after reading it once
     await page.click('.nse [data-set="fc2"]'); await page.waitForSelector('.nse [data-format="anki"]');
+    screens['study-export-cards'] = { html: await page.evaluate(() => `<div class="nse">${document.querySelector('.nse .nse-dialog').outerHTML}</div>`), bodyClass: '' };
     await page.click('.nse [data-set="qz2"]'); await page.waitForSelector('.nse [data-format="kahoot"]');
     screens['study-export'] = { html: await page.evaluate(() => `<div class="nse">${document.querySelector('.nse .nse-dialog').outerHTML}</div>`), bodyClass: '' };
     console.log('study export', screens['study-export'].html.length, 'chars');

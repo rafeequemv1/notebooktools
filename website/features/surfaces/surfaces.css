@@ -2561,3 +2561,41 @@
 /* Flashcards & quizzes export demo: the extension's real dialog over the notebook */
 .nlm-study-host { left: 50%; position: absolute; top: 74px; transform: translateX(-50%); width: min(520px, calc(100% - 24px)); z-index: 6; }
 .nlm-study-host[hidden] { display: none; }
+
+/* Flashcards & quizzes demo: Studio tiles, the files it makes, step captions */
+.nst-tiles { display: flex; flex-direction: column; gap: 8px; }
+.nst-tile { align-items: center; animation: nst-pop .35s ease-out; background: #f0f4f9; border-radius: 12px; display: flex; gap: 10px; padding: 9px 10px; }
+.nst-tile[hidden] { display: none; }
+.nst-tile b { color: #1f1f1f; display: block; font-size: 12.5px; font-weight: 500; }
+.nst-tile em { color: #5f6368; display: block; font-size: 11.5px; font-style: normal; }
+.nst-ic { align-items: center; border-radius: 8px; color: #fff; display: inline-flex; flex: none; font: 700 13px Arial; height: 28px; justify-content: center; width: 28px; }
+.nst-ic.is-cards { background: #0b57d0; box-shadow: 3px -3px 0 #8ab4f8; }
+.nst-ic.is-quiz { background: #188038; }
+.nst-result { animation: nst-pop .35s ease-out; background: #fff; border-radius: 20px; box-shadow: 0 18px 48px rgba(60, 64, 67, .28); left: 50%; padding: 16px 18px; position: absolute; top: 84px; transform: translateX(-50%); width: min(420px, calc(100% - 24px)); z-index: 7; }
+.nst-result.is-wide { width: min(660px, calc(100% - 24px)); }
+.nst-result[hidden] { display: none; }
+.nst-result-head { align-items: center; display: flex; gap: 12px; margin: 0 0 14px; }
+.nst-result-head b { color: #1f1f1f; display: block; font: 500 14px/1.3 "Google Sans", Roboto, Arial, sans-serif; }
+.nst-result-head em { color: #5f6368; display: block; font-size: 12.5px; font-style: normal; }
+.nst-file { align-items: center; background: #5f6368; border-radius: 6px; color: #fff; display: inline-flex; flex: none; font: 700 10px Arial; height: 34px; justify-content: center; width: 30px; }
+.nst-file.is-xlsx { background: #188038; }
+.nst-card { height: 120px; perspective: 800px; position: relative; }
+.nst-card-face { align-items: center; backface-visibility: hidden; background: #f8fafd; border: 1px solid #dadce0; border-radius: 14px; color: #1f1f1f; display: flex; flex-direction: column; font: 500 16px/1.35 "Google Sans", Roboto, Arial, sans-serif; gap: 6px; inset: 0; justify-content: center; padding: 14px 18px; position: absolute; text-align: center; transition: transform .6s ease; }
+.nst-card-face small { color: #5f6368; font: 500 11px Arial; letter-spacing: .06em; text-transform: uppercase; }
+.nst-card-face.is-back { background: #e8f0fe; transform: rotateY(180deg); }
+.nst-card.is-flipped .nst-card-face { transform: rotateY(180deg); }
+.nst-card.is-flipped .nst-card-face.is-back { transform: rotateY(360deg); }
+.nst-result-foot { color: #5f6368; font-size: 12px; margin: 12px 0 0; }
+.nst-sheet { border-collapse: collapse; font-size: 11.5px; width: 100%; }
+.nst-sheet th { background: #f1f3f4; color: #444746; font-weight: 500; text-align: left; }
+.nst-sheet th, .nst-sheet td { border: 1px solid #e0e3e7; padding: 5px 6px; }
+.nst-sheet td { color: #1f1f1f; }
+.nst-sheet td.is-ok { background: #e6f4ea; color: #137333; font-weight: 500; }
+.nst-sheet tr[hidden] { display: none; }
+.nst-sheet tbody tr { animation: nst-pop .3s ease-out; }
+.nst-cap { align-items: center; background: #1f1f1f; border-radius: 999px; bottom: 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, .2); color: #fff; display: flex; font: 500 13px/1.3 "Google Sans Text", Roboto, Arial, sans-serif; gap: 10px; left: 50%; margin: 0; max-width: calc(100% - 24px); padding: 8px 16px 8px 8px; position: absolute; transform: translateX(-50%); white-space: nowrap; z-index: 8; }
+.nst-cap-n { align-items: center; background: #8ab4f8; border-radius: 50%; color: #1f1f1f; display: inline-flex; flex: none; font-weight: 700; height: 22px; justify-content: center; width: 22px; }
+@keyframes nst-pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.nst-result { animation-name: nst-pop-c; }
+@keyframes nst-pop-c { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translateX(-50%); } }
+.nlm-lite-toast { bottom: 62px; }

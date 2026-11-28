@@ -419,21 +419,46 @@
     ]);
   });
 
-  // Flashcards & quizzes export: the ribbon's Flashcards button opens the real
-  // export dialog (study-export.js); a quiz goes to Kahoot
+  // Flashcards & quizzes export, start to finish: sets made in Studio, the ribbon's
+  // Flashcards button opens the real export dialog (study-export.js), a deck goes
+  // to Anki and a quiz to Kahoot, and each file is shown as it lands
   register("study", function (a) {
+    function cap(n, text) {
+      return a.run(function () { var nEl = a.el("cap-n"), tEl = a.el("cap-t"); if (nEl) nEl.textContent = n; if (tEl) tEl.textContent = text; });
+    }
+    function toast(text) {
+      return a.run(function () { var t = a.el("toast"); if (t) { t.textContent = text; t.hidden = false; } });
+    }
+    function flip(on) { return on ? a.add("anki-card", "is-flipped") : a.remove("anki-card", "is-flipped"); }
     return [
-      a.hide("study"), a.hide("toast"),
-      a.wait(500),
+      a.hide("study-cards"), a.hide("study-quiz"), a.hide("anki"), a.hide("kahoot"), a.hide("toast"),
+      a.hide("tile-cards"), a.hide("tile-quiz"), flip(false),
+      a.hide("row1"), a.hide("row2"), a.hide("row3"),
+      cap("1", "Make flashcards and a quiz in NotebookLM's Studio"),
+      a.wait(700), a.show("tile-cards"), a.wait(600), a.show("tile-quiz"), a.wait(1100),
+      cap("2", "Click Flashcards in the NotebookTools ribbon"),
       a.click('[data-ntr="study"]'),
-      a.show("study"),
-      a.wait(1400),
+      a.show("study-cards"), a.wait(1300),
+      cap("3", "Pick the deck, then Anki"),
+      a.click('[data-format="anki"]'),
+      toast("Saved Cell division flashcards (Anki).txt"), a.wait(1100),
+      a.hide("toast"), a.hide("study-cards"),
+      cap("4", "Import in Anki: every card arrives, front and back"),
+      a.show("anki"), a.wait(1300), flip(true), a.wait(1700), flip(false), a.wait(600),
+      a.hide("anki"),
+      cap("5", "Quizzes go to Kahoot, Wayground or Moodle"),
+      a.show("study-cards"), a.wait(600),
+      a.click('[data-set="qz2"]'),
+      a.hide("study-cards"), a.show("study-quiz"), a.wait(1100),
       a.click('[data-format="kahoot"]'),
-      a.show("toast"),
-      a.wait(1600),
-      a.hide("toast"),
-      a.hide("study"),
-      a.wait(400)
+      toast("Saved Chapter 3 quiz (Kahoot).xlsx"), a.wait(1100),
+      a.hide("toast"), a.hide("study-quiz"),
+      cap("6", "Import the spreadsheet in Kahoot: correct answers marked"),
+      a.show("kahoot"), a.wait(400), a.show("row1"), a.wait(350), a.show("row2"), a.wait(350), a.show("row3"),
+      a.wait(2600),
+      a.hide("kahoot"),
+      cap("✓", "Free · also CSV, Markdown and printable cards or worksheets"),
+      a.wait(1800)
     ];
   });
 
