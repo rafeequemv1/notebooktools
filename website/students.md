@@ -53,10 +53,11 @@ From my sources, make a study guide for [subject/topic]. Include: the key concep
 **The job:** Rereading feels like studying. Testing yourself actually is.
 
 1. Open Studio and generate Flashcards and a Quiz from the chapter.
-2. Make a Mind map to see how the topics connect.
-3. Come back to the quiz a few days later and see what stuck.
+2. Click Flashcards in the NotebookTools ribbon to send the deck to Anki or Quizlet for spaced repetition.
+3. Make a Mind map to see how the topics connect.
+4. Come back to the quiz a few days later and see what stuck.
 
-[Studio & podcasts](https://www.notebooktools.com/features/studio-podcasts)
+[Studio & podcasts](https://www.notebooktools.com/features/studio-podcasts)[Flashcards export](https://www.notebooktools.com/features/flashcards-export)
 
 03 Lecture notes · PDF
 
@@ -135,6 +136,8 @@ Explain [concept] from my sources as if I'm new to it. Start with a simple every
 ```
 Explain [chapter or topic] for a student revising for an exam. Focus on [the parts I find hardest]. Use simple examples, and finish by asking three questions I should be able to answer.
 ```
+
+[Studio & podcasts](https://www.notebooktools.com/features/studio-podcasts)
 
 08 Essay outline
 

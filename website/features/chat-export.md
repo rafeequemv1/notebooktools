@@ -32,7 +32,7 @@ How it works
 
 ## Export NotebookLM chat to PDF, Markdown and more
 
-The **Export** button in the NotebookTools ribbon saves your NotebookLM work three ways: the **last answer** as a print-ready PDF, a Word file or Markdown; the **whole chat** as Markdown, plain text, JSON, CSV, HTML or PDF; or the **whole notebook**, every source's text and every note, as a ZIP of files. Files are named after your notebook.
+The **Export** button in the NotebookTools ribbon saves your NotebookLM work three ways: the **last answer** as a print-ready PDF, a Word file or Markdown, or copied with its citation numbers and a list of their sources (**Copy with citations**); the **whole chat** as Markdown, plain text, JSON, CSV, HTML or PDF; or the **whole notebook**, every source's text and every note, as a ZIP of files. Files are named after your notebook.
 
 ### How to use it
 
@@ -54,6 +54,10 @@ A good NotebookLM session is a research trail: the questions you asked and the c
 - [NotebookLM privacy and your data](https://www.notebooktools.com/blog/notebooklm-privacy)
 
 ## Chat export: frequently asked questions
+
+### Can I copy a NotebookLM answer with its citations?
+
+Yes. In the ribbon, choose Export → Copy with citations. The answer is copied with its citation numbers in place and a numbered list of the sources they point to, ready to paste into Google Docs, Word or Notion.
 
 ### Can you export a NotebookLM chat to PDF?
 

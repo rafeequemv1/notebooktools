@@ -99,12 +99,13 @@ Using my sources, write a [40]-minute lesson plan on [topic] for [class/grade]. 
 1. In Studio, generate Flashcards and a Quiz from the chapter.
 2. Share the notebook with your class, where your school's accounts allow it, so students practise on their own.
 3. For a printed quiz, paste the prompt and export the answer as a PDF.
+4. To run it in class, click Flashcards in the NotebookTools ribbon and send the quiz to Kahoot, Wayground or Moodle, or print it with an answer key.
 
 ```
 Make a 15-question quiz on [topic] from my sources for [class/grade]: 10 multiple-choice questions with four options labelled a) to d), and 5 true/false questions. Put the answers in a separate section at the end titled Answers.
 ```
 
-[Studio & podcasts](https://www.notebooktools.com/features/studio-podcasts)[Answer to PDF / Word](https://www.notebooktools.com/features/chat-export)
+[Studio & podcasts](https://www.notebooktools.com/features/studio-podcasts)[Flashcards export](https://www.notebooktools.com/features/flashcards-export)[Answer to PDF / Word](https://www.notebooktools.com/features/chat-export)
 
 06 Audio Overview · audio file
 

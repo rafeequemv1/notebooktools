@@ -32,7 +32,7 @@ How it works
 
 ## Edit NotebookLM slide decks: real text, real PowerPoint
 
-NotebookLM's slide decks are pictures: every slide is one flat image, so you can't fix a typo or a date. The NotebookTools slide editor reads each slide on your computer and rebuilds it with real text boxes, keeping the look of the original. Pictures, charts and icons are cut out as separate pictures, and the background behind removed text is filled in. Then download PowerPoint, a PDF with selectable text, or images.
+NotebookLM's slide decks are pictures: every slide is one flat image, so you can't fix a typo or a date. The NotebookTools slide editor reads each slide on your computer and rebuilds it with real text boxes, keeping the look of the original. Pictures, charts and icons are cut out as separate pictures, and the background behind removed text is filled in. Diagrams get the same care: labels in small pills and boxes become editable text, and a diagram whose drawings are joined by arrows is split into one picture per drawing. The online editor also comes in [Spanish](https://www.notebooktools.com/es/editar-diapositivas-notebooklm), [Portuguese](https://www.notebooktools.com/pt/editar-slides-notebooklm) and [Traditional Chinese](https://www.notebooktools.com/zh-tw/edit-notebooklm-slides). Then download PowerPoint, a PDF with selectable text, or images.
 
 ### How to use it
 

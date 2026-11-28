@@ -84,6 +84,9 @@ Generate Studio outputs in bulk and play every Audio Overview in one player that
 - [X / Twitter threads](https://www.notebooktools.com/features/x-twitter)
 - [Prompt library](https://www.notebooktools.com/features/prompts)
 - [Slides to blog](https://www.notebooktools.com/features/slides-to-blog)
+- [Flashcards to Anki & Kahoot](https://www.notebooktools.com/features/flashcards-export)
+- [Prompt queue](https://www.notebooktools.com/features/prompt-queue)
+- [Slide editor (PPTX)](https://www.notebooktools.com/features/slide-editor)
 
 New to NotebookLM? [What it is](https://www.notebooktools.com/blog/what-is-notebooklm) · [Beginner tutorial](https://www.notebooktools.com/blog/notebooklm-tutorial-beginners) · [Best prompts](https://www.notebooktools.com/blog/best-notebooklm-prompts) · [All guides →](https://www.notebooktools.com/blog)
 
