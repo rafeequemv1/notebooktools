@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Homepage shots</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&display=block" rel="stylesheet">
+<link rel="stylesheet" href="/features/nlm/nlm-ui.css">
+<link rel="stylesheet" href="/features/surfaces/surfaces.css">
+<style>
+  /* The homepage's product shots: the extension's real screens (captured by
+     scripts/capture-app-ui.js) in the same Chrome window the demos use. */
+  html, body { margin: 0; background: transparent; }
+  body { display: grid; gap: 40px; padding: 0; }
+  .shot { box-sizing: border-box; }
+  .shot .br-window { height: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  .shot .br-page { height: 100%; overflow: hidden; position: relative; }
+  .shot .nlm-app { height: 100%; display: flex; flex-direction: column; }
+  .shot .nlm-body { flex: 1; min-height: 0; }
+  #shot-hero { width: 1440px; height: 900px; }
+  #shot-export { width: 1240px; height: 1000px; }
+  #shot-hub, #shot-podcasts { width: 1240px; height: 760px; }
+  #shot-youtube { width: 1240px; height: 1000px; }
+  /* the ribbon in the page flow; on the hero, lit so the eye finds it */
+  .ribbon-host { margin: 0 16px 12px; position: relative; }
+  #shot-hero .ribbon-host { border-radius: 999px; box-shadow: 0 0 0 3px rgba(11, 87, 208, 0.16), 0 6px 18px -6px rgba(11, 87, 208, 0.35); }
+  .ribbon-tag { position: absolute; left: 50%; transform: translateX(-50%); top: -11px; z-index: 3; background: #0b57d0; color: #fff; font: 600 11px/1 "Google Sans", sans-serif; letter-spacing: .04em; padding: 5px 9px; border-radius: 999px; }
+  .menu-host { position: absolute; z-index: 5; width: 280px; }
+  .yt-img { display: block; width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- Hero: a notebook with the NotebookTools ribbon above Sources, Chat and Studio -->
+<div class="shot" id="shot-hero">
+  <div class="br-window" data-surface="browser" data-tabs='[{"title": "Research — AI tools - Gemini Notebook", "url": "notebook.google.com/notebook/8f2c41d0", "icon": "nlm", "active": true}, {"title": "How RAG works - YouTube", "url": "youtube.com/watch", "icon": "yt"}]'>
+    <div class="br-page"><div class="nlm-app">
+      <header class="nlm-topbar" data-nlm="topbar"><span class="nlm-notebook-title">Research — AI tools</span></header>
+      <div class="ribbon-host"><span class="ribbon-tag">NOTEBOOKTOOLS</span><div data-app-screen="nlm-ribbon"></div></div>
+      <div class="nlm-body">
+        <aside class="nlm-sources">
+          <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+          <div data-nlm="source-tools"></div>
+          <ul class="nlm-source-list">
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf"></span><span class="nlm-src-name">RAG survey 2026.pdf</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt"></span><span class="nlm-src-name">How RAG works in 5 minutes</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-web"></span><span class="nlm-src-name">Evaluating retrieval systems</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt"></span><span class="nlm-src-name">Long context vs retrieval (talk)</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-gdoc"></span><span class="nlm-src-name">Thesis notes, chapter 2</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-web"></span><span class="nlm-src-name">Chunking strategies compared</span></li>
+          </ul>
+        </aside>
+        <section class="nlm-chat">
+          <div class="nlm-chat-scroll">
+            <div data-nlm="nb-head" data-title="Research — AI tools" data-meta="6 sources · 28 Nov 2026"></div>
+            <p class="nlm-summary">These sources compare <strong>retrieval-augmented generation</strong> with long-context models. The survey maps the main <strong>retrieval strategies</strong>, the evaluation guide covers <strong>faithfulness and recall</strong>, and the talks argue when a long context window is enough.</p>
+            <div data-nlm="msg-actions"></div>
+            <div data-nlm="suggest"><div class="nlm-suggest-card">When does RAG beat a long context window?</div><div class="nlm-suggest-card">Which evaluation metrics matter most?</div><div class="nlm-suggest-card">Summarize the chunking advice</div></div>
+          </div>
+          <div data-nlm="composer" data-sources="6"></div>
+        </section>
+        <aside class="nlm-studio">
+          <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+          <div data-nlm="studio"></div>
+        </aside>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- Chat export: the ribbon's Export menu over a chat with answers -->
+<div class="shot" id="shot-export">
+  <div class="br-window" data-surface="browser" data-tabs='[{"title": "Research — AI tools - Gemini Notebook", "url": "notebook.google.com/notebook/8f2c41d0", "icon": "nlm", "active": true}]'>
+    <div class="br-page"><div class="nlm-app">
+      <header class="nlm-topbar" data-nlm="topbar"><span class="nlm-notebook-title">Research — AI tools</span></header>
+      <div class="ribbon-host"><div data-app-screen="nlm-ribbon"></div></div>
+      <div class="nlm-body">
+        <aside class="nlm-sources">
+          <div class="nlm-panel-head" data-nlm="panel-head" data-panel="sources"></div>
+          <ul class="nlm-source-list">
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-pdf"></span><span class="nlm-src-name">RAG survey 2026.pdf</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-web"></span><span class="nlm-src-name">Evaluating retrieval systems</span></li>
+            <li class="nlm-source"><span class="nlm-src-icon nlm-src-yt"></span><span class="nlm-src-name">Long context vs retrieval (talk)</span></li>
+          </ul>
+        </aside>
+        <section class="nlm-chat">
+          <div class="nlm-chat-scroll">
+            <div class="nlm-messages" style="overflow:visible;padding:18px 0 0">
+              <div class="nlm-msg user">What are the main themes across these sources?</div>
+              <div class="nlm-msg bot">Three themes recur: <strong>retrieval quality</strong> <span class="nlm-cite">1</span>, <strong>evaluation</strong> <span class="nlm-cite">2</span>, and the trade-off between <strong>cost and latency</strong> <span class="nlm-cite">3</span>. The survey argues retrieval still wins when facts sit in the middle of long documents <span class="nlm-cite">1</span>.</div>
+              <div class="nlm-msg user">Turn that into a one-page brief.</div>
+              <div class="nlm-msg bot">Here is a one-page brief. It opens with the problem, compares the three approaches <span class="nlm-cite">1</span> <span class="nlm-cite">3</span>, and closes with a recommendation backed by the benchmark results <span class="nlm-cite">2</span>.</div>
+            </div>
+          </div>
+          <div data-nlm="composer" data-sources="3"></div>
+        </section>
+        <aside class="nlm-studio">
+          <div class="nlm-panel-head" data-nlm="panel-head" data-panel="studio"></div>
+          <div data-nlm="studio"></div>
+        </aside>
+      </div>
+      <div class="menu-host" data-for="export" data-app-screen="nlm-menu-export"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- Notebooks hub -->
+<div class="shot" id="shot-hub">
+  <div class="br-window" data-surface="browser" data-tabs='[{"title": "Notebooks — NotebookTools", "url": "chrome-extension://fhjgbniefbimnklnnomlhkkiekcjddmj/notebooks.html", "icon": "ext", "active": true}]'>
+    <div class="br-page"><img class="yt-img" src="/__hub.png" alt=""></div>
+  </div>
+</div>
+
+<!-- Podcasts -->
+<div class="shot" id="shot-podcasts">
+  <div class="br-window" data-surface="browser" data-tabs='[{"title": "Notebooks — NotebookTools", "url": "chrome-extension://fhjgbniefbimnklnnomlhkkiekcjddmj/notebooks.html", "icon": "ext", "active": true}]'>
+    <div class="br-page"><div data-app-screen="hub-podcast"></div></div>
+  </div>
+</div>
+
+<!-- YouTube: the real page as the extension changes it (rendered by render.js) -->
+<div class="shot" id="shot-youtube">
+  <div class="br-window" data-surface="browser" data-tabs='[{"title": "How Gemini Notebook Video Overviews work - YouTube", "url": "youtube.com/watch?v=Qv3jF0sXc2Y", "icon": "yt", "active": true}, {"title": "Research — AI tools - Gemini Notebook", "url": "notebook.google.com/notebook/8f2c41d0", "icon": "nlm"}]'>
+    <div class="br-page"><img class="yt-img" src="/__yt.png" alt=""></div>
+  </div>
+</div>
+
+<script src="/features/nlm/nlm-config.js"></script>
+<script src="/features/nlm/nlm-shell.js"></script>
+<script src="/features/app/screens.js"></script>
+<script src="/features/surfaces/surfaces.js"></script>
+<script>
+  // The Export menu opens under the ribbon's Export button
+  window.placeMenus = function () {
+    document.querySelectorAll('.menu-host[data-for]').forEach(function (menu) {
+      var shot = menu.closest('.shot');
+      var ribbon = shot.querySelector('[data-app-screen="nlm-ribbon"]');
+      var btn = ribbon && ribbon.shadowRoot && ribbon.shadowRoot.querySelector('[data-ntr="' + menu.dataset.for + '"]');
+      if (!btn) return;
+      var page = menu.offsetParent.getBoundingClientRect();
+      var r = btn.getBoundingClientRect();
+      menu.style.left = Math.min(r.left - page.left, page.width - 300) + 'px';
+      menu.style.top = (r.bottom - page.top + 6) + 'px';
+      btn.classList.add('is-open');
+    });
+  };
+</script>
+</body>
+</html>

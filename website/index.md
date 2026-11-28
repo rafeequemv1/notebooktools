@@ -13,7 +13,7 @@ The NotebookLM tools Google left out: import anything in bulk, organize every no
 
 Free imports · Pro $49 lifetime
 
-![A Gemini Notebook (NotebookLM) notebook in Chrome with the NotebookTools ribbon added above Sources, Chat and Studio: folders and tags, copy and export chat, add links and open tabs, manage sources, blog, prompts and all notebooks.](https://www.notebooktools.com/assets/hero-notebook-1440.webp)
+![A Gemini Notebook (NotebookLM) notebook in Chrome with the NotebookTools toolbar added above Sources, Chat and Studio: manage and filter sources, folders and tags, favorite, copy, prompt queue, prompts and export.](https://www.notebooktools.com/assets/hero-notebook-1440.webp)
 
 Import from
 
@@ -91,7 +91,7 @@ One click on YouTube, any webpage, X threads or text you highlight. Queue dozens
 
 [Watch the demo](https://www.notebooktools.com/features/add-youtube)
 
-![NotebookLM button on a YouTube video with the notebook picker open](https://www.notebooktools.com/assets/show-youtube.webp)
+![Send to NotebookLM button under a YouTube video with the notebook picker open](https://www.notebooktools.com/assets/show-youtube.webp)
 
 ### Organize every notebook
 
@@ -99,15 +99,15 @@ Pin, star, folder and tag notebooks, clean up duplicates and refresh Drive sourc
 
 [See the notebooks hub](https://www.notebooktools.com/features/notebooks-hub)
 
-![The NotebookTools notebooks hub with pinned and starred notebooks](https://www.notebooktools.com/assets/show-hub.webp)
+![The NotebookTools notebooks hub in card view with folders, tags, a pinned notebook and favorites](https://www.notebooktools.com/assets/show-hub.webp)
 
 ### Work inside NotebookLM
 
-Type / for saved prompts, export any chat in six formats, and turn slide decks into blog posts.
+Type / for saved prompts, save any answer as PDF or Word, copy it with its citations, export the whole chat, and turn slide decks into blog posts.
 
 [See chat export](https://www.notebooktools.com/features/chat-export)
 
-![Export chat menu inside NotebookLM with Markdown, Plain text, JSON, CSV, HTML and PDF](https://www.notebooktools.com/assets/show-export.webp)
+![Export menu in the NotebookTools toolbar inside Gemini Notebook: the last answer as PDF, Word, Markdown or with citations, and the whole chat as Markdown, plain text, JSON, CSV or HTML](https://www.notebooktools.com/assets/show-export.webp)
 
 ### Listen and create
 
@@ -115,7 +115,7 @@ Generate Studio outputs in bulk and play every Audio Overview in one player that
 
 [See Studio & podcasts](https://www.notebooktools.com/features/studio-podcasts)
 
-![Podcast player listing Audio Overviews from every notebook](https://www.notebooktools.com/assets/show-podcasts.webp)
+![Podcasts tab listing Audio Overviews from every notebook](https://www.notebooktools.com/assets/show-podcasts.webp)
 
 ### Edit and translate slide decks
 

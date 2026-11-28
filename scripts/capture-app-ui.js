@@ -60,6 +60,7 @@ const SCREENS = [
       await new Promise((r) => setTimeout(r, 800));
     } },
   { name: 'hub-drive', url: 'notebooks.html?notebook=nb3&tab=sources&title=Product%20launch%202026', root: 'body', width: 1240, wait: 3500 },
+  { name: 'hub-notebooks', url: 'notebooks.html', root: 'body', width: 1240, wait: 3000 },
   { name: 'hub-podcast', url: 'notebooks.html', root: 'body', width: 1240, wait: 2500,
     setup: async () => {
       document.querySelector('[data-app-tab="podcast"]')?.click();
